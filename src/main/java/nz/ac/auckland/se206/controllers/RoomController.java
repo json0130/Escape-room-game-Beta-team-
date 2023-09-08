@@ -1,8 +1,11 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.IOException;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
@@ -15,6 +18,7 @@ public class RoomController {
   @FXML private Rectangle door;
   @FXML private Rectangle window;
   @FXML private Rectangle vase;
+  @FXML private Button btnRoom1;
 
   /** Initializes the room view, it is called when the room loads. */
   public void initialize() {
@@ -102,5 +106,10 @@ public class RoomController {
   @FXML
   public void clickWindow(MouseEvent event) {
     System.out.println("window clicked");
+  }
+
+  @FXML
+  public void onRoom1(ActionEvent event) throws IOException {
+    App.setRoot("room1");
   }
 }
