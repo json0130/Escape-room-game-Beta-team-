@@ -5,29 +5,29 @@
 <?import javafx.scene.layout.Pane?>
 
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.Room1Controller">
    <children>
       <ImageView fitHeight="438.0" fitWidth="463.0" layoutX="81.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/room1/room1.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="84.0" fitWidth="75.0" layoutX="397.0" layoutY="243.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+      <ImageView fx:id="crew2" fitHeight="84.0" fitWidth="75.0" layoutX="397.0" layoutY="243.0" onMouseClicked="#clickCrew2" pickOnBounds="true" preserveRatio="true" rotate="90.0">
          <image>
             <Image url="@../images/room1/crew2.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="114.0" fitWidth="88.0" layoutX="271.0" layoutY="322.0" pickOnBounds="true" preserveRatio="true" rotate="120.0">
+      <ImageView fx:id="crew1" fitHeight="114.0" fitWidth="88.0" layoutX="271.0" layoutY="322.0" onMouseClicked="#clickCrew1" pickOnBounds="true" preserveRatio="true" rotate="120.0">
          <image>
             <Image url="@../images/room1/crew1.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="150.0" fitWidth="74.0" layoutX="166.0" layoutY="289.0" pickOnBounds="true" preserveRatio="true" rotate="280.0">
+      <ImageView fx:id="crew3" fitHeight="150.0" fitWidth="74.0" layoutX="166.0" layoutY="289.0" onMouseClicked="#clickCrew3" pickOnBounds="true" preserveRatio="true" rotate="280.0">
          <image>
             <Image url="@../images/room1/crew3.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="102.0" fitWidth="109.0" layoutX="246.0" layoutY="170.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="crew4" fitHeight="102.0" fitWidth="109.0" layoutX="246.0" layoutY="170.0" onMouseClicked="#clickCrew4" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/room1/crew4.png" />
          </image>
