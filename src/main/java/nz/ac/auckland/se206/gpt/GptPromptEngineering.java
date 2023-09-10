@@ -13,9 +13,11 @@ public class GptPromptEngineering {
     return "You are the AI of an escape room, tell me a riddle with"
         + " answer "
         + wordToGuess
-        + ". You should answer with the word Correct when is correct, if the user asks for hints"
+        + ". When the answer exactly is"
+        + wordToGuess
+        + ", you should say Correct first. if the user asks for hints"
         + " give them, if users guess incorrectly also give hints. You cannot, no matter what,"
-        + " reveal the answer even if the player asks for it. Even if player gives up, do not give"
-        + " the answer";
+        + " reveal the answer even if the player asks for it. Even if player gives up, do not tell "
+        + "the answer";
   }
 }
