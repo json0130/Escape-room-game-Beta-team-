@@ -90,9 +90,12 @@ public class TileGameRoomController {
   private Tile tileEight = new Tile();
   private Tile tileNine = new Tile();
 
+  @FXML private ImageView welcomeScreen;
   @FXML private ImageView bigScreenOff;
   @FXML private ImageView smallScreenOff;
   @FXML private Rectangle powerButton;
+  @FXML private Text wordText;
+  @FXML private Button releaseAirLockButton;
 
   /**
    * Initializes the room view, it is called when the room loads.
@@ -121,6 +124,8 @@ public class TileGameRoomController {
         runGpt(new ChatMessage("user", GptPromptEngineering.getRiddleAnswer(lettersForInput)))
             .getContent();
     System.out.println(riddleAnswer);
+
+    wordText.setText(riddleAnswer);
   }
 
   private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
@@ -386,6 +391,9 @@ public class TileGameRoomController {
           && tileFive.getLetter().equalsIgnoreCase(secondChar)
           && tileSix.getLetter().equalsIgnoreCase(thirdChar)) {
         System.out.println("done");
+        welcomeScreen.setVisible(true);
+        releaseAirLockButton.setDisable(false);
+        releaseAirLockButton.setVisible(true);
         indicatorTriangle.setLayoutX(94);
         indicatorTriangle.setLayoutY(450);
         indicatorTriangle.setRotate(0);
@@ -451,5 +459,11 @@ public class TileGameRoomController {
 
     bigScreenOff.setVisible(false);
     smallScreenOff.setVisible(false);
+  }
+
+  @FXML
+  private void onReleaseAirLockButtonClick() {
+    App.tileGameComplete = true;
+    System.out.println("Tile Game Complete");
   }
 }

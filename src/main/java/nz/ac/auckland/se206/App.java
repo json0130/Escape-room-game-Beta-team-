@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 public class App extends Application {
 
   private static Scene scene;
+  public static boolean tileGameComplete = false;
 
   public static void main(final String[] args) {
 
@@ -50,5 +51,4 @@ public class App extends Application {
     stage.show();
     root.requestFocus();
   }
-
 }
