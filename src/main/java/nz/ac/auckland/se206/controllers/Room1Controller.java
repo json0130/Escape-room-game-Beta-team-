@@ -3,79 +3,118 @@ package nz.ac.auckland.se206.controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.Polygon;
-import javafx.stage.Stage;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 
 public class Room1Controller implements Initializable {
-  @FXML public Polygon indicator;
   @FXML private ImageView crew1;
   @FXML private ImageView crew2;
   @FXML private ImageView crew3;
   @FXML private ImageView crew4;
 
-  private Stage idStage; // New stage for id cards
+  @FXML private ImageView idCaptain;
+  @FXML private ImageView idChef;
+  @FXML private ImageView idDoctor;
+  @FXML private ImageView idEngineer;
 
   public void initialize(URL url, ResourceBundle resource) {
-    idStage = new Stage();
-    idStage.setResizable(false);
-    idStage.setAlwaysOnTop(true);
+    // Set all id not visible
+    idCaptain.setVisible(false);
+    idDoctor.setVisible(false);
+    idChef.setVisible(false);
+    idEngineer.setVisible(false);
   }
 
-  // When crew1 is clicked and the riddle was resolved, id1 is shown
+  // When crew1 is clicked and the riddle was resolved, id1 is shown only for 2 seconds
   @FXML
   public void clickCrew1(MouseEvent event) throws IOException {
-    if (!idStage.isShowing() && GameState.isRiddleResolved) {
-      System.out.println("crew 1 clicked");
-      Parent root = new FXMLLoader(App.class.getResource("/fxml/id1.fxml")).load();
-      Scene scene = new Scene(root, 300, 200);
-      idStage.setScene(scene);
-      idStage.show();
+    if (GameState.isRiddleResolved) {
+      idDoctor.setVisible(true);
+
+            Thread hideImageThread = new Thread(() -> {
+                try {
+                    Thread.sleep(2000); // Sleep for 2 seconds
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // id becomes invisible again
+                Platform.runLater(() -> idDoctor.setVisible(false));
+            });
+            hideImageThread.start();
+
     }
   }
 
-  // When crew2 is clicked and the riddle was resolved, id2 is shown
+  // When crew2 is clicked and the riddle was resolved, id2 is shown only for 2 seconds
   @FXML
   public void clickCrew2(MouseEvent event) throws IOException {
-    if (!idStage.isShowing() && GameState.isRiddleResolved) {
-      System.out.println("crew 2 clicked");
-      Parent root = new FXMLLoader(App.class.getResource("/fxml/id2.fxml")).load();
-      Scene scene = new Scene(root, 300, 200);
-      idStage.setScene(scene);
-      idStage.show();
+    if (GameState.isRiddleResolved) {
+        if (GameState.isRiddleResolved) {
+      idCaptain.setVisible(true);
+
+            Thread hideImageThread = new Thread(() -> {
+                try {
+                    Thread.sleep(2000); // Sleep for 2 seconds
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // id becomes invisible again
+                Platform.runLater(() -> idCaptain.setVisible(false));
+            });
+            hideImageThread.start();
+
+    }
     }
   }
 
-  // When crew3 is clicked and the riddle was resolved, id3 is shown
+  // When crew3 is clicked and the riddle was resolved, id3 is shown only for 2 seconds
   @FXML
   public void clickCrew3(MouseEvent event) throws IOException {
-    if (!idStage.isShowing() && GameState.isRiddleResolved) {
-      System.out.println("crew 3 clicked");
-      Parent root = new FXMLLoader(App.class.getResource("/fxml/id3.fxml")).load();
-      Scene scene = new Scene(root, 300, 200);
-      idStage.setScene(scene);
-      idStage.show();
+    if (GameState.isRiddleResolved) {
+        if (GameState.isRiddleResolved) {
+      idChef.setVisible(true);
+
+            Thread hideImageThread = new Thread(() -> {
+                try {
+                    Thread.sleep(2000); // Sleep for 2 seconds
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // id becomes invisible again
+                Platform.runLater(() -> idChef.setVisible(false));
+            });
+            hideImageThread.start();
+
+    }
     }
   }
 
-  // When crew4 is clicked and the riddle was resolved, id4 is shown
+  // When crew4 is clicked and the riddle was resolved, id4 is shown only for 2 seconds
   @FXML
   public void clickCrew4(MouseEvent event) throws IOException {
-    if (!idStage.isShowing() && GameState.isRiddleResolved) {
-      System.out.println("crew 4 clicked");
-      Parent root = new FXMLLoader(App.class.getResource("/fxml/id4.fxml")).load();
-      Scene scene = new Scene(root, 300, 200);
-      idStage.setScene(scene);
-      idStage.show();
+    if (GameState.isRiddleResolved) {
+        if (GameState.isRiddleResolved) {
+      idEngineer.setVisible(true);
+
+            Thread hideImageThread = new Thread(() -> {
+                try {
+                    Thread.sleep(2000); // Sleep for 2 seconds
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // id becomes invisible again
+                Platform.runLater(() -> idEngineer.setVisible(false));
+            });
+            hideImageThread.start();
+
+    }
     }
   }
 

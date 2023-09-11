@@ -34,5 +34,25 @@
          </image>
       </ImageView>
       <Button fx:id="btnRiddle" layoutX="38.0" layoutY="410.0" mnemonicParsing="false" onAction="#onRiddle" text="Riddle" />
+      <ImageView fx:id="idCaptain" fitHeight="99.0" fitWidth="200.0" layoutX="428.0" layoutY="322.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/idphotos/idcaptain.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="idChef" fitHeight="109.0" fitWidth="158.0" layoutX="64.0" layoutY="185.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/idphotos/idchef.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="idDoctor" fitHeight="99.0" fitWidth="158.0" layoutX="124.0" layoutY="359.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/idphotos/iddoctor.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="idEngineer" fitHeight="110.0" fitWidth="158.0" layoutX="341.0" layoutY="96.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/idphotos/idengineer.png" />
+         </image>
+      </ImageView>
    </children>
 </Pane>
