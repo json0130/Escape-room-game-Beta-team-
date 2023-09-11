@@ -12,12 +12,7 @@
    <children>
       <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/game_scene.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="393.0" fitWidth="393.0" layoutX="444.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/tile_board_2.0.png" />
+            <Image url="@../images/TileMinigameScene.png" />
          </image>
       </ImageView>
       <Pane layoutX="442.0" layoutY="37.0" prefHeight="393.0" prefWidth="393.0">
@@ -43,22 +38,32 @@
             <Rectangle fx:id="bottomLeftBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="125.0" layoutY="270.0" onMouseClicked="#bottomLeftHitboxPress" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
             <Rectangle fx:id="bottomMiddleBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="125.0" layoutX="135.0" layoutY="270.0" onMouseClicked="#bottomMiddleHitboxPress" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
             <Rectangle fx:id="bottomRightBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="125.0" layoutX="266.0" layoutY="261.0" onMouseClicked="#bottomRightHitboxPress" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+            <ImageView fx:id="bigScreenOff" fitHeight="385.0" fitWidth="382.0" layoutX="7.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/BigScreenOffImage.png" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
-      <ImageView fx:id="indicatorTriangle" fitHeight="56.0" fitWidth="75.0" layoutX="1084.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="indicatorTriangle" disable="true" fitHeight="56.0" fitWidth="75.0" layoutX="1084.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../images/indicator_triangle.png" />
          </image>
       </ImageView>
-      <Label layoutX="14.0" layoutY="22.0" text="TIME REMAINING:">
+      <Label layoutX="1020.0" layoutY="21.0" text="TIME REMAINING:">
          <font>
             <Font name="Impact" size="36.0" />
          </font>
       </Label>
-      <Label fx:id="timerLabel" layoutX="14.0" layoutY="24.0" prefHeight="114.0" prefWidth="198.0" text="2:00">
+      <Label fx:id="timerLabel" layoutX="1020.0" layoutY="37.0" prefHeight="114.0" prefWidth="198.0" text="2:00">
          <font>
             <Font name="Impact" size="36.0" />
          </font>
       </Label>
+      <ImageView fx:id="smallScreenOff" fitHeight="125.0" fitWidth="254.0" layoutX="58.0" layoutY="66.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/SmallScreenOffImage.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

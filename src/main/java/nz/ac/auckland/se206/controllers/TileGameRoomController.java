@@ -60,7 +60,6 @@ public class TileGameRoomController {
   private int timerSeconds = 120;
 
   private ChatCompletionRequest chatCompletionRequest;
-  private String chatRiddle;
 
   @FXML private Rectangle topLeftBox;
   @FXML private Rectangle topMiddleBox;
@@ -90,6 +89,9 @@ public class TileGameRoomController {
   private Tile tileSeven = new Tile();
   private Tile tileEight = new Tile();
   private Tile tileNine = new Tile();
+
+  @FXML private ImageView bigScreenOff;
+  @FXML private ImageView smallScreenOff;
 
   /**
    * Initializes the room view, it is called when the room loads.
