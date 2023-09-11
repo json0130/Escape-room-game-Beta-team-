@@ -7,14 +7,12 @@ import java.util.List;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -109,9 +107,8 @@ public class TileGameRoomController {
     List<String> letterList = letterGenerator.generateCombinedList();
     String lettersForInput = letterGenerator.letterListToString(letterList);
     System.out.println(lettersForInput);
-    // List<ImageView> imagesList = imagesListCreator();
+
     setImage(letterList);
-    // System.out.println(ImageOne.getId());
     animateIndicator(false);
 
     chatCompletionRequest =
@@ -121,180 +118,6 @@ public class TileGameRoomController {
         runGpt(new ChatMessage("user", GptPromptEngineering.getRiddleAnswer(lettersForInput)))
             .getContent();
     System.out.println(riddleAnswer);
-
-    chatCompletionRequest =
-        new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.4).setMaxTokens(100);
-
-    chatRiddle =
-        runGpt(new ChatMessage("user", GptPromptEngineering.getRiddleWithGivenWord(riddleAnswer)))
-            .getContent();
-  }
-
-  @FXML
-  public void clickPharaoh() throws IOException {
-    // Creates dialogue box when the pharoah is clicked. This can either load a previous message or
-    // a new one based on the dialogue state.
-    System.out.println("click");
-    if (dialogueState == 0) {
-
-      Task<Void> sayFirstLine =
-          new Task<Void>() {
-
-            @Override
-            protected Void call() throws Exception {
-
-              Platform.runLater(
-                  () -> {
-                    // Creates indicator triangle for the next button.
-                    indicatorTriangle.setLayoutX(1200);
-                    indicatorTriangle.setLayoutY(550);
-                    indicatorTriangle.setVisible(true);
-                    dialogueText.setText(
-                        "WHO DARES DISTURB MY SLUMBER!?!"); // Sets the text for the first dialogue
-                    // state.
-                  });
-              textToSpeech.setInterupt();
-              textToSpeech.speak("WHO DARES DISTURB MY SLUMBER!?!");
-              return null;
-            }
-          };
-      Thread sayFirstLineThread = new Thread(sayFirstLine, "say first Line");
-      sayFirstLineThread.start();
-
-    } else if (dialogueState == 1 || dialogueState == 2) {
-
-      Task<Void> saySecondLine =
-          new Task<Void>() {
-
-            @Override
-            protected Void call() throws Exception {
-
-              Platform.runLater(
-                  () -> {
-                    // Sets the indicator triangle to be visible and the dialogue.
-                    indicatorTriangle.setVisible(true);
-                    indicatorTriangle.setLayoutX(1200);
-                    indicatorTriangle.setLayoutY(550);
-                    dialogueText.setText(dialogueList.get(dialogueState - 1));
-                  });
-              textToSpeech.setInterupt();
-              textToSpeech.speak(dialogueText.getText());
-              return null;
-            }
-          };
-      Thread saySecondLineThread = new Thread(saySecondLine, "say second Line");
-      saySecondLineThread.start();
-
-    } else if (dialogueState == 3) {
-
-      Task<Void> sayThirdLine =
-          new Task<Void>() {
-
-            @Override
-            protected Void call() throws Exception {
-
-              Platform.runLater(
-                  () -> {
-                    // Changes position of the indicator triangle.
-                    indicatorTriangle.setVisible(true);
-                    dialogueText.setText(dialogueList.get(1));
-                    appendMessage(chatRiddle);
-                  });
-
-              textToSpeech.setInterupt();
-              textToSpeech.speak(chatRiddle);
-              // textToSpeech.terminate();
-              return null;
-            }
-          };
-      Thread sayThirdLineThread = new Thread(sayThirdLine, "say third Line");
-      sayThirdLineThread.start();
-    }
-
-    dialogueBox.setVisible(true);
-    nextDialogue.setVisible(true);
-    nextDialogue.setDisable(false);
-    dialogueText.setVisible(true);
-    dialogueCloseButton.setVisible(true);
-  }
-
-  @FXML
-  private void onDialogueButtonClick() throws IOException {
-    if (dialogueState < 2) {
-      dialogueText.setText(dialogueList.get(dialogueState));
-      Task<Void> sayLine =
-          new Task<Void>() {
-
-            @Override
-            protected Void call() throws Exception {
-
-              textToSpeech.setInterupt();
-              textToSpeech.speak(dialogueText.getText());
-              // textToSpeech.terminate();
-              return null;
-            }
-          };
-      Thread sayLineThread = new Thread(sayLine, "say third Line");
-      sayLineThread.start();
-      dialogueState++;
-    } else if (dialogueState == 2) {
-
-      dialogueText.setText(dialogueList.get(1));
-      appendMessage(chatRiddle);
-
-      Task<Void> sayLastLine =
-          new Task<Void>() {
-
-            @Override
-            protected Void call() throws Exception {
-              textToSpeech.setInterupt();
-              textToSpeech.speak(chatRiddle);
-              // textToSpeech.terminate();
-              return null;
-            }
-          };
-
-      Thread sayLastLineThread = new Thread(sayLastLine, "say third Line");
-      sayLastLineThread.start();
-      keyFrame =
-          new KeyFrame(
-              duration,
-              event -> {
-                timerSeconds--;
-
-                if (timerSeconds == 0) {
-                  try {
-                    App.setRoot("loserscreen");
-
-                  } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                  }
-                } else {
-                  timerLabel.setText(timerFormat(timerSeconds));
-                }
-              });
-      timeline = new Timeline(keyFrame);
-      // Timeline.INDEFINITE
-      timeline.setCycleCount(120);
-      timeline.play();
-
-      indicatorTriangle.setLayoutX(863);
-      indicatorTriangle.setLayoutY(206);
-      indicatorTriangle.setRotate(90);
-      translate.stop();
-      animateIndicator(true);
-      dialogueState++;
-    }
-  }
-
-  @FXML
-  public void onKeyPressed(KeyEvent event) {
-    System.out.println("key " + event.getCode() + " pressed");
-  }
-
-  private void appendMessage(String msg) {
-    dialogueText.setText(dialogueText.getText() + "\n\n" + msg);
   }
 
   private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
@@ -423,12 +246,6 @@ public class TileGameRoomController {
     if (dialogueState == 3) {
       tileClickCounter++;
       System.out.println("tile clicks: " + tileClickCounter);
-    }
-    try {
-      actionsOnTileClick();
-    } catch (ApiProxyException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
     }
     // If the tile on the left is empty, swap them.
     if (currentTile.getLeftTile() != null && currentTile.getLeftTile().isFree() == true) {
@@ -571,7 +388,6 @@ public class TileGameRoomController {
         indicatorTriangle.setRotate(0);
         translate.stop();
         animateIndicator(false);
-        openDoor.setVisible(true);
       }
     }
   }
@@ -599,102 +415,6 @@ public class TileGameRoomController {
     }
     translate.setAutoReverse(true);
     translate.play();
-  }
-
-  @FXML
-  private void closeDialogue() {
-
-    dialogueBox.setVisible(false);
-    nextDialogue.setVisible(false);
-    dialogueText.setVisible(false);
-    dialogueCloseButton.setVisible(false);
-    textToSpeech.setInterupt();
-
-    if (dialogueState < 3) {
-      indicatorTriangle.setVisible(false);
-    }
-  }
-
-  @FXML
-  private void clickClosedDoor() {
-    System.out.println("click");
-    dialogueText.setText("Don't bother. Answer the riddle and I'll let you out!");
-    dialogueBox.setVisible(true);
-    dialogueText.setVisible(true);
-    dialogueCloseButton.setVisible(true);
-    sayLine();
-  }
-
-  // Does an action when the player clicks the tile if the tiles have been clicked 10, 30 and 50
-  // times before hand.
-  private void actionsOnTileClick() throws ApiProxyException {
-    if (tileClickCounter == 10) {
-      dialogueText.setText(
-          "Need a hint? \n\n It's a 3 letter word and those 3 tiles look very... odd.");
-      // Sets dialogue to be visible.
-      dialogueBox.setVisible(true);
-      dialogueText.setVisible(true);
-      dialogueCloseButton.setVisible(true);
-      // Loads text to speech for current dialogue Text value.
-      sayLine();
-    } else if (tileClickCounter == 30) {
-      // Loads hint one
-      Task<Void> createHintOne =
-          new Task<Void>() {
-
-            @Override
-            protected Void call() throws Exception {
-              ChatMessage msg =
-                  new ChatMessage(
-                      "user",
-                      "Give me a hint about the word. Please only reply with the hint and nothing"
-                          + " else.");
-              ChatMessage reply = runGpt(msg);
-              Platform.runLater(
-                  () -> {
-                    dialogueText.setText(
-                        "Wow you are useless! Here's another hint. I don't want to be stuck in here"
-                            + " with you either.");
-                    appendMessage(reply.getContent());
-
-                    dialogueBox.setVisible(true);
-                    dialogueText.setVisible(true);
-                    dialogueCloseButton.setVisible(true);
-                    sayLine();
-                  });
-              return null;
-            }
-          };
-      Thread hintThread = new Thread(createHintOne, "Create hint one.");
-      hintThread.start();
-
-    } else if (tileClickCounter == 50) {
-      Task<Void> createHintTwo = // Loads hint two.
-          new Task<Void>() {
-
-            @Override
-            protected Void call() throws Exception {
-              ChatMessage msg2 =
-                  new ChatMessage(
-                      "user",
-                      "Give me another hint about the word. Please only reply with the hint and"
-                          + " nothing else.");
-              ChatMessage reply2 = runGpt(msg2);
-              Platform.runLater(
-                  () -> {
-                    dialogueBox.setVisible(true);
-                    dialogueText.setVisible(true);
-                    dialogueCloseButton.setVisible(true);
-                    dialogueText.setText("Final Hint!");
-                    appendMessage(reply2.getContent());
-                    sayLine();
-                  });
-              return null;
-            }
-          };
-      Thread hintThreadTwo = new Thread(createHintTwo, "Create hint one.");
-      hintThreadTwo.start();
-    }
   }
 
   private String timerFormat(int seconds) {
