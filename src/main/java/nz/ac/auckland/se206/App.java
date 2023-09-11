@@ -13,7 +13,6 @@ import javafx.stage.Stage;
  */
 public class App extends Application {
 
-  public static int timerSeconds = 120;
   private static Scene scene;
 
   public static void main(final String[] args) {
@@ -46,7 +45,7 @@ public class App extends Application {
   @Override
   public void start(final Stage stage) throws IOException {
     Parent root = loadFxml("room");
-    scene = new Scene(root, 600, 470);
+    scene = new Scene(root, 1280, 720);
     stage.setScene(scene);
     stage.show();
     root.requestFocus();
