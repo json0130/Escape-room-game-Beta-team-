@@ -92,6 +92,7 @@ public class TileGameRoomController {
 
   @FXML private ImageView bigScreenOff;
   @FXML private ImageView smallScreenOff;
+  @FXML private Rectangle powerButton;
 
   /**
    * Initializes the room view, it is called when the room loads.
@@ -443,5 +444,12 @@ public class TileGameRoomController {
 
   public String getRiddleAnswer() {
     return riddleAnswer;
+  }
+
+  @FXML
+  private void onPowerButtonPressed() {
+
+    bigScreenOff.setVisible(false);
+    smallScreenOff.setVisible(false);
   }
 }
