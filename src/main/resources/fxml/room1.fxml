@@ -12,22 +12,22 @@
             <Image url="@../images/room1/room1withdeco.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="crew2" fitHeight="84.0" fitWidth="75.0" layoutX="397.0" layoutY="243.0" onMouseClicked="#clickCrew2" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+      <ImageView fx:id="crew2" fitHeight="84.0" fitWidth="75.0" layoutX="397.0" layoutY="243.0" onMouseClicked="#clickCrew2" onMouseEntered="#enterCrew2" onMouseExited="#exitCrew2" pickOnBounds="true" preserveRatio="true" rotate="90.0">
          <image>
             <Image url="@../images/room1/crew2.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="crew1" fitHeight="114.0" fitWidth="88.0" layoutX="315.0" layoutY="302.0" onMouseClicked="#clickCrew1" pickOnBounds="true" preserveRatio="true" rotate="120.0">
+      <ImageView fx:id="crew1" fitHeight="114.0" fitWidth="88.0" layoutX="315.0" layoutY="302.0" onMouseClicked="#clickCrew1" onMouseEntered="#enterCrew1" onMouseExited="#exitCrew1" pickOnBounds="true" preserveRatio="true" rotate="120.0">
          <image>
             <Image url="@../images/room1/crew1.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="crew3" fitHeight="150.0" fitWidth="74.0" layoutX="190.0" layoutY="295.0" onMouseClicked="#clickCrew3" pickOnBounds="true" preserveRatio="true" rotate="280.0">
+      <ImageView fx:id="crew3" fitHeight="150.0" fitWidth="74.0" layoutX="190.0" layoutY="295.0" onMouseClicked="#clickCrew3" onMouseEntered="#enterCrew3" onMouseExited="#exitCrew3" pickOnBounds="true" preserveRatio="true" rotate="280.0">
          <image>
             <Image url="@../images/room1/crew3.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="crew4" fitHeight="102.0" fitWidth="109.0" layoutX="202.0" layoutY="199.0" onMouseClicked="#clickCrew4" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="crew4" fitHeight="102.0" fitWidth="109.0" layoutX="202.0" layoutY="199.0" onMouseClicked="#clickCrew4" onMouseEntered="#enterCrew4" onMouseExited="#exitCrew4" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/room1/crew4.png" />
          </image>
@@ -38,7 +38,7 @@
          </image>
       </ImageView>
       <Button fx:id="btnRiddle" layoutX="38.0" layoutY="410.0" mnemonicParsing="false" onAction="#onRiddle" text="Riddle" />
-      <ImageView fx:id="idCaptain" fitHeight="99.0" fitWidth="200.0" layoutX="428.0" layoutY="143.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="idCaptain" fitHeight="99.0" fitWidth="200.0" layoutX="397.0" layoutY="143.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/idcaptain.png" />
          </image>
