@@ -9,14 +9,23 @@
 
 <Pane fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.PlayerController">
    <children>
-      <ImageView fitHeight="445.0" fitWidth="752.0" layoutX="13.0" layoutY="-22.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="420.0" fitWidth="572.0" layoutX="13.0" layoutY="-22.0" opacity="0.3" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/background.png" />
          </image>
       </ImageView>
-      <Button layoutX="27.0" layoutY="71.0" mnemonicParsing="false" onAction="#start" text="Button" />
-      <Circle fx:id="player" layoutX="248.0" layoutY="182.0" radius="19.0" stroke="BLACK" strokeType="INSIDE" />
-      <Rectangle fx:id="shape1" arcHeight="5.0" arcWidth="5.0" fill="RED" height="83.0" layoutX="522.0" layoutY="-4.0" stroke="BLACK" strokeType="INSIDE" width="85.0" />
-      <Button fx:id="button" layoutX="542.0" layoutY="37.0" mnemonicParsing="false" text="room" />
+      <Circle fx:id="player" layoutX="36.0" layoutY="302.0" radius="19.0" stroke="BLACK" strokeType="INSIDE" />
+      <Rectangle fx:id="room3" arcHeight="5.0" arcWidth="5.0" fill="RED" height="83.0" layoutX="470.0" layoutY="55.0" stroke="BLACK" strokeType="INSIDE" width="129.0" />
+      <Rectangle fx:id="wall" arcHeight="5.0" arcWidth="5.0" fill="#65d961" height="57.0" layoutY="343.0" stroke="TRANSPARENT" strokeType="INSIDE" width="600.0" />
+      <Rectangle fx:id="wall1" arcHeight="5.0" arcWidth="5.0" fill="#65d961" height="57.0" layoutX="-1.0" stroke="TRANSPARENT" strokeType="INSIDE" width="600.0" />
+      <Rectangle fx:id="wall2" arcHeight="5.0" arcWidth="5.0" fill="#65d961" height="210.0" layoutX="-1.0" layoutY="54.0" stroke="TRANSPARENT" strokeType="INSIDE" width="135.0" />
+      <Button fx:id="reset" layoutX="29.0" layoutY="29.0" mnemonicParsing="false" onAction="#start" text="Button" />
+      <Rectangle fx:id="wall3" arcHeight="5.0" arcWidth="5.0" fill="#65d961" height="210.0" layoutX="216.0" layoutY="54.0" stroke="TRANSPARENT" strokeType="INSIDE" width="92.0" />
+      <Rectangle fx:id="wall4" arcHeight="5.0" arcWidth="5.0" fill="#65d961" height="210.0" layoutX="407.0" layoutY="54.0" stroke="TRANSPARENT" strokeType="INSIDE" width="65.0" />
+      <Rectangle fx:id="room2" arcHeight="5.0" arcWidth="5.0" fill="RED" height="83.0" layoutX="308.0" layoutY="55.0" stroke="BLACK" strokeType="INSIDE" width="100.0" />
+      <Rectangle fx:id="room1" arcHeight="5.0" arcWidth="5.0" fill="RED" height="83.0" layoutX="134.0" layoutY="55.0" stroke="BLACK" strokeType="INSIDE" width="83.0" />
+      <Button fx:id="button" layoutX="153.0" layoutY="84.0" mnemonicParsing="false" text="room" />
+      <Button fx:id="button1" layoutX="335.0" layoutY="84.0" mnemonicParsing="false" text="room" />
+      <Button fx:id="button11" layoutX="512.0" layoutY="84.0" mnemonicParsing="false" text="room" />
    </children>
 </Pane>

@@ -1,5 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.AnimationTimer;
 import javafx.beans.binding.BooleanBinding;
@@ -28,34 +30,69 @@ public class PlayerController implements Initializable{
     private int movementVariable = 2;
     private double shapesize;
 
+    List<Rectangle> walls = new ArrayList<>();
+
     @FXML
     private Circle player;
 
     @FXML
-    private Rectangle shape1;
+    private Rectangle room1;
+    @FXML
+    private Rectangle room2;
+    @FXML
+    private Rectangle room3;
+
+    @FXML
+    private Rectangle wall;
+    @FXML
+    private Rectangle wall1;
+    @FXML
+    private Rectangle wall2;
+    @FXML
+    private Rectangle wall3;
+    @FXML
+    private Rectangle wall4;
 
     @FXML
     private Pane scene;
 
     @FXML
     private Button button;
+    @FXML
+    private Button button1;
+    @FXML
+    private Button button11;
+
+
+    @FXML
+    private Button reset;
+
+    private double previousX;
+    private double previousY;
 
     @FXML
     void start(ActionEvent event){
-        player.setLayoutX(200);
+        player.setLayoutX(10);
         player.setLayoutY(200);
     }
 
     AnimationTimer collisionTimer = new AnimationTimer(){
         @Override
         public void handle(long now){
-            checkCollision(player,shape1);
+            checkCollision2(player,walls);
+            checkRoom1(player, room1);
+            checkRoom2(player, room2);
+            checkRoom3(player, room3);
         }
     };
 
     AnimationTimer timer = new AnimationTimer(){
         @Override
         public void handle(long now){
+
+            previousX = player.getLayoutX(); // Update previousX
+            previousY = player.getLayoutY(); // Update previousY
+
             if(wPressed.get()){
                 player.setLayoutY(player.getLayoutY() - movementVariable);
             }
@@ -75,9 +112,22 @@ public class PlayerController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         button.setVisible(false);
+        button1.setVisible(false);
+        button11.setVisible(false);
+
         shapesize = player.getRadius() * 2;
         movementSetup();
+        
+        walls.add(wall);
+        walls.add(wall1);
+        walls.add(wall2);
+        walls.add(wall3);
+        walls.add(wall4);
+
         collisionTimer.start();
+
+        previousX = player.getLayoutX();
+        previousY = player.getLayoutY();
 
         keyPressed.addListener(((observableValue, aBoolean, t1) -> {
             if(!aBoolean){
@@ -87,10 +137,36 @@ public class PlayerController implements Initializable{
             }
         }));
     }
+    public void checkRoom1(Circle player, Rectangle room1){
+            if(player.getBoundsInParent().intersects(room1.getBoundsInParent())){
+                button.setVisible(true);
+            }else{
+                button.setVisible(false);
+            }
+    }
+    public void checkRoom2(Circle player, Rectangle room2){
+            if(player.getBoundsInParent().intersects(room2.getBoundsInParent())){
+                button1.setVisible(true);
+            }else{
+                button1.setVisible(false);
+            }
+    }
+    public void checkRoom3(Circle player, Rectangle room3){
+            if(player.getBoundsInParent().intersects(room3.getBoundsInParent())){
+                button11.setVisible(true);
+            }else {
+                button11.setVisible(false);
+            }
+    }
 
-    public void checkCollision(Circle player, Rectangle shape1){
-        if(player.getBoundsInParent().intersects(shape1.getBoundsInParent())){
-            button.setVisible(true);
+
+    public void checkCollision2(Circle player, List<Rectangle> walls){
+        for(Rectangle wall : walls){
+            if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
+                player.setLayoutX(previousX); // Restore the player's previous X position
+                player.setLayoutY(previousY); // Restore the player's previous Y position
+                 // Exit the loop as soon as a collision is detected
+            }
         }
     }
 
@@ -104,13 +180,10 @@ public class PlayerController implements Initializable{
         scene.setOnKeyPressed(e -> {
             if(e.getCode() == KeyCode.W) {
                 wPressed.set(true);
-                player.setLayoutY(player.getLayoutY() - movementVariable);
-                System.out.println(e.getCode());
             }
 
             if(e.getCode() == KeyCode.A) {
                 aPressed.set(true);
-                System.out.println(e.getCode());
             }
 
             if(e.getCode() == KeyCode.S) {
@@ -125,13 +198,10 @@ public class PlayerController implements Initializable{
         scene.setOnKeyReleased(e -> {
             if(e.getCode() == KeyCode.W) {
                 wPressed.set(false);
-                player.setLayoutY(player.getLayoutY() - movementVariable);
-                System.out.println(e.getCode());
             }
 
             if(e.getCode() == KeyCode.A) {
                 aPressed.set(false);
-                System.out.println(e.getCode());
             }
 
             if(e.getCode() == KeyCode.S) {
