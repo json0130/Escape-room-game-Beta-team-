@@ -44,7 +44,7 @@ public class App extends Application {
   @Override
   public void start(final Stage stage) throws IOException {
     Parent root = loadFxml("room");
-    scene = new Scene(root, 600, 470);
+    scene = new Scene(root, 1280, 720);
     stage.setScene(scene);
     stage.show();
     root.requestFocus();
