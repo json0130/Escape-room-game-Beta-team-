@@ -7,53 +7,48 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.Room1Controller">
    <children>
-      <ImageView fitHeight="713.0" fitWidth="845.0" layoutX="271.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="720.0" fitWidth="1296.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/room1/room1withdeco.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="crew2" fitHeight="113.0" fitWidth="96.0" layoutX="771.0" layoutY="403.0" onMouseClicked="#clickCrew2" onMouseEntered="#enterCrew2" onMouseExited="#exitCrew2" pickOnBounds="true" preserveRatio="true" rotate="90.0">
-         <image>
-            <Image url="@../images/room1/crew2.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="crew1" fitHeight="121.0" fitWidth="109.0" layoutX="474.0" layoutY="458.0" onMouseClicked="#clickCrew1" onMouseEntered="#enterCrew1" onMouseExited="#exitCrew1" pickOnBounds="true" preserveRatio="true" rotate="120.0">
-         <image>
-            <Image url="@../images/room1/crew1.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="crew3" fitHeight="147.0" fitWidth="109.0" layoutX="546.0" layoutY="552.0" onMouseClicked="#clickCrew3" onMouseEntered="#enterCrew3" onMouseExited="#exitCrew3" pickOnBounds="true" preserveRatio="true" rotate="280.0">
-         <image>
-            <Image url="@../images/room1/crew3.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="crew4" fitHeight="148.0" fitWidth="144.0" layoutX="496.0" layoutY="306.0" onMouseClicked="#clickCrew4" onMouseEntered="#enterCrew4" onMouseExited="#exitCrew4" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/room1/crew4.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="51.0" fitWidth="45.0" layoutX="359.0" layoutY="431.0" pickOnBounds="true" preserveRatio="true" rotate="-30.0">
-         <image>
-            <Image url="@../images/room1/cap.png" />
+            <Image url="@../images/room1/room1ver2.png" />
          </image>
       </ImageView>
       <Button fx:id="btnRiddle" layoutX="38.0" layoutY="410.0" mnemonicParsing="false" onAction="#onRiddle" text="Riddle" />
-      <ImageView fx:id="idCaptain" fitHeight="131.0" fitWidth="200.0" layoutX="788.0" layoutY="309.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="crew1" fitHeight="150.0" fitWidth="200.0" layoutX="74.0" layoutY="150.0" onMouseClicked="#clickCrew1" onMouseEntered="#enterCrew1" onMouseExited="#exitCrew1" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/room1/costume.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="crew2" fitHeight="150.0" fitWidth="200.0" layoutX="312.0" layoutY="150.0" onMouseClicked="#clickCrew2" onMouseEntered="#enterCrew2" onMouseExited="#exitCrew2" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/room1/costume.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="crew3" fitHeight="150.0" fitWidth="200.0" layoutX="560.0" layoutY="150.0" onMouseClicked="#clickCrew3" onMouseEntered="#enterCrew3" onMouseExited="#exitCrew3" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/room1/costume.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="crew4" fitHeight="150.0" fitWidth="200.0" layoutX="1067.0" layoutY="150.0" onMouseClicked="#clickCrew4" onMouseEntered="#enterCrew4" onMouseExited="#exitCrew4" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/room1/costume.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="idCaptain" fitHeight="153.0" fitWidth="250.0" layoutX="255.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/idcaptain.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="idChef" fitHeight="148.0" fitWidth="236.0" layoutX="663.0" layoutY="549.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="idChef" fitHeight="153.0" fitWidth="244.0" layoutX="499.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/idchef.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="idDoctor" fitHeight="132.0" fitWidth="200.0" layoutX="282.0" layoutY="331.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="idDoctor" fitHeight="166.0" fitWidth="250.0" layoutX="8.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/iddoctor.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="idEngineer" fitHeight="132.0" fitWidth="221.0" layoutX="521.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="idEngineer" fitHeight="153.0" fitWidth="250.0" layoutX="1009.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/idengineer.png" />
          </image>
