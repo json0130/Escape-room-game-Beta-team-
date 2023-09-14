@@ -458,10 +458,12 @@ public class TileGameRoomController {
   private void onPowerButtonPressed() {
 
     bigScreenOff.setVisible(false);
+    System.out.println("hi");
     smallScreenOff.setVisible(false);
+    
   }
 
-  @FXML
+  @FXML 
   private void onReleaseAirLockButtonClick() {
     App.tileGameComplete = true;
     System.out.println("Tile Game Complete");
