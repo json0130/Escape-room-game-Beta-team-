@@ -196,7 +196,7 @@ public class TutorialController implements Initializable {
     public void checkFinish(ImageView player, Circle c3) {
         
         if (player.getBoundsInParent().intersects(c3.getBoundsInParent())) {
-            App.setScene(AppUi.ROOM);
+            App.setScene(AppUi.ANIMATION);
             collisionTimer.stop();
             timer.stop();
         }
