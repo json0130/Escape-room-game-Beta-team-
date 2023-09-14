@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.IntroController">
+   <children>
+      <ImageView fx:id="background" fitHeight="690.0" fitWidth="1000.0" layoutX="-1.0" layoutY="-29.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly%20Space%20background%20with%20spaceship%20flying%20around%2053452.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="287.0" layoutY="247.0" prefHeight="56.0" prefWidth="455.0" style="-fx-background-color: grey;" text="SPACE SHIP ESCAPE" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="ACaslonPro-Regular" size="44.0" />
+         </font>
+      </Label>
+      <Group layoutX="172.0" layoutY="504.0">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="20.0" fill="#c5c5c5" height="39.0" opacity="0.34" stroke="BLACK" strokeType="INSIDE" width="101.0" />
+            <ImageView fitHeight="39.0" fitWidth="117.0" layoutX="-42.0" layoutY="-14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../../../Downloads/Screenshot%202023-09-13%20145946.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Group>
+      <Group layoutX="476.0" layoutY="504.0">
+         <children>
+            <ImageView fitHeight="58.0" fitWidth="159.0" layoutX="-42.0" layoutY="-14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../../../Downloads/Screenshot%202023-09-13%20150618.png" />
+               </image>
+            </ImageView>
+            <Rectangle arcHeight="5.0" arcWidth="20.0" fill="#c5c5c5" height="38.0" layoutX="-46.0" layoutY="-5.0" opacity="0.34" stroke="BLACK" strokeType="INSIDE" width="158.0" />
+         </children>
+      </Group>
+      <Button fx:id="startButton" layoutX="34.0" layoutY="201.0" mnemonicParsing="false" onAction="#startAnimation" prefHeight="75.0" prefWidth="126.0" text="Button" />
+      <ImageView fx:id="spaceship" fitHeight="153.0" fitWidth="169.0" layoutX="15.0" layoutY="476.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly_3D_spaceship_more_sharp_edges__going_80_degree_upward__bright_colour_spaceship_47271-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <Group layoutX="811.0" layoutY="514.0">
+         <children>
+            <ImageView fitHeight="39.0" fitWidth="117.0" layoutX="-42.0" layoutY="-14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../../../Downloads/Screenshot%202023-09-13%20150946.png" />
+               </image>
+            </ImageView>
+            <Rectangle arcHeight="5.0" arcWidth="20.0" fill="#c5c5c5" height="39.0" layoutX="-42.0" layoutY="-14.0" opacity="0.34" stroke="BLACK" strokeType="INSIDE" width="101.0" />
+         </children>
+      </Group>
+   </children>
+</Pane>
