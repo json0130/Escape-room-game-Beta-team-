@@ -77,7 +77,6 @@ public class AnimationController implements Initializable {
         spaceshipTranslation.setOnFinished(event -> {
             e1.setVisible(true);
             explosionAnimation(e1);
-
         });
     }
 
@@ -92,6 +91,11 @@ public class AnimationController implements Initializable {
 
     // Start the scale animation
     scaleTransition.play();
+    // Enable the button when the animation is finished
+        scaleTransition.setOnFinished(event -> {
+            App.setScene(AppUi.ROOM);
+        });
+    
     }
 
 
