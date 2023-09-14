@@ -27,7 +27,7 @@ public class PlayerController implements Initializable{
 
     private BooleanBinding keyPressed = wPressed.or(aPressed).or(sPressed).or(dPressed);
 
-    private int movementVariable = 2;
+    private int movementVariable = 5;
     private double shapesize;
 
     List<Rectangle> walls = new ArrayList<>();
@@ -42,16 +42,24 @@ public class PlayerController implements Initializable{
     @FXML
     private Rectangle room3;
 
-    @FXML
-    private Rectangle wall;
-    @FXML
-    private Rectangle wall1;
-    @FXML
-    private Rectangle wall2;
-    @FXML
-    private Rectangle wall3;
-    @FXML
-    private Rectangle wall4;
+    @FXML private Rectangle wall;
+    @FXML private Rectangle wall1;
+    @FXML private Rectangle wall2;
+    @FXML private Rectangle wall3;
+    @FXML private Rectangle wall4;
+    @FXML private Rectangle wall5;
+    @FXML private Rectangle wall6;
+    @FXML private Rectangle wall7;
+    @FXML private Rectangle wall8;
+    @FXML private Rectangle wall9;
+    @FXML private Rectangle wall10;
+    @FXML private Rectangle wall11;
+    @FXML private Rectangle wall12;
+    @FXML private Rectangle wall13;
+    @FXML private Rectangle wall14;
+    @FXML private Rectangle wall15;
+    @FXML private Rectangle wall16;
+    @FXML private Rectangle wall17;
 
     @FXML
     private Pane scene;
@@ -114,6 +122,9 @@ public class PlayerController implements Initializable{
         button.setVisible(false);
         button1.setVisible(false);
         button11.setVisible(false);
+        room1.setVisible(false);
+        room2.setVisible(false);
+        room3.setVisible(false);
 
         shapesize = player.getRadius() * 2;
         movementSetup();
@@ -123,6 +134,19 @@ public class PlayerController implements Initializable{
         walls.add(wall2);
         walls.add(wall3);
         walls.add(wall4);
+        walls.add(wall5);
+        walls.add(wall6);
+        walls.add(wall7);
+        walls.add(wall8);
+        walls.add(wall9);
+        walls.add(wall10);
+        walls.add(wall11);
+        walls.add(wall12);
+        walls.add(wall13);
+        walls.add(wall14);
+        walls.add(wall15);
+        walls.add(wall16);
+        walls.add(wall17);
 
         collisionTimer.start();
 
@@ -140,22 +164,28 @@ public class PlayerController implements Initializable{
     public void checkRoom1(Circle player, Rectangle room1){
             if(player.getBoundsInParent().intersects(room1.getBoundsInParent())){
                 button.setVisible(true);
+                room1.setVisible(true);
             }else{
                 button.setVisible(false);
+                room1.setVisible(false);
             }
     }
     public void checkRoom2(Circle player, Rectangle room2){
             if(player.getBoundsInParent().intersects(room2.getBoundsInParent())){
                 button1.setVisible(true);
+                room2.setVisible(true);
             }else{
                 button1.setVisible(false);
+                room2.setVisible(false);
             }
     }
     public void checkRoom3(Circle player, Rectangle room3){
             if(player.getBoundsInParent().intersects(room3.getBoundsInParent())){
                 button11.setVisible(true);
+                room3.setVisible(true);
             }else {
                 button11.setVisible(false);
+                room3.setVisible(false);
             }
     }
 

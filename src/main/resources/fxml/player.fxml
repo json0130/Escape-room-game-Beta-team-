@@ -4,28 +4,60 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 
-<Pane fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.PlayerController">
+<Pane fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.PlayerController">
    <children>
-      <ImageView fitHeight="420.0" fitWidth="572.0" layoutX="13.0" layoutY="-22.0" opacity="0.3" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="678.0" fitWidth="1262.0" layoutX="-17.0" layoutY="-9.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/background.png" />
+            <Image url="@../images/Firefly%2020230913233152.png" />
          </image>
       </ImageView>
-      <Circle fx:id="player" layoutX="36.0" layoutY="302.0" radius="19.0" stroke="BLACK" strokeType="INSIDE" />
-      <Rectangle fx:id="room3" arcHeight="5.0" arcWidth="5.0" fill="RED" height="83.0" layoutX="470.0" layoutY="55.0" stroke="BLACK" strokeType="INSIDE" width="129.0" />
-      <Rectangle fx:id="wall" arcHeight="5.0" arcWidth="5.0" fill="#65d961" height="57.0" layoutY="343.0" stroke="TRANSPARENT" strokeType="INSIDE" width="600.0" />
-      <Rectangle fx:id="wall1" arcHeight="5.0" arcWidth="5.0" fill="#65d961" height="57.0" layoutX="-1.0" stroke="TRANSPARENT" strokeType="INSIDE" width="600.0" />
-      <Rectangle fx:id="wall2" arcHeight="5.0" arcWidth="5.0" fill="#65d961" height="210.0" layoutX="-1.0" layoutY="54.0" stroke="TRANSPARENT" strokeType="INSIDE" width="135.0" />
-      <Button fx:id="reset" layoutX="29.0" layoutY="29.0" mnemonicParsing="false" onAction="#start" text="Button" />
-      <Rectangle fx:id="wall3" arcHeight="5.0" arcWidth="5.0" fill="#65d961" height="210.0" layoutX="216.0" layoutY="54.0" stroke="TRANSPARENT" strokeType="INSIDE" width="92.0" />
-      <Rectangle fx:id="wall4" arcHeight="5.0" arcWidth="5.0" fill="#65d961" height="210.0" layoutX="407.0" layoutY="54.0" stroke="TRANSPARENT" strokeType="INSIDE" width="65.0" />
-      <Rectangle fx:id="room2" arcHeight="5.0" arcWidth="5.0" fill="RED" height="83.0" layoutX="308.0" layoutY="55.0" stroke="BLACK" strokeType="INSIDE" width="100.0" />
-      <Rectangle fx:id="room1" arcHeight="5.0" arcWidth="5.0" fill="RED" height="83.0" layoutX="134.0" layoutY="55.0" stroke="BLACK" strokeType="INSIDE" width="83.0" />
-      <Button fx:id="button" layoutX="153.0" layoutY="84.0" mnemonicParsing="false" text="room" />
-      <Button fx:id="button1" layoutX="335.0" layoutY="84.0" mnemonicParsing="false" text="room" />
-      <Button fx:id="button11" layoutX="512.0" layoutY="84.0" mnemonicParsing="false" text="room" />
+      <Rectangle fx:id="room3" arcHeight="5.0" arcWidth="5.0" fill="#9202c765" height="205.0" layoutX="640.0" layoutY="403.0" stroke="TRANSPARENT" strokeType="INSIDE" width="189.0" />
+      <Rectangle fx:id="room2" arcHeight="5.0" arcWidth="5.0" fill="#0050a69c" height="212.0" layoutX="446.0" layoutY="51.0" stroke="TRANSPARENT" strokeType="INSIDE" width="186.0" />
+      <Rectangle fx:id="room1" arcHeight="5.0" arcWidth="5.0" fill="#ff550087" height="165.0" layoutX="33.0" layoutY="445.0" stroke="#ffffff00" strokeType="INSIDE" width="99.0" />
+      <Button fx:id="button" layoutX="60.0" layoutY="470.0" mnemonicParsing="false" text="room" />
+      <Button fx:id="button1" layoutX="509.0" layoutY="169.0" mnemonicParsing="false" text="room" />
+      <Button fx:id="button11" layoutX="668.0" layoutY="438.0" mnemonicParsing="false" text="room" />
+      <Circle fx:id="player" layoutX="95.0" layoutY="168.0" radius="19.0" stroke="BLACK" strokeType="INSIDE">
+         <fill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.8421052694320679" green="0.09876543283462524" blue="0.7429932951927185" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill></Circle>
+      <Rectangle fx:id="wall" arcHeight="5.0" arcWidth="5.0" fill="#0037ad75" height="38.0" layoutX="-2.0" layoutY="614.0" opacity="0.0" stroke="TRANSPARENT" strokeType="INSIDE" width="915.0" />
+      <Rectangle fx:id="wall1" arcHeight="5.0" arcWidth="5.0" fill="#0037ad75" height="25.0" layoutX="32.0" layoutY="19.0" opacity="0.0" stroke="TRANSPARENT" strokeType="INSIDE" width="821.0" />
+      <Rectangle fx:id="wall2" arcHeight="5.0" arcWidth="5.0" fill="#0037ad75" height="573.0" layoutX="-1.0" layoutY="33.0" opacity="0.0" stroke="TRANSPARENT" strokeType="INSIDE" width="32.0" />
+      <Rectangle fx:id="wall3" arcHeight="5.0" arcWidth="5.0" fill="#00a3987a" height="287.0" layoutX="343.0" layoutY="40.0" opacity="0.71" stroke="TRANSPARENT" strokeType="INSIDE" width="9.0" />
+      <Rectangle fx:id="wall4" arcHeight="5.0" arcWidth="5.0" fill="#0037ad75" height="226.0" layoutX="632.0" layoutY="47.0" opacity="0.71" stroke="TRANSPARENT" strokeType="INSIDE" width="7.0" />
+      <Rectangle fx:id="wall5" arcHeight="5.0" arcWidth="5.0" fill="#0037ad75" height="226.0" layoutX="435.0" layoutY="47.0" opacity="0.71" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
+      <Rectangle fx:id="wall6" arcHeight="5.0" arcWidth="5.0" fill="#0037ad75" height="573.0" layoutX="796.0" layoutY="41.0" opacity="0.0" stroke="TRANSPARENT" strokeType="INSIDE" width="38.0" />
+      <Rectangle fx:id="wall7" arcHeight="5.0" arcWidth="5.0" fill="#3e00ab75" height="242.0" layoutX="627.0" layoutY="393.0" opacity="0.71" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
+      <Rectangle fx:id="wall8" arcHeight="5.0" arcWidth="5.0" fill="#ff840075" height="167.0" layoutX="132.0" layoutY="444.0" opacity="0.71" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
+      <Rectangle fx:id="wall9" arcHeight="5.0" arcWidth="5.0" fill="#00ab7175" height="146.0" layoutX="204.0" layoutY="471.0" opacity="0.71" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
+      <Rectangle fx:id="wall10" arcHeight="5.0" arcWidth="5.0" fill="#00ab7175" height="151.0" layoutX="328.0" layoutY="469.0" opacity="0.71" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
+      <Rectangle fx:id="wall11" arcHeight="5.0" arcWidth="5.0" fill="#00a3987a" height="9.0" layoutX="63.0" layoutY="321.0" opacity="0.71" stroke="TRANSPARENT" strokeType="INSIDE" width="92.0" />
+      <Rectangle fx:id="wall12" arcHeight="5.0" arcWidth="5.0" fill="#0037ad75" height="9.0" layoutX="553.0" layoutY="259.0" opacity="0.71" stroke="TRANSPARENT" strokeType="INSIDE" width="77.0" />
+      <Rectangle fx:id="wall13" arcHeight="5.0" arcWidth="5.0" fill="#3e00ab75" height="9.0" layoutX="728.0" layoutY="391.0" opacity="0.71" stroke="TRANSPARENT" strokeType="INSIDE" width="107.0" />
+      <Rectangle fx:id="wall14" arcHeight="5.0" arcWidth="5.0" fill="#00ab8775" height="9.0" layoutX="436.0" layoutY="466.0" opacity="0.71" stroke="TRANSPARENT" strokeType="INSIDE" width="139.0" />
+      <Rectangle fx:id="wall15" arcHeight="5.0" arcWidth="5.0" fill="#00ab8775" height="172.0" layoutX="563.0" layoutY="467.0" opacity="0.71" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
+      <Rectangle fx:id="wall16" arcHeight="5.0" arcWidth="5.0" fill="#00ab8775" height="146.0" layoutX="436.0" layoutY="468.0" opacity="0.71" stroke="TRANSPARENT" strokeType="INSIDE" width="12.0" />
+      <Rectangle fx:id="wall17" arcHeight="5.0" arcWidth="5.0" fill="#00ab7175" height="9.0" layoutX="214.0" layoutY="469.0" opacity="0.71" stroke="TRANSPARENT" strokeType="INSIDE" width="116.0" />
+      <Button fx:id="reset" layoutX="38.0" layoutY="43.0" mnemonicParsing="false" onAction="#start" text="Button" />
    </children>
 </Pane>
