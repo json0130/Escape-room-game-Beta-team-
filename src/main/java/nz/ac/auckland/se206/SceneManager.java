@@ -6,9 +6,10 @@ import javafx.scene.Parent;
 public class SceneManager {
   public enum AppUi {
     ROOM,
-    CHAT,
-    TUTORIAL,
     PLAYER,
+    CHAT,
+    INTRO,
+    TUTORIAL,
     ANIMATION
   }
 
