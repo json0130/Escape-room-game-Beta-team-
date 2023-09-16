@@ -6,14 +6,170 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.IntroController">
    <children>
-      <ImageView fx:id="background" fitHeight="690.0" fitWidth="1000.0" layoutX="-1.0" layoutY="-29.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="background" fitHeight="690.0" fitWidth="1000.0" layoutX="-7.0" layoutY="-30.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly%20Space%20background%20with%20spaceship%20flying%20around%2053452.jpg" />
+         </image>
+      </ImageView>
+      <Label fx:id="title" alignment="CENTER" layoutX="175.0" layoutY="172.0" prefHeight="106.0" prefWidth="637.0" style="-fx-border-color: white;" styleClass="stroked-label" stylesheets="@../css/stroked-label.css" text="SPACE SHIP ESCAPE" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+         <font>
+            <Font name="ACaslonPro-Regular" size="53.0" />
+         </font>
+      </Label>
+      <Group layoutX="110.0" layoutY="412.0">
+         <children>
+            <Rectangle fx:id="easybox" arcHeight="5.0" arcWidth="10.0" fill="#0000008b" height="150.0" stroke="WHITE" strokeLineCap="ROUND" strokeWidth="2.0" width="200.0" />
+            <Label fx:id="easy" alignment="TOP_LEFT" layoutX="22.0" layoutY="14.0" prefHeight="132.0" prefWidth="162.0" text="EASY :  &#10;Hint: UNLIMITED&#10;" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="System Bold Italic" size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </Group>
+      <Group layoutX="399.0" layoutY="412.0">
+         <children>
+            <Rectangle fx:id="mediumbox" arcHeight="5.0" arcWidth="10.0" fill="#0000008b" height="150.0" stroke="WHITE" strokeLineCap="ROUND" strokeWidth="2.0" width="200.0" />
+            <Label fx:id="medium" alignment="TOP_LEFT" layoutX="37.0" layoutY="10.0" prefHeight="132.0" prefWidth="162.0" text="MEDIUM :  &#10;Hint: 5 TIMES&#10;" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="System Bold Italic" size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </Group>
+      <Group layoutX="690.0" layoutY="411.0">
+         <children>
+            <Rectangle fx:id="hardbox" arcHeight="5.0" arcWidth="10.0" fill="#0000008b" height="150.0" stroke="WHITE" strokeLineCap="ROUND" strokeWidth="2.0" width="200.0" />
+            <Label fx:id="hard" alignment="TOP_LEFT" layoutX="27.0" layoutY="10.0" prefHeight="132.0" prefWidth="162.0" text="HARD :  &#10;Hint: NO HINTS&#10;" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="System Bold Italic" size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </Group>
+      <Button fx:id="mediumButton" layoutX="399.0" layoutY="429.0" mnemonicParsing="false" onAction="#levelButtonClicked" prefHeight="60.0" prefWidth="200.0" text="MEDIUM">
+         <font>
+            <Font size="27.0" />
+         </font>
+         <textFill>
+            <RadialGradient centerX="0.7767527252985542" centerY="0.5977918221747461" radius="0.5">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.2631579041481018" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.3042505592841163">
+                     <color>
+                        <Color red="0.2631579041481018" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.8458694821847546">
+                     <color>
+                        <Color red="0.4649122953414917" green="0.12196772545576096" blue="0.12196772545576096" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.8421052694320679" green="0.15074723958969116" blue="0.15074723958969116" />
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+         </textFill>
+      </Button>
+      <Button fx:id="easyButton" layoutX="111.0" layoutY="429.0" mnemonicParsing="false" onAction="#levelButtonClicked" prefHeight="60.0" prefWidth="200.0" text="EASY">
+         <font>
+            <Font size="27.0" />
+         </font>
+         <textFill>
+            <RadialGradient centerX="0.7767527252985542" centerY="0.5977918221747461" radius="0.5">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.2631579041481018" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.3042505592841163">
+                     <color>
+                        <Color red="0.2631579041481018" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.8458694821847546">
+                     <color>
+                        <Color red="0.4649122953414917" green="0.12196772545576096" blue="0.12196772545576096" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.8421052694320679" green="0.15074723958969116" blue="0.15074723958969116" />
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+         </textFill>
+      </Button>
+      <Button fx:id="hardButton" layoutX="691.0" layoutY="429.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="HARD">
+         <font>
+            <Font size="27.0" />
+         </font>
+         <textFill>
+            <RadialGradient centerX="0.7767527252985542" centerY="0.5977918221747461" radius="0.5">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.2631579041481018" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.3042505592841163">
+                     <color>
+                        <Color red="0.2631579041481018" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.8458694821847546">
+                     <color>
+                        <Color red="0.4649122953414917" green="0.12196772545576096" blue="0.12196772545576096" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.8421052694320679" green="0.15074723958969116" blue="0.15074723958969116" />
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+         </textFill>
+      </Button>
+      <Button fx:id="minB2" layoutX="109.0" layoutY="516.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="45.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" text="2 MININTES" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="minB4" layoutX="398.0" layoutY="516.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="45.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" text="4 MININTES" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="minB6" layoutX="689.0" layoutY="515.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="45.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" text="6 MININTES" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="startButton" alignment="CENTER" contentDisplay="TOP" graphicTextGap="10.0" layoutX="308.0" layoutY="220.0" mnemonicParsing="false" onAction="#startAnimation" prefHeight="99.0" prefWidth="376.0" text="START" textAlignment="CENTER" textFill="#744b4b">
+         <font>
+            <Font size="46.0" />
+         </font>
+      </Button>
+      <ImageView fx:id="background2" fitHeight="729.0" fitWidth="1208.0" layoutX="-172.0" layoutY="-72.0" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../images/Firefly%20space%20game%20background%209772.jpg" />
          </image>
       </ImageView>
       <ImageView fx:id="spaceship" fitHeight="153.0" fitWidth="169.0" layoutX="15.0" layoutY="476.0" pickOnBounds="true" preserveRatio="true">
@@ -21,41 +177,5 @@
             <Image url="@../images/Firefly_3D_spaceship_more_sharp_edges__going_80_degree_upward__bright_colour_spaceship_47271-removebg-preview.png" />
          </image>
       </ImageView>
-      <Label layoutX="287.0" layoutY="247.0" prefHeight="56.0" prefWidth="455.0" style="-fx-background-color: grey;" text="SPACE SHIP ESCAPE" textAlignment="CENTER" textFill="WHITE">
-         <font>
-            <Font name="ACaslonPro-Regular" size="44.0" />
-         </font>
-      </Label>
-      <Group layoutX="172.0" layoutY="504.0">
-         <children>
-            <Rectangle arcHeight="5.0" arcWidth="20.0" fill="#c5c5c5" height="39.0" opacity="0.34" stroke="BLACK" strokeType="INSIDE" width="101.0" />
-            <ImageView fitHeight="59.0" fitWidth="140.0" layoutX="-42.0" layoutY="-14.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/Screenshot%202023-09-13%20145946.png" />
-               </image>
-            </ImageView>
-         </children>
-      </Group>
-      <Group layoutX="476.0" layoutY="504.0">
-         <children>
-            <ImageView fitHeight="65.0" fitWidth="183.0" layoutX="-42.0" layoutY="-14.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/Screenshot%202023-09-13%20150618.png" />
-               </image>
-            </ImageView>
-            <Rectangle arcHeight="5.0" arcWidth="20.0" fill="#c5c5c5" height="38.0" layoutX="-46.0" layoutY="-5.0" opacity="0.34" stroke="BLACK" strokeType="INSIDE" width="158.0" />
-         </children>
-      </Group>
-      <Group layoutX="808.0" layoutY="504.0">
-         <children>
-            <ImageView fitHeight="53.0" fitWidth="141.0" layoutX="-42.0" layoutY="-14.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/Screenshot%202023-09-13%20150946.png" />
-               </image>
-            </ImageView>
-            <Rectangle arcHeight="5.0" arcWidth="20.0" fill="#c5c5c5" height="39.0" layoutX="-42.0" layoutY="-14.0" opacity="0.34" stroke="BLACK" strokeType="INSIDE" width="101.0" />
-         </children>
-      </Group>
-      <Button fx:id="startButton" layoutX="34.0" layoutY="201.0" mnemonicParsing="false" onAction="#startAnimation" prefHeight="75.0" prefWidth="126.0" text="Button" />
    </children>
 </Pane>
