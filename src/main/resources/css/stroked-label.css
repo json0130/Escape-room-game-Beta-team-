@@ -1,5 +1,0 @@
-.stroked-label {
-    -fx-text-fill: white; /* Set text color */
-    -fx-stroke: red;      /* Set stroke color */
-    -fx-stroke-width: 10;  /* Set stroke width */
-}

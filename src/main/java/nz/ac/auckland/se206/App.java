@@ -45,6 +45,7 @@ public class App extends Application {
   public void start(final Stage stage) throws IOException {
     Parent root = loadFxml("start");
     scene = new Scene(root, 1000, 650);
+    scene.getStylesheets().add("styles.css");
     stage.setScene(scene);
     stage.show();
     root.requestFocus();
