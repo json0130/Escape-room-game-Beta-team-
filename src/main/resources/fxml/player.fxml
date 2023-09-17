@@ -21,7 +21,7 @@
       <Rectangle fx:id="room2" arcHeight="5.0" arcWidth="5.0" fill="#0050a69c" height="212.0" layoutX="446.0" layoutY="51.0" stroke="TRANSPARENT" strokeType="INSIDE" width="186.0" />
       <Rectangle fx:id="room1" arcHeight="5.0" arcWidth="5.0" fill="#ff550087" height="165.0" layoutX="33.0" layoutY="445.0" stroke="#ffffff00" strokeType="INSIDE" width="99.0" />
       <Button fx:id="button" layoutX="60.0" layoutY="470.0" mnemonicParsing="false" text="room" />
-      <Button fx:id="button1" layoutX="509.0" layoutY="169.0" mnemonicParsing="false" text="room" />
+      <Button fx:id="button1" layoutX="509.0" layoutY="169.0" mnemonicParsing="false" onAction="#switchScene" text="room" />
       <Button fx:id="button11" layoutX="668.0" layoutY="438.0" mnemonicParsing="false" text="room" />
       <Circle fx:id="player" layoutX="95.0" layoutY="168.0" radius="19.0" stroke="BLACK" strokeType="INSIDE">
          <fill>
@@ -59,6 +59,6 @@
       <Rectangle fx:id="wall16" arcHeight="5.0" arcWidth="5.0" fill="#00ab8775" height="146.0" layoutX="436.0" layoutY="468.0" opacity="0.71" stroke="TRANSPARENT" strokeType="INSIDE" width="12.0" />
       <Rectangle fx:id="wall17" arcHeight="5.0" arcWidth="5.0" fill="#00ab7175" height="9.0" layoutX="214.0" layoutY="469.0" opacity="0.71" stroke="TRANSPARENT" strokeType="INSIDE" width="116.0" />
       <Button fx:id="reset" layoutX="38.0" layoutY="43.0" mnemonicParsing="false" onAction="#start" text="Button" />
-       <fx:include source="countdowntimer.fxml"/>
+       <fx:include source="countdowntimer.fxml" />
    </children>
 </Pane>
