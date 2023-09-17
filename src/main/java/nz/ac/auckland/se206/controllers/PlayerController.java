@@ -10,13 +10,18 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.Pane;
+
+import java.io.IOException;
 import java.net.URL;
+import javafx.fxml.FXMLLoader;
 
 public class PlayerController implements Initializable{
     
@@ -78,6 +83,8 @@ public class PlayerController implements Initializable{
     private double previousX;
     private double previousY;
 
+    @FXML private Label countdownLabel;
+
     @FXML
     void start(ActionEvent event){
         player.setLayoutX(10);
@@ -119,6 +126,7 @@ public class PlayerController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+            
         button.setVisible(false);
         button1.setVisible(false);
         button11.setVisible(false);
@@ -161,6 +169,7 @@ public class PlayerController implements Initializable{
             }
         }));
     }
+    
     public void checkRoom1(Circle player, Rectangle room1){
             if(player.getBoundsInParent().intersects(room1.getBoundsInParent())){
                 button.setVisible(true);
