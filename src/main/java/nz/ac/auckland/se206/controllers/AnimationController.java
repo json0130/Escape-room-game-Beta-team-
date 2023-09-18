@@ -15,7 +15,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -98,56 +97,8 @@ public class AnimationController implements Initializable {
     
     }
 
-
-
-
-    private void setRotate(Circle c, boolean reverse, int angle, int duration){
-        RotateTransition rt = new RotateTransition(Duration.seconds(duration), c);
-        rt.setAutoReverse(reverse);
-        rt.setByAngle(angle);
-        rt.setDelay(Duration.seconds(0));
-        rt.setRate(3);
-        rt.setCycleCount(18);
-        rt.play();
-    }
-
-    private void setMovement(ImageView r, boolean reverse, int duration, double endX, double endY, int delaySeconds) {
-    double startX = r.getTranslateX();
-    double startY = r.getTranslateY();
-
-    Path path = new Path();
-    path.getElements().add(new MoveTo(startX, startY));
-    path.getElements().add(new LineTo(endX, endY));
-
-    PathTransition pathTransition = new PathTransition();
-    pathTransition.setNode(r);
-    pathTransition.setPath(path);
-    pathTransition.setDuration(Duration.seconds(duration));
-    pathTransition.setCycleCount(reverse ? Animation.INDEFINITE : 1);
-    pathTransition.setAutoReverse(reverse);
-
-    SequentialTransition sequentialTransition = new SequentialTransition();
-    sequentialTransition.getChildren().addAll(
-        new PauseTransition(Duration.seconds(delaySeconds)),
-        pathTransition
-    );
-
-    sequentialTransition.setOnFinished(event -> {
-        // Reset the position of the ImageView to its original location
-        r.setTranslateX(startX);
-        r.setTranslateY(startY);
-
-        // Start the animation again
-        sequentialTransition.playFromStart();
-    });
-
-    sequentialTransition.play();
-    }
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         e1.setVisible(false);
     }
 }
-
