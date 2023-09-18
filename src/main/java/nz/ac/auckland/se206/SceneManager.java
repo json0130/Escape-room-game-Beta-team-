@@ -8,7 +8,8 @@ public class SceneManager {
     ROOM,
     PLAYER,
     CHAT,
-    INTRO
+    INTRO,
+    END
   }
 
   private static HashMap<AppUi, Parent> scenes = new HashMap<AppUi, Parent>();
