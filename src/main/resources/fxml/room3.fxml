@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.ExitController">
+   <children>
+      <ImageView fitHeight="673.0" fitWidth="1020.0" layoutX="-4.0" layoutY="-9.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/room3/exit.png" />
+         </image>
+      </ImageView>
+      <TextField layoutX="528.0" layoutY="323.0" prefHeight="69.0" prefWidth="83.0" />
+      <TextField layoutX="625.0" layoutY="322.0" prefHeight="69.0" prefWidth="83.0" />
+      <TextField layoutX="718.0" layoutY="322.0" prefHeight="69.0" prefWidth="83.0" />
+      <TextField layoutX="811.0" layoutY="321.0" prefHeight="69.0" prefWidth="83.0" />
+      <ImageView fx:id="door" fitHeight="650.0" fitWidth="1000.0" layoutX="-6.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/room3/exit2.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="lever" fitHeight="101.0" fitWidth="371.0" layoutX="54.0" layoutY="582.0" onMouseDragged="#dragLever" onMouseEntered="#enterLever" onMouseExited="#exitLever" onMousePressed="#pressLever" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/room3/lever.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="145.0" layoutY="553.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/room3/lever2.png" />
+         </image>
+      </ImageView>
+   </children>
+</Pane>

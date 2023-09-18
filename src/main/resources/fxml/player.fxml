@@ -22,7 +22,7 @@
       <Rectangle fx:id="room1" arcHeight="5.0" arcWidth="5.0" fill="#ff550087" height="165.0" layoutX="33.0" layoutY="445.0" stroke="#ffffff00" strokeType="INSIDE" width="99.0" />
       <Button fx:id="button" layoutX="60.0" layoutY="470.0" mnemonicParsing="false" text="room" />
       <Button fx:id="button1" layoutX="509.0" layoutY="169.0" mnemonicParsing="false" text="room" />
-      <Button fx:id="button11" layoutX="668.0" layoutY="438.0" mnemonicParsing="false" text="room" />
+      <Button fx:id="button11" layoutX="668.0" layoutY="438.0" mnemonicParsing="false" onAction="#onRoom3" text="room" />
       <Circle fx:id="player" layoutX="95.0" layoutY="168.0" radius="19.0" stroke="BLACK" strokeType="INSIDE">
          <fill>
             <LinearGradient endX="1.0" endY="1.0">

@@ -15,6 +15,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.SceneManager.AppUi;
 import javafx.scene.layout.Pane;
 import java.net.URL;
 
@@ -265,5 +267,10 @@ public class PlayerController implements Initializable{
         if(player.getLayoutY() > bottom){
             player.setLayoutY(bottom);
         }
+    }
+
+    @FXML
+    public void onRoom3(ActionEvent event) {
+        App.setScene(AppUi.ROOM3);
     }
 }
