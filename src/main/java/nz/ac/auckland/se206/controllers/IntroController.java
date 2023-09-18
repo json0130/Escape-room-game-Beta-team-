@@ -1,7 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import javax.swing.Action;
 
 import javafx.animation.Animation;
@@ -19,9 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
@@ -122,6 +119,7 @@ public class IntroController implements Initializable {
             minB4.setDisable(false);
             minB6.setDisable(false);
             background3.setVisible(false);
+
             // Create a timeline to continuously increase the scaling factor
             Timeline continuousScaling = new Timeline(
                     new KeyFrame(Duration.ZERO, new KeyValue(spaceship.scaleXProperty(), 1.0)),
@@ -152,7 +150,7 @@ public class IntroController implements Initializable {
 
             // Enable the button when the animation is finished
             spaceshipPathTransition.setOnFinished(event -> {
-                System.out.println("Animation Starts");
+                startButton.setDisable(false);
                 animationStarted = false;
             });
 

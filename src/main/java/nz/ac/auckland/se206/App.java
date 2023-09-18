@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import nz.ac.auckland.se206.SceneManager.AppUi;
 
 /**
  * This is the entry point of the JavaFX application, while you can change this class, it should
@@ -21,6 +22,10 @@ public class App extends Application {
 
   public static void setRoot(String fxml) throws IOException {
     scene.setRoot(loadFxml(fxml));
+  }
+
+  public static void setScene(AppUi fxml) {
+    scene.setRoot(SceneManager.getScene(fxml));
   }
 
   /**
@@ -43,12 +48,13 @@ public class App extends Application {
    */
   @Override
   public void start(final Stage stage) throws IOException {
-    Parent root = loadFxml("start");
-    scene = new Scene(root, 1000, 650);
-    scene.getStylesheets().add("styles.css");
+    SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
+    SceneManager.addScene(AppUi.PLAYER, loadFxml("player"));
+    SceneManager.addScene(AppUi.ROOM, loadFxml("room"));
+    SceneManager.addScene(AppUi.TUTORIAL, loadFxml("tutorial"));
+    SceneManager.addScene(AppUi.ANIMATION, loadFxml("animation"));
+    scene = new Scene(SceneManager.getScene(AppUi.ROOM), 1000, 600);
     stage.setScene(scene);
     stage.show();
-    root.requestFocus();
   }
-
 }
