@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class Room1Controller implements Initializable {
   @FXML private ImageView crew1;
@@ -113,7 +114,7 @@ public class Room1Controller implements Initializable {
 
   @FXML
   public void onRiddle(ActionEvent evnet) throws IOException {
-    App.setRoot("chat");
+    App.setScene(AppUi.CHAT);
   }
 
   @FXML

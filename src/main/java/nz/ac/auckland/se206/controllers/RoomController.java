@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
+import nz.ac.auckland.se206.SceneManager.AppUi;
 
 /** Controller class for the room view. */
 public class RoomController {
@@ -110,6 +111,6 @@ public class RoomController {
 
   @FXML
   public void onRoom1(ActionEvent event) throws IOException {
-    App.setRoot("room1");
+    App.setScene(AppUi.ROOM1);
   }
 }
