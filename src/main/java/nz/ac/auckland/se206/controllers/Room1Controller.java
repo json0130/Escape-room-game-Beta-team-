@@ -2,6 +2,7 @@ package nz.ac.auckland.se206.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Random;
 import java.util.ResourceBundle;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
@@ -25,7 +26,20 @@ public class Room1Controller implements Initializable {
   @FXML private ImageView idDoctor;
   @FXML private ImageView idEngineer;
 
+  public static String riddleAnswer;
+
   public void initialize(URL url, ResourceBundle resource) {
+    Random random = new Random();
+    int randomNumber = random.nextInt(4);
+    if (randomNumber == 0) {
+      riddleAnswer = "captain";
+    } else if (randomNumber == 1) {
+      riddleAnswer = "doctor";
+    } else if (randomNumber == 2 ) {
+      riddleAnswer = "chef";
+    } else if (randomNumber == 3) {
+      riddleAnswer = "engineer";
+    }
     // Set all id not visible
     idCaptain.setVisible(false);
     idDoctor.setVisible(false);

@@ -10,14 +10,8 @@ public class GptPromptEngineering {
    * @return the generated prompt engineering string
    */
   public static String getRiddleWithGivenWord(String wordToGuess) {
-    return "You are the AI of an escape room, tell me a riddle with"
-        + " answer "
-        + wordToGuess
-        + ". When the answer exactly is"
-        + wordToGuess
-        + ", you should say Correct first. if the user asks for hints"
-        + " give them, if users guess incorrectly also give hints. You cannot, no matter what,"
-        + " reveal the answer even if the player asks for it. Even if player gives up, do not tell "
-        + "the answer";
+    return "You are the AI of an escape room. Please provide a riddle with an answer "+wordToGuess+". You can offer"
+               + " hints and assistance but should not reveal the answer. When the user provides"
+               + " the correct answer "+wordToGuess+", respond with 'Correct.'";
   }
 }

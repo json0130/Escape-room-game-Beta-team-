@@ -49,7 +49,7 @@ public class ChatController {
 
     chatCompletionRequest =
         new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.5).setMaxTokens(100);
-    runGpt(new ChatMessage("user", GptPromptEngineering.getRiddleWithGivenWord("captain")));
+    runGpt(new ChatMessage("user", GptPromptEngineering.getRiddleWithGivenWord(Room1Controller.riddleAnswer)));
   }
 
   /**
