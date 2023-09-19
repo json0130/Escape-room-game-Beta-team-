@@ -53,5 +53,6 @@
             <Image url="@../images/idphotos/idengineer.png" />
          </image>
       </ImageView>
+      <Button fx:id="backButton" layoutX="37.0" layoutY="475.0" mnemonicParsing="false" onAction="#back" text="Back" />
    </children>
 </Pane>

@@ -92,7 +92,7 @@ public class IntroController implements Initializable {
         minB4.setOnMouseEntered(null); // Disable hover effect
         minB6.setOnMouseEntered(null); // Disable hover effect
 
-        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.2));
                 pauseTransition.setOnFinished(event -> {
                     
 

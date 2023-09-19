@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -185,7 +186,6 @@ public class TutorialController implements Initializable {
                 Platform.runLater(this::playRock);
             }
         });
-
 
         keyPressed.addListener(((observableValue, aBoolean, t1) -> {
             if(!aBoolean){

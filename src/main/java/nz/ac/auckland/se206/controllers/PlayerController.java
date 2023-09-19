@@ -12,6 +12,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Circle;
@@ -37,7 +39,7 @@ public class PlayerController implements Initializable{
     List<Rectangle> walls = new ArrayList<>();
 
     @FXML
-    private Circle player;
+    private ImageView player;
 
     @FXML
     private Rectangle room1;
@@ -45,6 +47,11 @@ public class PlayerController implements Initializable{
     private Rectangle room2;
     @FXML
     private Rectangle room3;
+
+    @FXML private Label main;
+    @FXML private Label computer;
+    @FXML private Label closet;
+    @FXML private Label control;
 
     @FXML private Rectangle wall;
     @FXML private Rectangle wall1;
@@ -64,16 +71,13 @@ public class PlayerController implements Initializable{
     @FXML private Rectangle wall15;
     @FXML private Rectangle wall16;
     @FXML private Rectangle wall17;
+    @FXML private Rectangle wall18;
+    @FXML private Rectangle wall19;
+    @FXML private Rectangle wall20;
+    @FXML private Rectangle wall21;
 
     @FXML
     private Pane scene;
-
-    @FXML
-    private Button button;
-    @FXML
-    private Button button1;
-    @FXML
-    private Button button11;
 
 
     @FXML
@@ -123,14 +127,17 @@ public class PlayerController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        button.setVisible(false);
-        button1.setVisible(false);
-        button11.setVisible(false);
         room1.setVisible(false);
         room2.setVisible(false);
         room3.setVisible(false);
 
-        shapesize = player.getRadius() * 2;
+        // Set labels to have white text and black stroke for the text
+        main.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
+        computer.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
+        closet.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
+        control.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
+
+        shapesize = player.getFitWidth();
         movementSetup();
         
         walls.add(wall);
@@ -151,6 +158,10 @@ public class PlayerController implements Initializable{
         walls.add(wall15);
         walls.add(wall16);
         walls.add(wall17);
+        walls.add(wall18);
+        walls.add(wall19);
+        walls.add(wall20);
+        walls.add(wall21);
 
         collisionTimer.start();
 
@@ -165,9 +176,8 @@ public class PlayerController implements Initializable{
             }
         }));
     }
-    public void checkRoom1(Circle player, Rectangle room1){
+    public void checkRoom1(ImageView player, Rectangle room1){
             if(player.getBoundsInParent().intersects(room1.getBoundsInParent())){
-                button.setVisible(true);
                 room1.setVisible(true);
                 PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
                 pauseTransition.setOnFinished(event -> {
@@ -175,31 +185,26 @@ public class PlayerController implements Initializable{
                 });
                 pauseTransition.play();
             }else{
-                button.setVisible(false);
                 room1.setVisible(false);
             }
     }
-    public void checkRoom2(Circle player, Rectangle room2){
+    public void checkRoom2(ImageView player, Rectangle room2){
             if(player.getBoundsInParent().intersects(room2.getBoundsInParent())){
-                button1.setVisible(true);
                 room2.setVisible(true);
             }else{
-                button1.setVisible(false);
                 room2.setVisible(false);
             }
     }
-    public void checkRoom3(Circle player, Rectangle room3){
+    public void checkRoom3(ImageView player, Rectangle room3){
             if(player.getBoundsInParent().intersects(room3.getBoundsInParent())){
-                button11.setVisible(true);
                 room3.setVisible(true);
             }else {
-                button11.setVisible(false);
                 room3.setVisible(false);
             }
     }
 
 
-    public void checkCollision2(Circle player, List<Rectangle> walls){
+    public void checkCollision2(ImageView player, List<Rectangle> walls){
         for(Rectangle wall : walls){
             if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
                 player.setLayoutX(previousX); // Restore the player's previous X position

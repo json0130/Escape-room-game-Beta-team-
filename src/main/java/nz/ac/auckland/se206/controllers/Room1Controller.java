@@ -210,4 +210,9 @@ public class Room1Controller implements Initializable {
     scaleTransition.setToY(1.0);
     scaleTransition.play();
   }
+
+  @FXML
+  private void back(ActionEvent event) {
+    App.setScene(AppUi.PLAYER);
+  }
 }
