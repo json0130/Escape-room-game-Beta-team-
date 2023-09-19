@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -15,6 +16,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
+import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.SceneManager.AppUi;
 import javafx.scene.layout.Pane;
 import java.net.URL;
 
@@ -165,6 +169,11 @@ public class PlayerController implements Initializable{
             if(player.getBoundsInParent().intersects(room1.getBoundsInParent())){
                 button.setVisible(true);
                 room1.setVisible(true);
+                PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+                pauseTransition.setOnFinished(event -> {
+                    App.setScene(AppUi.ROOM1);
+                });
+                pauseTransition.play();
             }else{
                 button.setVisible(false);
                 room1.setVisible(false);
