@@ -25,6 +25,8 @@ public class ChatController {
   @FXML private Button sendButton;
 
   private ChatCompletionRequest chatCompletionRequest;
+  public static boolean hintContained = false;
+  public static boolean answerContained = false;
 
   /**
    * Initializes the chat view, loading the riddle.
@@ -49,7 +51,7 @@ public class ChatController {
 
     chatCompletionRequest =
         new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.5).setMaxTokens(100);
-    runGpt(new ChatMessage("user", GptPromptEngineering.getRiddleWithGivenWord(Room1Controller.riddleAnswer)));
+    runGpt(new ChatMessage("user", GptPromptEngineering.getGameMaster()));
   }
 
   /**
@@ -69,6 +71,7 @@ public class ChatController {
    * @throws ApiProxyException if there is an error communicating with the API proxy
    */
   private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
+    chatCompletionRequest = new ChatCompletionRequest().setN(1).setTemperature(0.5).setTopP(0.2).setMaxTokens(100);
     Task<ChatMessage> runningGptTask =
         new Task<ChatMessage>() {
           @Override
@@ -114,9 +117,22 @@ public class ChatController {
     if (message.trim().isEmpty()) {
       return;
     }
+
+    if (message.contains("hint") || message.contains("Hint")){
+      hintContained = true;
+    }
+
+    if (message.contains("answer") || message.contains("Answer")){
+      answerContained = true;
+    }
+
     inputText.clear();
     ChatMessage msg = new ChatMessage("user", message);
     appendChatMessage(msg);
+
+    message += " " + GptPromptEngineering.getGameMaster();
+    msg = new ChatMessage("user", message);
+
     ChatMessage lastMsg = runGpt(msg);
     if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("Correct")) {
       GameState.isRiddleResolved = true;
