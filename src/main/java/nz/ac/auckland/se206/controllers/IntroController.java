@@ -23,6 +23,9 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.GameState;
+import nz.ac.auckland.se206.SceneManager.AppUi;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
@@ -69,10 +72,6 @@ public class IntroController implements Initializable {
         minB4.setVisible(true);
         minB6.setVisible(true);
 
-        easyButton.setTranslateY(0);
-        mediumButton.setTranslateY(0);
-        hardButton.setTranslateY(0);
-
         Button clickedButton = (Button) event.getSource();
 
         // Change the style of the clicked button
@@ -87,17 +86,23 @@ public class IntroController implements Initializable {
         }
 
     @FXML
-    private void minBClicked(ActionEvent event){
+    private void minBClicked(ActionEvent events){
 
         minB2.setOnMouseEntered(null); // Disable hover effect
         minB4.setOnMouseEntered(null); // Disable hover effect
         minB6.setOnMouseEntered(null); // Disable hover effect
 
-        startButton.setVisible(true);
-        background3.setVisible(true);
-        title.setVisible(false);
+        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+                pauseTransition.setOnFinished(event -> {
+                    
 
-        Button cButton = (Button) event.getSource();
+                    startButton.setVisible(true);
+                    background3.setVisible(true);
+                    title.setVisible(false);
+                });
+                pauseTransition.play();
+
+        Button cButton = (Button) events.getSource();
 
         // Check if a time is already selected, if so, return
         if(!isTimeSelected){
@@ -151,7 +156,7 @@ public class IntroController implements Initializable {
             // Enable the button when the animation is finished
             spaceshipPathTransition.setOnFinished(event -> {
                 startButton.setDisable(false);
-                animationStarted = false;
+                App.setScene(AppUi.TUTORIAL);
             });
 
             animationStarted = true;
@@ -161,8 +166,6 @@ public class IntroController implements Initializable {
     @FXML
     private void buttonHovered(Button button, Label label, Rectangle box) {
             button.setOnMouseEntered(e -> {
-                // Move the button up for 0.2 seconds to -100
-                button.setTranslateY(-100);
                 // Change the style of the button for 0.2 seconds only and back to original style
                 button.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: drak blue;");
                 PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.9));
@@ -181,8 +184,6 @@ public class IntroController implements Initializable {
             // Delay the hiding of elements by 3 seconds
             PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.5));
             pauseTransition.setOnFinished(event -> {
-                // Return the button to its original position
-                button.setTranslateY(0);
                 // Hide label and box
                 label.setVisible(false);
                 box.setVisible(false);
@@ -196,7 +197,7 @@ public class IntroController implements Initializable {
             button.setOnMouseEntered(e -> {
                 // Change the style of the button for 0.2 seconds only and back to original style
                 button.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: drak blue;");
-                PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.9));
+                PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
                 pauseTransition.setOnFinished(event -> {
                     button.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: whilte; -fx-border-color: white; -fx-border-width: 2px; -fx-border-radius: 5px");
                 });

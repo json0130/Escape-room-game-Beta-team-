@@ -13,6 +13,7 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.control.Button;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.LineTo;
@@ -23,6 +24,7 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 
 public class AnimationController implements Initializable {
 
@@ -30,6 +32,7 @@ public class AnimationController implements Initializable {
     private ImageView spaceship;
     @FXML
     private ImageView r1;
+    @FXML private Pane scene;
     @FXML
     private Button b1;
     @FXML   
@@ -81,24 +84,30 @@ public class AnimationController implements Initializable {
 
     private void explosionAnimation(ImageView e1){
         // Create a scale transition to continuously increase the scaling factor
-    ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1), e1);
-    scaleTransition.setFromX(1.0);
-    scaleTransition.setFromY(1.0);
-    scaleTransition.setToX(3.0); // Scale factor on X-axis
-    scaleTransition.setToY(3.0); // Scale factor on Y-axis
-    scaleTransition.setCycleCount(1); // Play the animation once
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1), e1);
+        scaleTransition.setFromX(1.0);
+        scaleTransition.setFromY(1.0);
+        scaleTransition.setToX(3.0); // Scale factor on X-axis
+        scaleTransition.setToY(3.0); // Scale factor on Y-axis
+        scaleTransition.setCycleCount(1); // Play the animation once
 
-    // Start the scale animation
-    scaleTransition.play();
-    // Enable the button when the animation is finished
-        scaleTransition.setOnFinished(event -> {
-            App.setScene(AppUi.ROOM);
-        });
+        // Start the scale animation
+        scaleTransition.play();
+        // Enable the button when the animation is finished
+            scaleTransition.setOnFinished(event -> {
+                App.setScene(AppUi.PLAYER);
+            });
     
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         e1.setVisible(false);
+        scene.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            if (newScene != null) {
+                // Schedule the playRock method to run after the scene is shown
+                Platform.runLater(this::startAnimation);
+            }
+        });
     }
 }

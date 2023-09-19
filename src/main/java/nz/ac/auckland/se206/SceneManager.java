@@ -11,7 +11,8 @@ package nz.ac.auckland.se206;
      ROOM1,
      PLAYER,
      TUTORIAL,
-     ANIMATION
+     ANIMATION,
+      INTRO
    }
 
    private static HashMap<AppUi, Parent> scenes = new HashMap<AppUi, Parent>();
