@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206;
 
+
  import java.util.HashMap;
  import javafx.scene.Parent;
 
@@ -7,7 +8,10 @@ package nz.ac.auckland.se206;
    public enum AppUi {
      ROOM,
      CHAT,
-     ROOM1
+     ROOM1,
+     PLAYER,
+     TUTORIAL,
+     ANIMATION
    }
 
    private static HashMap<AppUi, Parent> scenes = new HashMap<AppUi, Parent>();

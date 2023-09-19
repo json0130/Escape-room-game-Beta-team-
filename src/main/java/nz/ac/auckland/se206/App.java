@@ -49,12 +49,16 @@ public class App extends Application {
    */
   @Override
   public void start(final Stage stage) throws IOException {
+
     SceneManager.addScene(AppUi.ROOM1, loadFxml("room1"));
     SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
+        SceneManager.addScene(AppUi.PLAYER, loadFxml("player"));
      SceneManager.addScene(AppUi.ROOM, loadFxml("room"));
-     scene = new Scene(SceneManager.getScene(AppUi.ROOM), 1000, 650);
+     SceneManager.addScene(AppUi.TUTORIAL, loadFxml("tutorial"));
+     SceneManager.addScene(AppUi.ANIMATION, loadFxml("animation"));
+     scene = new Scene(SceneManager.getScene(AppUi.ROOM), 1000, 600);
+
     stage.setScene(scene);
     stage.show();
   }
-
 }
