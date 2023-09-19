@@ -25,9 +25,10 @@ public class App extends Application {
   }
 
   public static void setScene(AppUi fxml) {
-    scene.setRoot(SceneManager.getScene(fxml));
-  }
+     scene.setRoot(SceneManager.getScene(fxml));
+   }
 
+  
   /**
    * Returns the node associated to the input file. The method expects that the file is located in
    * "src/main/resources/fxml".
@@ -48,6 +49,8 @@ public class App extends Application {
    */
   @Override
   public void start(final Stage stage) throws IOException {
+
+    SceneManager.addScene(AppUi.ROOM1, loadFxml("room1"));
     SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
     SceneManager.addScene(AppUi.PLAYER, loadFxml("player"));
     SceneManager.addScene(AppUi.ROOM, loadFxml("room"));

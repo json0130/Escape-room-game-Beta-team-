@@ -157,7 +157,6 @@ public class IntroController implements Initializable {
             spaceshipPathTransition.setOnFinished(event -> {
                 startButton.setDisable(false);
                 App.setScene(AppUi.TUTORIAL);
-                GameState.isTutorialStarted = true;
             });
 
             animationStarted = true;
