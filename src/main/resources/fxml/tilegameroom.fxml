@@ -1,141 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.TileGameRoomController">
+<AnchorPane prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.TileGameRoomController">
    <children>
-      <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="684.0" fitWidth="1015.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/TileMinigameScene.png" />
+            <Image url="@../images/Firefly_20230919194642.png" />
          </image>
       </ImageView>
-      <Pane layoutX="442.0" layoutY="37.0" prefHeight="393.0" prefWidth="393.0">
-         <children>
-            <ImageView fx:id="imageOne" fitHeight="125.0" fitWidth="125.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="imageTwo" fitHeight="125.0" fitWidth="125.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="imageThree" fitHeight="125.0" fitWidth="125.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="imageFour" fitHeight="125.0" fitWidth="125.0" layoutX="20.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="imageFive" fitHeight="125.0" fitWidth="125.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="imageSix" fitHeight="125.0" fitWidth="125.0" layoutX="20.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="imageSeven" fitHeight="125.0" fitWidth="125.0" layoutX="20.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="imageEight" fitHeight="125.0" fitWidth="125.0" layoutX="30.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true" />
-         </children>
-      </Pane>
-      <Pane layoutX="442.0" layoutY="37.0" prefHeight="393.0" prefWidth="393.0">
-         <children>
-            <Rectangle fx:id="topLeftBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="125.0" onMouseClicked="#topLeftHitboxPress" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-            <Rectangle fx:id="topMiddleBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="125.0" layoutX="135.0" onMouseClicked="#topMiddleHitboxPress" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-            <Rectangle fx:id="topRightBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="125.0" layoutX="270.0" onMouseClicked="#topRightHitboxPress" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-            <Rectangle fx:id="middleLeftBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="125.0" layoutY="135.0" onMouseClicked="#middleLeftHitboxPress" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-            <Rectangle fx:id="middleMiddleBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="125.0" layoutX="135.0" layoutY="135.0" onMouseClicked="#middleMiddleHitboxPress" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-            <Rectangle fx:id="middleRightBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="125.0" layoutX="270.0" layoutY="135.0" onMouseClicked="#middleRightHitboxPress" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-            <Rectangle fx:id="bottomLeftBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="125.0" layoutY="270.0" onMouseClicked="#bottomLeftHitboxPress" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-            <Rectangle fx:id="bottomMiddleBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="125.0" layoutX="135.0" layoutY="270.0" onMouseClicked="#bottomMiddleHitboxPress" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-            <Rectangle fx:id="bottomRightBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="125.0" layoutX="266.0" layoutY="261.0" onMouseClicked="#bottomRightHitboxPress" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-            <ImageView fx:id="bigScreenOff" fitHeight="385.0" fitWidth="382.0" layoutX="7.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/BigScreenOffImage.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="welcomeScreen" fitHeight="393.0" fitWidth="382.0" layoutX="6.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@../images/welcomeScreen.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="loadingGif" fitHeight="56.0" fitWidth="42.0" layoutX="167.0" layoutY="312.0" pickOnBounds="true" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@../images/loading.gif" />
-               </image>
-            </ImageView>
-            <Button fx:id="releaseAirLockButton" disable="true" layoutX="125.0" layoutY="197.0" mnemonicParsing="false" onAction="#onReleaseAirLockButtonClick" prefHeight="45.0" prefWidth="125.0" text="Release Air Lock" visible="false" />
-            <Label fx:id="crewMemberName" layoutX="24.0" layoutY="145.0" prefHeight="104.0" prefWidth="345.0" text="INSERT CREW MEMBER NAME" textAlignment="CENTER" textFill="WHITE" visible="false">
-               <font>
-                  <Font size="25.0" />
-               </font>
-            </Label>
-            <Pane fx:id="computerHomeScreen" layoutX="5.0" layoutY="5.0" prefHeight="383.0" prefWidth="382.0" visible="false">
-               <children>
-                  <ImageView fitHeight="383.0" fitWidth="382.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/Background.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="scheduleFileIcon" fitHeight="74.0" fitWidth="97.0" layoutX="179.0" layoutY="170.0" onMouseClicked="#onScheduleFileClick" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/Fileicon2.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="experimentFileIcon" fitHeight="104.0" fitWidth="125.0" layoutX="136.0" layoutY="37.0" onMouseClicked="#onExperimentFileClick" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/FileIcon3.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="passcodeFileIcon" fitHeight="74.0" fitWidth="81.0" layoutX="36.0" layoutY="112.0" onMouseClicked="#onPasscodeFileClick" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/PasscodeFileIcon.png" />
-                     </image>
-                  </ImageView>
-                  <Pane fx:id="passcodePane" prefHeight="383.0" prefWidth="382.0" visible="false">
-                     <children>
-                        <ImageView fitHeight="374.0" fitWidth="364.0" layoutX="11.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/PasscodeFile.png" />
-                           </image>
-                        </ImageView>
-                        <Rectangle fx:id="passcodeFileCloseButton" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="28.0" layoutX="344.0" layoutY="12.0" onMouseClicked="#onPasscodeFileCloseButtonClick" stroke="TRANSPARENT" strokeType="INSIDE" width="28.0" />
-                     </children>
-                  </Pane>
-                  <Pane fx:id="schedulePane" prefHeight="374.0" prefWidth="382.0" visible="false">
-                     <children>
-                        <ImageView fitHeight="383.0" fitWidth="364.0" layoutX="11.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/ScheduleFile.png" />
-                           </image>
-                        </ImageView>
-                        <Rectangle fx:id="scheduleFileCloseButton" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="28.0" layoutX="344.0" layoutY="13.0" onMouseClicked="#onscheduleFileCloseButtonClick" stroke="TRANSPARENT" strokeType="INSIDE" width="28.0" />
-                     </children>
-                     <opaqueInsets>
-                        <Insets top="-2.0" />
-                     </opaqueInsets>
-                  </Pane>
-                  <Pane fx:id="experimentPane" prefHeight="383.0" prefWidth="382.0" visible="false">
-                     <children>
-                        <ImageView fitHeight="374.0" fitWidth="382.0" layoutX="11.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/ExperimentFile.png" />
-                           </image>
-                        </ImageView>
-                        <Rectangle fx:id="experimentFileCloseButton" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="28.0" layoutX="344.0" layoutY="11.0" onMouseClicked="#onexperimentFileCloseButtonClick" stroke="TRANSPARENT" strokeType="INSIDE" width="28.0" />
-                     </children>
-                  </Pane>
-               </children>
-            </Pane>
-         </children>
-      </Pane>
-      <ImageView fx:id="indicatorTriangle" disable="true" fitHeight="56.0" fitWidth="75.0" layoutX="1084.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true" visible="false">
-         <image>
-            <Image url="@../images/indicator_triangle.png" />
-         </image>
-      </ImageView>
-      <Text fx:id="wordText" layoutX="83.0" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="187.5">
-         <font>
-            <Font name="Arial Bold" size="83.0" />
-         </font>
-      </Text>
-      <ImageView fx:id="smallScreenOff" fitHeight="125.0" fitWidth="254.0" layoutX="58.0" layoutY="66.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/SmallScreenOffImage.png" />
-         </image>
-      </ImageView>
-      <Rectangle fx:id="powerButton" arcHeight="5.0" arcWidth="5.0" fill="#727272" height="17.0" layoutX="423.0" layoutY="437.0" onMouseClicked="#onPowerButtonPressed" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="29.0" />
+      <Rectangle fx:id="startTileGame" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f00" height="126.0" layoutX="373.0" layoutY="71.0" onMouseClicked="#onTileGameButtonClick" stroke="TRANSPARENT" strokeType="INSIDE" width="432.0" />
    </children>
 </AnchorPane>
