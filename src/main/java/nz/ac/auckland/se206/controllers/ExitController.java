@@ -8,10 +8,12 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.GameState;
 
@@ -30,12 +32,22 @@ public class ExitController implements Initializable {
   @FXML private Button reset;
   @FXML private ImageView door;
   @FXML private ImageView lever;
+  @FXML private ImageView idCaptain;
+  @FXML private ImageView idChef;
+  @FXML private ImageView idDoctor;
+  @FXML private ImageView idEngineer;
   @FXML private TextArea screen;
+  @FXML private Rectangle idScanner;
+  @FXML private Rectangle ids;
+  @FXML private Rectangle light;
   private Boolean isDoorShown = false;
   private double startX;
   private double startY;
   private double angle;
   private String password = "";
+
+  private double mouseAnchorX;
+  private double mouseAnchorY;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -53,6 +65,17 @@ public class ExitController implements Initializable {
     zero.setDisable(true);
     enter.setDisable(true);
     reset.setDisable(true);
+
+    ids.setVisible(false);
+    idCaptain.setVisible(false);
+    idChef.setVisible(false);
+    idDoctor.setVisible(false);
+    idEngineer.setVisible(false);
+
+    makeDraggable(idCaptain);
+    makeDraggable(idChef);
+    makeDraggable(idDoctor);
+    makeDraggable(idEngineer);
   }
 
   // Lever is draggable while the exit is not shown
@@ -205,11 +228,13 @@ public class ExitController implements Initializable {
     screen.setText(password);
   }
 
+  
   @FXML
   private void onEnter(ActionEvent event) {
     if (password == "") {
       return;
     }
+    // incorrect password, show incorrect and reset the password
     if (!password.equals(GameState.password)) {
       screen.setText("INCORRECT");
       Thread clearThread =
@@ -223,7 +248,8 @@ public class ExitController implements Initializable {
                 Platform.runLater(() -> screen.clear());
               });
       clearThread.start();
-      password = null;
+      password = "";
+      // correct password, buttons are disabled to prevent further change in correctPassword state
     } else {
       screen.setText("CORRECT");
       GameState.correctPassword = true;
@@ -242,9 +268,60 @@ public class ExitController implements Initializable {
     }
   }
 
+  // reset the typed password
   @FXML
   private void onReset() {
     password = "";
     screen.setText("");
+  }
+
+  // when the scanner is clicked, ids are shown depending on its state
+  @FXML
+  private void clickIdScanner(MouseEvent event) {
+    if (ids.isVisible() == false) {
+      ids.setVisible(true);
+      if (GameState.isCaptainCollected) {
+        idCaptain.setLayoutX(272);
+        idCaptain.setLayoutY(118);
+        idCaptain.setVisible(true);
+      } 
+      if (GameState.isChefCollected) {
+        idChef.setLayoutX(272);
+        idChef.setLayoutY(210);
+        idChef.setVisible(true);
+      }
+      if (GameState.isDoctorCollected) {
+        idDoctor.setLayoutX(272);
+        idDoctor.setLayoutY(303);
+        idDoctor.setVisible(true);
+      }
+      if (GameState.isEngineerCollected) {
+        idEngineer.setLayoutX(272);
+        idEngineer.setLayoutY(392);
+        idEngineer.setVisible(true);
+      }
+    } else {
+      ids.setVisible(false);
+      idCaptain.setVisible(false);
+      idChef.setVisible(false);
+      idDoctor.setVisible(false);
+      idEngineer.setVisible(false);
+    }
+  }
+
+  // idcards can be dragged
+  public void makeDraggable(Node node) {
+
+    node.setOnMousePressed(
+        mouseEvent -> {
+          mouseAnchorX = mouseEvent.getX();
+          mouseAnchorY = mouseEvent.getY();
+        });
+
+    node.setOnMouseDragged(
+        mouseEvent -> {
+          node.setLayoutX(mouseEvent.getSceneX() - mouseAnchorX);
+          node.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY);
+        });
   }
 }
