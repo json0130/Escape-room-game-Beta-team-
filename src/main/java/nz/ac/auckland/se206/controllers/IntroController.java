@@ -86,17 +86,23 @@ public class IntroController implements Initializable {
         }
 
     @FXML
-    private void minBClicked(ActionEvent event){
+    private void minBClicked(ActionEvent events){
 
         minB2.setOnMouseEntered(null); // Disable hover effect
         minB4.setOnMouseEntered(null); // Disable hover effect
         minB6.setOnMouseEntered(null); // Disable hover effect
 
-        startButton.setVisible(true);
-        background3.setVisible(true);
-        title.setVisible(false);
+        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+                pauseTransition.setOnFinished(event -> {
+                    
 
-        Button cButton = (Button) event.getSource();
+                    startButton.setVisible(true);
+                    background3.setVisible(true);
+                    title.setVisible(false);
+                });
+                pauseTransition.play();
+
+        Button cButton = (Button) events.getSource();
 
         // Check if a time is already selected, if so, return
         if(!isTimeSelected){

@@ -7,6 +7,7 @@ import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,7 +19,6 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
-import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 import java.util.ArrayList;
@@ -46,6 +46,7 @@ public class TutorialController implements Initializable {
     List<ImageView> rocks = new ArrayList<>();
 
     @FXML private Button button;
+    @FXML private Button skipButton;
     @FXML private ImageView player;
     @FXML private Pane scene;
     @FXML private Circle c1;
@@ -55,11 +56,10 @@ public class TutorialController implements Initializable {
     @FXML private ImageView r2;
     @FXML private ImageView r3;
     @FXML private ImageView r4;
-    @FXML private ImageView r5;
 
     private double previousX;
     private double previousY;
-    
+
     AnimationTimer collisionTimer = new AnimationTimer() {
         @Override
         public void handle(long now) {
@@ -91,19 +91,24 @@ public class TutorialController implements Initializable {
         }
     };
 
+    @FXML 
+    private void skipTutorial(ActionEvent event){
+        App.setScene(AppUi.ANIMATION);
+        collisionTimer.stop();
+        timer.stop();
+    }
+
     @FXML	
     private void play(ActionEvent event){
         setRotate(c1, true, 360, 10);
         setRotate(c2, true, 180, 18);
         setRotate(c3, true, 145, 24);
-    
-        // Set the movement of the images and repeat it forever
-        setMovement(r1, false, 3, -900, 300,2);
-        setMovement(r2, false, 3, -900, 0,4);
-        setMovement(r3, false, 3, -900, -300,6);
-        setMovement(r4, false, 3, -900, -500, 2);
-        setMovement(r5, false, 3, -900, 500, 4);
 
+        // Set the movement of the images and repeat it forever
+        setMovement(r1, false, 2, -900, 0,2);
+        setMovement(r2, false, 3, -900, 0,4);
+        setMovement(r3, false, 4, -900, -0,3);
+        setMovement(r4, false, 2, -900, 0,5);
     }
 
     private void setRotate(Circle c, boolean reverse, int angle, int duration){
@@ -117,34 +122,34 @@ public class TutorialController implements Initializable {
     }
 
     private void setMovement(ImageView r, boolean reverse, int duration, double endX, double endY, int delaySeconds) {
-        double startX = r.getTranslateX();
-        double startY = r.getTranslateY();
+    double startX = r.getTranslateX();
+    double startY = r.getTranslateY();
 
-        Path path = new Path();
-        path.getElements().add(new MoveTo(startX, startY));
-        path.getElements().add(new LineTo(endX, endY));
+    Path path = new Path();
+    path.getElements().add(new MoveTo(startX, startY));
+    path.getElements().add(new LineTo(endX, endY));
 
-        PathTransition pathTransition = new PathTransition();
-        pathTransition.setNode(r);
-        pathTransition.setPath(path);
-        pathTransition.setDuration(Duration.seconds(duration));
-        pathTransition.setCycleCount(reverse ? Animation.INDEFINITE : 1);
-        pathTransition.setAutoReverse(reverse);
+    PathTransition pathTransition = new PathTransition();
+    pathTransition.setNode(r);
+    pathTransition.setPath(path);
+    pathTransition.setDuration(Duration.seconds(duration));
+    pathTransition.setCycleCount(reverse ? Animation.INDEFINITE : 1);
+    pathTransition.setAutoReverse(reverse);
 
-        SequentialTransition sequentialTransition = new SequentialTransition();
-        sequentialTransition.getChildren().addAll(
-            new PauseTransition(Duration.seconds(delaySeconds)),
-            pathTransition
-        );
+    SequentialTransition sequentialTransition = new SequentialTransition();
+    sequentialTransition.getChildren().addAll(
+        new PauseTransition(Duration.seconds(delaySeconds)),
+        pathTransition
+    );
 
-        sequentialTransition.setOnFinished(event -> {
-            // Reset the position of the ImageView to its original location
-            r.setTranslateX(startX);
-            r.setTranslateY(startY);
+    sequentialTransition.setOnFinished(event -> {
+        // Reset the position of the ImageView to its original location
+        r.setTranslateX(startX);
+        r.setTranslateY(startY);
 
-            // Start the animation again
-            sequentialTransition.playFromStart();
-        });
+        // Start the animation again
+        sequentialTransition.playFromStart();
+    });
 
     sequentialTransition.play();
 }
@@ -152,16 +157,14 @@ public class TutorialController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Initialise the position of the images
-        r1.setLayoutX(900);
-        r1.setLayoutY(60);
-        r2.setLayoutX(900);
-        r2.setLayoutY(160);
-        r3.setLayoutX(900);
-        r3.setLayoutY(300);
-        r4.setLayoutX(900);
-        r4.setLayoutY(400);
-        r5.setLayoutX(900);
-        r5.setLayoutY(560);
+        r1.setLayoutX(950);
+        r1.setLayoutY(100);
+        r2.setLayoutX(950);
+        r2.setLayoutY(250);
+        r3.setLayoutX(950);
+        r3.setLayoutY(400);
+        r4.setLayoutX(950);
+        r4.setLayoutY(550);
 
         shapesize = player.getFitHeight();
         movementSetup();
@@ -170,29 +173,19 @@ public class TutorialController implements Initializable {
         rocks.add(r2);
         rocks.add(r3);
         rocks.add(r4);
-        rocks.add(r5);
 
         collisionTimer.start();
 
         previousX = player.getLayoutX();
         previousY = player.getLayoutY();
 
-        // PauseTransition pauseTransition = new PauseTransition(Duration.seconds(5));
-        //         pauseTransition.setOnFinished(event -> {
-        //             setRotate(c1, true, 360, 10);
-        //             setRotate(c2, true, 180, 18);
-        //             setRotate(c3, true, 145, 24);
-                
-        //             // Set the movement of the images and repeat it forever
-        //             setMovement(r1, false, 3, -900, 0,2);
-        //             setMovement(r2, false, 3, -900, 0,4);
-        //             setMovement(r3, false, 3, -900, 0,6);
-        //             setMovement(r4, false, 3, -900, 0, 8);
-        //             setMovement(r5, false, 3, -900, 0, 10);
-        //         });
-        //         pauseTransition.play();
+        scene.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            if (newScene != null) {
+                // Schedule the playRock method to run after the scene is shown
+                Platform.runLater(this::playRock);
+            }
+        });
 
-        
 
         keyPressed.addListener(((observableValue, aBoolean, t1) -> {
             if(!aBoolean){
@@ -203,20 +196,19 @@ public class TutorialController implements Initializable {
         }));
     }
 
-    private void play(){
-        if(GameState.isTutorialStarted){
-                    setRotate(c1, true, 360, 10);
-                    setRotate(c2, true, 180, 18);
-                    setRotate(c3, true, 145, 24);
-                        
-                    // Set the movement of the images and repeat it forever
-                    setMovement(r1, false, 2, -900, 0,2);
-                    setMovement(r2, false, 2, -900, 0,4);
-                    setMovement(r3, false, 2, -900, 0,6);
-                    setMovement(r4, false, 2, -900, 0, 8);
-                    setMovement(r5, false, 2, -900, 0, 10);
-                }
+    @FXML	
+    private void playRock(){
+        setRotate(c1, true, 360, 10);
+        setRotate(c2, true, 180, 18);
+        setRotate(c3, true, 145, 24);
+
+        // Set the movement of the images and repeat it forever
+        setMovement(r1, false, 3, -900, 0,2);
+        setMovement(r2, false, 3, -900, 0,4);
+        setMovement(r3, false, 3, -900, -0,6);
+        setMovement(r4, false, 3, -900, 0,8);
     }
+
 
     public void checkCollision(ImageView player, List<ImageView> rocks) {
         for(ImageView rock : rocks) {
@@ -224,11 +216,12 @@ public class TutorialController implements Initializable {
             player.setLayoutX(previousX); // Restore the player's previous X position
             player.setLayoutY(previousY); // Restore the player's previous Y position
              // Exit the loop as soon as a collision is detected
-            }
+        }
         }
     }
 
     public void checkFinish(ImageView player, Circle c3) {
+
         if (player.getBoundsInParent().intersects(c3.getBoundsInParent())) {
             App.setScene(AppUi.ANIMATION);
             collisionTimer.stop();
@@ -298,4 +291,3 @@ public class TutorialController implements Initializable {
         }
     }
 }
-
