@@ -5,9 +5,13 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.AnimationController">
    <children>
+      <ImageView fitHeight="686.0" fitWidth="1048.0" layoutX="-3.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly%20space%20game%20background%209772.jpg" />
+         </image>
+      </ImageView>
       <ImageView fx:id="spaceship" fitHeight="150.0" fitWidth="200.0" layoutX="23.0" layoutY="290.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/rocket-spaceship-cartoon-icon-illustration-science-technology-icon-concept-isolated-premium-flat-cartoon-style-vector-removebg-preview.png" />

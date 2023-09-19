@@ -8,9 +8,14 @@
 
 <Pane fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.TutorialController">
    <children>
-      <Circle fx:id="c1" fill="#1f93ff00" layoutX="876.0" layoutY="322.0" radius="124.0" stroke="#009ac9" strokeType="INSIDE" strokeWidth="15.0" style="-fx-stroke-dash-array: 70;" />
-      <Circle fx:id="c2" fill="#1f93ff00" layoutX="878.0" layoutY="324.0" radius="85.0" stroke="#2100fa" strokeType="INSIDE" strokeWidth="10.0" style="-fx-stroke-dash-array: 50;" />
-      <Circle fx:id="c3" fill="#1f93ff00" layoutX="876.0" layoutY="322.0" radius="44.0" stroke="#ea00fa" strokeType="INSIDE" strokeWidth="7.0" style="-fx-stroke-dash-array: 30;" />
+      <ImageView fitHeight="632.0" fitWidth="1062.0" layoutX="-6.0" layoutY="-9.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly%20space%20game%20background%209772.jpg" />
+         </image>
+      </ImageView>
+      <Circle fx:id="c1" fill="#1f93ff00" layoutX="876.0" layoutY="322.0" radius="124.0" stroke="#9de8ff" strokeType="INSIDE" strokeWidth="15.0" style="-fx-stroke-dash-array: 70;" />
+      <Circle fx:id="c2" fill="#1f93ff00" layoutX="878.0" layoutY="324.0" radius="85.0" stroke="#cec8ff" strokeType="INSIDE" strokeWidth="10.0" style="-fx-stroke-dash-array: 50;" />
+      <Circle fx:id="c3" fill="#1f93ff00" layoutX="876.0" layoutY="322.0" radius="44.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="7.0" style="-fx-stroke-dash-array: 30;" />
       <Button fx:id="button" layoutX="36.0" layoutY="38.0" mnemonicParsing="false" onAction="#play" text="Button" />
       <ImageView fx:id="player" fitHeight="105.0" fitWidth="163.0" layoutX="16.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -27,7 +32,17 @@
             <Image url="@../images/png-transparent-strange-meteorite-alien-stone-meteorite-thumbnail-removebg-preview.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="r3" fitHeight="76.0" fitWidth="99.0" layoutX="876.0" layoutY="446.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="r3" fitHeight="76.0" fitWidth="99.0" layoutX="880.0" layoutY="392.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/png-transparent-strange-meteorite-alien-stone-meteorite-thumbnail-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="r4" fitHeight="85.0" fitWidth="91.0" layoutX="831.0" layoutY="-9.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/png-transparent-strange-meteorite-alien-stone-meteorite-thumbnail-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="r5" fitHeight="85.0" fitWidth="91.0" layoutX="787.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/png-transparent-strange-meteorite-alien-stone-meteorite-thumbnail-removebg-preview.png" />
          </image>

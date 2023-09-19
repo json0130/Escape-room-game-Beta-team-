@@ -92,7 +92,7 @@ public class AnimationController implements Initializable {
     scaleTransition.play();
     // Enable the button when the animation is finished
         scaleTransition.setOnFinished(event -> {
-            App.setScene(AppUi.ROOM);
+            App.setScene(AppUi.PLAYER);
         });
     
     }
