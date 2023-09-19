@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -96,6 +97,16 @@ public class TileGameRoomController {
   @FXML private Rectangle powerButton;
   @FXML private Text wordText;
   @FXML private Button releaseAirLockButton;
+  @FXML private Label crewMemberName;
+  @FXML private ImageView loadingGif;
+
+  @FXML private ImageView experimentFileIcon;
+  @FXML private ImageView scheduleFileIcon;
+  @FXML private ImageView passcodeFileIcon;
+  @FXML private Pane computerHomeScreen;
+  @FXML private Pane schedulePane;
+  @FXML private Pane passcodePane;
+  @FXML private Pane experimentPane;
 
   /**
    * Initializes the room view, it is called when the room loads.
@@ -391,14 +402,19 @@ public class TileGameRoomController {
           && tileFive.getLetter().equalsIgnoreCase(secondChar)
           && tileSix.getLetter().equalsIgnoreCase(thirdChar)) {
         System.out.println("done");
-        welcomeScreen.setVisible(true);
-        releaseAirLockButton.setDisable(false);
-        releaseAirLockButton.setVisible(true);
-        indicatorTriangle.setLayoutX(94);
-        indicatorTriangle.setLayoutY(450);
-        indicatorTriangle.setRotate(0);
-        translate.stop();
-        animateIndicator(false);
+        
+        showWelcomeScreen();
+        disableImages();
+        
+        // try {
+        //   Thread.sleep(1000);
+        // } catch (InterruptedException e) {
+        //   // TODO Auto-generated catch block
+        //   e.printStackTrace();
+        // }
+        
+        showHomeScreen();
+
       }
     }
   }
@@ -468,4 +484,46 @@ public class TileGameRoomController {
     App.tileGameComplete = true;
     System.out.println("Tile Game Complete");
   }
-}
+
+  @FXML
+  private void disableImages(){
+    imageOne.setVisible(false);
+    imageTwo.setVisible(false);
+    imageThree.setVisible(false);
+    imageFour.setVisible(false);
+    imageFive.setVisible(false);
+    imageSix.setVisible(false);
+    imageSeven.setVisible(false);
+    imageEight.setVisible(false);
+  }
+
+  @FXML
+  private void showWelcomeScreen(){
+    welcomeScreen.setVisible(true);
+    crewMemberName.setVisible(true);
+    loadingGif.setVisible(true);
+  }
+
+  @FXML
+  private void showHomeScreen(){
+    computerHomeScreen.setVisible(true);
+  }
+
+  @FXML
+  private void onScheduleFileClick(){
+    schedulePane.setVisible(true);
+    System.out.println("DONE3");
+    
+  }
+
+    @FXML
+  private void onPasscodeFileClick(){
+    passcodePane.setVisible(true);
+    System.out.println("DONE1");
+  }
+    @FXML
+  private void onExperimentFileClick(){
+    experimentPane.setVisible(true);
+    System.out.println("DONE2");
+  }
+} 

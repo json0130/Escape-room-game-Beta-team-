@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -50,7 +51,71 @@
                   <Image url="@../images/welcomeScreen.png" />
                </image>
             </ImageView>
+            <ImageView fx:id="loadingGif" fitHeight="56.0" fitWidth="42.0" layoutX="167.0" layoutY="312.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../images/loading.gif" />
+               </image>
+            </ImageView>
             <Button fx:id="releaseAirLockButton" disable="true" layoutX="125.0" layoutY="197.0" mnemonicParsing="false" onAction="#onReleaseAirLockButtonClick" prefHeight="45.0" prefWidth="125.0" text="Release Air Lock" visible="false" />
+            <Label fx:id="crewMemberName" layoutX="24.0" layoutY="145.0" prefHeight="104.0" prefWidth="345.0" text="INSERT CREW MEMBER NAME" textAlignment="CENTER" textFill="WHITE" visible="false">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <Pane fx:id="computerHomeScreen" layoutX="5.0" layoutY="5.0" prefHeight="383.0" prefWidth="382.0" visible="false">
+               <children>
+                  <ImageView fitHeight="383.0" fitWidth="382.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/Background.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="scheduleFileIcon" fitHeight="74.0" fitWidth="97.0" layoutX="179.0" layoutY="170.0" onMouseClicked="#onScheduleFileClick" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/Fileicon2.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="experimentFileIcon" fitHeight="104.0" fitWidth="125.0" layoutX="136.0" layoutY="37.0" onMouseClicked="#onExperimentFileClick" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/FileIcon3.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="passcodeFileIcon" fitHeight="74.0" fitWidth="81.0" layoutX="36.0" layoutY="112.0" onMouseClicked="#onPasscodeFileClick" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/PasscodeFileIcon.png" />
+                     </image>
+                  </ImageView>
+                  <Pane fx:id="passcodePane" prefHeight="383.0" prefWidth="382.0" visible="false">
+                     <children>
+                        <ImageView fitHeight="374.0" fitWidth="364.0" layoutX="11.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/PasscodeFile.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="schedulePane" prefHeight="374.0" prefWidth="382.0" visible="false">
+                     <children>
+                        <ImageView fitHeight="383.0" fitWidth="364.0" layoutX="11.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/ScheduleFile.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                     <opaqueInsets>
+                        <Insets top="-2.0" />
+                     </opaqueInsets>
+                  </Pane>
+                  <Pane fx:id="experimentPane" prefHeight="383.0" prefWidth="382.0" visible="false">
+                     <children>
+                        <ImageView fitHeight="374.0" fitWidth="382.0" layoutX="11.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/ExperimentFile.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+               </children>
+            </Pane>
          </children>
       </Pane>
       <ImageView fx:id="indicatorTriangle" disable="true" fitHeight="56.0" fitWidth="75.0" layoutX="1084.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true" visible="false">
