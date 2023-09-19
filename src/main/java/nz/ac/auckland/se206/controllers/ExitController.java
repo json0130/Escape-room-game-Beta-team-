@@ -2,6 +2,7 @@ package nz.ac.auckland.se206.controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.animation.AnimationTimer;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
@@ -13,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.GameState;
@@ -76,6 +78,7 @@ public class ExitController implements Initializable {
     makeDraggable(idChef);
     makeDraggable(idDoctor);
     makeDraggable(idEngineer);
+    collisionTimer.start();
   }
 
   // Lever is draggable while the exit is not shown
@@ -228,7 +231,6 @@ public class ExitController implements Initializable {
     screen.setText(password);
   }
 
-  
   @FXML
   private void onEnter(ActionEvent event) {
     if (password == "") {
@@ -278,13 +280,14 @@ public class ExitController implements Initializable {
   // when the scanner is clicked, ids are shown depending on its state
   @FXML
   private void clickIdScanner(MouseEvent event) {
-    if (ids.isVisible() == false) {
+    // if the ids are not shown and the correct id was not tagged yet
+    if (ids.isVisible() == false && !GameState.correctId) {
       ids.setVisible(true);
       if (GameState.isCaptainCollected) {
         idCaptain.setLayoutX(272);
         idCaptain.setLayoutY(118);
         idCaptain.setVisible(true);
-      } 
+      }
       if (GameState.isChefCollected) {
         idChef.setLayoutX(272);
         idChef.setLayoutY(210);
@@ -324,4 +327,70 @@ public class ExitController implements Initializable {
           node.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY);
         });
   }
+
+  AnimationTimer collisionTimer =
+      new AnimationTimer() {
+        @Override
+        public void handle(long timeStamp) {
+          checkCollision(idCaptain, idScanner);
+          checkCollision(idChef, idScanner);
+          checkCollision(idDoctor, idScanner);
+          checkCollision(idEngineer, idScanner);
+        }
+    
+
+        private void checkCollision(Node node1, Node node2) {
+          if (node1.getBoundsInParent().intersects(node2.getBoundsInParent())) {
+            if (GameState.answerOfRiddle == "captain") {
+              if (node1 == idCaptain) {
+                light.setFill(Color.GREEN);
+                GameState.correctId = true;
+                ids.setVisible(false);
+                idCaptain.setVisible(false);
+                idChef.setVisible(false);
+                idDoctor.setVisible(false);
+                idEngineer.setVisible(false);
+              } else {
+                light.setFill(Color.RED);
+              }
+            } else if (GameState.answerOfRiddle == "chef") {
+              if (node1 == idChef) {
+                light.setFill(Color.GREEN);
+                GameState.correctId = true;
+                ids.setVisible(false);
+                idCaptain.setVisible(false);
+                idChef.setVisible(false);
+                idDoctor.setVisible(false);
+                idEngineer.setVisible(false);
+              } else {
+                light.setFill(Color.RED);
+              }
+            } else if (GameState.answerOfRiddle == "doctor") {
+              if (node1 == idDoctor) {
+                light.setFill(Color.GREEN);
+                GameState.correctId = true;
+                ids.setVisible(false);
+                idCaptain.setVisible(false);
+                idChef.setVisible(false);
+                idDoctor.setVisible(false);
+                idEngineer.setVisible(false);
+              } else {
+                light.setFill(Color.RED);
+              }
+            } else if (GameState.answerOfRiddle == "engineer") {
+              if (node1 == idEngineer) {
+                light.setFill(Color.GREEN);
+                GameState.correctId = true;
+                ids.setVisible(false);
+                idCaptain.setVisible(false);
+                idChef.setVisible(false);
+                idDoctor.setVisible(false);
+                idEngineer.setVisible(false);
+              } else {
+                light.setFill(Color.RED);
+              }
+            }
+          }
+        }
+      };
 }

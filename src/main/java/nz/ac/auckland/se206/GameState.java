@@ -19,4 +19,8 @@ public class GameState {
   public static boolean isChefCollected = false;
   public static boolean isDoctorCollected = false;
   public static boolean isEngineerCollected = false;
+
+  public static boolean correctId = false;
+
+  public static String answerOfRiddle = "";
 }
