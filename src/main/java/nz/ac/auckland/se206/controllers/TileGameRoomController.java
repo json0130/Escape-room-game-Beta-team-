@@ -108,6 +108,9 @@ public class TileGameRoomController {
   @FXML private Pane passcodePane;
   @FXML private Pane experimentPane;
 
+  @FXML private Rectangle passcodeFileCloseButton;
+  @FXML private Rectangle scheduleFileCloseButton;
+  @FXML private Rectangle experimentFileCloseButton;
   /**
    * Initializes the room view, it is called when the room loads.
    *
@@ -526,4 +529,20 @@ public class TileGameRoomController {
     experimentPane.setVisible(true);
     System.out.println("DONE2");
   }
+
+  @FXML
+  private void onPasscodeFileCloseButtonClick(){
+    passcodePane.setVisible(false);
+  }
+
+  @FXML
+  private void onscheduleFileCloseButtonClick(){
+    schedulePane.setVisible(false);
+  }
+
+  @FXML
+  private void onexperimentFileCloseButtonClick(){
+    experimentPane.setVisible(false);
+  }
+
 } 

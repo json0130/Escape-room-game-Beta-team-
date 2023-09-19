@@ -91,6 +91,7 @@
                               <Image url="@../images/PasscodeFile.png" />
                            </image>
                         </ImageView>
+                        <Rectangle fx:id="passcodeFileCloseButton" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="28.0" layoutX="344.0" layoutY="12.0" onMouseClicked="#onPasscodeFileCloseButtonClick" stroke="TRANSPARENT" strokeType="INSIDE" width="28.0" />
                      </children>
                   </Pane>
                   <Pane fx:id="schedulePane" prefHeight="374.0" prefWidth="382.0" visible="false">
@@ -100,6 +101,7 @@
                               <Image url="@../images/ScheduleFile.png" />
                            </image>
                         </ImageView>
+                        <Rectangle fx:id="scheduleFileCloseButton" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="28.0" layoutX="344.0" layoutY="13.0" onMouseClicked="#onscheduleFileCloseButtonClick" stroke="TRANSPARENT" strokeType="INSIDE" width="28.0" />
                      </children>
                      <opaqueInsets>
                         <Insets top="-2.0" />
@@ -112,6 +114,7 @@
                               <Image url="@../images/ExperimentFile.png" />
                            </image>
                         </ImageView>
+                        <Rectangle fx:id="experimentFileCloseButton" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="28.0" layoutX="344.0" layoutY="11.0" onMouseClicked="#onexperimentFileCloseButtonClick" stroke="TRANSPARENT" strokeType="INSIDE" width="28.0" />
                      </children>
                   </Pane>
                </children>
@@ -123,16 +126,6 @@
             <Image url="@../images/indicator_triangle.png" />
          </image>
       </ImageView>
-      <Label layoutX="1020.0" layoutY="21.0" text="TIME REMAINING:">
-         <font>
-            <Font name="Impact" size="36.0" />
-         </font>
-      </Label>
-      <Label fx:id="timerLabel" layoutX="1020.0" layoutY="37.0" prefHeight="114.0" prefWidth="198.0" text="2:00">
-         <font>
-            <Font name="Impact" size="36.0" />
-         </font>
-      </Label>
       <Text fx:id="wordText" layoutX="83.0" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="187.5">
          <font>
             <Font name="Arial Bold" size="83.0" />
