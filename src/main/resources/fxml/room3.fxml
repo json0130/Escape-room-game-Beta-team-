@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
-
+<?import javafx.scene.text.Font?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.ExitController">
    <children>
@@ -13,11 +14,24 @@
             <Image url="@../images/room3/exit.png" />
          </image>
       </ImageView>
-      <TextField layoutX="528.0" layoutY="323.0" prefHeight="69.0" prefWidth="83.0" />
-      <TextField layoutX="625.0" layoutY="322.0" prefHeight="69.0" prefWidth="83.0" />
-      <TextField layoutX="718.0" layoutY="322.0" prefHeight="69.0" prefWidth="83.0" />
-      <TextField layoutX="811.0" layoutY="321.0" prefHeight="69.0" prefWidth="83.0" />
-      <ImageView fx:id="door" fitHeight="650.0" fitWidth="1000.0" layoutX="-6.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+      <Button fx:id="one" layoutX="622.0" layoutY="355.0" mnemonicParsing="false" onAction="#onOne" prefHeight="26.0" prefWidth="54.0" text="1" />
+      <Button fx:id="zero" layoutX="729.0" layoutY="433.0" mnemonicParsing="false" onAction="#onZero" prefHeight="26.0" prefWidth="54.0" text="0" />
+      <Button fx:id="enter" layoutX="622.0" layoutY="433.0" mnemonicParsing="false" onAction="#onEnter" prefHeight="26.0" prefWidth="54.0" text="Enter" />
+      <Button fx:id="nine" layoutX="729.0" layoutY="407.0" mnemonicParsing="false" onAction="#onNine" prefHeight="26.0" prefWidth="54.0" text="9" />
+      <Button fx:id="eight" layoutX="675.0" layoutY="407.0" mnemonicParsing="false" onAction="#onEight" prefHeight="26.0" prefWidth="54.0" text="8" />
+      <Button fx:id="seven" layoutX="622.0" layoutY="407.0" mnemonicParsing="false" onAction="#onSeven" prefHeight="26.0" prefWidth="54.0" text="7" />
+      <Button fx:id="six" layoutX="729.0" layoutY="381.0" mnemonicParsing="false" onAction="#onSix" prefHeight="26.0" prefWidth="54.0" text="6" />
+      <Button fx:id="five" layoutX="675.0" layoutY="381.0" mnemonicParsing="false" onAction="#onFive" prefHeight="26.0" prefWidth="54.0" text="5" />
+      <Button fx:id="four" layoutX="622.0" layoutY="381.0" mnemonicParsing="false" onAction="#onFour" prefHeight="26.0" prefWidth="54.0" text="4" />
+      <Button fx:id="three" layoutX="729.0" layoutY="355.0" mnemonicParsing="false" onAction="#onThree" prefHeight="26.0" prefWidth="54.0" text="3" />
+      <Button fx:id="two" layoutX="675.0" layoutY="355.0" mnemonicParsing="false" onAction="#onTwo" prefHeight="26.0" prefWidth="54.0" text="2" />
+      <Button fx:id="reset" layoutX="675.0" layoutY="433.0" mnemonicParsing="false" onAction="#onReset" prefHeight="26.0" prefWidth="54.0" text="Reset" />
+      <TextArea fx:id="screen" layoutX="622.0" layoutY="295.0" prefHeight="60.0" prefWidth="161.0">
+         <font>
+            <Font name="Arial" size="20.0" />
+         </font>
+      </TextArea>
+      <ImageView fx:id="door" fitHeight="650.0" fitWidth="1128.0" layoutX="-6.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/room3/exit2.png" />
          </image>
