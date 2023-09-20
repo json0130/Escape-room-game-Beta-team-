@@ -12,7 +12,10 @@ package nz.ac.auckland.se206;
      PLAYER,
      TUTORIAL,
      ANIMATION,
-      INTRO
+      INTRO,
+      TILEPUZZLE,
+      TILEROOM
+
    }
 
    private static HashMap<AppUi, Parent> scenes = new HashMap<AppUi, Parent>();

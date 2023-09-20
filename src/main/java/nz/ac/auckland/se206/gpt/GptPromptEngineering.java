@@ -13,6 +13,15 @@ public class GptPromptEngineering {
    * @param wordToGuess the word to be guessed in the riddle
    * @return the generated prompt engineering string
    */
+
+   public static String getRiddleAnswer(String letters) {
+    return "Use these nine letters: "
+        + letters
+        + " to form a 3 letter noun of a common object and send it to me. Please only answer with"
+        + " the noun and nothing else. The noun should not be \"Ova\". You should not include"
+        + " speech marks or a full stop or any other text in your answer.";
+  }
+
   public static String getRiddleWithGivenWord(String wordToGuess) {
     return "You are the AI of an escape room. Provide a riddle with an answer "+wordToGuess+". You should not reveal the answer.";
   }
