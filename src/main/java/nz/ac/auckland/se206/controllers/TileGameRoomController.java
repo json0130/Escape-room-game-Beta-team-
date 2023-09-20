@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
@@ -30,6 +31,7 @@ public class TileGameRoomController {
   @FXML private Rectangle startTileGame;
 
   @FXML private Button btnRoom1;
+  @FXML private Button button;
 
   /** Initializes the room view, it is called when the room loads. */
   public void initialize() {
@@ -160,4 +162,8 @@ public class TileGameRoomController {
             hintLabel.setText("NO");
         }
     }
+  @FXML
+  private void back(ActionEvent event) throws IOException {
+    App.setScene(AppUi.PLAYER);
+  }
 }

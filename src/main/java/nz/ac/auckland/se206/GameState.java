@@ -10,7 +10,7 @@ public class GameState {
   public static boolean isKeyFound = false;
 
   /* password will be generated in room2 */
-  public static String password = "";
+  public static String password = "1234";
 
   public static boolean correctPassword = false;
 
@@ -22,7 +22,6 @@ public class GameState {
 
   public static boolean correctId = false;
 
-  public static String answerOfRiddle = "";
   public static boolean isTutorialStarted = false;
   /** Indicates whether the riddle is given or not */
   public static boolean isRiddleGiven = false;

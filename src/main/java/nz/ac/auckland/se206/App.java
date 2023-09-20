@@ -9,6 +9,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import nz.ac.auckland.se206.SceneManager.AppUi;
+import nz.ac.auckland.se206.controllers.CountdownTimerController;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 /**
  * This is the entry point of the JavaFX application, while you can change this class, it should
@@ -16,7 +22,11 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
  */
 public class App extends Application {
 
+  public static int timerSeconds = 120;
+  private Label countdownLabel;
+  private Timeline countdownTimeline;
   private static Scene scene;
+   private StackPane mainLayout;
   public static boolean tileGameComplete = false;
   public static int passcode;
 
@@ -57,6 +67,7 @@ public class App extends Application {
     
     Random r = new Random();
     passcode = r.nextInt((9999 - 1000) + 1) + 1000;
+    GameState.password = String.valueOf(passcode);
 
     SceneManager.addScene(AppUi.ROOM1, loadFxml("room1"));
     SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
@@ -67,9 +78,10 @@ public class App extends Application {
     SceneManager.addScene(AppUi.TILEPUZZLE, loadFxml("tilegamedesk"));
     SceneManager.addScene(AppUi.TILEROOM, loadFxml("tilegameroom"));
     SceneManager.addScene(AppUi.ROOM3, loadFxml("room3"));
-    scene = new Scene(SceneManager.getScene(AppUi.INTRO), 1000, 600);
+    scene = new Scene(SceneManager.getScene(AppUi.INTRO), 1000, 650);
 
     stage.setScene(scene);
     stage.show();
+
   }
 }

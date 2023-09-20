@@ -103,7 +103,7 @@ public class TutorialController implements Initializable {
 
     @FXML 
     private void skipTutorial(ActionEvent event){
-        App.setScene(AppUi.ANIMATION);
+        App.setScene(AppUi.PLAYER);
         collisionTimer.stop();
         timer.stop();
     }
