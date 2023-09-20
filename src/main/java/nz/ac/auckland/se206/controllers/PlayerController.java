@@ -339,12 +339,4 @@ public class PlayerController implements Initializable{
             hintLabel.setText("NO");
         }
     }
-
-
-
-    @FXML
-    public void decrease(ActionEvent event) {
-        GameState.numOfHints--;
-        System.out.println("btn clicked");
-    }
 }

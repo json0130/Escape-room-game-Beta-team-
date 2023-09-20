@@ -63,7 +63,7 @@
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
-      <Label fx:id="difficultyLabel" alignment="CENTER" layoutX="362.0" layoutY="6.0" prefHeight="39.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
+      <Label fx:id="difficultyLabel" alignment="CENTER" layoutX="362.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
          <font>
             <Font name="Arial" size="32.0" />
          </font>

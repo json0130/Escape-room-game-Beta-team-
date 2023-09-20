@@ -1,11 +1,15 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
@@ -16,6 +20,10 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
 /** Controller class for the room view. */
 public class TileGameRoomController {
 
+  @FXML private Label difficultyLabel;
+  @FXML private Label hintLabel;
+  @FXML private Label hintLabel2;
+
   @FXML private Rectangle door;
   @FXML private Rectangle window;
   @FXML private Rectangle vase;
@@ -25,7 +33,8 @@ public class TileGameRoomController {
 
   /** Initializes the room view, it is called when the room loads. */
   public void initialize() {
-    // Initialization code goes here
+    // if difficulty is selected, label is updated
+      detectDifficulty();
   }
 
   /**
@@ -116,4 +125,39 @@ public class TileGameRoomController {
     App.setScene(AppUi.TILEPUZZLE);
     System.out.println("click");
   }
+
+  public void detectDifficulty() {
+        Timer labelTimer = new Timer(true);
+        labelTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (GameState.difficulty != null) {
+                    if (GameState.difficulty == "MEDIUM") {
+                        Platform.runLater(()-> updateLabels());
+                        if (GameState.numOfHints == 0) {
+                            labelTimer.cancel();
+                        }
+                    } else {
+                        Platform.runLater(()-> updateLabels());
+                        labelTimer.cancel();
+                    }
+                }
+            }
+        }, 0, 500); 
+    }
+
+    private void updateLabels() {
+        difficultyLabel.setText(GameState.difficulty);
+        if (GameState.difficulty == "EASY") {
+            hintLabel.setText("UNLIMITED");
+        } else if (GameState.difficulty == "MEDIUM") {
+            hintLabel.setText(String.valueOf(GameState.numOfHints));
+            hintLabel2.setText("HINTS");
+            if (GameState.numOfHints == 1) {
+                hintLabel2.setText("HINT");
+            }
+        } else {
+            hintLabel.setText("NO");
+        }
+    }
 }
