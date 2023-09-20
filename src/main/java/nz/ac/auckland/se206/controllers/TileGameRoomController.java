@@ -5,6 +5,7 @@ import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -20,8 +21,6 @@ public class TileGameRoomController {
   @FXML private Rectangle window;
   @FXML private Rectangle vase;
   @FXML private Rectangle startTileGame;
-
-  @FXML private Button btnRoom1;
 
   /** Initializes the room view, it is called when the room loads. */
   public void initialize() {

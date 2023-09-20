@@ -9,6 +9,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import nz.ac.auckland.se206.SceneManager.AppUi;
+import nz.ac.auckland.se206.controllers.CountdownTimerController;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 /**
  * This is the entry point of the JavaFX application, while you can change this class, it should
@@ -16,7 +22,11 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
  */
 public class App extends Application {
 
+  public static int timerSeconds = 120;
+  private Label countdownLabel;
+  private Timeline countdownTimeline;
   private static Scene scene;
+   private StackPane mainLayout;
   public static boolean tileGameComplete = false;
   public static int passcode;
 
@@ -71,5 +81,6 @@ public class App extends Application {
 
     stage.setScene(scene);
     stage.show();
+
   }
 }
