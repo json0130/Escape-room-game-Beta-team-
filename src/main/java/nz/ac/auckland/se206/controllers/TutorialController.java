@@ -13,6 +13,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -57,14 +59,22 @@ public class TutorialController implements Initializable {
     @FXML private ImageView r3;
     @FXML private ImageView r4;
 
+    @FXML private ProgressBar progressBar;
+    private PauseTransition collisionPause = new PauseTransition(Duration.seconds(1));
+
+    private double health = 1.0;
+
     private double previousX;
     private double previousY;
+
+    private boolean collisionDetected = false;
+
 
     AnimationTimer collisionTimer = new AnimationTimer() {
         @Override
         public void handle(long now) {
-                checkCollision(player, rocks);
-                checkFinish(player, c3);
+            checkCollision(player, rocks);
+            checkFinish(player, c3);
         }
     };
 
@@ -186,7 +196,6 @@ public class TutorialController implements Initializable {
             }
         });
 
-
         keyPressed.addListener(((observableValue, aBoolean, t1) -> {
             if(!aBoolean){
                 timer.start();
@@ -209,14 +218,22 @@ public class TutorialController implements Initializable {
         setMovement(r4, false, 3, -900, 0,8);
     }
 
-
     public void checkCollision(ImageView player, List<ImageView> rocks) {
-        for(ImageView rock : rocks) {
-            if (player.getBoundsInParent().intersects(rock.getBoundsInParent())) {
-            player.setLayoutX(previousX); // Restore the player's previous X position
-            player.setLayoutY(previousY); // Restore the player's previous Y position
-             // Exit the loop as soon as a collision is detected
-        }
+        if (!collisionDetected) {
+            for (ImageView rock : rocks) {
+                if (player.getBoundsInParent().intersects(rock.getBoundsInParent())) {
+                    player.setLayoutX(previousX); // Restore the player's previous X position
+                    player.setLayoutY(previousY); // Restore the player's previous Y position
+                    collisionDetected = true;
+                    progressBar.setProgress(health -= 0.25); // Decrease the progress bar
+                    if (health == 0){
+                        App.setScene(AppUi.ANIMATION);
+                    }
+                    collisionPause.setOnFinished(event -> collisionDetected = false); // Re-enable collision detection after 1 second
+                    collisionPause.play();
+
+                }
+            }
         }
     }
 
