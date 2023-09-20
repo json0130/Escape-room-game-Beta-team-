@@ -426,7 +426,7 @@ public class ExitController implements Initializable {
 
         private void checkCollision(Node node1, Node node2) {
           if (node1.getBoundsInParent().intersects(node2.getBoundsInParent())) {
-            if (GameState.answerOfRiddle == "captain") {
+            if (Room1Controller.riddleAnswer == "captain") {
               if (node1 == idCaptain) {
                 light.setFill(Color.GREEN);
                 GameState.correctId = true;
@@ -438,7 +438,7 @@ public class ExitController implements Initializable {
               } else {
                 light.setFill(Color.RED);
               }
-            } else if (GameState.answerOfRiddle == "chef") {
+            } else if (Room1Controller.riddleAnswer == "chef") {
               if (node1 == idChef) {
                 light.setFill(Color.GREEN);
                 GameState.correctId = true;
@@ -450,7 +450,7 @@ public class ExitController implements Initializable {
               } else {
                 light.setFill(Color.RED);
               }
-            } else if (GameState.answerOfRiddle == "doctor") {
+            } else if (Room1Controller.riddleAnswer == "doctor") {
               if (node1 == idDoctor) {
                 light.setFill(Color.GREEN);
                 GameState.correctId = true;
@@ -462,7 +462,7 @@ public class ExitController implements Initializable {
               } else {
                 light.setFill(Color.RED);
               }
-            } else if (GameState.answerOfRiddle == "engineer") {
+            } else if (Room1Controller.riddleAnswer == "engineer") {
               if (node1 == idEngineer) {
                 light.setFill(Color.GREEN);
                 GameState.correctId = true;

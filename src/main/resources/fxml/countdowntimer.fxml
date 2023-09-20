@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+
+<Label fx:id="countdownLabel" prefHeight="115.0" prefWidth="191.0" text="2:00" textAlignment="CENTER" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.CountdownTimerController">
+   <font>
+      <Font name="Arial" size="43.0" />
+   </font>
+</Label>
