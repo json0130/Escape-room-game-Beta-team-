@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -25,61 +26,63 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 
 public class EndController implements Initializable {
 
     @FXML
-    private ImageView spaceship;
+    private Label win;
     @FXML
-    private ImageView r1;
+    private Label lose;
     @FXML private Pane scene;
     @FXML
-    private Button b1;
+    private Button button;
     @FXML   
     private ImageView e1;
 
     @FXML
-    private void startAnimation() {
-
+    private void startAnimation(ActionEvent events) {
              // Create a timeline to continuously increase the scaling factor
              Timeline continuousScaling = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(r1.scaleXProperty(), 1.0)),
-                new KeyFrame(Duration.ZERO, new KeyValue(r1.scaleYProperty(), 1.0)),
-                new KeyFrame(Duration.seconds(3), new KeyValue(r1.scaleXProperty(), 1.5)),
-                new KeyFrame(Duration.seconds(3), new KeyValue(r1.scaleYProperty(), 1.5))
+                new KeyFrame(Duration.ZERO, new KeyValue(win.scaleXProperty(), 1.0)),
+                new KeyFrame(Duration.ZERO, new KeyValue(win.scaleYProperty(), 1.0)),
+                new KeyFrame(Duration.seconds(1), new KeyValue(win.scaleXProperty(), 2)),
+                new KeyFrame(Duration.seconds(1), new KeyValue(win.scaleYProperty(), 2)),
+                new KeyFrame(Duration.seconds(0.5), new KeyValue(win.scaleXProperty(), 1.7)),
+                new KeyFrame(Duration.seconds(0.5), new KeyValue(win.scaleYProperty(), 1.7))
         );
         continuousScaling.setCycleCount(1); // Play the animation once
 
         // Create a translate animation for the r1
-        TranslateTransition r1Translation = new TranslateTransition(Duration.seconds(3), r1);
-        TranslateTransition spaceshipTranslation = new TranslateTransition(Duration.seconds(4), spaceship);
-
-        // Set the initial position to the left corner
-        r1.setTranslateX(0);
-        r1.setTranslateY(-300);
-        spaceship.setTranslateX(0);
-        spaceship.setTranslateY(-50);
+        TranslateTransition Translation = new TranslateTransition(Duration.seconds(3), win);
 
         // Set the animation properties
-        r1Translation.setToX(-200); // Move to the right end of the scene
-        r1Translation.setToY(100); // Move to the right end of the scene
-        spaceshipTranslation.setToX(340); // Move to the right end of the scene
-        spaceshipTranslation.setToY(-50); // Move to the right end of the scene
-        r1Translation.setCycleCount(1); // Play the animation once
-        spaceshipTranslation.setCycleCount(1); // Play the animation once
-        r1Translation.setAutoReverse(false); // Don't reverse the animation
-        spaceshipTranslation.setAutoReverse(false); // Don't reverse the animation
+        
+        Translation.setCycleCount(1); // Play the animation once
+        Translation.setAutoReverse(false); // Don't reverse the animation
 
         // Start the animations
         continuousScaling.play();
-        spaceshipTranslation.play();
-        r1Translation.play();
-        
-        // Enable the button when the animation is finished
-        spaceshipTranslation.setOnFinished(event -> {
-            e1.setVisible(true);
-            explosionAnimation(e1);
-        });
+        Translation.play();
+    }
+
+    @FXML
+    private void animation(ActionEvent event){
+        // Create a scale transition
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(2), win);
+        scaleTransition.setFromX(1.0); // Starting X scale
+        scaleTransition.setFromY(1.0); // Starting Y scale
+        scaleTransition.setToX(2.0);   // Ending X scale (scale up by a factor of 2)
+        scaleTransition.setToY(2.0);   // Ending Y scale (scale up by a factor of 2)
+
+        // Create a translate transition
+        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(2), win);
+        translateTransition.setByX(100); // Move label 100 units to the right
+        translateTransition.setByY(50);  // Move label 50 units down
+
+        // Play both transitions in parallel
+        scaleTransition.play();
+        translateTransition.play();
     }
 
     private void explosionAnimation(ImageView e1){
@@ -102,12 +105,12 @@ public class EndController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        e1.setVisible(false);
-        scene.sceneProperty().addListener((observable, oldScene, newScene) -> {
-            if (newScene != null) {
-                // Schedule the playRock method to run after the scene is shown
-                Platform.runLater(this::startAnimation);
-            }
-        });
+
+        // scene.sceneProperty().addListener((observable, oldScene, newScene) -> {
+        //     if (newScene != null) {
+        //         // Schedule the playRock method to run after the scene is shown
+        //         Platform.runLater(this::startAnimation);
+        //     }
+        // });
     }
 }
