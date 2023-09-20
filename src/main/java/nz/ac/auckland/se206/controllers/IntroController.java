@@ -83,7 +83,16 @@ public class IntroController implements Initializable {
             clickedButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: drak blue;");
         }
         isLevelSelected = true;
+
+        // set the difficulty 
+        if (event.getSource()== easyButton) {
+            GameState.difficulty = "EASY";
+        } else if (event.getSource() == mediumButton) {
+            GameState.difficulty = "MEDIUM";
+        } else if (event.getSource() == hardButton) {
+            GameState.difficulty = "HARD";
         }
+    }
 
     @FXML
     private void minBClicked(ActionEvent events){
