@@ -25,9 +25,9 @@
             <Image url="@../images/Firefly%2020230913233152.png" />
          </image>
       </ImageView>
-      <Rectangle fx:id="room3" arcHeight="5.0" arcWidth="5.0" fill="#9202c765" height="226.0" layoutX="646.0" layoutY="350.0" stroke="TRANSPARENT" strokeType="INSIDE" width="191.0" />
-      <Rectangle fx:id="room2" arcHeight="5.0" arcWidth="5.0" fill="#0050a69c" height="217.0" layoutX="456.0" layoutY="22.0" stroke="TRANSPARENT" strokeType="INSIDE" width="198.0" />
-      <Rectangle fx:id="room1" arcHeight="5.0" arcWidth="5.0" fill="#ff550087" height="190.0" layoutX="236.0" layoutY="392.0" stroke="#ffffff00" strokeType="INSIDE" width="131.0" />
+      <Rectangle fx:id="room3" arcHeight="5.0" arcWidth="5.0" fill="#9202c765" height="223.0" layoutX="651.0" layoutY="353.0" stroke="TRANSPARENT" strokeType="INSIDE" width="184.0" />
+      <Rectangle fx:id="room2" arcHeight="5.0" arcWidth="5.0" fill="#0050a69c" height="211.0" layoutX="461.0" layoutY="22.0" stroke="TRANSPARENT" strokeType="INSIDE" width="190.0" />
+      <Rectangle fx:id="room1" arcHeight="5.0" arcWidth="5.0" fill="#ff550087" height="186.0" layoutX="239.0" layoutY="396.0" stroke="#ffffff00" strokeType="INSIDE" width="125.0" />
       <Rectangle fx:id="wall" arcHeight="5.0" arcWidth="5.0" fill="#0037ad75" height="38.0" layoutX="-2.0" layoutY="580.0" opacity="0.0" stroke="TRANSPARENT" strokeType="INSIDE" width="915.0" />
       <Rectangle fx:id="wall1" arcHeight="5.0" arcWidth="5.0" fill="#0037ad75" height="25.0" layoutX="32.0" layoutY="1.0" opacity="0.0" stroke="TRANSPARENT" strokeType="INSIDE" width="821.0" />
       <Rectangle fx:id="wall2" arcHeight="5.0" arcWidth="5.0" fill="#0037ad75" height="573.0" layoutX="54.0" layoutY="33.0" opacity="0.0" stroke="TRANSPARENT" strokeType="INSIDE" width="32.0" />
@@ -35,21 +35,21 @@
       <Rectangle fx:id="wall3" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="246.0" layoutX="356.0" layoutY="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="9.0" />
       <Rectangle fx:id="wall4" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="212.0" layoutX="649.0" layoutY="19.0" stroke="TRANSPARENT" strokeType="INSIDE" width="7.0" />
       <Rectangle fx:id="wall5" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="211.0" layoutX="451.0" layoutY="21.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
-      <Rectangle fx:id="wall7" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="233.0" layoutX="641.0" layoutY="347.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
+      <Rectangle fx:id="wall7" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="227.0" layoutX="641.0" layoutY="353.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
       <Rectangle fx:id="wall8" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="190.0" layoutX="361.0" layoutY="392.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
       <Rectangle fx:id="wall9" arcHeight="5.0" arcWidth="5.0" height="172.0" layoutX="173.0" layoutY="401.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
       <Rectangle fx:id="wall10" arcHeight="5.0" arcWidth="5.0" height="432.0" layoutX="84.0" layoutY="93.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
       <Rectangle fx:id="wall11" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="9.0" layoutX="95.0" layoutY="260.0" stroke="TRANSPARENT" strokeType="INSIDE" width="86.0" />
-      <Rectangle fx:id="wall12" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="9.0" layoutX="589.0" layoutY="229.0" stroke="TRANSPARENT" strokeType="INSIDE" width="67.0" />
-      <Rectangle fx:id="wall13" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="9.0" layoutX="736.0" layoutY="346.0" stroke="TRANSPARENT" strokeType="INSIDE" width="100.0" />
+      <Rectangle fx:id="wall12" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="9.0" layoutX="589.0" layoutY="230.0" stroke="TRANSPARENT" strokeType="INSIDE" width="67.0" />
+      <Rectangle fx:id="wall13" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="9.0" layoutX="760.0" layoutY="346.0" stroke="TRANSPARENT" strokeType="INSIDE" width="76.0" />
       <Rectangle fx:id="wall14" arcHeight="5.0" arcWidth="5.0" height="9.0" layoutX="460.0" layoutY="427.0" stroke="TRANSPARENT" strokeType="INSIDE" width="134.0" />
-      <Rectangle fx:id="wall15" arcHeight="5.0" arcWidth="5.0" height="155.0" layoutX="583.0" layoutY="426.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
+      <Rectangle fx:id="wall15" arcHeight="5.0" arcWidth="5.0" height="155.0" layoutX="583.0" layoutY="427.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
       <Rectangle fx:id="wall16" arcHeight="5.0" arcWidth="5.0" height="155.0" layoutX="456.0" layoutY="427.0" stroke="TRANSPARENT" strokeType="INSIDE" width="12.0" />
       <Rectangle fx:id="wall17" arcHeight="5.0" arcWidth="5.0" height="9.0" layoutX="90.0" layoutY="400.0" stroke="TRANSPARENT" strokeType="INSIDE" width="92.0" />
       <Button fx:id="reset" layoutX="8.0" layoutY="14.0" mnemonicParsing="false" onAction="#start" text="Button" />
-      <Rectangle fx:id="wall18" arcHeight="5.0" arcWidth="5.0" height="9.0" layoutX="721.0" layoutY="262.0" stroke="TRANSPARENT" strokeType="INSIDE" width="115.0" />
-      <Rectangle fx:id="wall19" arcHeight="5.0" arcWidth="5.0" height="245.0" layoutX="721.0" layoutY="21.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
-      <Rectangle fx:id="wall20" arcHeight="5.0" arcWidth="5.0" height="443.0" layoutX="827.0" layoutY="87.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
+      <Rectangle fx:id="wall18" arcHeight="5.0" arcWidth="5.0" height="9.0" layoutX="760.0" layoutY="225.0" stroke="TRANSPARENT" strokeType="INSIDE" width="76.0" />
+      <Rectangle fx:id="wall19" arcHeight="5.0" arcWidth="5.0" height="193.0" layoutX="756.0" layoutY="41.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
+      <Rectangle fx:id="wall20" arcHeight="5.0" arcWidth="5.0" height="441.0" layoutX="827.0" layoutY="89.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
       <ImageView fitHeight="490.0" fitWidth="492.0" layoutX="743.0" layoutY="92.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly_20230920003425-removebg-preview.png" />
@@ -81,7 +81,7 @@
             <Font size="26.0" />
          </font>
       </Label>
-      <Label fx:id="computer" layoutX="483.0" layoutY="99.0" prefHeight="77.0" prefWidth="165.0" text="COMPUTER" textAlignment="CENTER" textFill="WHITE">
+      <Label fx:id="computer" layoutX="483.0" layoutY="87.0" prefHeight="77.0" prefWidth="165.0" text="COMPUTER" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="26.0" />
          </font>
@@ -91,12 +91,12 @@
             <Font size="26.0" />
          </font>
       </Label>
-      <Label fx:id="control" layoutX="678.0" layoutY="430.0" prefHeight="77.0" prefWidth="186.0" text="CONTROL" textAlignment="CENTER" textFill="WHITE">
+      <Label fx:id="control" layoutX="678.0" layoutY="430.0" prefHeight="77.0" prefWidth="134.0" text="CONTROL" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="26.0" />
          </font>
       </Label>
-      <ImageView fx:id="player" fitHeight="86.0" fitWidth="83.0" layoutX="108.0" layoutY="141.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="player" fitHeight="50.0" fitWidth="56.0" layoutX="113.0" layoutY="189.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/images-removebg-preview.png" />
          </image>

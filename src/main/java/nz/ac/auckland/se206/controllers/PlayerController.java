@@ -4,6 +4,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javax.swing.Action;
+
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.beans.binding.BooleanBinding;
@@ -35,7 +38,6 @@ public class PlayerController implements Initializable {
   private BooleanProperty sPressed = new SimpleBooleanProperty();
   private BooleanProperty dPressed = new SimpleBooleanProperty();
 
-
   private BooleanBinding keyPressed = wPressed.or(aPressed).or(sPressed).or(dPressed);
     private int movementVariable = 5;
     private double shapesize;
@@ -43,12 +45,10 @@ public class PlayerController implements Initializable {
 
   List<Rectangle> walls = new ArrayList<>();
 
-    @FXML
-    private ImageView player;
-
-  @FXML private Rectangle room1;
-  @FXML private Rectangle room2;
-  @FXML private Rectangle room3;
+    @FXML private ImageView player;
+    @FXML private Rectangle room1;
+    @FXML private Rectangle room2;
+    @FXML private Rectangle room3;
 
     @FXML private Label main;
     @FXML private Label computer;
@@ -107,24 +107,24 @@ public class PlayerController implements Initializable {
   AnimationTimer timer =
       new AnimationTimer() {
         @Override
-        public void handle(long now) {
+        public void handle(long now){
+            
+                previousX = player.getLayoutX(); // Update previousX
+                previousY = player.getLayoutY(); // Update previousY
 
-          previousX = player.getLayoutX(); // Update previousX
-          previousY = player.getLayoutY(); // Update previousY
-
-          if (wPressed.get()) {
-            player.setLayoutY(player.getLayoutY() - movementVariable);
-          }
-          if (aPressed.get()) {
-            player.setLayoutX(player.getLayoutX() - movementVariable);
-          }
-          if (sPressed.get()) {
-            player.setLayoutY(player.getLayoutY() + movementVariable);
-          }
-          if (dPressed.get()) {
-            player.setLayoutX(player.getLayoutX() + movementVariable);
-          }
-          squareBorder();
+                if(wPressed.get()){
+                    player.setLayoutY(player.getLayoutY() - movementVariable);
+                }
+                if(aPressed.get()){
+                    player.setLayoutX(player.getLayoutX() - movementVariable);
+                }
+                if(sPressed.get()){
+                    player.setLayoutY(player.getLayoutY() + movementVariable);
+                }
+                if(dPressed.get()){
+                    player.setLayoutX(player.getLayoutX() + movementVariable);
+                }
+                squareBorder();
         }
       };
 
@@ -133,7 +133,6 @@ public class PlayerController implements Initializable {
         room1.setVisible(false);
         room2.setVisible(false);
         room3.setVisible(false);
-
         // Set labels to have white text and black stroke for the text
         main.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
         computer.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
@@ -179,48 +178,56 @@ public class PlayerController implements Initializable {
             timer.stop();
           }
         }));
-  }
-
-    public void checkRoom1(ImageView player, Rectangle room1){
-            if(player.getBoundsInParent().intersects(room1.getBoundsInParent())){
-                room1.setVisible(true);
-                PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-                pauseTransition.setOnFinished(event -> {
-                    App.setScene(AppUi.ROOM1);
-                });
-                pauseTransition.play();
-            }else{
-                room1.setVisible(false);
-            }
     }
-    public void checkRoom2(ImageView player, Rectangle room2){
-            if(player.getBoundsInParent().intersects(room2.getBoundsInParent())){
-                room2.setVisible(true);
-                
-                PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-                pauseTransition.setOnFinished(event -> {
-                    App.setScene(AppUi.TILEROOM);
-                    player.setLayoutX(486);
-                player.setLayoutY(258);
-                });
-                pauseTransition.play();
-            }else{
-                room2.setVisible(false);
-            }
+    public void checkRoom1(ImageView player, Rectangle room1) {
+        if (player.getBoundsInParent().intersects(room1.getBoundsInParent())) {
+            room1.setVisible(true);
+            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
+            pauseTransition.setOnFinished(event -> {
+                // Adjust the player's position to be right in front of the room
+                player.setLayoutX(272);
+                player.setLayoutY(336);
+                App.setScene(AppUi.ROOM1);
+                timer.stop();
+            });
+            pauseTransition.play();
+        } else {
+            room1.setVisible(false);
+        }
     }
-    public void checkRoom3(ImageView player, Rectangle room3){
-            if(player.getBoundsInParent().intersects(room3.getBoundsInParent())){
-                room3.setVisible(true);
-            }else {
-                room3.setVisible(false);
-            }
-
+    
+    public void checkRoom2(ImageView player, Rectangle room2) {
+        if (player.getBoundsInParent().intersects(room2.getBoundsInParent())) {
+            room2.setVisible(true);
+            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
+            pauseTransition.setOnFinished(event -> {
+                // Adjust the player's position to be right in front of the room
+                player.setLayoutX(487);
+                player.setLayoutY(244);
+                App.setScene(AppUi.TILEROOM);
+                timer.stop();
+            });
+            pauseTransition.play();
+        } else {
+            room2.setVisible(false);
+        }
     }
-
-  public void buttonPressed(KeyEvent event) {
-    // if button is pressed then it moves to the other room
-  }
-
+    
+    public void checkRoom3(ImageView player, Rectangle room3) {
+        if (player.getBoundsInParent().intersects(room3.getBoundsInParent())) {
+            room3.setVisible(true);
+            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
+            pauseTransition.setOnFinished(event -> {
+                // Adjust the player's position to be right in front of the room
+                player.setLayoutX(674);
+                player.setLayoutY(292);
+                App.setScene(AppUi.ROOM3);
+            });
+            pauseTransition.play();
+        } else {
+            room3.setVisible(false);
+        }
+    }
 
     public void checkCollision2(ImageView player, List<Rectangle> walls){
         for(Rectangle wall : walls){
@@ -231,7 +238,6 @@ public class PlayerController implements Initializable {
             }
         }
     }
-
 
   @FXML
   public void movementSetup() {
