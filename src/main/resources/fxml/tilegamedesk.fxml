@@ -157,6 +157,6 @@
             <Font name="Arial Black" size="13.0" />
          </font>
       </Button>
-      <fx:include source="countdowntimer.fxml" />
+      <fx:include layoutX="900.0" layoutY="-20.0" source="countdowntimer.fxml" />
    </children>
 </AnchorPane>

@@ -101,6 +101,6 @@
             <Image url="@../images/images-removebg-preview.png" />
          </image>
       </ImageView>
-      <fx:include source="countdowntimer.fxml" />
+      <fx:include layoutX="900.0" layoutY="-20.0" source="countdowntimer.fxml" />
    </children>
 </Pane>

@@ -54,6 +54,6 @@
          </image>
       </ImageView>
       <Button fx:id="backButton" layoutX="37.0" layoutY="475.0" mnemonicParsing="false" onAction="#back" text="Back" />
-      <fx:include source="countdowntimer.fxml" />
+      <fx:include layoutX="900.0" layoutY="-20.0" source="countdowntimer.fxml" />
    </children>
 </Pane>
