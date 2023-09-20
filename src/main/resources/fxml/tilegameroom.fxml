@@ -8,12 +8,12 @@
 
 <AnchorPane prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.TileGameRoomController">
    <children>
-      <ImageView fitHeight="684.0" fitWidth="1015.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="759.0" fitWidth="1288.0" layoutX="-13.0" layoutY="-5.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/Firefly%2020230920212027.png" />
+            <Image url="@../images/Firefly%2020230921012743.png" />
          </image>
       </ImageView>
-      <Rectangle fx:id="startTileGame" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f00" height="116.0" layoutX="408.0" layoutY="74.0" onMouseClicked="#onTileGameButtonClick" stroke="TRANSPARENT" strokeType="INSIDE" width="397.0" />
+      <Rectangle fx:id="startTileGame" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f00" height="104.0" layoutX="538.0" layoutY="161.0" onMouseClicked="#onTileGameButtonClick" stroke="TRANSPARENT" strokeType="INSIDE" width="131.0" />
       <Button fx:id="button" layoutX="114.0" layoutY="393.0" mnemonicParsing="false" onAction="#back" text="Button" />
    </children>
 </AnchorPane>

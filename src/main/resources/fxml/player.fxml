@@ -96,7 +96,7 @@
             <Font size="26.0" />
          </font>
       </Label>
-      <ImageView fx:id="player" fitHeight="50.0" fitWidth="56.0" layoutX="108.0" layoutY="192.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="player" fitHeight="50.0" fitWidth="56.0" layoutX="113.0" layoutY="189.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/images-removebg-preview.png" />
          </image>

@@ -67,7 +67,7 @@ public class App extends Application {
     SceneManager.addScene(AppUi.TILEPUZZLE, loadFxml("tilegamedesk"));
     SceneManager.addScene(AppUi.TILEROOM, loadFxml("tilegameroom"));
     SceneManager.addScene(AppUi.ROOM3, loadFxml("room3"));
-    scene = new Scene(SceneManager.getScene(AppUi.ROOM3), 1000, 600);
+    scene = new Scene(SceneManager.getScene(AppUi.INTRO), 1000, 650);
 
     stage.setScene(scene);
     stage.show();
