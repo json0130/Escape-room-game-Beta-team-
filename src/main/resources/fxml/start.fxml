@@ -91,12 +91,12 @@
             </LinearGradient>
          </textFill>
       </Button>
-      <Button fx:id="minB2" layoutX="109.0" layoutY="504.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="45.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" stylesheets="@../css/styles.css" text="2 MININTES" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="minB2" layoutX="109.0" layoutY="504.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="45.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" stylesheets="@../css/styles.css" text="2 MINUTES" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="minB4" layoutX="398.0" layoutY="504.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="45.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" text="4 MININTES" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="minB4" layoutX="398.0" layoutY="504.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="45.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" text="4 MINUTES" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>
