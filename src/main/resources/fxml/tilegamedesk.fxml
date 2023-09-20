@@ -147,7 +147,7 @@
          </image>
       </ImageView>
       <Rectangle fx:id="powerButton" arcHeight="5.0" arcWidth="5.0" fill="#727272" height="17.0" layoutX="423.0" layoutY="437.0" onMouseClicked="#onPowerButtonPressed" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="29.0" />
-      <Button layoutX="73.0" layoutY="542.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="141.0" text="Leave Computer">
+      <Button fx:id="leaveComputerButton" layoutX="73.0" layoutY="542.0" mnemonicParsing="false" onAction="#onPuzzleGoBackClick" prefHeight="49.0" prefWidth="141.0" text="Leave Computer">
          <font>
             <Font name="Arial Black" size="13.0" />
          </font>

@@ -192,6 +192,14 @@ public class PlayerController implements Initializable{
     public void checkRoom2(ImageView player, Rectangle room2){
             if(player.getBoundsInParent().intersects(room2.getBoundsInParent())){
                 room2.setVisible(true);
+                
+                PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+                pauseTransition.setOnFinished(event -> {
+                    App.setScene(AppUi.TILEROOM);
+                    player.setLayoutX(486);
+                player.setLayoutY(258);
+                });
+                pauseTransition.play();
             }else{
                 room2.setVisible(false);
             }
