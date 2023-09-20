@@ -4,15 +4,20 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class Room1Controller implements Initializable {
@@ -25,6 +30,10 @@ public class Room1Controller implements Initializable {
   @FXML private ImageView idChef;
   @FXML private ImageView idDoctor;
   @FXML private ImageView idEngineer;
+
+  @FXML private Label difficultyLabel;
+  @FXML private Label hintLabel;
+  @FXML private Label hintLabel2;
 
   public static String riddleAnswer;
 
@@ -45,6 +54,9 @@ public class Room1Controller implements Initializable {
     idDoctor.setVisible(false);
     idChef.setVisible(false);
     idEngineer.setVisible(false);
+
+    // if difficulty is selected, label is updated
+    detectDifficulty();
   }
 
   // When crew1 is clicked and the riddle was resolved, id1 is shown only for 2 seconds
@@ -215,4 +227,39 @@ public class Room1Controller implements Initializable {
   private void back(ActionEvent event) {
     App.setScene(AppUi.PLAYER);
   }
+
+  public void detectDifficulty() {
+        Timer labelTimer = new Timer(true);
+        labelTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (GameState.difficulty != null) {
+                    if (GameState.difficulty == "MEDIUM") {
+                        Platform.runLater(()-> updateLabels());
+                        if (GameState.numOfHints == 0) {
+                            labelTimer.cancel();
+                        }
+                    } else {
+                        Platform.runLater(()-> updateLabels());
+                        labelTimer.cancel();
+                    }
+                }
+            }
+        }, 0, 500); 
+    }
+
+    private void updateLabels() {
+        difficultyLabel.setText(GameState.difficulty);
+        if (GameState.difficulty == "EASY") {
+            hintLabel.setText("UNLIMITED");
+        } else if (GameState.difficulty == "MEDIUM") {
+            hintLabel.setText(String.valueOf(GameState.numOfHints));
+            hintLabel2.setText("HINTS");
+            if (GameState.numOfHints == 1) {
+                hintLabel2.setText("HINT");
+            }
+        } else {
+            hintLabel.setText("NO");
+        }
+    }
 }
