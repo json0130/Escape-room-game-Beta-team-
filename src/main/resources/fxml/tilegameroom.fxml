@@ -15,5 +15,6 @@
       </ImageView>
       <Rectangle fx:id="startTileGame" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f00" height="104.0" layoutX="538.0" layoutY="161.0" onMouseClicked="#onTileGameButtonClick" stroke="TRANSPARENT" strokeType="INSIDE" width="131.0" />
       <Button fx:id="button" layoutX="114.0" layoutY="393.0" mnemonicParsing="false" onAction="#back" text="Button" />
+      <fx:include source="countdowntimer.fxml" />
    </children>
 </AnchorPane>
