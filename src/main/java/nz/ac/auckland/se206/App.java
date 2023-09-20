@@ -56,7 +56,7 @@ public class App extends Application {
   public void start(final Stage stage) throws IOException {
     
     Random r = new Random();
-    passcode = r.nextInt((9999 - 1000) + 1) + 1000;
+    //passcode = r.nextInt((9999 - 1000) + 1) + 1000;
 
     SceneManager.addScene(AppUi.ROOM1, loadFxml("room1"));
     SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
@@ -67,7 +67,7 @@ public class App extends Application {
     SceneManager.addScene(AppUi.TILEPUZZLE, loadFxml("tilegamedesk"));
     SceneManager.addScene(AppUi.TILEROOM, loadFxml("tilegameroom"));
     SceneManager.addScene(AppUi.ROOM3, loadFxml("room3"));
-    scene = new Scene(SceneManager.getScene(AppUi.INTRO), 1000, 600);
+    scene = new Scene(SceneManager.getScene(AppUi.ROOM3), 1000, 600);
 
     stage.setScene(scene);
     stage.show();

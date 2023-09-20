@@ -22,6 +22,7 @@ public class TileGameRoomController {
   @FXML private Rectangle startTileGame;
 
   @FXML private Button btnRoom1;
+  @FXML private Button button;
 
   /** Initializes the room view, it is called when the room loads. */
   public void initialize() {
@@ -115,5 +116,9 @@ public class TileGameRoomController {
   public void onTileGameButtonClick() throws IOException {
     App.setScene(AppUi.TILEPUZZLE);
     System.out.println("click");
+  }
+  @FXML
+  private void back(ActionEvent event) throws IOException {
+    App.setScene(AppUi.PLAYER);
   }
 }
