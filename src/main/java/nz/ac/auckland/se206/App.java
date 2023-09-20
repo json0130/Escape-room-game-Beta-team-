@@ -1,6 +1,8 @@
 package nz.ac.auckland.se206;
 
 import java.io.IOException;
+import java.util.Random;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,8 +17,11 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
 public class App extends Application {
 
   private static Scene scene;
+  public static boolean tileGameComplete = false;
+  public static int passcode;
 
   public static void main(final String[] args) {
+
     launch();
   }
 
@@ -25,9 +30,10 @@ public class App extends Application {
   }
 
   public static void setScene(AppUi fxml) {
-    scene.setRoot(SceneManager.getScene(fxml));
-  }
+     scene.setRoot(SceneManager.getScene(fxml));
+   }
 
+  
   /**
    * Returns the node associated to the input file. The method expects that the file is located in
    * "src/main/resources/fxml".
@@ -48,11 +54,21 @@ public class App extends Application {
    */
   @Override
   public void start(final Stage stage) throws IOException {
+    
+    Random r = new Random();
+    passcode = r.nextInt((9999 - 1000) + 1) + 1000;
+
+    SceneManager.addScene(AppUi.ROOM1, loadFxml("room1"));
     SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
     SceneManager.addScene(AppUi.PLAYER, loadFxml("player"));
-    SceneManager.addScene(AppUi.ROOM, loadFxml("room"));
+    SceneManager.addScene(AppUi.TUTORIAL, loadFxml("tutorial"));
+    SceneManager.addScene(AppUi.ANIMATION, loadFxml("animation"));
+    SceneManager.addScene(AppUi.INTRO, loadFxml("start"));
+    SceneManager.addScene(AppUi.TILEPUZZLE, loadFxml("tilegamedesk"));
+    SceneManager.addScene(AppUi.TILEROOM, loadFxml("tilegameroom"));
     SceneManager.addScene(AppUi.ROOM3, loadFxml("room3"));
-    scene = new Scene(SceneManager.getScene(AppUi.PLAYER), 1000, 650);
+    scene = new Scene(SceneManager.getScene(AppUi.INTRO), 1000, 600);
+
     stage.setScene(scene);
     stage.show();
   }

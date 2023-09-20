@@ -8,13 +8,14 @@ import javax.speech.synthesis.SynthesizerModeDesc;
 
 /** Text-to-speech API using the JavaX speech library. */
 public class TextToSpeech {
+  
   /** Custom unchecked exception for Text-to-speech issues. */
   static class TextToSpeechException extends RuntimeException {
     public TextToSpeechException(final String message) {
       super(message);
     }
   }
-
+  private boolean interupt = false;
   /**
    * Main function to speak the given list of sentences.
    *
@@ -33,6 +34,7 @@ public class TextToSpeech {
   }
 
   private final Synthesizer synthesizer;
+  
 
   /**
    * Constructs the TextToSpeech object creating and allocating the speech synthesizer. English
@@ -110,5 +112,10 @@ public class TextToSpeech {
     } catch (final EngineException e) {
       throw new TextToSpeechException(e.getMessage());
     }
+  }
+
+  public void setInterupt() {
+    this.interupt = true;
+    synthesizer.cancelAll();
   }
 }

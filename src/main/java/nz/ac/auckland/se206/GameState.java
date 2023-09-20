@@ -23,4 +23,9 @@ public class GameState {
   public static boolean correctId = false;
 
   public static String answerOfRiddle = "";
+  public static boolean isTutorialStarted = false;
+  /** Indicates whether the riddle is given or not */
+  public static boolean isRiddleGiven = false;
+
+  public static int numOfHints = 5;
 }
