@@ -35,6 +35,7 @@ public class PlayerController implements Initializable{
 
     private int movementVariable = 5;
     private double shapesize;
+    private double progressSize = 4.0;
 
     List<Rectangle> walls = new ArrayList<>();
 
