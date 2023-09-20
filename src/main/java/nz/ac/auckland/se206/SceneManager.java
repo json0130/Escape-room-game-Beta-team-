@@ -1,12 +1,10 @@
 package nz.ac.auckland.se206;
-
-
  import java.util.HashMap;
  import javafx.scene.Parent;
 
+
  public class SceneManager {
    public enum AppUi {
-     ROOM,
      CHAT,
      ROOM1,
      PLAYER,
@@ -14,7 +12,8 @@ package nz.ac.auckland.se206;
      ANIMATION,
       INTRO,
       TILEPUZZLE,
-      TILEROOM
+      TILEROOM,
+      ROOM3
 
    }
 

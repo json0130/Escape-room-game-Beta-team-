@@ -289,4 +289,9 @@ public class PlayerController implements Initializable{
             player.setLayoutY(bottom);
         }
     }
+
+    @FXML
+    public void onRoom3(ActionEvent event) {
+        App.setScene(AppUi.ROOM3);
+    }
 }
