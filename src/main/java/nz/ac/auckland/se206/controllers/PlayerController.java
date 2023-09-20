@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -13,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -20,6 +22,11 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.SceneManager.AppUi;
+import javafx.util.Duration;
+import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.SceneManager.AppUi;
+import javafx.scene.layout.Pane;
+import java.net.URL;
 
 public class PlayerController implements Initializable {
 
@@ -28,43 +35,50 @@ public class PlayerController implements Initializable {
   private BooleanProperty sPressed = new SimpleBooleanProperty();
   private BooleanProperty dPressed = new SimpleBooleanProperty();
 
-  private BooleanBinding keyPressed = wPressed.or(aPressed).or(sPressed).or(dPressed);
 
-  private int movementVariable = 5;
-  private double shapesize;
+  private BooleanBinding keyPressed = wPressed.or(aPressed).or(sPressed).or(dPressed);
+    private int movementVariable = 5;
+    private double shapesize;
+    private double progressSize = 4.0;
 
   List<Rectangle> walls = new ArrayList<>();
 
-  @FXML private Circle player;
+    @FXML
+    private ImageView player;
 
   @FXML private Rectangle room1;
   @FXML private Rectangle room2;
   @FXML private Rectangle room3;
 
-  @FXML private Rectangle wall;
-  @FXML private Rectangle wall1;
-  @FXML private Rectangle wall2;
-  @FXML private Rectangle wall3;
-  @FXML private Rectangle wall4;
-  @FXML private Rectangle wall5;
-  @FXML private Rectangle wall6;
-  @FXML private Rectangle wall7;
-  @FXML private Rectangle wall8;
-  @FXML private Rectangle wall9;
-  @FXML private Rectangle wall10;
-  @FXML private Rectangle wall11;
-  @FXML private Rectangle wall12;
-  @FXML private Rectangle wall13;
-  @FXML private Rectangle wall14;
-  @FXML private Rectangle wall15;
-  @FXML private Rectangle wall16;
-  @FXML private Rectangle wall17;
+    @FXML private Label main;
+    @FXML private Label computer;
+    @FXML private Label closet;
+    @FXML private Label control;
+
+    @FXML private Rectangle wall;
+    @FXML private Rectangle wall1;
+    @FXML private Rectangle wall2;
+    @FXML private Rectangle wall3;
+    @FXML private Rectangle wall4;
+    @FXML private Rectangle wall5;
+    @FXML private Rectangle wall6;
+    @FXML private Rectangle wall7;
+    @FXML private Rectangle wall8;
+    @FXML private Rectangle wall9;
+    @FXML private Rectangle wall10;
+    @FXML private Rectangle wall11;
+    @FXML private Rectangle wall12;
+    @FXML private Rectangle wall13;
+    @FXML private Rectangle wall14;
+    @FXML private Rectangle wall15;
+    @FXML private Rectangle wall16;
+    @FXML private Rectangle wall17;
+    @FXML private Rectangle wall18;
+    @FXML private Rectangle wall19;
+    @FXML private Rectangle wall20;
+    @FXML private Rectangle wall21;
 
   @FXML private Pane scene;
-
-  @FXML private Button button;
-  @FXML private Button button1;
-  @FXML private Button button11;
 
   @FXML private Button reset;
 
@@ -77,11 +91,6 @@ public class PlayerController implements Initializable {
   void start(ActionEvent event) {
     player.setLayoutX(10);
     player.setLayoutY(200);
-  }
-
-  @FXML
-  void switchScene(ActionEvent event) {
-    App.setScene(AppUi.ROOM);
   }
 
   AnimationTimer collisionTimer =
@@ -119,37 +128,43 @@ public class PlayerController implements Initializable {
         }
       };
 
-  @Override
-  public void initialize(URL url, ResourceBundle resourceBundle) {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        room1.setVisible(false);
+        room2.setVisible(false);
+        room3.setVisible(false);
 
-    button.setVisible(false);
-    button1.setVisible(false);
-    button11.setVisible(false);
-    room1.setVisible(false);
-    room2.setVisible(false);
-    room3.setVisible(false);
+        // Set labels to have white text and black stroke for the text
+        main.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
+        computer.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
+        closet.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
+        control.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
 
-    shapesize = player.getRadius() * 2;
-    movementSetup();
-
-    walls.add(wall);
-    walls.add(wall1);
-    walls.add(wall2);
-    walls.add(wall3);
-    walls.add(wall4);
-    walls.add(wall5);
-    walls.add(wall6);
-    walls.add(wall7);
-    walls.add(wall8);
-    walls.add(wall9);
-    walls.add(wall10);
-    walls.add(wall11);
-    walls.add(wall12);
-    walls.add(wall13);
-    walls.add(wall14);
-    walls.add(wall15);
-    walls.add(wall16);
-    walls.add(wall17);
+        shapesize = player.getFitWidth();
+        movementSetup();
+        
+        walls.add(wall);
+        walls.add(wall1);
+        walls.add(wall2);
+        walls.add(wall3);
+        walls.add(wall4);
+        walls.add(wall5);
+        walls.add(wall6);
+        walls.add(wall7);
+        walls.add(wall8);
+        walls.add(wall9);
+        walls.add(wall10);
+        walls.add(wall11);
+        walls.add(wall12);
+        walls.add(wall13);
+        walls.add(wall14);
+        walls.add(wall15);
+        walls.add(wall16);
+        walls.add(wall17);
+        walls.add(wall18);
+        walls.add(wall19);
+        walls.add(wall20);
+        walls.add(wall21);
 
     collisionTimer.start();
 
@@ -166,50 +181,57 @@ public class PlayerController implements Initializable {
         }));
   }
 
-  public void checkRoom1(Circle player, Rectangle room1) {
-    if (player.getBoundsInParent().intersects(room1.getBoundsInParent())) {
-      button.setVisible(true);
-      room1.setVisible(true);
-    } else {
-      button.setVisible(false);
-      room1.setVisible(false);
+    public void checkRoom1(ImageView player, Rectangle room1){
+            if(player.getBoundsInParent().intersects(room1.getBoundsInParent())){
+                room1.setVisible(true);
+                PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+                pauseTransition.setOnFinished(event -> {
+                    App.setScene(AppUi.ROOM1);
+                });
+                pauseTransition.play();
+            }else{
+                room1.setVisible(false);
+            }
     }
-  }
+    public void checkRoom2(ImageView player, Rectangle room2){
+            if(player.getBoundsInParent().intersects(room2.getBoundsInParent())){
+                room2.setVisible(true);
+                
+                PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+                pauseTransition.setOnFinished(event -> {
+                    App.setScene(AppUi.TILEROOM);
+                    player.setLayoutX(486);
+                player.setLayoutY(258);
+                });
+                pauseTransition.play();
+            }else{
+                room2.setVisible(false);
+            }
+    }
+    public void checkRoom3(ImageView player, Rectangle room3){
+            if(player.getBoundsInParent().intersects(room3.getBoundsInParent())){
+                room3.setVisible(true);
+            }else {
+                room3.setVisible(false);
+            }
 
-  public void checkRoom2(Circle player, Rectangle room2) {
-    if (player.getBoundsInParent().intersects(room2.getBoundsInParent())) {
-      button1.setVisible(true);
-      room2.setVisible(true);
-    } else {
-      button1.setVisible(false);
-      room2.setVisible(false);
     }
-  }
-
-  public void checkRoom3(Circle player, Rectangle room3) {
-    if (player.getBoundsInParent().intersects(room3.getBoundsInParent())) {
-      button11.setVisible(true);
-      room3.setVisible(true);
-    } else {
-      button11.setVisible(false);
-      room3.setVisible(false);
-    }
-  }
-
-  public void checkCollision2(Circle player, List<Rectangle> walls) {
-    for (Rectangle wall : walls) {
-      if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
-        player.setLayoutX(previousX); // Restore the player's previous X position
-        player.setLayoutY(previousY); // Restore the player's previous Y position
-        // Exit the loop as soon as a collision is detected
-      }
-    }
-  }
 
   public void buttonPressed(KeyEvent event) {
     // if button is pressed then it moves to the other room
-
   }
+
+
+    public void checkCollision2(ImageView player, List<Rectangle> walls){
+        for(Rectangle wall : walls){
+            if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
+                player.setLayoutX(previousX); // Restore the player's previous X position
+                player.setLayoutY(previousY); // Restore the player's previous Y position
+                 // Exit the loop as soon as a collision is detected
+            }
+        }
+    }
+
 
   @FXML
   public void movementSetup() {
@@ -274,4 +296,8 @@ public class PlayerController implements Initializable {
       player.setLayoutY(bottom);
     }
   }
+    @FXML
+    public void onRoom3(ActionEvent event) {
+        App.setScene(AppUi.ROOM3);
+    }
 }
