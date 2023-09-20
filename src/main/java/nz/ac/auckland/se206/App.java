@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import nz.ac.auckland.se206.SceneManager.AppUi;
 
 /**
  * This is the entry point of the JavaFX application, while you can change this class, it should
@@ -28,6 +29,11 @@ public class App extends Application {
     scene.setRoot(loadFxml(fxml));
   }
 
+  public static void setScene(AppUi fxml) {
+     scene.setRoot(SceneManager.getScene(fxml));
+   }
+
+  
   /**
    * Returns the node associated to the input file. The method expects that the file is located in
    * "src/main/resources/fxml".
@@ -52,10 +58,18 @@ public class App extends Application {
     Random r = new Random();
     passcode = r.nextInt((9999 - 1000) + 1) + 1000;
 
-    Parent root = loadFxml("tilegameroom");
-    scene = new Scene(root, 1000, 650);
+    SceneManager.addScene(AppUi.ROOM1, loadFxml("room1"));
+    SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
+    SceneManager.addScene(AppUi.PLAYER, loadFxml("player"));
+    SceneManager.addScene(AppUi.ROOM, loadFxml("room"));
+    SceneManager.addScene(AppUi.TUTORIAL, loadFxml("tutorial"));
+    SceneManager.addScene(AppUi.ANIMATION, loadFxml("animation"));
+    SceneManager.addScene(AppUi.INTRO, loadFxml("start"));
+    SceneManager.addScene(AppUi.TILEPUZZLE, loadFxml("tilegamedesk"));
+    SceneManager.addScene(AppUi.TILEROOM, loadFxml("tilegameroom"));
+    scene = new Scene(SceneManager.getScene(AppUi.INTRO), 1000, 600);
+
     stage.setScene(scene);
     stage.show();
-    root.requestFocus();
   }
 }
