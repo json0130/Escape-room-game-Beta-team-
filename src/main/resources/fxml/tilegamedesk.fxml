@@ -41,6 +41,7 @@
             <Rectangle fx:id="bottomLeftBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="125.0" layoutY="270.0" onMouseClicked="#bottomLeftHitboxPress" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
             <Rectangle fx:id="bottomMiddleBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="125.0" layoutX="135.0" layoutY="270.0" onMouseClicked="#bottomMiddleHitboxPress" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
             <Rectangle fx:id="bottomRightBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="125.0" layoutX="266.0" layoutY="261.0" onMouseClicked="#bottomRightHitboxPress" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+            <Button fx:id="puzzleInfoButton" layoutX="317.0" layoutY="18.0" mnemonicParsing="false" onAction="#onpuzzleInfoButtonClick" text="INFO" />
             <Pane fx:id="tutorialScreen" layoutX="6.0" layoutY="5.0" prefHeight="393.0" prefWidth="382.0">
                <children>
                   <ImageView fx:id="welcomeScreen" fitHeight="393.0" fitWidth="382.0" pickOnBounds="true" preserveRatio="true">

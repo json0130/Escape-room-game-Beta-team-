@@ -115,6 +115,7 @@ public class TileGameDeskController {
   @FXML private Button loadCaptchaButton;
   @FXML private Label puzzleTutorial;
   @FXML private Pane tutorialScreen;
+  @FXML private Button puzzleInfoButton;
 
   /**
    * Initializes the room view, it is called when the room loads.
@@ -557,5 +558,10 @@ public class TileGameDeskController {
     // puzzleTutorial.setVisible(false);
     // loadCaptchaButton.setVisible(false);
     tutorialScreen.setVisible(false);
+  }
+
+  @FXML
+  private void onpuzzleInfoButtonClick(){
+    tutorialScreen.setVisible(true);
   }
 }
