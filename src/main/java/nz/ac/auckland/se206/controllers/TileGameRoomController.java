@@ -114,5 +114,6 @@ public class TileGameRoomController {
   @FXML
   public void onTileGameButtonClick() throws IOException {
     App.setScene(AppUi.TILEPUZZLE);
+    System.out.println("click");
   }
 }

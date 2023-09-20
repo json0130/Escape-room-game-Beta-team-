@@ -21,6 +21,7 @@ import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.LetterGenerator;
 import nz.ac.auckland.se206.Tile;
+import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.gpt.ChatMessage;
 import nz.ac.auckland.se206.gpt.GptPromptEngineering;
 import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
@@ -116,6 +117,7 @@ public class TileGameDeskController {
   @FXML private Label puzzleTutorial;
   @FXML private Pane tutorialScreen;
   @FXML private Button puzzleInfoButton;
+  @FXML private Button leaveComputerButton;
 
   /**
    * Initializes the room view, it is called when the room loads.
@@ -563,5 +565,10 @@ public class TileGameDeskController {
   @FXML
   private void onpuzzleInfoButtonClick(){
     tutorialScreen.setVisible(true);
+  }
+
+  @FXML
+  private void onPuzzleGoBackClick(){
+    App.setScene(AppUi.TILEROOM);
   }
 }
