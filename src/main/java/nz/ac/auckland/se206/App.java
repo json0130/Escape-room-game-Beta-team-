@@ -1,6 +1,8 @@
 package nz.ac.auckland.se206;
 
 import java.io.IOException;
+import java.util.Random;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,6 +17,7 @@ public class App extends Application {
 
   private static Scene scene;
   public static boolean tileGameComplete = false;
+  public static int passcode;
 
   public static void main(final String[] args) {
 
@@ -45,6 +48,10 @@ public class App extends Application {
    */
   @Override
   public void start(final Stage stage) throws IOException {
+    
+    Random r = new Random();
+    passcode = r.nextInt((9999 - 1000) + 1) + 1000;
+
     Parent root = loadFxml("tilegameroom");
     scene = new Scene(root, 1000, 650);
     stage.setScene(scene);

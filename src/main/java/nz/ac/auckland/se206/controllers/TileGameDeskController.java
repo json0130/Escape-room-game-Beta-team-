@@ -111,6 +111,10 @@ public class TileGameDeskController {
   @FXML private Rectangle passcodeFileCloseButton;
   @FXML private Rectangle scheduleFileCloseButton;
   @FXML private Rectangle experimentFileCloseButton;
+  @FXML private Label computerPasscodeLabel;
+  @FXML private Button loadCaptchaButton;
+  @FXML private Label puzzleTutorial;
+  @FXML private Pane tutorialScreen;
 
   /**
    * Initializes the room view, it is called when the room loads.
@@ -407,7 +411,6 @@ public class TileGameDeskController {
           && tileSix.getLetter().equalsIgnoreCase(thirdChar)) {
         System.out.println("done");
 
-        showWelcomeScreen();
         disableImages();
 
         // try {
@@ -450,7 +453,7 @@ public class TileGameDeskController {
   private String timerFormat(int seconds) {
     int min = seconds / 60;
     int remainingSecs = seconds % 60;
-    return String.format("%02d:%02d", min, remainingSecs);
+    return String.format("%02   d:%02d", min, remainingSecs);
   }
 
   private void sayLine() {
@@ -499,12 +502,12 @@ public class TileGameDeskController {
     imageEight.setVisible(false);
   }
 
-  @FXML
-  private void showWelcomeScreen() {
-    welcomeScreen.setVisible(true);
-    crewMemberName.setVisible(true);
-    loadingGif.setVisible(true);
-  }
+  // @FXML
+  // private void showWelcomeScreen() {
+  //   welcomeScreen.setVisible(true);
+  //   crewMemberName.setVisible(true);
+  //   loadingGif.setVisible(true);
+  // }
 
   @FXML
   private void showHomeScreen() {
@@ -519,7 +522,11 @@ public class TileGameDeskController {
 
   @FXML
   private void onPasscodeFileClick() {
+    int currentPasscode = App.passcode;
+    String stringPasscode = Integer.toString(currentPasscode);
+    computerPasscodeLabel.setText(stringPasscode);
     passcodePane.setVisible(true);
+
     System.out.println("DONE1");
   }
 
@@ -542,5 +549,13 @@ public class TileGameDeskController {
   @FXML
   private void onexperimentFileCloseButtonClick() {
     experimentPane.setVisible(false);
+  }
+
+  @FXML
+  private void onCaptchaButtonClick(){
+    // welcomeScreen.setVisible(false);
+    // puzzleTutorial.setVisible(false);
+    // loadCaptchaButton.setVisible(false);
+    tutorialScreen.setVisible(false);
   }
 }

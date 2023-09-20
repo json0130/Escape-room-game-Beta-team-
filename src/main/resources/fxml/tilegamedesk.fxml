@@ -41,27 +41,31 @@
             <Rectangle fx:id="bottomLeftBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="125.0" layoutY="270.0" onMouseClicked="#bottomLeftHitboxPress" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
             <Rectangle fx:id="bottomMiddleBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="125.0" layoutX="135.0" layoutY="270.0" onMouseClicked="#bottomMiddleHitboxPress" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
             <Rectangle fx:id="bottomRightBox" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="125.0" layoutX="266.0" layoutY="261.0" onMouseClicked="#bottomRightHitboxPress" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-            <ImageView fx:id="bigScreenOff" fitHeight="385.0" fitWidth="382.0" layoutX="7.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/BigScreenOffImage.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="welcomeScreen" fitHeight="393.0" fitWidth="382.0" layoutX="6.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@../images/welcomeScreen.png" />
-               </image>
-            </ImageView>
+            <Pane fx:id="tutorialScreen" layoutX="6.0" layoutY="5.0" prefHeight="393.0" prefWidth="382.0">
+               <children>
+                  <ImageView fx:id="welcomeScreen" fitHeight="393.0" fitWidth="382.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/welcomeScreen.png" />
+                     </image>
+                  </ImageView>
+                  <Button fx:id="loadCaptchaButton" layoutX="140.0" layoutY="303.0" mnemonicParsing="false" onAction="#onCaptchaButtonClick" text="Load Captcha" />
+                  <Label fx:id="puzzleTutorial" layoutX="13.0" layoutY="150.0" prefHeight="165.0" prefWidth="345.0" text="Prove you are not a robot by solving the following puzzle: Slide the tiles to spell out the word on screen in the middle of the grid. Each tile represents a letter." textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
             <ImageView fx:id="loadingGif" fitHeight="56.0" fitWidth="42.0" layoutX="167.0" layoutY="312.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../images/loading.gif" />
                </image>
             </ImageView>
-            <Button fx:id="releaseAirLockButton" disable="true" layoutX="125.0" layoutY="197.0" mnemonicParsing="false" onAction="#onReleaseAirLockButtonClick" prefHeight="45.0" prefWidth="125.0" text="Release Air Lock" visible="false" />
-            <Label fx:id="crewMemberName" layoutX="24.0" layoutY="145.0" prefHeight="104.0" prefWidth="345.0" text="INSERT CREW MEMBER NAME" textAlignment="CENTER" textFill="WHITE" visible="false">
-               <font>
-                  <Font size="25.0" />
-               </font>
-            </Label>
+            <ImageView fx:id="bigScreenOff" fitHeight="385.0" fitWidth="382.0" layoutX="7.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/BigScreenOffImage.png" />
+               </image>
+            </ImageView>
             <Pane fx:id="computerHomeScreen" layoutX="5.0" layoutY="5.0" prefHeight="383.0" prefWidth="382.0" visible="false">
                <children>
                   <ImageView fitHeight="383.0" fitWidth="382.0" pickOnBounds="true" preserveRatio="true">
@@ -92,6 +96,11 @@
                            </image>
                         </ImageView>
                         <Rectangle fx:id="passcodeFileCloseButton" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="28.0" layoutX="344.0" layoutY="12.0" onMouseClicked="#onPasscodeFileCloseButtonClick" stroke="TRANSPARENT" strokeType="INSIDE" width="28.0" />
+                        <Label fx:id="computerPasscodeLabel" layoutX="29.0" layoutY="58.0" prefHeight="56.0" prefWidth="264.0" text="INSERT PASSCODE HERE">
+                           <font>
+                              <Font name="Arial Black" size="15.0" />
+                           </font>
+                        </Label>
                      </children>
                   </Pane>
                   <Pane fx:id="schedulePane" prefHeight="374.0" prefWidth="382.0" visible="false">
@@ -137,5 +146,15 @@
          </image>
       </ImageView>
       <Rectangle fx:id="powerButton" arcHeight="5.0" arcWidth="5.0" fill="#727272" height="17.0" layoutX="423.0" layoutY="437.0" onMouseClicked="#onPowerButtonPressed" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="29.0" />
+      <Button layoutX="73.0" layoutY="542.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="141.0" text="Leave Computer">
+         <font>
+            <Font name="Arial Black" size="13.0" />
+         </font>
+      </Button>
+      <Button layoutX="253.0" layoutY="543.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="183.0" text="Call For Game Master">
+         <font>
+            <Font name="Arial Black" size="13.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
