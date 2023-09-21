@@ -11,19 +11,18 @@
 <?import javafx.scene.text.Font?>
 
 <Pane fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.ExitController">
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.ExitController">
    <children>
       <ImageView fx:id="background2" fitHeight="677.0" fitWidth="1074.0" layoutX="-37.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly%2020230920215509.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="background" fitHeight="689.0" fitWidth="1167.0" layoutX="-26.0" layoutY="-6.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="background" fitHeight="616.0" fitWidth="1088.0" layoutX="-37.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly%2020230920220330.png" />
          </image>
       </ImageView>
-      <Button fx:id="button" layoutX="45.0" layoutY="463.0" mnemonicParsing="false" onAction="#back" text="Button" />
+      <Button fx:id="button" layoutX="6.0" layoutY="405.0" mnemonicParsing="false" onAction="#back" text="Button" />
       <ImageView fx:id="pad" fitHeight="420.0" fitWidth="387.0" layoutX="323.0" layoutY="159.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly_spaceship_passcode_touchpad_2D_46452-removebg-preview.png" />
@@ -122,17 +121,6 @@
             <Image url="@../images/idphotos/idengineer.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="lever" fitHeight="101.0" fitWidth="371.0" layoutX="54.0" layoutY="528.0" onMouseDragged="#dragLever" onMouseEntered="#enterLever" onMouseExited="#exitLever" onMousePressed="#pressLever" opacity="0.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/room3/lever.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="145.0" layoutY="499.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/room3/lever2.png" />
-         </image>
-      </ImageView>
-      <TextArea fx:id="screen" layoutX="327.0" layoutY="123.0" prefHeight="166.0" prefWidth="307.0" style="-fx-background-color: darkblue;">
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
       <Label layoutX="5.0" layoutY="6.0" prefHeight="37.0" prefWidth="304.0" text="2MIN 30SEC" textFill="WHITE">
          <font>
@@ -164,13 +152,13 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Rectangle fx:id="wall" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="25.0" layoutX="8.0" layoutY="392.0" opacity="0.04" stroke="BLACK" strokeType="INSIDE" width="1000.0" />
-      <Rectangle fx:id="exit1" arcHeight="5.0" arcWidth="5.0" fill="#ff9500" height="200.0" layoutX="-19.0" layoutY="448.0" stroke="BLACK" strokeType="INSIDE" width="63.0" />
-      <ImageView fx:id="player" fitHeight="150.0" fitWidth="200.0" layoutX="500.0" layoutY="424.0" pickOnBounds="true" preserveRatio="true">
+      <fx:include layoutX="900.0" layoutY="-20.0" source="countdowntimer.fxml" />
+      <ImageView fx:id="player" fitHeight="150.0" fitWidth="167.0" layoutX="82.0" layoutY="488.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly_spaceship_game_character_walking_48398-removebg-preview.png" />
          </image>
       </ImageView>
-      <fx:include layoutX="900.0" layoutY="-20.0" source="countdowntimer.fxml" />
+      <Rectangle fx:id="exit1" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="216.0" layoutY="441.0" stroke="BLACK" strokeType="INSIDE" width="63.0" />
+      <Rectangle fx:id="wall" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="25.0" layoutX="82.0" layoutY="431.0" stroke="BLACK" strokeType="INSIDE" width="908.0" />
    </children>
 </Pane>
