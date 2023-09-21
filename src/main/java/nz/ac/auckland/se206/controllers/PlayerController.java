@@ -18,8 +18,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -47,6 +50,7 @@ public class PlayerController implements Initializable {
   @FXML private Rectangle room1;
   @FXML private Rectangle room2;
   @FXML private Rectangle room3;
+  @FXML private ImageView gameMasterBox;
 
   @FXML private Label main;
   @FXML private Label computer;
@@ -82,6 +86,10 @@ public class PlayerController implements Initializable {
   @FXML private Pane scene;
 
   @FXML private Button reset;
+  @FXML private Button btnSend;
+  @FXML private Button btnClose;
+  @FXML private TextArea chatTextArea;
+  @FXML private TextField inputText;
   private double previousX;
   private double previousY;
 
@@ -180,6 +188,12 @@ public class PlayerController implements Initializable {
         }));
     // if difficulty is selected, label is updated
     detectDifficulty();
+
+    gameMasterBox.setVisible(false);
+    inputText.setVisible(false);
+    chatTextArea.setVisible(false);
+    btnClose.setVisible(false);
+    btnSend.setVisible(false);
   }
 
   public void checkRoom1(ImageView player, Rectangle room1) {
@@ -366,4 +380,28 @@ public class PlayerController implements Initializable {
       hintLabel.setText("NO");
     }
   }
+
+  @FXML
+  public void clickGameMaster(MouseEvent event) {
+    gameMasterBox.setVisible(true);
+    inputText.setVisible(true);
+    chatTextArea.setVisible(true);
+    btnClose.setVisible(true);
+    btnSend.setVisible(true);
+  }
+
+  @FXML
+  public void onClose(ActionEvent event) {
+    gameMasterBox.setVisible(false);
+    inputText.setVisible(false);
+    chatTextArea.setVisible(false);
+    btnClose.setVisible(false);
+    btnSend.setVisible(false);
+  }
+
+  @FXML
+  public void onSend(ActionEvent event) {
+    
+  }
+
 }
