@@ -2,9 +2,12 @@ package nz.ac.auckland.se206.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -19,6 +22,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
@@ -35,6 +39,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
   private int movementVariable = 5;
   private double shapesize;
 
+  List<Rectangle> walls = new ArrayList<>();
+
   @FXML private ImageView player;
   @FXML private Pane scene;
 
@@ -46,8 +52,22 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
   @FXML private Rectangle vase;
   @FXML private Rectangle startTileGame;
 
+  @FXML private Rectangle exit;
+  @FXML private Rectangle wall;
+  @FXML private Rectangle wall1;
+  @FXML private Rectangle wall2;
+
   @FXML private Button btnRoom1;
   @FXML private Button button;
+
+  AnimationTimer collisionTimer =
+      new AnimationTimer() {
+        @Override
+        public void handle(long now) {
+          checkCollision2(player, walls);
+          checkExit(player, exit);
+        }
+      };
 
   AnimationTimer timer =
       new AnimationTimer() {
@@ -77,8 +97,12 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     // Initialization code goes here
+    walls.add(wall);
+
     shapesize = player.getFitWidth();
     movementSetup();
+
+    collisionTimer.start();
 
     previousX = player.getLayoutX();
     previousY = player.getLayoutY();
@@ -92,6 +116,34 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
           }
         }));
 
+  }
+
+  public void checkExit(ImageView player, Rectangle exit) {
+        if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
+            exit.setVisible(true);
+            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+            pauseTransition.setOnFinished(event -> {
+                // Adjust the player's position to be right in front of the room
+                player.setLayoutX(436);
+                player.setLayoutY(488);
+                App.setScene(AppUi.PLAYER);
+                timer.stop();
+            });
+            pauseTransition.play();
+        } else {
+            exit.setVisible(false);
+        }
+    }
+
+    public void checkCollision2(ImageView player, List<Rectangle> walls){
+      for(Rectangle wall : walls){
+          if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
+              player.setLayoutX(previousX); // Restore the player's previous X position
+              player.setLayoutY(previousY); // Restore the player's previous Y position
+              System.out.println("Collision detected");
+               // Exit the loop as soon as a collision is detected
+          }
+      }
   }
 
   @FXML

@@ -18,11 +18,13 @@
             </ImageView>
             <Rectangle fx:id="startTileGame" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f00" height="104.0" layoutX="420.0" layoutY="163.0" onMouseClicked="#onTileGameButtonClick" stroke="TRANSPARENT" strokeType="INSIDE" width="131.0" />
             <Button fx:id="button" layoutX="39.0" layoutY="118.0" mnemonicParsing="false" onAction="#back" text="Button" />
-            <ImageView fx:id="player" fitHeight="99.0" fitWidth="113.0" layoutX="255.0" layoutY="447.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="player" fitHeight="99.0" fitWidth="113.0" layoutX="436.0" layoutY="488.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/Firefly_spaceship_game_character_walking_48398-removebg-preview.png" />
                </image>
             </ImageView>
+            <Rectangle fx:id="exit" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="42.0" layoutX="379.0" layoutY="617.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+            <Rectangle fx:id="wall" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff85" height="25.0" layoutX="80.0" layoutY="215.0" stroke="BLACK" strokeType="INSIDE" width="774.0" />
          </children>
       </Pane>
    </children>
