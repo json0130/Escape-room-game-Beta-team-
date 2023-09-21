@@ -2,17 +2,14 @@ package nz.ac.auckland.se206;
 
 import java.io.IOException;
 import java.util.Random;
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 /**
@@ -29,6 +26,7 @@ public class App extends Application {
   public static int passcode;
   public static Boolean timerStarted = false;
   public static Timeline timerTimeline;
+  public static int chosenTimer;
 
   public static void main(final String[] args) {
 
@@ -51,7 +49,7 @@ public class App extends Application {
    * @return The node of the input file.
    * @throws IOException If the file is not found.
    */
-  private static Parent loadFxml(final String fxml) throws IOException {
+  public static Parent loadFxml(final String fxml) throws IOException {
     return new FXMLLoader(App.class.getResource("/fxml/" + fxml + ".fxml")).load();
   }
 
@@ -64,30 +62,18 @@ public class App extends Application {
   @Override
   public void start(final Stage stage) throws IOException {
 
-    timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), this::updateTimer));
-    timerTimeline.setCycleCount(App.timerSeconds);
-    timerTimeline.play();
-
     Random r = new Random();
     passcode = r.nextInt((9999 - 1000) + 1) + 1000;
     GameState.password = String.valueOf(passcode);
 
-    SceneManager.addScene(AppUi.ROOM1, loadFxml("room1"));
     SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
-    SceneManager.addScene(AppUi.PLAYER, loadFxml("player"));
     SceneManager.addScene(AppUi.TUTORIAL, loadFxml("tutorial"));
     SceneManager.addScene(AppUi.ANIMATION, loadFxml("animation"));
     SceneManager.addScene(AppUi.INTRO, loadFxml("start"));
-    SceneManager.addScene(AppUi.TILEPUZZLE, loadFxml("tilegamedesk"));
-    SceneManager.addScene(AppUi.TILEROOM, loadFxml("tilegameroom"));
-    SceneManager.addScene(AppUi.ROOM3, loadFxml("room3"));
+
     scene = new Scene(SceneManager.getScene(AppUi.INTRO), 1000, 650);
 
     stage.setScene(scene);
     stage.show();
-  }
-
-  private void updateTimer(ActionEvent event) {
-    App.timerSeconds--;
   }
 }

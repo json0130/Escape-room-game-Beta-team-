@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
@@ -20,6 +21,7 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.SceneManager;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class IntroController implements Initializable {
@@ -98,16 +100,20 @@ public class IntroController implements Initializable {
 
     switch (cButton.getId()) {
       case "minB2":
-        App.timerSeconds = 120;
+        App.timerSeconds = 12;
+        App.chosenTimer = 12;
         break;
       case "minB4":
-        App.timerSeconds = 240;
+        App.timerSeconds = 24;
+        App.chosenTimer = 24;
         break;
       case "minB6":
-        App.timerSeconds = 360;
+        App.timerSeconds = 36;
+        App.chosenTimer = 36;
         break;
       default:
-        App.timerSeconds = 120;
+        App.timerSeconds = 12;
+        App.chosenTimer = 12;
     }
     System.out.println(App.timerSeconds);
 
@@ -166,10 +172,30 @@ public class IntroController implements Initializable {
           event -> {
             startButton.setDisable(false);
             App.setScene(AppUi.TUTORIAL);
+
+            try {
+              SceneManager.addScene(AppUi.ROOM3, App.loadFxml("room3"));
+              SceneManager.addScene(AppUi.ROOM1, App.loadFxml("room1"));
+              SceneManager.addScene(AppUi.PLAYER, App.loadFxml("player"));
+              SceneManager.addScene(AppUi.TILEPUZZLE, App.loadFxml("tilegamedesk"));
+              SceneManager.addScene(AppUi.TILEROOM, App.loadFxml("tilegameroom"));
+            } catch (IOException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+            }
+
+            App.timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), this::updateTimer));
+            App.timerTimeline.setCycleCount(App.timerSeconds);
+            App.timerTimeline.play();
           });
 
       animationStarted = true;
     }
+  }
+
+  private void updateTimer(ActionEvent event) {
+    App.timerSeconds--;
+    System.out.println("Actual timer: " + App.timerSeconds);
   }
 
   @FXML
