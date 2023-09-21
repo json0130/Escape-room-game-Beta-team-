@@ -70,6 +70,7 @@ public class EndController implements Initializable {
         // Enable the button when the animation is finished
             Translation.setOnFinished(event -> {
                 App.setScene(AppUi.END1);
+                endAnimation();
             });
     }
 
@@ -100,7 +101,7 @@ public class EndController implements Initializable {
     }
 
     @FXML
-    private void animation(ActionEvent event){
+    private void animation(){
         // Create a scale transition
         ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(2), win);
         scaleTransition.setFromX(1.0); // Starting X scale
@@ -119,7 +120,7 @@ public class EndController implements Initializable {
     }
 
     @FXML
-    private void endAnimation(ActionEvent events) { 
+    private void endAnimation() { 
             spaceship.setVisible(true);
 
             // Create a timeline to continuously increase the scaling factor
@@ -153,6 +154,7 @@ public class EndController implements Initializable {
             // Enable the button when the animation is finished
             spaceshipPathTransition.setOnFinished(event -> {
                 App.setScene(AppUi.WIN);
+                animation();
             });
     }
 

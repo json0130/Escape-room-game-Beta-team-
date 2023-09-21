@@ -62,9 +62,14 @@
          </image>
       </ImageView>
       <Button fx:id="backButton" layoutX="37.0" layoutY="475.0" mnemonicParsing="false" onAction="#back" text="Back" />
-      <Rectangle fx:id="exit" arcHeight="5.0" arcWidth="5.0" fill="#f89d00" height="62.0" layoutX="389.0" layoutY="605.0" opacity="0.65" stroke="BLACK" strokeType="INSIDE" width="200.0" />
-      <Rectangle fx:id="wall1" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="31.0" layoutX="-8.0" layoutY="194.0" opacity="0.41" stroke="BLACK" strokeType="INSIDE" visible="false" width="1019.0" />
+      <Rectangle fx:id="exit" arcHeight="5.0" arcWidth="5.0" fill="#f89d00" height="50.0" layoutX="413.0" layoutY="617.0" opacity="0.65" stroke="BLACK" strokeType="INSIDE" width="161.0" />
+      <Rectangle fx:id="wall1" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="31.0" layoutX="-8.0" layoutY="189.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="1019.0" />
       <Rectangle fx:id="wall2" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="53.0" layoutX="431.0" layoutY="221.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="100.0" />
+      <ImageView fx:id="player" fitHeight="121.0" fitWidth="131.0" layoutX="139.0" layoutY="304.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly_spaceship_game_character_walking_48398-removebg-preview.png" />
+         </image>
+      </ImageView>
       <fx:include layoutX="900.0" layoutY="-20.0" source="countdowntimer.fxml" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
       <Label fx:id="difficultyLabel" alignment="CENTER" layoutX="362.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
@@ -86,6 +91,8 @@
       <Button fx:id="btnCollect2" layoutX="392.0" layoutY="246.0" mnemonicParsing="false" onAction="#onCollect2" text="Collect Id" />
       <Button fx:id="btnCollect3" layoutX="694.0" layoutY="246.0" mnemonicParsing="false" onAction="#onCollect3" text="Collect Id" />
       <Button fx:id="btnCollect4" layoutX="813.0" layoutY="468.0" mnemonicParsing="false" onAction="#onCollect4" text="Collect Id" />
+      <Rectangle fx:id="blinkingRectangle" arcHeight="100.0" arcWidth="100.0" fill="TRANSPARENT" height="96.0" layoutX="432.0" layoutY="167.0" stroke="#ff6a00" strokeType="INSIDE" strokeWidth="3.0" width="96.0" />
+      <Button fx:id="btnRiddle" layoutX="445.0" layoutY="188.0" mnemonicParsing="false" onAction="#onRiddle" prefHeight="53.0" prefWidth="72.0" text="Click Me" />
       <Rectangle fx:id="crew1Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="80.0" layoutX="95.0" layoutY="351.0" opacity="0.0" rotate="40.0" stroke="BLACK" strokeType="INSIDE" width="44.0" />
       <Rectangle fx:id="crew2Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="31.0" layoutX="182.0" layoutY="241.0" opacity="0.0" rotate="-50.0" stroke="BLACK" strokeType="INSIDE" width="68.0" />
       <Rectangle fx:id="crew3Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="62.0" layoutX="727.0" layoutY="222.0" opacity="0.0" rotate="-40.0" stroke="BLACK" strokeType="INSIDE" width="44.0" />

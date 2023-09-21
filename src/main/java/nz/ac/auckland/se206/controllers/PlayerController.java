@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,21 +14,44 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.SceneManager.AppUi;
+import nz.ac.auckland.se206.gpt.ChatMessage;
+import nz.ac.auckland.se206.gpt.GptPromptEngineering;
+import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
+import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
+import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult;
+import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
+import nz.ac.auckland.se206.speech.TextToSpeech;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
+import javafx.scene.layout.Pane;
+import java.net.URL;
+import nz.ac.auckland.se206.gpt.ChatMessage;
+import nz.ac.auckland.se206.gpt.GptPromptEngineering;
+import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
+import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
+import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult;
+import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
 
 public class PlayerController implements Initializable {
 
@@ -43,18 +67,20 @@ public class PlayerController implements Initializable {
 
   List<Rectangle> walls = new ArrayList<>();
 
-  @FXML private ImageView player;
-  @FXML private Rectangle room1;
-  @FXML private Rectangle room2;
-  @FXML private Rectangle room3;
+    @FXML private ImageView player;
+    @FXML private Rectangle room1;
+    @FXML private Rectangle room2;
+    @FXML private Rectangle room3;
+    @FXML private Rectangle black;
 
-  @FXML private Label main;
-  @FXML private Label computer;
-  @FXML private Label closet;
-  @FXML private Label control;
-  @FXML private Label difficultyLabel;
-  @FXML private Label hintLabel;
-  @FXML private Label hintLabel2;
+    @FXML private Label playerLabel;
+    @FXML private Label main;
+    @FXML private Label computer;
+    @FXML private Label closet;
+    @FXML private Label control;
+    @FXML private Label difficultyLabel;
+    @FXML private Label hintLabel;
+    @FXML private Label hintLabel2;
 
   @FXML private Rectangle wall;
   @FXML private Rectangle wall1;
@@ -87,6 +113,17 @@ public class PlayerController implements Initializable {
 
   @FXML private Label countdownLabel;
 
+  @FXML private Rectangle gpt;
+  @FXML private Rectangle gptBackground;
+  @FXML private TextArea chatTextArea;
+  @FXML private TextField inputText;
+  @FXML private Button sendButton;
+
+  private ChatCompletionRequest chatCompletionRequest;
+  public static boolean hintContained = false;
+  public static boolean answerContained = false;
+  private String lastUserMessage = ""; // Track the last user message for GPT response
+
   @FXML
   void start(ActionEvent event) {
     player.setLayoutX(10);
@@ -107,7 +144,12 @@ public class PlayerController implements Initializable {
   AnimationTimer timer =
       new AnimationTimer() {
         @Override
-        public void handle(long now) {
+        public void handle(long now){
+                playerLabel.setVisible(false);
+                black.setVisible(false);
+            
+                previousX = player.getLayoutX(); // Update previousX
+                previousY = player.getLayoutY(); // Update previousY
 
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
@@ -128,16 +170,20 @@ public class PlayerController implements Initializable {
         }
       };
 
-  @Override
-  public void initialize(URL url, ResourceBundle resourceBundle) {
-    room1.setVisible(false);
-    room2.setVisible(false);
-    room3.setVisible(false);
-    // Set labels to have white text and black stroke for the text
-    main.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
-    computer.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
-    closet.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
-    control.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        introTextToSpeech();
+        playerLabel.setVisible(true);
+        black.setVisible(true);
+
+        room1.setVisible(false);
+        room2.setVisible(false);
+        room3.setVisible(false);
+        // Set labels to have white text and black stroke for the text
+        main.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
+        computer.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
+        closet.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
+        control.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
 
     shapesize = player.getFitWidth();
     movementSetup();
@@ -165,6 +211,33 @@ public class PlayerController implements Initializable {
     walls.add(wall20);
     walls.add(wall21);
 
+        gptBackground.setVisible(false);
+        chatTextArea.setVisible(false);
+        inputText.setVisible(false);
+        sendButton.setVisible(false);
+
+
+      //     // when the enter key is pressed, message is sent
+      // inputText.setOnKeyPressed(
+      //     event -> {
+      //       if (event.getCode() == KeyCode.ENTER) {
+      //         try {
+      //           onSendMessage(new ActionEvent());
+      //         } catch (ApiProxyException | IOException e) {
+      //           e.printStackTrace();
+      //         }
+      //       }
+      //     });
+      // chatTextArea.setEditable(false);
+
+      // chatCompletionRequest =
+      //     new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.5).setMaxTokens(100);
+      //   try {
+      //     runGpt(new ChatMessage("user", GptPromptEngineering.getGameMaster()));
+      //   } catch (ApiProxyException e) {
+      //     e.printStackTrace();
+      //   }
+
     collisionTimer.start();
 
     previousX = player.getLayoutX();
@@ -178,8 +251,34 @@ public class PlayerController implements Initializable {
             timer.stop();
           }
         }));
-    // if difficulty is selected, label is updated
-    detectDifficulty();
+        // if difficulty is selected, label is updated
+        detectDifficulty();
+
+        Platform.runLater(
+        () -> {
+          Stage stage = (Stage) scene.getScene().getWindow();
+
+          stage.setOnCloseRequest(
+              event -> {
+                Platform.exit();
+                System.exit(0);
+              });
+        });
+    }
+
+    private void introTextToSpeech() {
+    Task<Void> introTask =
+        new Task<>() {
+
+          @Override
+          protected Void call() throws Exception {
+            TextToSpeech textToSpeech = new TextToSpeech();
+            textToSpeech.speak("Welcome to STARSHIP ESCAPE 1!");
+            return null;
+          }
+        };
+    Thread introThread = new Thread(introTask);
+    introThread.start();
   }
 
   public void checkRoom1(ImageView player, Rectangle room1) {
@@ -366,4 +465,15 @@ public class PlayerController implements Initializable {
       hintLabel.setText("NO");
     }
   }
+
+    @FXML
+    private void callGPT(MouseEvent event) {
+        // if the player clicked the gpt rectangle, the gpt scene is loaded
+      chatTextArea.setVisible(true);
+      inputText.setVisible(true);
+      sendButton.setVisible(true);
+      gptBackground.setVisible(true);
+
+    }
+
 }

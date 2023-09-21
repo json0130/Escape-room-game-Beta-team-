@@ -2,6 +2,8 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
@@ -96,11 +98,6 @@
             <Font size="26.0" />
          </font>
       </Label>
-      <ImageView fx:id="player" fitHeight="50.0" fitWidth="56.0" layoutX="278.0" layoutY="234.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/images-removebg-preview.png" />
-         </image>
-      </ImageView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
       <Label fx:id="difficultyLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="362.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
          <font>
@@ -118,5 +115,22 @@
          </font>
       </Label>
       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
+      <fx:include source="countdowntimer.fxml" />
+      <Rectangle fx:id="gpt" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="61.0" layoutX="745.0" layoutY="122.0" onMouseClicked="#callGPT" stroke="BLACK" strokeType="INSIDE" width="75.0" />
+      <Rectangle fx:id="gptBackground" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="300.0" layoutX="544.0" layoutY="15.0" opacity="0.29" stroke="BLACK" strokeType="INSIDE" width="481.0" />
+      <TextArea fx:id="chatTextArea" layoutX="556.0" layoutY="28.0" opacity="0.29" prefHeight="170.0" prefWidth="449.0" />
+      <TextField fx:id="inputText" layoutX="556.0" layoutY="259.0" opacity="0.29" prefHeight="25.0" prefWidth="417.0" />
+      <Button fx:id="sendButton" layoutX="926.0" layoutY="213.0" mnemonicParsing="false" opacity="0.29" text="Button" />
+      <Rectangle fx:id="black" arcHeight="5.0" arcWidth="5.0" fill="#1f1f1fac" height="606.0" layoutX="-6.0" layoutY="46.0" stroke="BLACK" strokeType="INSIDE" width="1008.0" />
+      <ImageView fx:id="player" fitHeight="50.0" fitWidth="56.0" layoutX="281.0" layoutY="237.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/images-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="playerLabel" layoutX="268.0" layoutY="209.0" text="PLAYER" textFill="WHITE">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
    </children>
 </Pane>

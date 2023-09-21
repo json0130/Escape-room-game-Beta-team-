@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -15,6 +16,7 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,6 +28,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import javafx.stage.Stage;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
@@ -52,6 +55,7 @@ public class Room1Controller implements Initializable {
   @FXML private Rectangle exit;
   @FXML private Rectangle wall1;
   @FXML private Rectangle wall2;
+  @FXML private Rectangle blinkingRectangle;
   @FXML private Rectangle crew1Collision;
   @FXML private Rectangle crew2Collision;
   @FXML private Rectangle crew3Collision;
@@ -61,6 +65,7 @@ public class Room1Controller implements Initializable {
   @FXML private Button btnCollect2;
   @FXML private Button btnCollect3;
   @FXML private Button btnCollect4;
+  @FXML private Button btnRiddle;
 
   @FXML private ImageView crew1;
   @FXML private ImageView crew2;
@@ -81,6 +86,7 @@ public class Room1Controller implements Initializable {
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
 
+  private FadeTransition fadeTransition;
   public static String riddleAnswer;
   public boolean isCrew1Colliding = false;
   public boolean isCrew2Colliding = false;
@@ -93,6 +99,7 @@ public class Room1Controller implements Initializable {
         public void handle(long now) {
           checkCollision2(player, walls);
           checkExit(player, exit);
+          checkMonitor(player, wall2);
         }
       };
 
@@ -121,6 +128,16 @@ public class Room1Controller implements Initializable {
       };
 
   public void initialize(URL url, ResourceBundle resource) {
+    shapesize = player.getFitWidth();
+    movementSetup();
+
+    collisionTimer.start();
+    
+    walls.add(wall1);
+
+    previousX = player.getLayoutX();
+    previousY = player.getLayoutY();
+
     Random random = new Random();
     int randomNumber = random.nextInt(4);
     if (randomNumber == 0) {
@@ -138,15 +155,6 @@ public class Room1Controller implements Initializable {
     idChef.setVisible(false);
     idEngineer.setVisible(false);
 
-    walls.add(wall1);
-    walls.add(wall2);
-
-    shapesize = player.getFitWidth();
-    movementSetup();
-
-    previousX = player.getLayoutX();
-    previousY = player.getLayoutY();
-
     keyPressed.addListener(
         ((observableValue, aBoolean, t1) -> {
           if (!aBoolean) {
@@ -156,10 +164,20 @@ public class Room1Controller implements Initializable {
           }
         }));
 
+    fadeTransition = new FadeTransition(Duration.seconds(1), blinkingRectangle);
+    fadeTransition.setFromValue(1.0);
+    fadeTransition.setToValue(0.0);
+    fadeTransition.setCycleCount(FadeTransition.INDEFINITE); // Blink indefinitely
+    fadeTransition.setAutoReverse(true); // Reverse the animation
+    // Start the animation
+    fadeTransition.play();
+
     btnCollect1.setVisible(false);
     btnCollect2.setVisible(false);
     btnCollect3.setVisible(false);
     btnCollect4.setVisible(false);
+    btnRiddle.setVisible(false);
+    blinkingRectangle.setVisible(true);
 
     crew1Indicator.setVisible(false);
     crew2Indicator.setVisible(false);
@@ -316,8 +334,8 @@ public class Room1Controller implements Initializable {
             PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
             pauseTransition.setOnFinished(event -> {
                 // Adjust the player's position to be right in front of the room
-                player.setLayoutX(436);
-                player.setLayoutY(488);
+                player.setLayoutX(433);
+                player.setLayoutY(475);
                 App.setScene(AppUi.PLAYER);
                 timer.stop();
             });
@@ -335,6 +353,22 @@ public class Room1Controller implements Initializable {
                // Exit the loop as soon as a collision is detected
           }
       }
+  }
+
+  private void checkMonitor(ImageView player, Rectangle wall2){
+    if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
+      blinkingRectangle.setOpacity(1);
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+      pauseTransition.setOnFinished(event -> {
+          // Adjust the player's position to be right in front of the room
+          blinkingRectangle.setOpacity(0);
+          btnRiddle.setVisible(true);
+      });
+      pauseTransition.play();
+  } else {
+    btnRiddle.setVisible(false);
+
+  }
   }
 
    @FXML

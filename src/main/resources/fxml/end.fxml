@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
@@ -19,6 +18,5 @@
             <Image url="@../images/Firefly_spaceship_cockpit_47432-removebg-preview.png" />
          </image>
       </ImageView>
-      <Button fx:id="start" layoutX="206.0" layoutY="98.0" mnemonicParsing="false" onAction="#endingAnimation" text="Button" />
    </children>
 </Pane>
