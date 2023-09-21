@@ -572,9 +572,15 @@ public class TileGameDeskController {
 
   @FXML
   private void onPuzzleGoBackClick() {
+    String musicFile;
     App.setScene(AppUi.TILEROOM);
 
-    String musicFile = "src\\main\\resources\\sounds\\Background-Music.mp3";
+    if (App.timerSeconds < 60) {
+      musicFile = "src\\main\\resources\\sounds\\final-BG-MUSIC.mp3";
+      App.musicType = "final";
+    } else {
+      musicFile = "src\\main\\resources\\sounds\\Background-Music.mp3";
+    }
     Media media = new Media(new File(musicFile).toURI().toString());
 
     App.mediaPlayer.stop();

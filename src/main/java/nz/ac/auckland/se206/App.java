@@ -32,6 +32,7 @@ public class App extends Application {
   public static Timeline timerTimeline;
   public static int chosenTimer;
   public static MediaPlayer mediaPlayer;
+  public static String musicType = "starting";
 
   public static void main(final String[] args) {
 
@@ -82,6 +83,25 @@ public class App extends Application {
 
     mediaPlayer.setVolume(0.1);
     mediaPlayer.setAutoPlay(true);
+
+    // SimpleIntegerProperty numberProperty = new SimpleIntegerProperty(timerSeconds);
+
+    // numberProperty.addListener(
+    //     new ChangeListener<Number>() {
+    //       @Override
+    //       public void changed(
+    //           ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+    //         if (newValue.intValue() < 115) {
+    //           System.out.println("hi");
+    //           mediaPlayer.stop();
+    //           String musicFile = "src\\main\\resources\\sounds\\final-BG-MUSIC.mp3";
+    //           Media media = new Media(new File(musicFile).toURI().toString());
+    //           mediaPlayer = new MediaPlayer(media);
+    //           mediaPlayer.setVolume(0.1);
+    //           mediaPlayer.setAutoPlay(true);
+    //         }
+    //       }
+    //     });
 
     SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
     SceneManager.addScene(AppUi.TUTORIAL, loadFxml("tutorial"));
