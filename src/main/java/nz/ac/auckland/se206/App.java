@@ -2,19 +2,18 @@ package nz.ac.auckland.se206;
 
 import java.io.IOException;
 import java.util.Random;
-
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
-import nz.ac.auckland.se206.SceneManager.AppUi;
-import nz.ac.auckland.se206.controllers.CountdownTimerController;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+import nz.ac.auckland.se206.SceneManager.AppUi;
 
 /**
  * This is the entry point of the JavaFX application, while you can change this class, it should
@@ -24,11 +23,12 @@ public class App extends Application {
 
   public static int timerSeconds = 120;
   private Label countdownLabel;
-  private Timeline countdownTimeline;
   private static Scene scene;
-   private StackPane mainLayout;
+  private StackPane mainLayout;
   public static boolean tileGameComplete = false;
   public static int passcode;
+  public static Boolean timerStarted = false;
+  public static Timeline timerTimeline;
 
   public static void main(final String[] args) {
 
@@ -40,10 +40,9 @@ public class App extends Application {
   }
 
   public static void setScene(AppUi fxml) {
-     scene.setRoot(SceneManager.getScene(fxml));
-   }
+    scene.setRoot(SceneManager.getScene(fxml));
+  }
 
-  
   /**
    * Returns the node associated to the input file. The method expects that the file is located in
    * "src/main/resources/fxml".
@@ -64,7 +63,11 @@ public class App extends Application {
    */
   @Override
   public void start(final Stage stage) throws IOException {
-    
+
+    timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), this::updateTimer));
+    timerTimeline.setCycleCount(App.timerSeconds);
+    timerTimeline.play();
+
     Random r = new Random();
     passcode = r.nextInt((9999 - 1000) + 1) + 1000;
     GameState.password = String.valueOf(passcode);
@@ -82,6 +85,9 @@ public class App extends Application {
 
     stage.setScene(scene);
     stage.show();
+  }
 
+  private void updateTimer(ActionEvent event) {
+    App.timerSeconds--;
   }
 }
