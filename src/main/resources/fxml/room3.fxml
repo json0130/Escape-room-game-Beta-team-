@@ -12,17 +12,22 @@
 
 <Pane fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.ExitController">
    <children>
+      <ImageView fx:id="background3" fitHeight="629.0" fitWidth="1084.0" layoutX="-48.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly%2020230922000416.png" />
+         </image>
+      </ImageView>
       <ImageView fx:id="background2" fitHeight="677.0" fitWidth="1074.0" layoutX="-37.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly%2020230920215509.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="background" fitHeight="616.0" fitWidth="1088.0" layoutX="-37.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="background" fitHeight="616.0" fitWidth="1088.0" layoutX="-37.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly%2020230920220330.png" />
          </image>
       </ImageView>
-      <Button fx:id="button" layoutX="6.0" layoutY="405.0" mnemonicParsing="false" onAction="#back" text="Button" />
+      <Button fx:id="button" layoutX="6.0" layoutY="405.0" mnemonicParsing="false" onAction="#back" opacity="0.0" text="Button" />
       <ImageView fx:id="pad" fitHeight="420.0" fitWidth="387.0" layoutX="323.0" layoutY="159.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly_spaceship_passcode_touchpad_2D_46452-removebg-preview.png" />
@@ -92,14 +97,14 @@
             </Button>
          </children>
       </Group>
-      <Rectangle fx:id="monitor" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="71.0" layoutX="451.0" layoutY="346.0" onMouseClicked="#monitorClicked" opacity="0.19" stroke="BLACK" strokeType="INSIDE" width="114.0" />
-      <Rectangle fx:id="idScanner" arcHeight="5.0" arcWidth="5.0" height="74.0" layoutX="608.0" layoutY="331.0" onMouseClicked="#clickIdScanner" stroke="BLACK" strokeType="INSIDE" width="95.0" />
-      <Label fx:id="idLabel" layoutX="628.0" layoutY="356.0" text="Tag ID" textFill="WHITE">
+      <Rectangle fx:id="monitor" arcHeight="5.0" arcWidth="5.0" fill="#aa00ff00" height="71.0" layoutX="451.0" layoutY="346.0" onMouseClicked="#monitorClicked" stroke="#aa00ff" strokeType="INSIDE" strokeWidth="3.0" width="114.0" />
+      <Rectangle fx:id="idScanner" arcHeight="5.0" arcWidth="5.0" height="74.0" layoutX="356.0" layoutY="331.0" onMouseClicked="#clickIdScanner" stroke="BLACK" strokeType="INSIDE" width="95.0" />
+      <Label fx:id="idLabel" layoutX="376.0" layoutY="356.0" text="Tag ID" textFill="WHITE">
          <font>
             <Font name="Arial" size="21.0" />
          </font>
       </Label>
-      <Rectangle fx:id="light" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="25.0" layoutX="685.0" layoutY="332.0" stroke="BLACK" strokeType="INSIDE" width="12.0" />
+      <Rectangle fx:id="light" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="25.0" layoutX="433.0" layoutY="332.0" stroke="BLACK" strokeType="INSIDE" width="12.0" />
       <Rectangle fx:id="ids" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="409.0" layoutX="711.0" layoutY="99.0" stroke="#fffdfd" strokeType="INSIDE" width="237.0" />
       <ImageView fx:id="idCaptain" fitHeight="87.0" fitWidth="135.0" layoutX="762.0" layoutY="113.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -153,12 +158,18 @@
          </font>
       </Button>
       <fx:include layoutX="900.0" layoutY="-20.0" source="countdowntimer.fxml" />
-      <ImageView fx:id="player" fitHeight="150.0" fitWidth="167.0" layoutX="82.0" layoutY="488.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="player" fitHeight="131.0" fitWidth="150.0" layoutX="68.0" layoutY="508.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly_spaceship_game_character_walking_48398-removebg-preview.png" />
          </image>
       </ImageView>
-      <Rectangle fx:id="exit1" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="216.0" layoutY="441.0" stroke="BLACK" strokeType="INSIDE" width="63.0" />
-      <Rectangle fx:id="wall" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="25.0" layoutX="82.0" layoutY="431.0" stroke="BLACK" strokeType="INSIDE" width="908.0" />
+      <Rectangle fx:id="exit1" arcHeight="5.0" arcWidth="5.0" fill="#ff95008e" height="216.0" layoutX="-17.0" layoutY="441.0" stroke="BLACK" strokeType="INSIDE" width="52.0" />
+      <Rectangle fx:id="wall" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff" height="25.0" layoutX="35.0" layoutY="431.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="955.0" />
+      <Rectangle fx:id="clickMonitor" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="83.0" layoutX="434.0" layoutY="410.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="146.0" />
+      <Label fx:id="clickButton" layoutX="465.0" layoutY="364.0" text="Click Me">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
    </children>
 </Pane>

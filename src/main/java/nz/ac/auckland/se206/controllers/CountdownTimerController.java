@@ -37,6 +37,6 @@ public class CountdownTimerController {
 
   private void updateTimer(ActionEvent event) {
     updateCountdownLabel();
-    System.out.println(App.timerSeconds);
+    //System.out.println(App.timerSeconds);
   }
 }

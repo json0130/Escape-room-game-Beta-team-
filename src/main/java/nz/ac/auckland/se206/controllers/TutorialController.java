@@ -206,10 +206,10 @@ public class TutorialController implements Initializable {
     r4.setLayoutY(550);
 
     String paragraph =
-        "Hello, I am the Game master of this game and my name is ROBI. This is a simple tutorial"
-            + " game which will help you to get used to keyboard control. Start with 'W' to move"
-            + " up. 'A' to move left. 'S' to move down. 'D' to move right. Try to avoid the rocks"
-            + " and reach the finish line";
+        "Hello, I am the Game master of this game. This is a simple tutorial"
+            + " game. It will help you to get used to keyboard control. Start with 'W' to move"
+            + " up. 'S' to move down. 'A' to move left. 'D' to move right. Try to avoid the rocks"
+            + " and reach the finish line. Good Luck!";
     sentences = parseSentences(paragraph);
 
     shapesize = player.getFitHeight();
@@ -226,7 +226,7 @@ public class TutorialController implements Initializable {
     previousY = player.getLayoutY();
 
     // Initialize the sentenceLabel
-    sentenceLabel.setWrapText(true);
+        sentenceLabel.setWrapText(true);
         scene.sceneProperty().addListener((observable, oldScene, newScene) -> {
             if (newScene != null) {
                 PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
@@ -234,7 +234,7 @@ public class TutorialController implements Initializable {
                     // Create a Timeline to display sentences
                     Timeline timeline = new Timeline(
                         new KeyFrame(Duration.ZERO, events -> displayNextSentence()),
-                        new KeyFrame(Duration.seconds(1.5))
+                        new KeyFrame(Duration.seconds(2))
                     );
                     timeline.setCycleCount(sentences.size()); // Repeat for each sentence
                     // Start displaying sentences
@@ -261,10 +261,10 @@ public class TutorialController implements Initializable {
     setRotate(c3, true, 145, 24);
 
     // Set the movement of the images and repeat it forever
-    setMovement(r1, false, 3, -900, 0, 2);
-    setMovement(r2, false, 3, -900, 0, 4);
-    setMovement(r3, false, 3, -900, -0, 6);
-    setMovement(r4, false, 3, -900, 0, 8);
+    setMovement(r1, false, 3, -900, 0, 3);
+    setMovement(r2, false, 3, -900, 0, 0);
+    setMovement(r3, false, 3, -900, -0, 2);
+    setMovement(r4, false, 3, -900, 0, 5);
   }
 
   public void checkCollision(ImageView player, List<ImageView> rocks) {
