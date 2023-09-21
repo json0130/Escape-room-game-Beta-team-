@@ -121,16 +121,6 @@
             <Image url="@../images/idphotos/idengineer.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="lever" fitHeight="101.0" fitWidth="371.0" layoutX="54.0" layoutY="528.0" onMouseDragged="#dragLever" onMouseEntered="#enterLever" onMouseExited="#exitLever" onMousePressed="#pressLever" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/room3/lever.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="145.0" layoutY="499.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/room3/lever2.png" />
-         </image>
-      </ImageView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
       <Label layoutX="5.0" layoutY="6.0" prefHeight="37.0" prefWidth="304.0" text="2MIN 30SEC" textFill="WHITE">
          <font>

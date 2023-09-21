@@ -43,8 +43,6 @@ public class ExitController implements Initializable {
   @FXML private Button button;
   @FXML private Button exit;
 
-  @FXML private ImageView door;
-  @FXML private ImageView lever;
   @FXML private ImageView idCaptain;
   @FXML private ImageView idChef;
   @FXML private ImageView idDoctor;
@@ -63,10 +61,7 @@ public class ExitController implements Initializable {
   @FXML private Rectangle monitor;
   @FXML private Label idLabel;
 
-  private Boolean isDoorShown = false;
-  private double startX;
-  private double startY;
-  private double angle;
+
   private String password = "";
 
   private double mouseAnchorX;
@@ -157,79 +152,7 @@ public class ExitController implements Initializable {
     monitor.setVisible(true);
   }
 
-
-
-  // Lever is draggable while the exit is not shown
-  @FXML
-  public void pressLever(MouseEvent event) {
-    if (!isDoorShown) {
-      startX = event.getSceneX();
-      startY = event.getSceneY();
-    }
-  }
-
-  @FXML
-  public void dragLever(MouseEvent event) {
-    if (!isDoorShown) {
-      double deltaX = event.getSceneX() - startX;
-      double deltaY = event.getSceneY() - startY;
-      angle = Math.toDegrees(Math.atan2(deltaY, deltaX));
-
-      if (angle < 0) {
-        angle = 0;
-      } else if (angle > 180) {
-        angle = 180;
-      }
-      lever.setRotate(angle);
-      startX = event.getSceneX();
-      startY = event.getSceneY();
-      // check if the angle is 180
-      checkRotation(angle);
-    }
-  }
-
-  // if the angle is 180, exit is shown
-  private void checkRotation(double angle) {
-    if (angle == 180) {
-      TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(3), door);
-      translateTransition.setByY(-650);
-      translateTransition.play();
-      isDoorShown = true;
-    }
-  }
-
-  // if the door is not shown, enlarge lever on hover
-  @FXML
-  private void enterLever(MouseEvent event) {
-    if (!isDoorShown) {
-      ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), lever);
-      scaleTransition.setToX(1.1);
-      scaleTransition.setToY(1.1);
-      scaleTransition.play();
-    }
-  }
-
-  @FXML
-  private void exitLever(MouseEvent event) {
-    if (!isDoorShown) {
-      ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), lever);
-      scaleTransition.setToX(1.0);
-      scaleTransition.setToY(1.0);
-      scaleTransition.play();
-      one.setDisable(false);
-      two.setDisable(false);
-      three.setDisable(false);
-      four.setDisable(false);
-      five.setDisable(false);
-      six.setDisable(false);
-      seven.setDisable(false);
-      eight.setDisable(false);
-      nine.setDisable(false);
-      zero.setDisable(false);
-      enter.setDisable(false);
-      reset.setDisable(false);
-    }
-  }
+  
 
   @FXML
   private void onOne(ActionEvent event) {
@@ -343,6 +266,7 @@ public class ExitController implements Initializable {
                 enter.setVisible(false);
                 reset.setVisible(false);
                 pad.setVisible(false);
+                exit.setVisible(false);
 
                 idScanner.setVisible(true);
                 light.setVisible(true);
