@@ -10,25 +10,25 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.ExitController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.ExitController">
    <children>
-      <ImageView fx:id="background2" fitHeight="677.0" fitWidth="1074.0" layoutX="-64.0" layoutY="-5.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="background2" fitHeight="677.0" fitWidth="1074.0" layoutX="-37.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly%2020230920215509.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="background" fitHeight="616.0" fitWidth="1088.0" layoutX="-90.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="background" fitHeight="616.0" fitWidth="1088.0" layoutX="-37.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly%2020230920220330.png" />
          </image>
       </ImageView>
       <Button fx:id="button" layoutX="45.0" layoutY="463.0" mnemonicParsing="false" onAction="#back" text="Button" />
-      <ImageView fx:id="pad" fitHeight="420.0" fitWidth="387.0" layoutX="301.0" layoutY="82.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="pad" fitHeight="420.0" fitWidth="387.0" layoutX="323.0" layoutY="159.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly_spaceship_passcode_touchpad_2D_46452-removebg-preview.png" />
          </image>
       </ImageView>
-      <Group layoutX="380.0" layoutY="220.0">
+      <Group layoutX="400.0" layoutY="293.0">
          <children>
             <Button fx:id="zero" layoutX="-53.0" layoutY="192.0" mnemonicParsing="false" onAction="#onZero" prefHeight="36.0" prefWidth="100.0" text="0">
                <font>
@@ -92,31 +92,31 @@
             </Button>
          </children>
       </Group>
-      <Rectangle fx:id="monitor" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="71.0" layoutX="425.0" layoutY="284.0" onMouseClicked="#monitorClicked" opacity="0.19" stroke="BLACK" strokeType="INSIDE" width="114.0" />
-      <Rectangle fx:id="idScanner" arcHeight="5.0" arcWidth="5.0" height="74.0" layoutX="446.0" layoutY="279.0" onMouseClicked="#clickIdScanner" stroke="BLACK" strokeType="INSIDE" width="95.0" />
-      <Label fx:id="idLabel" layoutX="462.0" layoutY="304.0" text="Tag ID" textFill="WHITE">
+      <Rectangle fx:id="monitor" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="71.0" layoutX="451.0" layoutY="346.0" onMouseClicked="#monitorClicked" opacity="0.19" stroke="BLACK" strokeType="INSIDE" width="114.0" />
+      <Rectangle fx:id="idScanner" arcHeight="5.0" arcWidth="5.0" height="74.0" layoutX="608.0" layoutY="331.0" onMouseClicked="#clickIdScanner" stroke="BLACK" strokeType="INSIDE" width="95.0" />
+      <Label fx:id="idLabel" layoutX="628.0" layoutY="356.0" text="Tag ID" textFill="WHITE">
          <font>
             <Font name="Arial" size="21.0" />
          </font>
       </Label>
-      <Rectangle fx:id="light" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="25.0" layoutX="525.0" layoutY="278.0" stroke="BLACK" strokeType="INSIDE" width="12.0" />
-      <Rectangle fx:id="ids" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="409.0" layoutX="133.0" layoutY="93.0" stroke="#fffdfd" strokeType="INSIDE" width="237.0" />
-      <ImageView fx:id="idCaptain" fitHeight="87.0" fitWidth="135.0" layoutX="185.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
+      <Rectangle fx:id="light" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="25.0" layoutX="685.0" layoutY="332.0" stroke="BLACK" strokeType="INSIDE" width="12.0" />
+      <Rectangle fx:id="ids" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="409.0" layoutX="711.0" layoutY="99.0" stroke="#fffdfd" strokeType="INSIDE" width="237.0" />
+      <ImageView fx:id="idCaptain" fitHeight="87.0" fitWidth="135.0" layoutX="762.0" layoutY="113.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/idcaptain.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="idChef" fitHeight="110.0" fitWidth="135.0" layoutX="185.0" layoutY="210.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="idChef" fitHeight="110.0" fitWidth="135.0" layoutX="762.0" layoutY="206.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/idchef.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="idDoctor" fitHeight="99.0" fitWidth="135.0" layoutX="185.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="idDoctor" fitHeight="99.0" fitWidth="135.0" layoutX="762.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/iddoctor.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="idEngineer" fitHeight="83.0" fitWidth="151.0" layoutX="185.0" layoutY="392.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="idEngineer" fitHeight="83.0" fitWidth="151.0" layoutX="762.0" layoutY="399.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/idengineer.png" />
          </image>
@@ -142,12 +142,12 @@
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
-      <TextArea fx:id="screen" layoutX="327.0" layoutY="123.0" prefHeight="166.0" prefWidth="307.0" style="-fx-background-color: darkblue;">
+      <TextArea fx:id="screen" layoutX="348.0" layoutY="198.0" prefHeight="166.0" prefWidth="307.0" style="-fx-background-color: darkblue;">
          <font>
             <Font name="Arial" size="20.0" />
          </font>
       </TextArea>
-      <Button fx:id="exit" layoutX="589.0" layoutY="85.0" mnemonicParsing="false" onAction="#clickExit" prefHeight="19.0" prefWidth="35.0" text="X">
+      <Button fx:id="exit" layoutX="610.0" layoutY="163.0" mnemonicParsing="false" onAction="#clickExit" prefHeight="19.0" prefWidth="35.0" text="X">
          <font>
             <Font size="18.0" />
          </font>

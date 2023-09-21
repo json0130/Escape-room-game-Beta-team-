@@ -308,23 +308,23 @@ public class ExitController implements Initializable {
       idEngineer.setVisible(true);
 
       if (GameState.isCaptainCollected) {
-        idCaptain.setLayoutX(272);
-        idCaptain.setLayoutY(118);
+        idCaptain.setLayoutX(762);
+        idCaptain.setLayoutY(113);
         idCaptain.setVisible(true);
       }
       if (GameState.isChefCollected) {
-        idChef.setLayoutX(272);
-        idChef.setLayoutY(210);
+        idChef.setLayoutX(762);
+        idChef.setLayoutY(206);
         idChef.setVisible(true);
       }
       if (GameState.isDoctorCollected) {
-        idDoctor.setLayoutX(272);
+        idDoctor.setLayoutX(762);
         idDoctor.setLayoutY(303);
         idDoctor.setVisible(true);
       }
       if (GameState.isEngineerCollected) {
-        idEngineer.setLayoutX(272);
-        idEngineer.setLayoutY(392);
+        idEngineer.setLayoutX(762);
+        idEngineer.setLayoutY(399);
         idEngineer.setVisible(true);
       }
     } else {
