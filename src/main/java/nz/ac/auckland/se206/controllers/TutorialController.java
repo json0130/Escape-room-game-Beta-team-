@@ -230,15 +230,19 @@ public class TutorialController implements Initializable {
         // Create a Timeline to display sentences
         Timeline timeline = new Timeline(
             new KeyFrame(Duration.ZERO, event -> displayNextSentence()),
-            new KeyFrame(Duration.seconds(3))
+            new KeyFrame(Duration.seconds(1.5))
         );
         timeline.setCycleCount(sentences.size()); // Repeat for each sentence
 
         scene.sceneProperty().addListener((observable, oldScene, newScene) -> {
             if (newScene != null) {
-                // Start displaying sentences
-                displayNextSentence();
-                timeline.play();
+                PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
+                pauseTransition.setOnFinished(event -> {
+                    // Start displaying sentences
+                    displayNextSentence();
+                    timeline.play();
+                });
+                pauseTransition.play();
             }
         });
         

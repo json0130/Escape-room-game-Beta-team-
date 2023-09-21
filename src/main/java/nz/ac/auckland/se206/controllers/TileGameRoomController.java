@@ -34,7 +34,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
   private BooleanBinding keyPressed = wPressed.or(aPressed).or(sPressed).or(dPressed);
   private int movementVariable = 5;
   private double shapesize;
-  private double progressSize = 4.0;
 
   @FXML private ImageView player;
   @FXML private Pane scene;
