@@ -4,18 +4,14 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
@@ -43,8 +39,6 @@ public class ExitController implements Initializable {
   @FXML private Button button;
   @FXML private Button exit;
 
-  @FXML private ImageView door;
-  @FXML private ImageView lever;
   @FXML private ImageView idCaptain;
   @FXML private ImageView idChef;
   @FXML private ImageView idDoctor;
@@ -63,10 +57,6 @@ public class ExitController implements Initializable {
   @FXML private Rectangle monitor;
   @FXML private Label idLabel;
 
-  private Boolean isDoorShown = false;
-  private double startX;
-  private double startY;
-  private double angle;
   private String password = "";
 
   private double mouseAnchorX;
@@ -86,7 +76,7 @@ public class ExitController implements Initializable {
     detectDifficulty();
   }
 
-  private void makeInvisible(){
+  private void makeInvisible() {
     idScanner.setVisible(false);
     light.setVisible(false);
     idLabel.setVisible(false);
@@ -133,10 +123,6 @@ public class ExitController implements Initializable {
     exit.setVisible(true);
   }
 
-    
-  
-
-
   @FXML
   private void clickExit(ActionEvent event) {
     screen.setVisible(false);
@@ -155,80 +141,6 @@ public class ExitController implements Initializable {
     pad.setVisible(false);
     exit.setVisible(false);
     monitor.setVisible(true);
-  }
-
-
-
-  // Lever is draggable while the exit is not shown
-  @FXML
-  public void pressLever(MouseEvent event) {
-    if (!isDoorShown) {
-      startX = event.getSceneX();
-      startY = event.getSceneY();
-    }
-  }
-
-  @FXML
-  public void dragLever(MouseEvent event) {
-    if (!isDoorShown) {
-      double deltaX = event.getSceneX() - startX;
-      double deltaY = event.getSceneY() - startY;
-      angle = Math.toDegrees(Math.atan2(deltaY, deltaX));
-
-      if (angle < 0) {
-        angle = 0;
-      } else if (angle > 180) {
-        angle = 180;
-      }
-      lever.setRotate(angle);
-      startX = event.getSceneX();
-      startY = event.getSceneY();
-      // check if the angle is 180
-      checkRotation(angle);
-    }
-  }
-
-  // if the angle is 180, exit is shown
-  private void checkRotation(double angle) {
-    if (angle == 180) {
-      TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(3), door);
-      translateTransition.setByY(-650);
-      translateTransition.play();
-      isDoorShown = true;
-    }
-  }
-
-  // if the door is not shown, enlarge lever on hover
-  @FXML
-  private void enterLever(MouseEvent event) {
-    if (!isDoorShown) {
-      ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), lever);
-      scaleTransition.setToX(1.1);
-      scaleTransition.setToY(1.1);
-      scaleTransition.play();
-    }
-  }
-
-  @FXML
-  private void exitLever(MouseEvent event) {
-    if (!isDoorShown) {
-      ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), lever);
-      scaleTransition.setToX(1.0);
-      scaleTransition.setToY(1.0);
-      scaleTransition.play();
-      one.setDisable(false);
-      two.setDisable(false);
-      three.setDisable(false);
-      four.setDisable(false);
-      five.setDisable(false);
-      six.setDisable(false);
-      seven.setDisable(false);
-      eight.setDisable(false);
-      nine.setDisable(false);
-      zero.setDisable(false);
-      enter.setDisable(false);
-      reset.setDisable(false);
-    }
   }
 
   @FXML
@@ -328,28 +240,30 @@ public class ExitController implements Initializable {
       background.setVisible(false);
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
-            pauseTransition.setOnFinished(event -> {
-                screen.setVisible(false);
-                one.setVisible(false);
-                two.setVisible(false);
-                three.setVisible(false);
-                four.setVisible(false);
-                five.setVisible(false);
-                six.setVisible(false);
-                seven.setVisible(false);
-                eight.setVisible(false);
-                nine.setVisible(false);
-                zero.setVisible(false);
-                enter.setVisible(false);
-                reset.setVisible(false);
-                pad.setVisible(false);
+      pauseTransition.setOnFinished(
+          event -> {
+            screen.setVisible(false);
+            one.setVisible(false);
+            two.setVisible(false);
+            three.setVisible(false);
+            four.setVisible(false);
+            five.setVisible(false);
+            six.setVisible(false);
+            seven.setVisible(false);
+            eight.setVisible(false);
+            nine.setVisible(false);
+            zero.setVisible(false);
+            enter.setVisible(false);
+            reset.setVisible(false);
+            pad.setVisible(false);
+            exit.setVisible(false);
 
-                idScanner.setVisible(true);
-                light.setVisible(true);
-                idLabel.setVisible(true);
-            });
-            pauseTransition.play();
-      
+            idScanner.setVisible(true);
+            light.setVisible(true);
+            idLabel.setVisible(true);
+          });
+      pauseTransition.play();
+
       // one.setDisable(true);
       // two.setDisable(true);
       // three.setDisable(true);
@@ -384,23 +298,15 @@ public class ExitController implements Initializable {
       idEngineer.setVisible(true);
 
       if (GameState.isCaptainCollected) {
-        idCaptain.setLayoutX(272);
-        idCaptain.setLayoutY(118);
         idCaptain.setVisible(true);
       }
       if (GameState.isChefCollected) {
-        idChef.setLayoutX(272);
-        idChef.setLayoutY(210);
         idChef.setVisible(true);
       }
       if (GameState.isDoctorCollected) {
-        idDoctor.setLayoutX(272);
-        idDoctor.setLayoutY(303);
         idDoctor.setVisible(true);
       }
       if (GameState.isEngineerCollected) {
-        idEngineer.setLayoutX(272);
-        idEngineer.setLayoutY(392);
         idEngineer.setVisible(true);
       }
     } else {
@@ -413,19 +319,35 @@ public class ExitController implements Initializable {
   }
 
   // idcards can be dragged
-  public void makeDraggable(Node node) {
+  public void makeDraggable(ImageView imageView) {
+    double originalX = imageView.getLayoutX();
+    double originalY = imageView.getLayoutY();
+  
 
-    node.setOnMousePressed(
+    imageView.setOnMousePressed(
         mouseEvent -> {
           mouseAnchorX = mouseEvent.getX();
           mouseAnchorY = mouseEvent.getY();
         });
 
-    node.setOnMouseDragged(
+    imageView.setOnMouseDragged(
         mouseEvent -> {
-          node.setLayoutX(mouseEvent.getSceneX() - mouseAnchorX);
-          node.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY);
+          // Calculate the new position based on the mouse movement
+          double newX = mouseEvent.getSceneX() - mouseAnchorX;
+          double newY = mouseEvent.getSceneY() - mouseAnchorY;
+
+          // Update the layout of the image
+          imageView.setLayoutX(newX);
+          imageView.setLayoutY(newY);
         });
+
+    imageView.setOnMouseReleased(
+        mouseEvent -> {
+          // Return the image to its original position
+          imageView.setLayoutX(originalX);
+          imageView.setLayoutY(originalY);
+        });
+
   }
 
   AnimationTimer collisionTimer =
@@ -437,7 +359,6 @@ public class ExitController implements Initializable {
           checkCollision(idDoctor, idScanner);
           checkCollision(idEngineer, idScanner);
         }
-    
 
         private void checkCollision(Node node1, Node node2) {
           if (node1.getBoundsInParent().intersects(node2.getBoundsInParent())) {
@@ -494,41 +415,44 @@ public class ExitController implements Initializable {
         }
       };
 
-
-    public void detectDifficulty() {
-        Timer labelTimer = new Timer(true);
-        labelTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                if (GameState.difficulty != null) {
-                    if (GameState.difficulty == "MEDIUM") {
-                        Platform.runLater(()-> updateLabels());
-                        if (GameState.numOfHints == 0) {
-                            labelTimer.cancel();
-                        }
-                    } else {
-                        Platform.runLater(()-> updateLabels());
-                        labelTimer.cancel();
-                    }
+  public void detectDifficulty() {
+    Timer labelTimer = new Timer(true);
+    labelTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (GameState.difficulty != null) {
+              if (GameState.difficulty == "MEDIUM") {
+                Platform.runLater(() -> updateLabels());
+                if (GameState.numOfHints == 0) {
+                  labelTimer.cancel();
                 }
+              } else {
+                Platform.runLater(() -> updateLabels());
+                labelTimer.cancel();
+              }
             }
-        }, 0, 500); 
-    }
+          }
+        },
+        0,
+        500);
+  }
 
-    private void updateLabels() {
-        difficultyLabel.setText(GameState.difficulty);
-        if (GameState.difficulty == "EASY") {
-            hintLabel.setText("UNLIMITED");
-        } else if (GameState.difficulty == "MEDIUM") {
-            hintLabel.setText(String.valueOf(GameState.numOfHints));
-            hintLabel2.setText("HINTS");
-            if (GameState.numOfHints == 1) {
-                hintLabel2.setText("HINT");
-            }
-        } else {
-            hintLabel.setText("NO");
-        }
+  private void updateLabels() {
+    difficultyLabel.setText(GameState.difficulty);
+    if (GameState.difficulty == "EASY") {
+      hintLabel.setText("UNLIMITED");
+    } else if (GameState.difficulty == "MEDIUM") {
+      hintLabel.setText(String.valueOf(GameState.numOfHints));
+      hintLabel2.setText("HINTS");
+      if (GameState.numOfHints == 1) {
+        hintLabel2.setText("HINT");
+      }
+    } else {
+      hintLabel.setText("NO");
     }
+  }
+
   @FXML
   private void back(ActionEvent event) {
     App.setScene(AppUi.PLAYER);
