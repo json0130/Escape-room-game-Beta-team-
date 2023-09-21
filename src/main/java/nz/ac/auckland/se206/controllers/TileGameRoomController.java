@@ -3,10 +3,13 @@ package nz.ac.auckland.se206.controllers;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -24,6 +27,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
@@ -39,7 +43,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   private BooleanBinding keyPressed = wPressed.or(aPressed).or(sPressed).or(dPressed);
   private int movementVariable = 5;
   private double shapesize;
-  private double progressSize = 4.0;
+
+  List<Rectangle> walls = new ArrayList<>();
 
   @FXML private ImageView player;
   @FXML private Pane scene;
@@ -56,8 +61,39 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private Rectangle vase;
   @FXML private Rectangle startTileGame;
 
+  @FXML private Rectangle exit;
+  @FXML private Rectangle wall;
+  @FXML private Rectangle wall2;
+  @FXML private Rectangle wall3;
+  @FXML private Rectangle wall4;
+  @FXML private Rectangle wall5;
+  @FXML private Rectangle wall6;
+  @FXML private Rectangle wall7;
+  @FXML private Rectangle wall8;
+  @FXML private Rectangle wall9;
+  @FXML private Rectangle wall10;
+  @FXML private Rectangle wall11;
+  @FXML private Rectangle wall12;
+  @FXML private Rectangle wall13;
+  @FXML private Rectangle wall14;
+  @FXML private Rectangle wall15;
+  @FXML private Rectangle wall16;
+  @FXML private Rectangle wall17;
+  @FXML private Rectangle wall18;
+  @FXML private Rectangle wall19;
+  @FXML private Rectangle wall20;
+
   @FXML private Button btnRoom1;
   @FXML private Button button;
+
+  AnimationTimer collisionTimer =
+      new AnimationTimer() {
+        @Override
+        public void handle(long now) {
+          checkCollision2(player, walls);
+          checkExit(player, exit);
+        }
+      };
 
   AnimationTimer timer =
       new AnimationTimer() {
@@ -85,10 +121,35 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
+    // Initialization code goes here
+    walls.add(wall);
+    walls.add(wall2);
+    walls.add(wall3);
+    walls.add(wall4);
+    walls.add(wall5);
+    walls.add(wall6);
+    walls.add(wall7);
+    walls.add(wall8);
+    walls.add(wall9);
+    walls.add(wall10);
+    walls.add(wall11);
+    walls.add(wall12);
+    walls.add(wall13);
+    walls.add(wall14);
+    walls.add(wall15);
+    walls.add(wall16);
+    walls.add(wall17);
+    walls.add(wall18);
+    walls.add(wall19);
+    walls.add(wall20);
+
     // if difficulty is selected, label is updated
     detectDifficulty();
+
     shapesize = player.getFitWidth();
     movementSetup();
+
+    collisionTimer.start();
 
     previousX = player.getLayoutX();
     previousY = player.getLayoutY();
@@ -101,6 +162,34 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             timer.stop();
           }
         }));
+  }
+
+  public void checkExit(ImageView player, Rectangle exit) {
+    if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
+      exit.setOpacity(1);
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+      pauseTransition.setOnFinished(
+          event -> {
+            // Adjust the player's position to be right in front of the room
+            player.setLayoutX(436);
+            player.setLayoutY(488);
+            App.setScene(AppUi.PLAYER);
+            timer.stop();
+          });
+      pauseTransition.play();
+    } else {
+      exit.setOpacity(0.6);
+    }
+  }
+
+  public void checkCollision2(ImageView player, List<Rectangle> walls) {
+    for (Rectangle wall : walls) {
+      if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
+        player.setLayoutX(previousX); // Restore the player's previous X position
+        player.setLayoutY(previousY); // Restore the player's previous Y position
+        // Exit the loop as soon as a collision is detected
+      }
+    }
   }
 
   @FXML

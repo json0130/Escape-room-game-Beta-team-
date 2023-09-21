@@ -2,25 +2,62 @@ package nz.ac.auckland.se206.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
+import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class Room1Controller implements Initializable {
+
+  private BooleanProperty wPressed = new SimpleBooleanProperty();
+  private BooleanProperty aPressed = new SimpleBooleanProperty();
+  private BooleanProperty sPressed = new SimpleBooleanProperty();
+  private BooleanProperty dPressed = new SimpleBooleanProperty();
+
+  private BooleanBinding keyPressed = wPressed.or(aPressed).or(sPressed).or(dPressed);
+  private int movementVariable = 5;
+  private double shapesize;
+
+  List<Rectangle> walls = new ArrayList<>();
+
+  @FXML private ImageView player;
+  @FXML private Pane scene;
+
+  private double previousX;
+  private double previousY;
+
+  @FXML private Rectangle exit;
+  @FXML private Rectangle wall1;
+  @FXML private Rectangle wall2;
+
+  @FXML private Button btnCollect1;
+  @FXML private Button btnCollect2;
+  @FXML private Button btnCollect3;
+  @FXML private Button btnCollect4;
+
   @FXML private ImageView crew1;
   @FXML private ImageView crew2;
   @FXML private ImageView crew3;
@@ -36,6 +73,39 @@ public class Room1Controller implements Initializable {
   @FXML private Label hintLabel2;
 
   public static String riddleAnswer;
+
+  AnimationTimer collisionTimer =
+      new AnimationTimer() {
+        @Override
+        public void handle(long now) {
+          checkCollision2(player, walls);
+          checkExit(player, exit);
+        }
+      };
+
+  AnimationTimer timer =
+      new AnimationTimer() {
+        @Override
+        public void handle(long now){
+            
+                previousX = player.getLayoutX(); // Update previousX
+                previousY = player.getLayoutY(); // Update previousY
+
+                if(wPressed.get()){
+                    player.setLayoutY(player.getLayoutY() - movementVariable);
+                }
+                if(aPressed.get()){
+                    player.setLayoutX(player.getLayoutX() - movementVariable);
+                }
+                if(sPressed.get()){
+                    player.setLayoutY(player.getLayoutY() + movementVariable);
+                }
+                if(dPressed.get()){
+                    player.setLayoutX(player.getLayoutX() + movementVariable);
+                }
+                squareBorder();
+        }
+      };
 
   public void initialize(URL url, ResourceBundle resource) {
     Random random = new Random();
@@ -55,6 +125,29 @@ public class Room1Controller implements Initializable {
     idChef.setVisible(false);
     idEngineer.setVisible(false);
 
+    walls.add(wall1);
+    walls.add(wall2);
+
+    shapesize = player.getFitWidth();
+    movementSetup();
+
+    previousX = player.getLayoutX();
+    previousY = player.getLayoutY();
+
+    keyPressed.addListener(
+        ((observableValue, aBoolean, t1) -> {
+          if (!aBoolean) {
+            timer.start();
+          } else {
+            timer.stop();
+          }
+        }));
+
+    btnCollect1.setVisible(false);
+    btnCollect2.setVisible(false);
+    btnCollect3.setVisible(false);
+    btnCollect4.setVisible(false);
+
     // if difficulty is selected, label is updated
     detectDifficulty();
   }
@@ -63,79 +156,130 @@ public class Room1Controller implements Initializable {
   @FXML
   public void clickCrew1(MouseEvent event) throws IOException {
 
-    idDoctor.setVisible(true);
+    if (!GameState.isDoctorCollected) {
+      idDoctor.setVisible(true);
+    btnCollect1.setVisible(true);
 
     Thread hideImageThread =
         new Thread(
             () -> {
               try {
-                Thread.sleep(2000); // Sleep for 2 seconds
+                Thread.sleep(5000); // Sleep for 5 seconds
               } catch (InterruptedException e) {
                 e.printStackTrace();
               }
               // id becomes invisible again
-              Platform.runLater(() -> idDoctor.setVisible(false));
+              Platform.runLater(() -> hideId1());
             });
     hideImageThread.start();
+    }
+  }
+
+  private void hideId1() {
+    idDoctor.setVisible(false);
+    btnCollect1.setVisible(false);
   }
 
   // When crew2 is clicked and the riddle was resolved, id2 is shown only for 2 seconds
   @FXML
   public void clickCrew2(MouseEvent event) throws IOException {
-    idCaptain.setVisible(true);
+    if (!GameState.isCaptainCollected) {
+      idCaptain.setVisible(true);
+    btnCollect2.setVisible(true);
 
     Thread hideImageThread =
         new Thread(
             () -> {
               try {
-                Thread.sleep(2000); // Sleep for 2 seconds
+                Thread.sleep(5000); // Sleep for 5 seconds
               } catch (InterruptedException e) {
                 e.printStackTrace();
               }
               // id becomes invisible again
-              Platform.runLater(() -> idCaptain.setVisible(false));
+              Platform.runLater(() -> hideId2());
             });
     hideImageThread.start();
+    }
+  }
+
+  private void hideId2() {
+    idCaptain.setVisible(false);
+    btnCollect2.setVisible(false);
   }
 
   // When crew3 is clicked and the riddle was resolved, id3 is shown only for 2 seconds
   @FXML
   public void clickCrew3(MouseEvent event) throws IOException {
-
-    idChef.setVisible(true);
+    if(!GameState.isChefCollected) {
+      idChef.setVisible(true);
+    btnCollect3.setVisible(true);
 
     Thread hideImageThread =
         new Thread(
             () -> {
               try {
-                Thread.sleep(2000); // Sleep for 2 seconds
+                Thread.sleep(5000); // Sleep for 5 seconds
               } catch (InterruptedException e) {
                 e.printStackTrace();
               }
               // id becomes invisible again
-              Platform.runLater(() -> idChef.setVisible(false));
+              Platform.runLater(() -> hideId3());
             });
     hideImageThread.start();
+    }
+  }
+
+  private void hideId3() {
+    idChef.setVisible(false);
+    btnCollect3.setVisible(false);
   }
 
   // When crew4 is clicked and the riddle was resolved, id4 is shown only for 2 seconds
   @FXML
   public void clickCrew4(MouseEvent event) throws IOException {
-
-    idEngineer.setVisible(true);
+    if (!GameState.isEngineerCollected) {
+      idEngineer.setVisible(true);
+    btnCollect4.setVisible(true);
 
     Thread hideImageThread =
         new Thread(
             () -> {
               try {
-                Thread.sleep(2000); // Sleep for 2 seconds
+                Thread.sleep(5000); // Sleep for 5 seconds
               } catch (InterruptedException e) {
                 e.printStackTrace();
               }
               // id becomes invisible again
-              Platform.runLater(() -> idEngineer.setVisible(false));
+              Platform.runLater(() -> hideId4());
             });
     hideImageThread.start();
+    }
+  }
+
+  private void hideId4() {
+    idEngineer.setVisible(false);
+    btnCollect4.setVisible(false);
+  }
+
+  public void onCollect1() {
+    GameState.isDoctorCollected = true;
+    idDoctor.setVisible(false);
+    btnCollect1.setVisible(false);
+  }
+  public void onCollect2() {
+    GameState.isCaptainCollected = true;
+    idCaptain.setVisible(false);
+    btnCollect2.setVisible(false);
+  }
+  public void onCollect3() {
+    GameState.isChefCollected = true;
+    idChef.setVisible(false);
+    btnCollect3.setVisible(false);
+  }
+  public void onCollect4() {
+    GameState.isEngineerCollected = true;
+    idEngineer.setVisible(false);
+    btnCollect4.setVisible(false);
   }
 
   @FXML
@@ -143,84 +287,97 @@ public class Room1Controller implements Initializable {
     App.setScene(AppUi.CHAT);
   }
 
-  @FXML
-  public void enterCrew1(MouseEvent event) {
+  
 
-    // Enlarge image on hober by 10%
-    ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), crew1);
-    scaleTransition.setToX(1.1);
-    scaleTransition.setToY(1.1);
-    scaleTransition.play();
+  public void checkExit(ImageView player, Rectangle exit) {
+        if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
+            exit.setOpacity(1);
+            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+            pauseTransition.setOnFinished(event -> {
+                // Adjust the player's position to be right in front of the room
+                player.setLayoutX(436);
+                player.setLayoutY(488);
+                App.setScene(AppUi.PLAYER);
+                timer.stop();
+            });
+            pauseTransition.play();
+        } else {
+          exit.setOpacity(0.6);
+        }
+    }
+
+    public void checkCollision2(ImageView player, List<Rectangle> walls){
+      for(Rectangle wall : walls){
+          if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
+              player.setLayoutX(previousX); // Restore the player's previous X position
+              player.setLayoutY(previousY); // Restore the player's previous Y position
+               // Exit the loop as soon as a collision is detected
+          }
+      }
   }
 
-  @FXML
-  public void exitCrew1(MouseEvent event) {
+   @FXML
+  public void movementSetup() {
+    scene.setOnKeyPressed(
+        e -> {
+          if (e.getCode() == KeyCode.W) {
+            wPressed.set(true);
+          }
 
-    // Set to normal
-    ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), crew1);
-    scaleTransition.setToX(1.0);
-    scaleTransition.setToY(1.0);
-    scaleTransition.play();
+          if (e.getCode() == KeyCode.A) {
+            aPressed.set(true);
+          }
+
+          if (e.getCode() == KeyCode.S) {
+            sPressed.set(true);
+          }
+
+          if (e.getCode() == KeyCode.D) {
+            dPressed.set(true);
+          }
+        });
+
+    scene.setOnKeyReleased(
+        e -> {
+          if (e.getCode() == KeyCode.W) {
+            wPressed.set(false);
+          }
+
+          if (e.getCode() == KeyCode.A) {
+            aPressed.set(false);
+          }
+
+          if (e.getCode() == KeyCode.S) {
+            sPressed.set(false);
+          }
+
+          if (e.getCode() == KeyCode.D) {
+            dPressed.set(false);
+          }
+        });
   }
 
-  @FXML
-  public void enterCrew2(MouseEvent event) {
+  public void squareBorder() {
+    double left = 0;
+    double right = scene.getWidth() - shapesize;
+    double top = 0;
+    double bottom = scene.getHeight() - shapesize;
 
-    // Enlarge image on hober by 10%
-    ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), crew2);
-    scaleTransition.setToX(1.1);
-    scaleTransition.setToY(1.1);
-    scaleTransition.play();
-  }
+    if (player.getLayoutX() < left) {
+      player.setLayoutX(left);
+    }
 
-  @FXML
-  public void exitCrew2(MouseEvent event) {
+    if (player.getLayoutX() > right) {
+      player.setLayoutX(right);
+    }
 
-    // Set to normal
-    ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), crew2);
-    scaleTransition.setToX(1.0);
-    scaleTransition.setToY(1.0);
-    scaleTransition.play();
-  }
+    if (player.getLayoutY() < top) {
+      player.setLayoutY(top);
+    }
 
-  @FXML
-  public void enterCrew3(MouseEvent event) {
-
-    // Enlarge image on hober by 10%
-    ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), crew3);
-    scaleTransition.setToX(1.1);
-    scaleTransition.setToY(1.1);
-    scaleTransition.play();
-  }
-
-  @FXML
-  public void exitCrew3(MouseEvent event) {
-
-    // Set to normal
-    ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), crew3);
-    scaleTransition.setToX(1.0);
-    scaleTransition.setToY(1.0);
-    scaleTransition.play();
-  }
-
-  @FXML
-  public void enterCrew4(MouseEvent event) {
-
-    // Enlarge image on hober by 10%
-    ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), crew4);
-    scaleTransition.setToX(1.1);
-    scaleTransition.setToY(1.1);
-    scaleTransition.play();
-  }
-
-  @FXML
-  public void exitCrew4(MouseEvent event) {
-
-    // Set to normal
-    ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), crew4);
-    scaleTransition.setToX(1.0);
-    scaleTransition.setToY(1.0);
-    scaleTransition.play();
+    if (player.getLayoutY() > bottom) {
+      player.setLayoutY(bottom);
+    }
   }
 
   @FXML

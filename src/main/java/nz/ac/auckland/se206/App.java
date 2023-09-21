@@ -84,31 +84,21 @@ public class App extends Application {
     mediaPlayer.setVolume(0.1);
     mediaPlayer.setAutoPlay(true);
 
-    // SimpleIntegerProperty numberProperty = new SimpleIntegerProperty(timerSeconds);
-
-    // numberProperty.addListener(
-    //     new ChangeListener<Number>() {
-    //       @Override
-    //       public void changed(
-    //           ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    //         if (newValue.intValue() < 115) {
-    //           System.out.println("hi");
-    //           mediaPlayer.stop();
-    //           String musicFile = "src\\main\\resources\\sounds\\final-BG-MUSIC.mp3";
-    //           Media media = new Media(new File(musicFile).toURI().toString());
-    //           mediaPlayer = new MediaPlayer(media);
-    //           mediaPlayer.setVolume(0.1);
-    //           mediaPlayer.setAutoPlay(true);
-    //         }
-    //       }
-    //     });
-
+    SceneManager.addScene(AppUi.ROOM1, loadFxml("room1"));
     SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
+    SceneManager.addScene(AppUi.PLAYER, loadFxml("player"));
+    SceneManager.addScene(AppUi.END, loadFxml("end"));
+    SceneManager.addScene(AppUi.WIN, loadFxml("win"));
+    SceneManager.addScene(AppUi.LOSE, loadFxml("lose"));
+    SceneManager.addScene(AppUi.END1, loadFxml("end1"));
     SceneManager.addScene(AppUi.TUTORIAL, loadFxml("tutorial"));
     SceneManager.addScene(AppUi.ANIMATION, loadFxml("animation"));
     SceneManager.addScene(AppUi.INTRO, loadFxml("start"));
-
+    SceneManager.addScene(AppUi.TILEPUZZLE, loadFxml("tilegamedesk"));
+    SceneManager.addScene(AppUi.TILEROOM, loadFxml("tilegameroom"));
+    SceneManager.addScene(AppUi.ROOM3, loadFxml("room3"));
     scene = new Scene(SceneManager.getScene(AppUi.INTRO), 1000, 650);
+
     stage.setResizable(false);
     stage.setScene(scene);
     stage.show();
