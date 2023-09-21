@@ -72,6 +72,10 @@ public class App extends Application {
     SceneManager.addScene(AppUi.ROOM1, loadFxml("room1"));
     SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
     SceneManager.addScene(AppUi.PLAYER, loadFxml("player"));
+    SceneManager.addScene(AppUi.END, loadFxml("end"));
+    SceneManager.addScene(AppUi.WIN, loadFxml("win"));
+    SceneManager.addScene(AppUi.LOSE, loadFxml("lose"));
+    SceneManager.addScene(AppUi.END1, loadFxml("end1"));
     SceneManager.addScene(AppUi.TUTORIAL, loadFxml("tutorial"));
     SceneManager.addScene(AppUi.ANIMATION, loadFxml("animation"));
     SceneManager.addScene(AppUi.INTRO, loadFxml("start"));
