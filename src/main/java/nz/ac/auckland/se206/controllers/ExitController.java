@@ -539,6 +539,7 @@ public class ExitController implements Initializable {
             if (Room1Controller.riddleAnswer == "captain") {
               if (node1 == idCaptain) {
                 light.setFill(Color.GREEN);
+                soundCorrectCard();
                 GameState.correctId = true;
                 ids.setVisible(false);
                 idCaptain.setVisible(false);
@@ -546,11 +547,13 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
               } else {
+                soundIncorrect();
                 light.setFill(Color.RED);
               }
             } else if (Room1Controller.riddleAnswer == "chef") {
               if (node1 == idChef) {
                 light.setFill(Color.GREEN);
+                soundCorrectCard();
                 GameState.correctId = true;
                 ids.setVisible(false);
                 idCaptain.setVisible(false);
@@ -558,11 +561,13 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
               } else {
+                soundIncorrect();
                 light.setFill(Color.RED);
               }
             } else if (Room1Controller.riddleAnswer == "doctor") {
               if (node1 == idDoctor) {
                 light.setFill(Color.GREEN);
+                soundCorrectCard();
                 GameState.correctId = true;
                 ids.setVisible(false);
                 idCaptain.setVisible(false);
@@ -570,11 +575,13 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
               } else {
+                soundIncorrect();
                 light.setFill(Color.RED);
               }
             } else if (Room1Controller.riddleAnswer == "engineer") {
               if (node1 == idEngineer) {
                 light.setFill(Color.GREEN);
+                soundCorrectCard();
                 GameState.correctId = true;
                 ids.setVisible(false);
                 idCaptain.setVisible(false);
@@ -582,6 +589,7 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
               } else {
+                soundIncorrect();
                 light.setFill(Color.RED);
               }
             }
@@ -651,6 +659,14 @@ public class ExitController implements Initializable {
   @FXML
   private void soundIncorrect() {
     String soundEffect = "src/main/resources/sounds/incorrect.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
+  }
+
+  @FXML
+  private void soundCorrectCard() {
+    String soundEffect = "src/main/resources/sounds/correct-card.mp3";
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
