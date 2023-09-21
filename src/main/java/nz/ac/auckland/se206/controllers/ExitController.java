@@ -331,6 +331,7 @@ private void checkComputer(ImageView player, Rectangle wall2){
     player.setVisible(false);
     clickButton.setVisible(false);
     monitor.setOpacity(0);
+    clickMonitor.setVisible(false);
   }
 
   @FXML
@@ -352,6 +353,8 @@ private void checkComputer(ImageView player, Rectangle wall2){
     exit.setVisible(false);
     monitor.setVisible(true);
     player.setVisible(true);
+    clickMonitor.setVisible(true);
+
   }
 
   @FXML
@@ -467,6 +470,7 @@ private void checkComputer(ImageView player, Rectangle wall2){
             reset.setVisible(false);
             pad.setVisible(false);
             exit.setVisible(false);
+            clickButton.setVisible(false);
 
             changeOpacity();
           });
