@@ -50,6 +50,8 @@ public class IntroController implements Initializable {
     @FXML private Label medium;
     @FXML private Label hard;
     @FXML private Label title;
+    @FXML private Label letter;
+    @FXML private Rectangle letterbox;
 
     private boolean animationStarted = false;
     @FXML private boolean isLevelSelected = false;
@@ -99,6 +101,8 @@ public class IntroController implements Initializable {
                     startButton.setVisible(true);
                     background3.setVisible(true);
                     title.setVisible(false);
+                    letter.setVisible(true);
+                    letterbox.setVisible(true);
                 });
                 pauseTransition.play();
 
@@ -124,6 +128,8 @@ public class IntroController implements Initializable {
             minB4.setDisable(false);
             minB6.setDisable(false);
             background3.setVisible(false);
+            letter.setVisible(false);
+            letterbox.setVisible(false);
 
             // Create a timeline to continuously increase the scaling factor
             Timeline continuousScaling = new Timeline(
@@ -235,6 +241,9 @@ public class IntroController implements Initializable {
         minB2.setVisible(false);
         minB4.setVisible(false);
         minB6.setVisible(false);
+        letter.setVisible(false);
+        letterbox.setVisible(false);
+
         background2.setVisible(false);
         startButton.setVisible(false);
         background3.setVisible(false);
