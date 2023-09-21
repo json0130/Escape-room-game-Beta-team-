@@ -88,7 +88,6 @@ public class PlayerController implements Initializable {
   @FXML private Pane scene;
 
   @FXML private Button reset;
-
   private double previousX;
   private double previousY;
 

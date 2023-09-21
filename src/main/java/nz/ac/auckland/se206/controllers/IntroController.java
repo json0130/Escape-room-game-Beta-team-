@@ -39,6 +39,7 @@ public class IntroController implements Initializable {
     @FXML private Button mediumButton;
     @FXML private Button hardButton;
     @FXML private Button startButton;
+    @FXML private Button tutorial;
     @FXML private ImageView spaceship;
     @FXML private ImageView background;
     @FXML private ImageView background2;
@@ -50,6 +51,8 @@ public class IntroController implements Initializable {
     @FXML private Label medium;
     @FXML private Label hard;
     @FXML private Label title;
+    @FXML private Label letter;
+    @FXML private Rectangle letterbox;
 
     private boolean animationStarted = false;
     @FXML private boolean isLevelSelected = false;
@@ -103,8 +106,6 @@ public class IntroController implements Initializable {
 
         PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.2));
                 pauseTransition.setOnFinished(event -> {
-                    
-
                     startButton.setVisible(true);
                     background3.setVisible(true);
                     title.setVisible(false);
@@ -124,15 +125,37 @@ public class IntroController implements Initializable {
         isTimeSelected = true;
     }
 
-    @FXML
-    private void startAnimation() { 
-        if (!animationStarted) {
-            spaceship.setVisible(true);
-            background2.setVisible(true);
+    @FXML 
+    private void startButtonClicked(ActionEvent event){
+        if(isLevelSelected && isTimeSelected){
+            startButton.setDisable(true);
+            startButton.setVisible(false);
+            letter.setVisible(true);
+            letterbox.setVisible(true);
+            tutorial.setVisible(true);
+
             minB2.setDisable(false);
             minB4.setDisable(false);
             minB6.setDisable(false);
+            minB2.setVisible(false);
+            minB4.setVisible(false);
+            minB6.setVisible(false);
+            easyButton.setVisible(false);
+            mediumButton.setVisible(false);
+            hardButton.setVisible(false);
+
+        }
+    }
+
+    @FXML
+    private void startAnimation(ActionEvent events) { 
+        if (!animationStarted) {
+            spaceship.setVisible(true);
+            background2.setVisible(true);
             background3.setVisible(false);
+            letter.setVisible(false);
+            letterbox.setVisible(false);
+            tutorial.setVisible(false);
 
             // Create a timeline to continuously increase the scaling factor
             Timeline continuousScaling = new Timeline(
@@ -244,6 +267,10 @@ public class IntroController implements Initializable {
         minB2.setVisible(false);
         minB4.setVisible(false);
         minB6.setVisible(false);
+        letter.setVisible(false);
+        letterbox.setVisible(false);
+        tutorial.setVisible(false);
+
         background2.setVisible(false);
         startButton.setVisible(false);
         background3.setVisible(false);
