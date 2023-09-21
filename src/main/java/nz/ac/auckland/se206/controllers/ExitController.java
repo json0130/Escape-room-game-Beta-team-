@@ -487,10 +487,6 @@ private void checkComputer(ImageView player, Rectangle wall2){
     // if the ids are not shown and the correct id was not tagged yet
     if (ids.isVisible() == false && !GameState.correctId) {
       ids.setVisible(true);
-      idCaptain.setVisible(true);
-      idChef.setVisible(true);
-      idDoctor.setVisible(true);
-      idEngineer.setVisible(true);
 
       if (GameState.isCaptainCollected) {
         idCaptain.setVisible(true);

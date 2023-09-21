@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -7,25 +8,25 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
-import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
@@ -33,7 +34,7 @@ import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 /** Controller class for the room view. */
-public class TileGameRoomController implements javafx.fxml.Initializable{
+public class TileGameRoomController implements javafx.fxml.Initializable {
 
   private BooleanProperty wPressed = new SimpleBooleanProperty();
   private BooleanProperty aPressed = new SimpleBooleanProperty();
@@ -51,7 +52,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
 
   private double previousX;
   private double previousY;
-
 
   @FXML private Label difficultyLabel;
   @FXML private Label hintLabel;
@@ -103,27 +103,26 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
   AnimationTimer timer =
       new AnimationTimer() {
         @Override
-        public void handle(long now){
-            
-                previousX = player.getLayoutX(); // Update previousX
-                previousY = player.getLayoutY(); // Update previousY
+        public void handle(long now) {
 
-                if(wPressed.get()){
-                    player.setLayoutY(player.getLayoutY() - movementVariable);
-                }
-                if(aPressed.get()){
-                    player.setLayoutX(player.getLayoutX() - movementVariable);
-                }
-                if(sPressed.get()){
-                    player.setLayoutY(player.getLayoutY() + movementVariable);
-                }
-                if(dPressed.get()){
-                    player.setLayoutX(player.getLayoutX() + movementVariable);
-                }
-                squareBorder();
+          previousX = player.getLayoutX(); // Update previousX
+          previousY = player.getLayoutY(); // Update previousY
+
+          if (wPressed.get()) {
+            player.setLayoutY(player.getLayoutY() - movementVariable);
+          }
+          if (aPressed.get()) {
+            player.setLayoutX(player.getLayoutX() - movementVariable);
+          }
+          if (sPressed.get()) {
+            player.setLayoutY(player.getLayoutY() + movementVariable);
+          }
+          if (dPressed.get()) {
+            player.setLayoutX(player.getLayoutX() + movementVariable);
+          }
+          squareBorder();
         }
       };
-
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -181,30 +180,31 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
   }
 
   public void checkExit(ImageView player, Rectangle exit) {
-        if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
-            exit.setOpacity(1);
-            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-            pauseTransition.setOnFinished(event -> {
-                // Adjust the player's position to be right in front of the room
-                player.setLayoutX(436);
-                player.setLayoutY(488);
-                App.setScene(AppUi.PLAYER);
-                timer.stop();
-            });
-            pauseTransition.play();
-        } else {
-            exit.setOpacity(0.6);
-        }
+    if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
+      exit.setOpacity(1);
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+      pauseTransition.setOnFinished(
+          event -> {
+            // Adjust the player's position to be right in front of the room
+            player.setLayoutX(436);
+            player.setLayoutY(488);
+            App.setScene(AppUi.PLAYER);
+            timer.stop();
+          });
+      pauseTransition.play();
+    } else {
+      exit.setOpacity(0.6);
     }
+  }
 
-    public void checkCollision2(ImageView player, List<Rectangle> walls){
-      for(Rectangle wall : walls){
-          if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
-              player.setLayoutX(previousX); // Restore the player's previous X position
-              player.setLayoutY(previousY); // Restore the player's previous Y position
-               // Exit the loop as soon as a collision is detected
-          }
+  public void checkCollision2(ImageView player, List<Rectangle> walls) {
+    for (Rectangle wall : walls) {
+      if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
+        player.setLayoutX(previousX); // Restore the player's previous X position
+        player.setLayoutY(previousY); // Restore the player's previous Y position
+        // Exit the loop as soon as a collision is detected
       }
+    }
   }
 
   private void checkComputer(ImageView player, Rectangle wall2){
@@ -376,43 +376,45 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
   }
 
   public void detectDifficulty() {
-        Timer labelTimer = new Timer(true);
-        labelTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                if (GameState.difficulty != null) {
-                    if (GameState.difficulty == "MEDIUM") {
-                        Platform.runLater(()-> updateLabels());
-                        if (GameState.numOfHints == 0) {
-                            labelTimer.cancel();
-                        }
-                    } else {
-                        Platform.runLater(()-> updateLabels());
-                        labelTimer.cancel();
-                    }
+    Timer labelTimer = new Timer(true);
+    labelTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (GameState.difficulty != null) {
+              if (GameState.difficulty == "MEDIUM") {
+                Platform.runLater(() -> updateLabels());
+                if (GameState.numOfHints == 0) {
+                  labelTimer.cancel();
                 }
+              } else {
+                Platform.runLater(() -> updateLabels());
+                labelTimer.cancel();
+              }
             }
-        }, 0, 500); 
-    }
+          }
+        },
+        0,
+        500);
+  }
 
-    private void updateLabels() {
-        difficultyLabel.setText(GameState.difficulty);
-        if (GameState.difficulty == "EASY") {
-            hintLabel.setText("UNLIMITED");
-        } else if (GameState.difficulty == "MEDIUM") {
-            hintLabel.setText(String.valueOf(GameState.numOfHints));
-            hintLabel2.setText("HINTS");
-            if (GameState.numOfHints == 1) {
-                hintLabel2.setText("HINT");
-            }
-        } else {
-            hintLabel.setText("NO");
-        }
+  private void updateLabels() {
+    difficultyLabel.setText(GameState.difficulty);
+    if (GameState.difficulty == "EASY") {
+      hintLabel.setText("UNLIMITED");
+    } else if (GameState.difficulty == "MEDIUM") {
+      hintLabel.setText(String.valueOf(GameState.numOfHints));
+      hintLabel2.setText("HINTS");
+      if (GameState.numOfHints == 1) {
+        hintLabel2.setText("HINT");
+      }
+    } else {
+      hintLabel.setText("NO");
     }
+  }
+
   @FXML
   private void back(ActionEvent event) throws IOException {
     App.setScene(AppUi.PLAYER);
   }
-
-  
 }

@@ -15,6 +15,12 @@
             <Image url="@../images/Firefly%2020230921004116.png" />
          </image>
       </ImageView>
+      <Button fx:id="btnRiddle" layoutX="38.0" layoutY="410.0" mnemonicParsing="false" onAction="#onRiddle" text="Riddle" />
+      <ImageView fx:id="player" fitHeight="121.0" fitWidth="131.0" layoutX="429.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly_spaceship_game_character_walking_48398-removebg-preview.png" />
+         </image>
+      </ImageView>
       <ImageView fx:id="crew1" fitHeight="273.0" fitWidth="151.0" layoutX="-59.0" layoutY="99.0" onMouseClicked="#clickCrew1" opacity="0.0" pickOnBounds="true" rotate="-30.0">
          <image>
             <Image url="@../images/room1/costume.png" />
@@ -92,5 +98,29 @@
       <Button fx:id="btnCollect4" layoutX="813.0" layoutY="468.0" mnemonicParsing="false" onAction="#onCollect4" text="Collect Id" />
       <Rectangle fx:id="blinkingRectangle" arcHeight="100.0" arcWidth="100.0" fill="TRANSPARENT" height="96.0" layoutX="432.0" layoutY="167.0" stroke="#ff6a00" strokeType="INSIDE" strokeWidth="3.0" width="96.0" />
       <Button fx:id="btnRiddle" layoutX="445.0" layoutY="188.0" mnemonicParsing="false" onAction="#onRiddle" prefHeight="53.0" prefWidth="72.0" text="Click Me" />
+      <Rectangle fx:id="crew1Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="80.0" layoutX="95.0" layoutY="351.0" opacity="0.0" rotate="40.0" stroke="BLACK" strokeType="INSIDE" width="44.0" />
+      <Rectangle fx:id="crew2Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="31.0" layoutX="182.0" layoutY="241.0" opacity="0.0" rotate="-50.0" stroke="BLACK" strokeType="INSIDE" width="68.0" />
+      <Rectangle fx:id="crew3Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="62.0" layoutX="727.0" layoutY="222.0" opacity="0.0" rotate="-40.0" stroke="BLACK" strokeType="INSIDE" width="44.0" />
+      <Rectangle fx:id="crew4Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="62.0" layoutX="837.0" layoutY="386.0" opacity="0.0" rotate="-40.0" stroke="BLACK" strokeType="INSIDE" width="51.0" />
+      <ImageView fx:id="crew1Indicator" fitHeight="37.0" fitWidth="51.0" layoutX="19.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/indicator_triangle.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="crew4Indicator" fitHeight="37.0" fitWidth="51.0" layoutX="951.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/indicator_triangle.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="crew3Indicator" fitHeight="37.0" fitWidth="51.0" layoutX="847.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/indicator_triangle.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="crew2Indicator" fitHeight="37.0" fitWidth="51.0" layoutX="117.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/indicator_triangle.png" />
+         </image>
+      </ImageView>
    </children>
 </Pane>
