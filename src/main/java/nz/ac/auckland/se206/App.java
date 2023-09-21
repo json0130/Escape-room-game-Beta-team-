@@ -36,7 +36,6 @@ public class App extends Application {
   public static String musicType = "starting";
 
   public static void main(final String[] args) {
-
     launch();
   }
 

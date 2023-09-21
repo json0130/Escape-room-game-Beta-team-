@@ -8,7 +8,12 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -80,13 +85,18 @@ public class ExitController implements Initializable {
   @FXML private ImageView pad;
   @FXML private ImageView background;
   @FXML private ImageView background2;
+  @FXML private ImageView background3;
 
   @FXML private TextArea screen;
   @FXML private Rectangle idScanner;
   @FXML private Rectangle ids;
   @FXML private Rectangle light;
   @FXML private Rectangle monitor;
+  @FXML private Rectangle clickMonitor;
   @FXML private Label idLabel;
+  @FXML private Label clickButton;
+
+  private FadeTransition fadeTransition;
 
   private String password = "";
 
@@ -99,6 +109,7 @@ public class ExitController implements Initializable {
         public void handle(long now) {
           checkCollision2(player, walls);
           checkExit(player, exit1);
+          checkComputer(player, clickMonitor);
         }
       };
 
@@ -128,6 +139,9 @@ public class ExitController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    background.setOpacity(1);
+    clickButton.setVisible(false);
+
     walls.add(wall);
 
     shapesize = player.getFitWidth();
@@ -145,6 +159,14 @@ public class ExitController implements Initializable {
             timer.stop();
           }
         }));
+
+    fadeTransition = new FadeTransition(Duration.seconds(1), monitor);
+    fadeTransition.setFromValue(1.0);
+    fadeTransition.setToValue(0.0);
+    fadeTransition.setCycleCount(FadeTransition.INDEFINITE); // Blink indefinitely
+    fadeTransition.setAutoReverse(true); // Reverse the animation
+    // Start the animation
+    fadeTransition.play();
 
     screen.setEditable(false);
     makeInvisible();
@@ -164,8 +186,8 @@ public class ExitController implements Initializable {
       pauseTransition.setOnFinished(
           event -> {
             // Adjust the player's position to be right in front of the room
-            player.setLayoutX(436);
-            player.setLayoutY(488);
+            player.setLayoutX(68);
+            player.setLayoutY(508);
             App.setScene(AppUi.PLAYER);
             timer.stop();
           });
@@ -182,6 +204,23 @@ public class ExitController implements Initializable {
         player.setLayoutY(previousY); // Restore the player's previous Y position
         // Exit the loop as soon as a collision is detected
       }
+    }
+  }
+
+  private void checkComputer(ImageView player, Rectangle wall2) {
+    if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
+      monitor.setOpacity(1);
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+      pauseTransition.setOnFinished(
+          event -> {
+            // Adjust the player's position to be right in front of the room
+            monitor.setFill(javafx.scene.paint.Color.WHITE);
+            clickButton.setVisible(true);
+          });
+      pauseTransition.play();
+    } else {
+      clickButton.setVisible(false);
+      monitor.setFill(javafx.scene.paint.Color.TRANSPARENT);
     }
   }
 
@@ -294,6 +333,10 @@ public class ExitController implements Initializable {
     pad.setVisible(true);
     monitor.setVisible(false);
     exit.setVisible(true);
+    player.setVisible(false);
+    clickButton.setVisible(false);
+    monitor.setOpacity(0);
+    clickMonitor.setVisible(false);
   }
 
   @FXML
@@ -314,6 +357,8 @@ public class ExitController implements Initializable {
     pad.setVisible(false);
     exit.setVisible(false);
     monitor.setVisible(true);
+    player.setVisible(true);
+    clickMonitor.setVisible(true);
   }
 
   @FXML
@@ -417,7 +462,6 @@ public class ExitController implements Initializable {
       soundCorrect();
       screen.setText("CORRECT");
       GameState.correctPassword = true;
-      background.setVisible(false);
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
       pauseTransition.setOnFinished(
@@ -437,25 +481,11 @@ public class ExitController implements Initializable {
             reset.setVisible(false);
             pad.setVisible(false);
             exit.setVisible(false);
+            clickButton.setVisible(false);
 
-            idScanner.setVisible(true);
-            light.setVisible(true);
-            idLabel.setVisible(true);
+            changeOpacity();
           });
       pauseTransition.play();
-
-      // one.setDisable(true);
-      // two.setDisable(true);
-      // three.setDisable(true);
-      // four.setDisable(true);
-      // five.setDisable(true);
-      // six.setDisable(true);
-      // seven.setDisable(true);
-      // eight.setDisable(true);
-      // nine.setDisable(true);
-      // zero.setDisable(true);
-      // enter.setDisable(true);
-      // reset.setDisable(true);
     }
   }
 
@@ -546,6 +576,7 @@ public class ExitController implements Initializable {
                 idChef.setVisible(false);
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
+                changeOpacity2();
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -560,6 +591,7 @@ public class ExitController implements Initializable {
                 idChef.setVisible(false);
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
+                changeOpacity2();
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -574,6 +606,7 @@ public class ExitController implements Initializable {
                 idChef.setVisible(false);
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
+                changeOpacity2();
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -588,6 +621,7 @@ public class ExitController implements Initializable {
                 idChef.setVisible(false);
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
+                changeOpacity2();
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -633,6 +667,75 @@ public class ExitController implements Initializable {
     } else {
       hintLabel.setText("NO");
     }
+  }
+
+  private void changeOpacity() {
+    // Create a FadeTransition for background
+    FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(2), background);
+    fadeTransition1.setFromValue(1.0); // Start with fully opaque
+    fadeTransition1.setToValue(0.0); // Fade to fully transparent
+    fadeTransition1.play(); // Start the animation for background
+
+    // Create a FadeTransition for background2
+    FadeTransition fadeTransition2 = new FadeTransition(Duration.seconds(2), background2);
+    fadeTransition2.setFromValue(0.0); // Start with fully transparent
+    fadeTransition2.setToValue(1.0); // Fade to fully opaque
+    fadeTransition2.play(); // Start the animation for background2
+    idScanner.setVisible(true);
+    light.setVisible(true);
+    idLabel.setVisible(true);
+  }
+
+  private void changeOpacity2() {
+    if (GameState.correctId) {
+      // Create a FadeTransition for both background images
+      FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(2), background2);
+      fadeTransition1.setToValue(0.0); // Set the target opacity value (1.0 for fully opaque)
+      fadeTransition1.play(); // Start the animation for background1
+      idScanner.setVisible(false);
+      light.setVisible(false);
+      idLabel.setVisible(false);
+
+      FadeTransition fadeTransition2 = new FadeTransition(Duration.seconds(2), background3);
+      fadeTransition2.setToValue(1.0); // Set the target opacity value (1.0 for fully opaque)
+      fadeTransition2.play(); // Start the animation for background2
+
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.0));
+      pauseTransition.setOnFinished(
+          event -> {
+            // Adjust the player's position to be right in front of the room
+            endingAnimation();
+          });
+      pauseTransition.play();
+    }
+  }
+
+  private void endingAnimation() {
+    // Create a timeline to continuously increase the scaling factor
+    Timeline continuousScaling =
+        new Timeline(
+            new KeyFrame(Duration.ZERO, new KeyValue(background3.scaleXProperty(), 1.0)),
+            new KeyFrame(Duration.ZERO, new KeyValue(background3.scaleYProperty(), 1.0)),
+            new KeyFrame(Duration.seconds(3), new KeyValue(background3.scaleXProperty(), 2)),
+            new KeyFrame(Duration.seconds(3), new KeyValue(background3.scaleYProperty(), 2)));
+    continuousScaling.setCycleCount(1); // Play the animation once
+
+    // Create a translate animation for the r1
+    TranslateTransition Translation = new TranslateTransition(Duration.seconds(2.0), background3);
+
+    // Set the animation properties
+
+    Translation.setCycleCount(1); // Play the animation once
+    Translation.setAutoReverse(false); // Don't reverse the animation
+
+    // Start the animations
+    continuousScaling.play();
+    Translation.play();
+    // Enable the button when the animation is finished
+    Translation.setOnFinished(
+        event -> {
+          App.setScene(AppUi.END);
+        });
   }
 
   @FXML
