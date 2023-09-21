@@ -72,11 +72,6 @@
       </ImageView>
       <fx:include layoutX="900.0" layoutY="-20.0" source="countdowntimer.fxml" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
-      <Label layoutX="5.0" layoutY="6.0" prefHeight="37.0" prefWidth="304.0" text="2MIN 30SEC" textFill="WHITE">
-         <font>
-            <Font name="Arial" size="32.0" />
-         </font>
-      </Label>
       <Label fx:id="difficultyLabel" alignment="CENTER" layoutX="362.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
          <font>
             <Font name="Arial" size="32.0" />
@@ -122,5 +117,6 @@
             <Image url="@../images/indicator_triangle.png" />
          </image>
       </ImageView>
+      <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
    </children>
 </Pane>
