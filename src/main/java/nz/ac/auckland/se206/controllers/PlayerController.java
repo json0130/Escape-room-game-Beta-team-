@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,19 +16,29 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.SceneManager.AppUi;
+import nz.ac.auckland.se206.gpt.ChatMessage;
+import nz.ac.auckland.se206.gpt.GptPromptEngineering;
+import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
+import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
+import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult;
+import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
@@ -92,6 +103,14 @@ public class PlayerController implements Initializable {
   private double previousY;
 
   @FXML private Label countdownLabel;
+
+  @FXML private TextArea chatTextArea;
+  @FXML private TextField inputText;
+  @FXML private Button sendButton;
+
+  private ChatCompletionRequest chatCompletionRequest;
+  public static boolean hintContained = false;
+  public static boolean answerContained = false;
 
   @FXML
   void start(ActionEvent event) {
@@ -170,6 +189,27 @@ public class PlayerController implements Initializable {
         walls.add(wall19);
         walls.add(wall20);
         walls.add(wall21);
+
+        // when the enter key is pressed, message is sent
+    inputText.setOnKeyPressed(
+        event -> {
+          if (event.getCode() == KeyCode.ENTER) {
+            try {
+              onSendMessage(new ActionEvent());
+            } catch (ApiProxyException | IOException e) {
+              e.printStackTrace();
+            }
+          }
+        });
+    chatTextArea.setEditable(false);
+
+    chatCompletionRequest =
+        new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.5).setMaxTokens(100);
+      try {
+        runGpt(new ChatMessage("user", GptPromptEngineering.getGameMaster()));
+      } catch (ApiProxyException e) {
+        e.printStackTrace();
+      }
 
     collisionTimer.start();
 
@@ -350,4 +390,107 @@ public class PlayerController implements Initializable {
             hintLabel.setText("NO");
         }
     }
+
+    @FXML
+    private void callGPT(MouseEvent event) {
+        
+    }
+
+      /**
+   * Appends a chat message to the chat text area.
+   *
+   * @param msg the chat message to append
+   */
+  private void appendChatMessage(ChatMessage msg) {
+    chatTextArea.appendText(msg.getRole() + ": " + msg.getContent() + "\n\n");
+  }
+
+  /**
+   * Runs the GPT model with a given chat message.
+   *
+   * @param msg the chat message to process
+   * @return the response chat message
+   * @throws ApiProxyException if there is an error communicating with the API proxy
+   */
+  private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
+    chatCompletionRequest =
+        new ChatCompletionRequest().setN(1).setTemperature(0.5).setTopP(0.2).setMaxTokens(100);
+    Task<ChatMessage> runningGptTask =
+        new Task<ChatMessage>() {
+          @Override
+          protected ChatMessage call() {
+            chatCompletionRequest.addMessage(msg);
+            try {
+              ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
+              Choice result = chatCompletionResult.getChoices().iterator().next();
+              chatCompletionRequest.addMessage(result.getChatMessage());
+              appendChatMessage(result.getChatMessage());
+              // Check the correctness of player's answer for the riddle
+              Platform.runLater(
+                  () -> {
+                    if (result.getChatMessage().getRole().equals("assistant")
+                        && result.getChatMessage().getContent().startsWith("Correct")) {
+                      GameState.isRiddleResolved = true;
+                    }
+                  });
+              return result.getChatMessage();
+            } catch (ApiProxyException e) {
+              // TODO handle exception appropriately
+              e.printStackTrace();
+              return null;
+            }
+          }
+        };
+    Thread gptThread = new Thread(runningGptTask);
+    gptThread.setDaemon(true);
+    gptThread.start();
+    return msg;
+  }
+
+  /**
+   * Sends a message to the GPT model.
+   *
+   * @param event the action event triggered by the send button
+   * @throws ApiProxyException if there is an error communicating with the API proxy
+   * @throws IOException if there is an I/O error
+   */
+  @FXML
+  private void onSendMessage(ActionEvent event) throws ApiProxyException, IOException {
+    String message = inputText.getText();
+    if (message.trim().isEmpty()) {
+      return;
+    }
+
+    if (message.contains("hint") || message.contains("Hint")) {
+      hintContained = true;
+    }
+
+    if (message.contains("answer") || message.contains("Answer")) {
+      answerContained = true;
+    }
+
+    inputText.clear();
+    ChatMessage msg = new ChatMessage("user", message);
+    appendChatMessage(msg);
+
+    message += " " + GptPromptEngineering.getGameMaster();
+    msg = new ChatMessage("user", message);
+
+    ChatMessage lastMsg = runGpt(msg);
+    if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("Correct")) {
+      GameState.isRiddleResolved = true;
+    }
+  }
+
+  /**
+   * Navigates back to the previous view.
+   *
+   * @param event the action event triggered by the go back button
+   * @throws ApiProxyException if there is an error communicating with the API proxy
+   * @throws IOException if there is an I/O error
+   */
+  @FXML
+  private void onGoBack(ActionEvent event) throws ApiProxyException, IOException {
+    App.setScene(AppUi.ROOM1);
+  }
 }
