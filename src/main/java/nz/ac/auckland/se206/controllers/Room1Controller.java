@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -54,12 +55,13 @@ public class Room1Controller implements Initializable {
   @FXML private Rectangle exit;
   @FXML private Rectangle wall1;
   @FXML private Rectangle wall2;
-  @FXML private Rectangle heading;
+  @FXML private Rectangle blinkingRectangle;
 
   @FXML private Button btnCollect1;
   @FXML private Button btnCollect2;
   @FXML private Button btnCollect3;
   @FXML private Button btnCollect4;
+  @FXML private Button btnRiddle;
 
   @FXML private ImageView crew1;
   @FXML private ImageView crew2;
@@ -75,6 +77,7 @@ public class Room1Controller implements Initializable {
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
 
+  private FadeTransition fadeTransition;
   public static String riddleAnswer;
 
   AnimationTimer collisionTimer =
@@ -83,6 +86,7 @@ public class Room1Controller implements Initializable {
         public void handle(long now) {
           checkCollision2(player, walls);
           checkExit(player, exit);
+          checkMonitor(player, wall2);
         }
       };
 
@@ -117,7 +121,6 @@ public class Room1Controller implements Initializable {
     collisionTimer.start();
     
     walls.add(wall1);
-    walls.add(wall2);
 
     previousX = player.getLayoutX();
     previousY = player.getLayoutY();
@@ -148,10 +151,20 @@ public class Room1Controller implements Initializable {
           }
         }));
 
+    fadeTransition = new FadeTransition(Duration.seconds(1), blinkingRectangle);
+    fadeTransition.setFromValue(1.0);
+    fadeTransition.setToValue(0.0);
+    fadeTransition.setCycleCount(FadeTransition.INDEFINITE); // Blink indefinitely
+    fadeTransition.setAutoReverse(true); // Reverse the animation
+    // Start the animation
+    fadeTransition.play();
+
     btnCollect1.setVisible(false);
     btnCollect2.setVisible(false);
     btnCollect3.setVisible(false);
     btnCollect4.setVisible(false);
+    btnRiddle.setVisible(false);
+    blinkingRectangle.setVisible(true);
 
     // if difficulty is selected, label is updated
     detectDifficulty();
@@ -295,15 +308,13 @@ public class Room1Controller implements Initializable {
   
 
   public void checkExit(ImageView player, Rectangle exit) {
-    System.out.println("Checking exit");
         if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
             exit.setOpacity(1);
-            System.out.println("Exit");
             PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
             pauseTransition.setOnFinished(event -> {
                 // Adjust the player's position to be right in front of the room
-                player.setLayoutX(436);
-                player.setLayoutY(488);
+                player.setLayoutX(433);
+                player.setLayoutY(475);
                 App.setScene(AppUi.PLAYER);
                 timer.stop();
             });
@@ -318,10 +329,25 @@ public class Room1Controller implements Initializable {
           if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
               player.setLayoutX(previousX); // Restore the player's previous X position
               player.setLayoutY(previousY); // Restore the player's previous Y position
-              System.out.println("Collision");
                // Exit the loop as soon as a collision is detected
           }
       }
+  }
+
+  private void checkMonitor(ImageView player, Rectangle wall2){
+    if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
+      blinkingRectangle.setOpacity(1);
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+      pauseTransition.setOnFinished(event -> {
+          // Adjust the player's position to be right in front of the room
+          blinkingRectangle.setOpacity(0);
+          btnRiddle.setVisible(true);
+      });
+      pauseTransition.play();
+  } else {
+    btnRiddle.setVisible(false);
+
+  }
   }
 
    @FXML

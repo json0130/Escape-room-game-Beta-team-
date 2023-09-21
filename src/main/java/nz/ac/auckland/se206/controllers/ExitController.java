@@ -89,7 +89,11 @@ public class ExitController implements Initializable {
   @FXML private Rectangle ids;
   @FXML private Rectangle light;
   @FXML private Rectangle monitor;
+  @FXML private Rectangle clickMonitor;
   @FXML private Label idLabel;
+  @FXML private Label clickButton;
+
+  private FadeTransition fadeTransition;
 
   private String password = "";
 
@@ -102,6 +106,7 @@ public class ExitController implements Initializable {
         public void handle(long now) {
           checkCollision2(player, walls);
           checkExit(player, exit1);
+          checkComputer(player, clickMonitor);
         }
       };
 
@@ -132,6 +137,8 @@ public class ExitController implements Initializable {
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     background.setOpacity(1);
+    clickButton.setVisible(false);
+
     walls.add(wall);
 
     shapesize = player.getFitWidth();
@@ -149,6 +156,14 @@ public class ExitController implements Initializable {
             timer.stop();
           }
         }));
+
+        fadeTransition = new FadeTransition(Duration.seconds(1), monitor);
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+        fadeTransition.setCycleCount(FadeTransition.INDEFINITE); // Blink indefinitely
+        fadeTransition.setAutoReverse(true); // Reverse the animation
+        // Start the animation
+        fadeTransition.play();
 
     screen.setEditable(false);
     makeInvisible();
@@ -187,6 +202,23 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
       }
   }
 }
+
+private void checkComputer(ImageView player, Rectangle wall2){
+  if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
+    monitor.setOpacity(1);
+    PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+    pauseTransition.setOnFinished(event -> {
+        // Adjust the player's position to be right in front of the room
+        monitor.setFill(javafx.scene.paint.Color.WHITE);
+        clickButton.setVisible(true);
+    });
+    pauseTransition.play();
+} else {
+    clickButton.setVisible(false);
+    monitor.setFill(javafx.scene.paint.Color.TRANSPARENT);
+  }
+}
+
 @FXML
   public void movementSetup() {
     scene.setOnKeyPressed(
@@ -297,6 +329,8 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
     monitor.setVisible(false);
     exit.setVisible(true);
     player.setVisible(false);
+    clickButton.setVisible(false);
+    monitor.setOpacity(0);
   }
 
   @FXML

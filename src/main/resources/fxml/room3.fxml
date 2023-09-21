@@ -97,7 +97,7 @@
             </Button>
          </children>
       </Group>
-      <Rectangle fx:id="monitor" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="71.0" layoutX="451.0" layoutY="346.0" onMouseClicked="#monitorClicked" opacity="0.19" stroke="BLACK" strokeType="INSIDE" width="114.0" />
+      <Rectangle fx:id="monitor" arcHeight="5.0" arcWidth="5.0" fill="#aa00ff00" height="71.0" layoutX="451.0" layoutY="346.0" onMouseClicked="#monitorClicked" stroke="#aa00ff" strokeType="INSIDE" strokeWidth="3.0" width="114.0" />
       <Rectangle fx:id="idScanner" arcHeight="5.0" arcWidth="5.0" height="74.0" layoutX="356.0" layoutY="331.0" onMouseClicked="#clickIdScanner" stroke="BLACK" strokeType="INSIDE" width="95.0" />
       <Label fx:id="idLabel" layoutX="376.0" layoutY="356.0" text="Tag ID" textFill="WHITE">
          <font>
@@ -165,5 +165,11 @@
       </ImageView>
       <Rectangle fx:id="exit1" arcHeight="5.0" arcWidth="5.0" fill="#ff95008e" height="216.0" layoutX="-17.0" layoutY="441.0" stroke="BLACK" strokeType="INSIDE" width="52.0" />
       <Rectangle fx:id="wall" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff" height="25.0" layoutX="35.0" layoutY="431.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="955.0" />
+      <Rectangle fx:id="clickMonitor" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="83.0" layoutX="434.0" layoutY="410.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="146.0" />
+      <Label fx:id="clickButton" layoutX="465.0" layoutY="364.0" text="Click Me">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
    </children>
 </Pane>
