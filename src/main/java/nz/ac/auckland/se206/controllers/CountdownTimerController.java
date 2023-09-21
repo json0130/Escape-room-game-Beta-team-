@@ -20,9 +20,9 @@ public class CountdownTimerController {
     updateCountdownLabel();
 
     countdownTimeline = new Timeline(new KeyFrame(Duration.seconds(1), this::updateTimer));
-    countdownTimeline.setCycleCount(App.chosenTimer + 5);
-
+    countdownTimeline.setCycleCount(Timeline.INDEFINITE);
     countdownTimeline.play();
+
     System.out.println("countdown INITIALIZED");
   }
 
@@ -30,9 +30,9 @@ public class CountdownTimerController {
     int minutes = App.timerSeconds / 60;
     int seconds = App.timerSeconds % 60;
     countdownLabel.setText(String.format("%02d:%02d", minutes, seconds));
-    // if (minutes == 0 && seconds == 0) {
-    //   countdownTimeline.stop();
-    // }
+    if (minutes == 0 && seconds == 0) {
+      countdownTimeline.stop();
+    }
   }
 
   private void updateTimer(ActionEvent event) {

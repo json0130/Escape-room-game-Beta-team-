@@ -186,7 +186,7 @@ public class IntroController implements Initializable {
 
             App.timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), this::updateTimer));
             App.timerTimeline.setCycleCount(App.timerSeconds);
-            App.timerTimeline.play();
+            // App.timerTimeline.play();
           });
 
       animationStarted = true;
