@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -102,24 +105,24 @@ public class ExitController implements Initializable {
   AnimationTimer timer =
       new AnimationTimer() {
         @Override
-        public void handle(long now){
-            
-                previousX = player.getLayoutX(); // Update previousX
-                previousY = player.getLayoutY(); // Update previousY
+        public void handle(long now) {
 
-                if(wPressed.get()){
-                    player.setLayoutY(player.getLayoutY() - movementVariable);
-                }
-                if(aPressed.get()){
-                    player.setLayoutX(player.getLayoutX() - movementVariable);
-                }
-                if(sPressed.get()){
-                    player.setLayoutY(player.getLayoutY() + movementVariable);
-                }
-                if(dPressed.get()){
-                    player.setLayoutX(player.getLayoutX() + movementVariable);
-                }
-                squareBorder();
+          previousX = player.getLayoutX(); // Update previousX
+          previousY = player.getLayoutY(); // Update previousY
+
+          if (wPressed.get()) {
+            player.setLayoutY(player.getLayoutY() - movementVariable);
+          }
+          if (aPressed.get()) {
+            player.setLayoutX(player.getLayoutX() - movementVariable);
+          }
+          if (sPressed.get()) {
+            player.setLayoutY(player.getLayoutY() + movementVariable);
+          }
+          if (dPressed.get()) {
+            player.setLayoutX(player.getLayoutX() + movementVariable);
+          }
+          squareBorder();
         }
       };
 
@@ -156,31 +159,33 @@ public class ExitController implements Initializable {
 
   public void checkExit(ImageView player, Rectangle exit1) {
     if (player.getBoundsInParent().intersects(exit1.getBoundsInParent())) {
-        exit1.setOpacity(1);
-        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-        pauseTransition.setOnFinished(event -> {
+      exit1.setOpacity(1);
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+      pauseTransition.setOnFinished(
+          event -> {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(436);
             player.setLayoutY(488);
             App.setScene(AppUi.PLAYER);
             timer.stop();
-        });
-        pauseTransition.play();
+          });
+      pauseTransition.play();
     } else {
-        exit1.setOpacity(0.6);
+      exit1.setOpacity(0.6);
     }
-}
-
-public void checkCollision2(ImageView player, List<Rectangle> walls){
-  for(Rectangle wall : walls){
-      if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
-          player.setLayoutX(previousX); // Restore the player's previous X position
-          player.setLayoutY(previousY); // Restore the player's previous Y position
-           // Exit the loop as soon as a collision is detected
-      }
   }
-}
-@FXML
+
+  public void checkCollision2(ImageView player, List<Rectangle> walls) {
+    for (Rectangle wall : walls) {
+      if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
+        player.setLayoutX(previousX); // Restore the player's previous X position
+        player.setLayoutY(previousY); // Restore the player's previous Y position
+        // Exit the loop as soon as a collision is detected
+      }
+    }
+  }
+
+  @FXML
   public void movementSetup() {
     scene.setOnKeyPressed(
         e -> {
@@ -244,7 +249,7 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
     }
   }
 
-  private void makeInvisible(){
+  private void makeInvisible() {
     idScanner.setVisible(false);
     light.setVisible(false);
     idLabel.setVisible(false);
@@ -313,13 +318,14 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
 
   @FXML
   private void onOne(ActionEvent event) {
+    soundButttonClick();
     password += "1";
     screen.setText(password);
   }
 
   @FXML
   private void onTwo(ActionEvent event) {
-
+    soundButttonClick();
     password += "2";
 
     screen.setText(password);
@@ -327,7 +333,7 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
 
   @FXML
   private void onThree(ActionEvent event) {
-
+    soundButttonClick();
     password += "3";
 
     screen.setText(password);
@@ -335,7 +341,7 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
 
   @FXML
   private void onFour(ActionEvent event) {
-
+    soundButttonClick();
     password += "4";
 
     screen.setText(password);
@@ -343,7 +349,7 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
 
   @FXML
   private void onFive(ActionEvent event) {
-
+    soundButttonClick();
     password += "5";
 
     screen.setText(password);
@@ -351,7 +357,7 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
 
   @FXML
   private void onSix(ActionEvent event) {
-
+    soundButttonClick();
     password += "6";
 
     screen.setText(password);
@@ -359,24 +365,28 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
 
   @FXML
   private void onSeven(ActionEvent event) {
+    soundButttonClick();
     password += "7";
     screen.setText(password);
   }
 
   @FXML
   private void onEight(ActionEvent event) {
+    soundButttonClick();
     password += "8";
     screen.setText(password);
   }
 
   @FXML
   private void onNine(ActionEvent event) {
+    soundButttonClick();
     password += "9";
     screen.setText(password);
   }
 
   @FXML
   private void onZero(ActionEvent event) {
+    soundButttonClick();
     password += "0";
     screen.setText(password);
   }
@@ -486,7 +496,6 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
   public void makeDraggable(ImageView imageView) {
     double originalX = imageView.getLayoutX();
     double originalY = imageView.getLayoutY();
-  
 
     imageView.setOnMousePressed(
         mouseEvent -> {
@@ -511,7 +520,6 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
           imageView.setLayoutX(originalX);
           imageView.setLayoutY(originalY);
         });
-
   }
 
   AnimationTimer collisionTimer =
@@ -620,5 +628,13 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
   @FXML
   private void back(ActionEvent event) {
     App.setScene(AppUi.PLAYER);
+  }
+
+  @FXML
+  private void soundButttonClick() {
+    String soundEffect = "src/main/resources/sounds/button-click.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
   }
 }

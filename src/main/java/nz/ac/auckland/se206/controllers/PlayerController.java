@@ -40,6 +40,11 @@ public class PlayerController implements Initializable {
   private int movementVariable = 5;
   private double shapesize;
   private double progressSize = 4.0;
+  private Boolean soundPlaying = false;
+
+  String soundEffect = "src/main/resources/sounds/door-open.mp3";
+  Media media = new Media(new File(soundEffect).toURI().toString());
+  MediaPlayer mediaPlayer = new MediaPlayer(media);
 
   List<Rectangle> walls = new ArrayList<>();
 
@@ -185,6 +190,12 @@ public class PlayerController implements Initializable {
   public void checkRoom1(ImageView player, Rectangle room1) {
     if (player.getBoundsInParent().intersects(room1.getBoundsInParent())) {
       room1.setVisible(true);
+
+      // System.out.println(mediaPlayer.getMedia());
+      // if (mediaPlayer.getStatus() != MediaPlayer.Status.PLAYING) {
+      //   // soundDoorOpen();
+      // }
+
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
@@ -203,12 +214,17 @@ public class PlayerController implements Initializable {
   public void checkRoom2(ImageView player, Rectangle room2) {
     if (player.getBoundsInParent().intersects(room2.getBoundsInParent())) {
       room2.setVisible(true);
+
+      // if (mediaPlayer.getStatus() != MediaPlayer.Status.PLAYING) {
+      //   soundDoorOpen();
+      // }
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(500);
             player.setLayoutY(284);
+
             App.setScene(AppUi.TILEROOM);
             timer.stop();
           });
@@ -234,12 +250,17 @@ public class PlayerController implements Initializable {
         App.mediaPlayer.setVolume(0.1);
         App.mediaPlayer.setAutoPlay(true);
       }
+
+      // if (mediaPlayer.getStatus() != MediaPlayer.Status.PLAYING) {
+      //   soundDoorOpen();
+      // }
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(674);
             player.setLayoutY(292);
+
             App.setScene(AppUi.ROOM3);
             timer.stop();
           });
@@ -366,4 +387,16 @@ public class PlayerController implements Initializable {
       hintLabel.setText("NO");
     }
   }
+
+  // @FXML
+  // private void soundDoorOpen() {
+  //   mediaPlayer.play();
+
+  //   mediaPlayer.setOnEndOfMedia(
+  //       () -> {
+  //         // This code block is executed when the media playback reaches the end
+  //         System.out.println("Media playback has finished.");
+  //         // You can perform any additional actions here
+  //       });
+  // }
 }
