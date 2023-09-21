@@ -576,10 +576,10 @@ public class TileGameDeskController {
     App.setScene(AppUi.TILEROOM);
 
     if (App.timerSeconds < 60) {
-      musicFile = "src\\main\\resources\\sounds\\final-BG-MUSIC.mp3";
+      musicFile = "src/main/resources/sounds/final-BG-MUSIC.mp3";
       App.musicType = "final";
     } else {
-      musicFile = "src\\main\\resources\\sounds\\Background-Music.mp3";
+      musicFile = "src/main/resources/sounds/Background-Music.mp3";
     }
     Media media = new Media(new File(musicFile).toURI().toString());
 

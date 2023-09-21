@@ -74,7 +74,7 @@ public class App extends Application {
     GameState.password = String.valueOf(passcode);
 
     String musicFile =
-        "src\\main\\resources\\sounds\\Background-Music.mp3"; // Replace with the actual path to
+        "src/main/resources/sounds/Background-Music.mp3"; // Replace with the actual path to
     // your audio file
     Media media = new Media(new File(musicFile).toURI().toString());
     mediaPlayer = new MediaPlayer(media);

@@ -225,7 +225,7 @@ public class PlayerController implements Initializable {
       System.out.println("ENTERED ROOM3");
       if (App.timerSeconds < 60 && App.musicType.equals("starting")) {
         App.musicType = "final";
-        musicFile = "src\\main\\resources\\sounds\\final-BG-MUSIC.mp3";
+        musicFile = "srcsrc/main/resources/sounds/final-BG-MUSIC.mp3";
         Media media = new Media(new File(musicFile).toURI().toString());
 
         App.mediaPlayer.stop();

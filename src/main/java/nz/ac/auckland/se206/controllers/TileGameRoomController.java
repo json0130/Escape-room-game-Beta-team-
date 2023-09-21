@@ -343,7 +343,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   public void onTileGameButtonClick() throws IOException {
     App.setScene(AppUi.TILEPUZZLE);
 
-    String musicFile = "src\\main\\resources\\sounds\\Tile-Game-Background-Music_1.mp3";
+    String musicFile = "src/main/resources/sounds/Tile-Game-Background-Music_1.mp3";
     Media media = new Media(new File(musicFile).toURI().toString());
 
     App.mediaPlayer.stop();
