@@ -152,4 +152,6 @@ public class ChatController {
   private void onGoBack(ActionEvent event) throws ApiProxyException, IOException {
     App.setScene(AppUi.ROOM1);
   }
+
+  
 }

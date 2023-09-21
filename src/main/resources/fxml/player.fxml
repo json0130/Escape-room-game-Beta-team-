@@ -99,11 +99,6 @@
             <Font size="26.0" />
          </font>
       </Label>
-      <ImageView fx:id="player" fitHeight="50.0" fitWidth="56.0" layoutX="278.0" layoutY="234.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/images-removebg-preview.png" />
-         </image>
-      </ImageView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
       <Label layoutX="5.0" layoutY="6.0" prefHeight="37.0" prefWidth="304.0" text="2MIN 30SEC" textFill="WHITE">
          <font>
@@ -149,5 +144,17 @@
             <Image url="@../images/faq.png" />
          </image>
       </ImageView>
+
+      <Rectangle fx:id="black" arcHeight="5.0" arcWidth="5.0" fill="#1f1f1fac" height="606.0" layoutX="-6.0" layoutY="46.0" stroke="BLACK" strokeType="INSIDE" width="1008.0" />
+      <ImageView fx:id="player" fitHeight="50.0" fitWidth="56.0" layoutX="281.0" layoutY="237.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/images-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="playerLabel" layoutX="268.0" layoutY="209.0" text="PLAYER" textFill="WHITE">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
    </children>
 </Pane>
