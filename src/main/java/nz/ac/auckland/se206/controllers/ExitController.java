@@ -398,6 +398,7 @@ public class ExitController implements Initializable {
     }
     // incorrect password, show incorrect and reset the password
     if (!password.equals(GameState.password)) {
+      soundIncorrect();
       screen.setText("INCORRECT");
       Thread clearThread =
           new Thread(
@@ -413,6 +414,7 @@ public class ExitController implements Initializable {
       password = "";
       // correct password, buttons are disabled to prevent further change in correctPassword state
     } else {
+      soundCorrect();
       screen.setText("CORRECT");
       GameState.correctPassword = true;
       background.setVisible(false);
@@ -633,6 +635,22 @@ public class ExitController implements Initializable {
   @FXML
   private void soundButttonClick() {
     String soundEffect = "src/main/resources/sounds/button-click.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
+  }
+
+  @FXML
+  private void soundCorrect() {
+    String soundEffect = "src/main/resources/sounds/correct.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
+  }
+
+  @FXML
+  private void soundIncorrect() {
+    String soundEffect = "src/main/resources/sounds/incorrect.mp3";
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
