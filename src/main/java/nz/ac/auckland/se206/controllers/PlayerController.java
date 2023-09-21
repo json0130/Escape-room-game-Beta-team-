@@ -1,7 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,34 +23,18 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import nz.ac.auckland.se206.App;
-import nz.ac.auckland.se206.SceneManager.AppUi;
-import nz.ac.auckland.se206.gpt.ChatMessage;
-import nz.ac.auckland.se206.gpt.GptPromptEngineering;
-import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
-import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
-import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult;
-import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
-import nz.ac.auckland.se206.speech.TextToSpeech;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
-import javafx.scene.layout.Pane;
-import java.net.URL;
-import nz.ac.auckland.se206.gpt.ChatMessage;
-import nz.ac.auckland.se206.gpt.GptPromptEngineering;
-import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
-import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult;
-import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
+import nz.ac.auckland.se206.speech.TextToSpeech;
 
 public class PlayerController implements Initializable {
 
@@ -64,23 +47,28 @@ public class PlayerController implements Initializable {
   private int movementVariable = 5;
   private double shapesize;
   private double progressSize = 4.0;
+  private Boolean soundPlaying = false;
+
+  String soundEffect = "src/main/resources/sounds/door-open.mp3";
+  Media media = new Media(new File(soundEffect).toURI().toString());
+  MediaPlayer mediaPlayer = new MediaPlayer(media);
 
   List<Rectangle> walls = new ArrayList<>();
 
-    @FXML private ImageView player;
-    @FXML private Rectangle room1;
-    @FXML private Rectangle room2;
-    @FXML private Rectangle room3;
-    @FXML private Rectangle black;
+  @FXML private ImageView player;
+  @FXML private Rectangle room1;
+  @FXML private Rectangle room2;
+  @FXML private Rectangle room3;
+  @FXML private Rectangle black;
 
-    @FXML private Label playerLabel;
-    @FXML private Label main;
-    @FXML private Label computer;
-    @FXML private Label closet;
-    @FXML private Label control;
-    @FXML private Label difficultyLabel;
-    @FXML private Label hintLabel;
-    @FXML private Label hintLabel2;
+  @FXML private Label playerLabel;
+  @FXML private Label main;
+  @FXML private Label computer;
+  @FXML private Label closet;
+  @FXML private Label control;
+  @FXML private Label difficultyLabel;
+  @FXML private Label hintLabel;
+  @FXML private Label hintLabel2;
 
   @FXML private Rectangle wall;
   @FXML private Rectangle wall1;
@@ -144,12 +132,12 @@ public class PlayerController implements Initializable {
   AnimationTimer timer =
       new AnimationTimer() {
         @Override
-        public void handle(long now){
-                playerLabel.setVisible(false);
-                black.setVisible(false);
-            
-                previousX = player.getLayoutX(); // Update previousX
-                previousY = player.getLayoutY(); // Update previousY
+        public void handle(long now) {
+          playerLabel.setVisible(false);
+          black.setVisible(false);
+
+          previousX = player.getLayoutX(); // Update previousX
+          previousY = player.getLayoutY(); // Update previousY
 
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
@@ -170,20 +158,20 @@ public class PlayerController implements Initializable {
         }
       };
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        introTextToSpeech();
-        playerLabel.setVisible(true);
-        black.setVisible(true);
+  @Override
+  public void initialize(URL url, ResourceBundle resourceBundle) {
+    introTextToSpeech();
+    playerLabel.setVisible(true);
+    black.setVisible(true);
 
-        room1.setVisible(false);
-        room2.setVisible(false);
-        room3.setVisible(false);
-        // Set labels to have white text and black stroke for the text
-        main.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
-        computer.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
-        closet.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
-        control.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
+    room1.setVisible(false);
+    room2.setVisible(false);
+    room3.setVisible(false);
+    // Set labels to have white text and black stroke for the text
+    main.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
+    computer.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
+    closet.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
+    control.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
 
     shapesize = player.getFitWidth();
     movementSetup();
@@ -211,32 +199,31 @@ public class PlayerController implements Initializable {
     walls.add(wall20);
     walls.add(wall21);
 
-        gptBackground.setVisible(false);
-        chatTextArea.setVisible(false);
-        inputText.setVisible(false);
-        sendButton.setVisible(false);
+    gptBackground.setVisible(false);
+    chatTextArea.setVisible(false);
+    inputText.setVisible(false);
+    sendButton.setVisible(false);
 
+    //     // when the enter key is pressed, message is sent
+    // inputText.setOnKeyPressed(
+    //     event -> {
+    //       if (event.getCode() == KeyCode.ENTER) {
+    //         try {
+    //           onSendMessage(new ActionEvent());
+    //         } catch (ApiProxyException | IOException e) {
+    //           e.printStackTrace();
+    //         }
+    //       }
+    //     });
+    // chatTextArea.setEditable(false);
 
-      //     // when the enter key is pressed, message is sent
-      // inputText.setOnKeyPressed(
-      //     event -> {
-      //       if (event.getCode() == KeyCode.ENTER) {
-      //         try {
-      //           onSendMessage(new ActionEvent());
-      //         } catch (ApiProxyException | IOException e) {
-      //           e.printStackTrace();
-      //         }
-      //       }
-      //     });
-      // chatTextArea.setEditable(false);
-
-      // chatCompletionRequest =
-      //     new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.5).setMaxTokens(100);
-      //   try {
-      //     runGpt(new ChatMessage("user", GptPromptEngineering.getGameMaster()));
-      //   } catch (ApiProxyException e) {
-      //     e.printStackTrace();
-      //   }
+    // chatCompletionRequest =
+    //     new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.5).setMaxTokens(100);
+    //   try {
+    //     runGpt(new ChatMessage("user", GptPromptEngineering.getGameMaster()));
+    //   } catch (ApiProxyException e) {
+    //     e.printStackTrace();
+    //   }
 
     collisionTimer.start();
 
@@ -251,10 +238,10 @@ public class PlayerController implements Initializable {
             timer.stop();
           }
         }));
-        // if difficulty is selected, label is updated
-        detectDifficulty();
+    // if difficulty is selected, label is updated
+    detectDifficulty();
 
-        Platform.runLater(
+    Platform.runLater(
         () -> {
           Stage stage = (Stage) scene.getScene().getWindow();
 
@@ -264,9 +251,9 @@ public class PlayerController implements Initializable {
                 System.exit(0);
               });
         });
-    }
+  }
 
-    private void introTextToSpeech() {
+  private void introTextToSpeech() {
     Task<Void> introTask =
         new Task<>() {
 
@@ -284,6 +271,12 @@ public class PlayerController implements Initializable {
   public void checkRoom1(ImageView player, Rectangle room1) {
     if (player.getBoundsInParent().intersects(room1.getBoundsInParent())) {
       room1.setVisible(true);
+
+      // System.out.println(mediaPlayer.getMedia());
+      // if (mediaPlayer.getStatus() != MediaPlayer.Status.PLAYING) {
+      //   // soundDoorOpen();
+      // }
+
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
@@ -302,12 +295,17 @@ public class PlayerController implements Initializable {
   public void checkRoom2(ImageView player, Rectangle room2) {
     if (player.getBoundsInParent().intersects(room2.getBoundsInParent())) {
       room2.setVisible(true);
+
+      // if (mediaPlayer.getStatus() != MediaPlayer.Status.PLAYING) {
+      //   soundDoorOpen();
+      // }
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(500);
             player.setLayoutY(284);
+
             App.setScene(AppUi.TILEROOM);
             timer.stop();
           });
@@ -333,12 +331,17 @@ public class PlayerController implements Initializable {
         App.mediaPlayer.setVolume(0.1);
         App.mediaPlayer.setAutoPlay(true);
       }
+
+      // if (mediaPlayer.getStatus() != MediaPlayer.Status.PLAYING) {
+      //   soundDoorOpen();
+      // }
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(674);
             player.setLayoutY(292);
+
             App.setScene(AppUi.ROOM3);
             timer.stop();
           });
@@ -466,14 +469,12 @@ public class PlayerController implements Initializable {
     }
   }
 
-    @FXML
-    private void callGPT(MouseEvent event) {
-        // if the player clicked the gpt rectangle, the gpt scene is loaded
-      chatTextArea.setVisible(true);
-      inputText.setVisible(true);
-      sendButton.setVisible(true);
-      gptBackground.setVisible(true);
-
-    }
-
+  @FXML
+  private void callGPT(MouseEvent event) {
+    // if the player clicked the gpt rectangle, the gpt scene is loaded
+    chatTextArea.setVisible(true);
+    inputText.setVisible(true);
+    sendButton.setVisible(true);
+    gptBackground.setVisible(true);
+  }
 }

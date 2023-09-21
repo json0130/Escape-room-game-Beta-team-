@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,8 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -57,6 +60,10 @@ public class TutorialController implements Initializable {
   @FXML private ImageView r2;
   @FXML private ImageView r3;
   @FXML private ImageView r4;
+
+  String soundEffect = "src/main/resources/sounds/rocket.mp3";
+  Media media = new Media(new File(soundEffect).toURI().toString());
+  MediaPlayer mediaPlayer = new MediaPlayer(media);
 
   @FXML private ProgressBar progressBar;
   private PauseTransition collisionPause = new PauseTransition(Duration.seconds(1));
@@ -110,6 +117,7 @@ public class TutorialController implements Initializable {
 
   @FXML
   private void skipTutorial(ActionEvent event) {
+    soundButttonClick();
     App.setScene(AppUi.ANIMATION);
     collisionTimer.stop();
     timer.stop();
@@ -226,33 +234,38 @@ public class TutorialController implements Initializable {
     previousY = player.getLayoutY();
 
     // Initialize the sentenceLabel
-        sentenceLabel.setWrapText(true);
-        scene.sceneProperty().addListener((observable, oldScene, newScene) -> {
-            if (newScene != null) {
+    sentenceLabel.setWrapText(true);
+    scene
+        .sceneProperty()
+        .addListener(
+            (observable, oldScene, newScene) -> {
+              if (newScene != null) {
                 PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
-                pauseTransition.setOnFinished(event -> {
-                    // Create a Timeline to display sentences
-                    Timeline timeline = new Timeline(
-                        new KeyFrame(Duration.ZERO, events -> displayNextSentence()),
-                        new KeyFrame(Duration.seconds(2))
-                    );
-                    timeline.setCycleCount(sentences.size()); // Repeat for each sentence
-                    // Start displaying sentences
-                    displayNextSentence();
-                    timeline.play();
-                });
+                pauseTransition.setOnFinished(
+                    event -> {
+                      // Create a Timeline to display sentences
+                      Timeline timeline =
+                          new Timeline(
+                              new KeyFrame(Duration.ZERO, events -> displayNextSentence()),
+                              new KeyFrame(Duration.seconds(2)));
+                      timeline.setCycleCount(sentences.size()); // Repeat for each sentence
+                      // Start displaying sentences
+                      displayNextSentence();
+                      timeline.play();
+                    });
                 pauseTransition.play();
-            }
-        });
-        
-        keyPressed.addListener(((observableValue, aBoolean, t1) -> {
-            if(!aBoolean){
-                timer.start();
-            } else {
-                timer.stop();
-            }
+              }
+            });
+
+    keyPressed.addListener(
+        ((observableValue, aBoolean, t1) -> {
+          if (!aBoolean) {
+            timer.start();
+          } else {
+            timer.stop();
+          }
         }));
-    }
+  }
 
   @FXML
   private void playRock() {
@@ -301,18 +314,22 @@ public class TutorialController implements Initializable {
     scene.setOnKeyPressed(
         e -> {
           if (e.getCode() == KeyCode.W) {
+
             wPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.A) {
+
             aPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.S) {
+
             sPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.D) {
+
             dPressed.set(true);
           }
         });
@@ -320,18 +337,22 @@ public class TutorialController implements Initializable {
     scene.setOnKeyReleased(
         e -> {
           if (e.getCode() == KeyCode.W) {
+
             wPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.A) {
+
             aPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.S) {
+
             sPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.D) {
+
             dPressed.set(false);
           }
         });
@@ -358,5 +379,19 @@ public class TutorialController implements Initializable {
     if (player.getLayoutY() > bottom) {
       player.setLayoutY(bottom);
     }
+  }
+
+  @FXML
+  private void playSoundRocket() {
+    mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    mediaPlayer.play();
+  }
+
+  @FXML
+  private void soundButttonClick() {
+    String soundEffect = "src/main/resources/sounds/button-click.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
   }
 }
