@@ -99,11 +99,6 @@
          </font>
       </Label>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
-      <Label layoutX="5.0" layoutY="6.0" prefHeight="37.0" prefWidth="304.0" text="2MIN 30SEC" textFill="WHITE">
-         <font>
-            <Font name="Arial" size="32.0" />
-         </font>
-      </Label>
       <Label fx:id="difficultyLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="362.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
          <font>
             <Font size="32.0" />
@@ -119,6 +114,7 @@
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
+      <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
       <fx:include source="countdowntimer.fxml" />
       <Rectangle fx:id="gpt" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="61.0" layoutX="745.0" layoutY="122.0" onMouseClicked="#callGPT" stroke="BLACK" strokeType="INSIDE" width="75.0" />
       <Rectangle fx:id="gptBackground" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="300.0" layoutX="544.0" layoutY="15.0" opacity="0.29" stroke="BLACK" strokeType="INSIDE" width="481.0" />
