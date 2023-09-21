@@ -4,18 +4,14 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
@@ -61,7 +57,6 @@ public class ExitController implements Initializable {
   @FXML private Rectangle monitor;
   @FXML private Label idLabel;
 
-
   private String password = "";
 
   private double mouseAnchorX;
@@ -81,7 +76,7 @@ public class ExitController implements Initializable {
     detectDifficulty();
   }
 
-  private void makeInvisible(){
+  private void makeInvisible() {
     idScanner.setVisible(false);
     light.setVisible(false);
     idLabel.setVisible(false);
@@ -128,10 +123,6 @@ public class ExitController implements Initializable {
     exit.setVisible(true);
   }
 
-    
-  
-
-
   @FXML
   private void clickExit(ActionEvent event) {
     screen.setVisible(false);
@@ -151,8 +142,6 @@ public class ExitController implements Initializable {
     exit.setVisible(false);
     monitor.setVisible(true);
   }
-
-  
 
   @FXML
   private void onOne(ActionEvent event) {
@@ -251,29 +240,30 @@ public class ExitController implements Initializable {
       background.setVisible(false);
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
-            pauseTransition.setOnFinished(event -> {
-                screen.setVisible(false);
-                one.setVisible(false);
-                two.setVisible(false);
-                three.setVisible(false);
-                four.setVisible(false);
-                five.setVisible(false);
-                six.setVisible(false);
-                seven.setVisible(false);
-                eight.setVisible(false);
-                nine.setVisible(false);
-                zero.setVisible(false);
-                enter.setVisible(false);
-                reset.setVisible(false);
-                pad.setVisible(false);
-                exit.setVisible(false);
+      pauseTransition.setOnFinished(
+          event -> {
+            screen.setVisible(false);
+            one.setVisible(false);
+            two.setVisible(false);
+            three.setVisible(false);
+            four.setVisible(false);
+            five.setVisible(false);
+            six.setVisible(false);
+            seven.setVisible(false);
+            eight.setVisible(false);
+            nine.setVisible(false);
+            zero.setVisible(false);
+            enter.setVisible(false);
+            reset.setVisible(false);
+            pad.setVisible(false);
+            exit.setVisible(false);
 
-                idScanner.setVisible(true);
-                light.setVisible(true);
-                idLabel.setVisible(true);
-            });
-            pauseTransition.play();
-      
+            idScanner.setVisible(true);
+            light.setVisible(true);
+            idLabel.setVisible(true);
+          });
+      pauseTransition.play();
+
       // one.setDisable(true);
       // two.setDisable(true);
       // three.setDisable(true);
@@ -308,23 +298,15 @@ public class ExitController implements Initializable {
       idEngineer.setVisible(true);
 
       if (GameState.isCaptainCollected) {
-        idCaptain.setLayoutX(762);
-        idCaptain.setLayoutY(113);
         idCaptain.setVisible(true);
       }
       if (GameState.isChefCollected) {
-        idChef.setLayoutX(762);
-        idChef.setLayoutY(206);
         idChef.setVisible(true);
       }
       if (GameState.isDoctorCollected) {
-        idDoctor.setLayoutX(762);
-        idDoctor.setLayoutY(303);
         idDoctor.setVisible(true);
       }
       if (GameState.isEngineerCollected) {
-        idEngineer.setLayoutX(762);
-        idEngineer.setLayoutY(399);
         idEngineer.setVisible(true);
       }
     } else {
@@ -337,19 +319,35 @@ public class ExitController implements Initializable {
   }
 
   // idcards can be dragged
-  public void makeDraggable(Node node) {
+  public void makeDraggable(ImageView imageView) {
+    double originalX = imageView.getLayoutX();
+    double originalY = imageView.getLayoutY();
+  
 
-    node.setOnMousePressed(
+    imageView.setOnMousePressed(
         mouseEvent -> {
           mouseAnchorX = mouseEvent.getX();
           mouseAnchorY = mouseEvent.getY();
         });
 
-    node.setOnMouseDragged(
+    imageView.setOnMouseDragged(
         mouseEvent -> {
-          node.setLayoutX(mouseEvent.getSceneX() - mouseAnchorX);
-          node.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY);
+          // Calculate the new position based on the mouse movement
+          double newX = mouseEvent.getSceneX() - mouseAnchorX;
+          double newY = mouseEvent.getSceneY() - mouseAnchorY;
+
+          // Update the layout of the image
+          imageView.setLayoutX(newX);
+          imageView.setLayoutY(newY);
         });
+
+    imageView.setOnMouseReleased(
+        mouseEvent -> {
+          // Return the image to its original position
+          imageView.setLayoutX(originalX);
+          imageView.setLayoutY(originalY);
+        });
+
   }
 
   AnimationTimer collisionTimer =
@@ -361,7 +359,6 @@ public class ExitController implements Initializable {
           checkCollision(idDoctor, idScanner);
           checkCollision(idEngineer, idScanner);
         }
-    
 
         private void checkCollision(Node node1, Node node2) {
           if (node1.getBoundsInParent().intersects(node2.getBoundsInParent())) {
@@ -418,41 +415,44 @@ public class ExitController implements Initializable {
         }
       };
 
-
-    public void detectDifficulty() {
-        Timer labelTimer = new Timer(true);
-        labelTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                if (GameState.difficulty != null) {
-                    if (GameState.difficulty == "MEDIUM") {
-                        Platform.runLater(()-> updateLabels());
-                        if (GameState.numOfHints == 0) {
-                            labelTimer.cancel();
-                        }
-                    } else {
-                        Platform.runLater(()-> updateLabels());
-                        labelTimer.cancel();
-                    }
+  public void detectDifficulty() {
+    Timer labelTimer = new Timer(true);
+    labelTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (GameState.difficulty != null) {
+              if (GameState.difficulty == "MEDIUM") {
+                Platform.runLater(() -> updateLabels());
+                if (GameState.numOfHints == 0) {
+                  labelTimer.cancel();
                 }
+              } else {
+                Platform.runLater(() -> updateLabels());
+                labelTimer.cancel();
+              }
             }
-        }, 0, 500); 
-    }
+          }
+        },
+        0,
+        500);
+  }
 
-    private void updateLabels() {
-        difficultyLabel.setText(GameState.difficulty);
-        if (GameState.difficulty == "EASY") {
-            hintLabel.setText("UNLIMITED");
-        } else if (GameState.difficulty == "MEDIUM") {
-            hintLabel.setText(String.valueOf(GameState.numOfHints));
-            hintLabel2.setText("HINTS");
-            if (GameState.numOfHints == 1) {
-                hintLabel2.setText("HINT");
-            }
-        } else {
-            hintLabel.setText("NO");
-        }
+  private void updateLabels() {
+    difficultyLabel.setText(GameState.difficulty);
+    if (GameState.difficulty == "EASY") {
+      hintLabel.setText("UNLIMITED");
+    } else if (GameState.difficulty == "MEDIUM") {
+      hintLabel.setText(String.valueOf(GameState.numOfHints));
+      hintLabel2.setText("HINTS");
+      if (GameState.numOfHints == 1) {
+        hintLabel2.setText("HINT");
+      }
+    } else {
+      hintLabel.setText("NO");
     }
+  }
+
   @FXML
   private void back(ActionEvent event) {
     App.setScene(AppUi.PLAYER);
