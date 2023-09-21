@@ -24,7 +24,7 @@
             <Font name="ACaslonPro-Regular" size="53.0" />
          </font>
       </Label>
-      <Pane fx:id="background3" layoutX="-13.0" layoutY="-15.0" opacity="0.36" prefHeight="681.0" prefWidth="1026.0" style="-fx-background-color: black;" />
+      <Pane fx:id="background3" layoutX="-13.0" layoutY="-15.0" opacity="0.47" prefHeight="681.0" prefWidth="1026.0" style="-fx-background-color: black;" />
       <Group layoutX="110.0" layoutY="412.0">
          <children>
             <Rectangle fx:id="easybox" arcHeight="5.0" arcWidth="10.0" fill="#0000008b" height="97.0" layoutY="40.0" stroke="WHITE" strokeLineCap="ROUND" strokeWidth="2.0" width="202.0" />
@@ -91,22 +91,22 @@
             </LinearGradient>
          </textFill>
       </Button>
-      <Button fx:id="minB2" layoutX="109.0" layoutY="504.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="45.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" stylesheets="@../css/styles.css" text="2 MININTES" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="minB2" layoutX="109.0" layoutY="504.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="45.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" stylesheets="@../css/styles.css" text="2 MINUTES" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="minB4" layoutX="398.0" layoutY="504.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="45.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" text="4 MININTES" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="minB4" layoutX="398.0" layoutY="504.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="45.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" text="4 MINUTES" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="minB6" layoutX="689.0" layoutY="503.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="45.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" text="6 MININTES" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="minB6" layoutX="689.0" layoutY="503.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="45.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" text="6 MINUTES" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="startButton" alignment="CENTER" contentDisplay="TOP" graphicTextGap="10.0" layoutX="308.0" layoutY="220.0" mnemonicParsing="false" onAction="#startAnimation" prefHeight="99.0" prefWidth="376.0" text="START" textAlignment="CENTER">
+      <Button fx:id="startButton" alignment="CENTER" contentDisplay="TOP" graphicTextGap="10.0" layoutX="300.0" layoutY="208.0" mnemonicParsing="false" onAction="#startButtonClicked" prefHeight="99.0" prefWidth="376.0" text="START" textAlignment="CENTER">
          <font>
             <Font name="System Bold Italic" size="47.0" />
          </font>
@@ -224,5 +224,12 @@
             <Image url="@../images/Firefly_3D_spaceship_more_sharp_edges__going_80_degree_upward__bright_colour_spaceship_47271-removebg-preview.png" />
          </image>
       </ImageView>
+      <Rectangle fx:id="letterbox" arcHeight="20.0" arcWidth="20.0" fill="#0b0b0bd9" height="611.0" layoutX="227.0" layoutY="17.0" stroke="#ffffff95" strokeType="INSIDE" strokeWidth="3.0" width="542.0" />
+      <Label fx:id="letter" alignment="CENTER" layoutX="190.0" layoutY="45.0" prefHeight="556.0" prefWidth="620.0" text="STARSHIP ESCAPE I&#10;&#10;Welcome aboard, intrepid space explorer! 🚀🌌 &#10;Prepare to embark on a thrilling cosmic adventure &#10;like no other as you step into the world of our &#10;spaceship escape room game. Get ready to test &#10;your wits and problem-solving skills through the &#10;mission. Solve mind-bending puzzles and &#10;ultimately find your way to escape this &#10;spaceship before time runs out. &#10;&#10;Before we start the game, let me introduce &#10;you to some key controls it will help you.&#10;&#10; Let the adventure begin! 🌠🌏🔐" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="ACaslonPro-Italic" size="26.0" />
+         </font>
+      </Label>
+      <Button fx:id="tutorial" layoutX="732.0" layoutY="539.0" mnemonicParsing="false" onAction="#startAnimation" prefHeight="66.0" prefWidth="170.0" text="Button" />
    </children>
 </Pane>

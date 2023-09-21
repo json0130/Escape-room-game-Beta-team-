@@ -10,7 +10,7 @@ public class GameState {
   public static boolean isKeyFound = false;
 
   /* password will be generated in room2 */
-  public static String password = "1234";
+  public static String password = "";
 
   public static boolean correctPassword = false;
 
