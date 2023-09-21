@@ -6,9 +6,12 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Rectangle?>
+<<<<<<< HEAD
+=======
 <?import javafx.scene.text.Font?>
+>>>>>>> main
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.Room1Controller">
+<Pane fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.Room1Controller">
    <children>
       <ImageView fitHeight="716.0" fitWidth="1002.0" layoutX="-1.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -57,6 +60,16 @@
          </image>
       </ImageView>
       <Button fx:id="backButton" layoutX="37.0" layoutY="475.0" mnemonicParsing="false" onAction="#back" text="Back" />
+<<<<<<< HEAD
+      <ImageView fx:id="player" fitHeight="121.0" fitWidth="131.0" layoutX="139.0" layoutY="304.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly_spaceship_game_character_walking_48398-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <Rectangle fx:id="exit" arcHeight="5.0" arcWidth="5.0" fill="#f89d00" height="62.0" layoutX="389.0" layoutY="605.0" opacity="0.65" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+      <Rectangle fx:id="wall1" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="31.0" layoutX="-8.0" layoutY="194.0" opacity="0.41" stroke="BLACK" strokeType="INSIDE" width="1019.0" />
+      <Rectangle fx:id="wall2" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="53.0" layoutX="431.0" layoutY="221.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="100.0" />
+=======
       <fx:include layoutX="900.0" layoutY="-20.0" source="countdowntimer.fxml" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
       <Label layoutX="5.0" layoutY="6.0" prefHeight="37.0" prefWidth="304.0" text="2MIN 30SEC" textFill="WHITE">
@@ -83,5 +96,6 @@
       <Button fx:id="btnCollect2" layoutX="392.0" layoutY="246.0" mnemonicParsing="false" onAction="#onCollect2" text="Collect Id" />
       <Button fx:id="btnCollect3" layoutX="694.0" layoutY="246.0" mnemonicParsing="false" onAction="#onCollect3" text="Collect Id" />
       <Button fx:id="btnCollect4" layoutX="813.0" layoutY="468.0" mnemonicParsing="false" onAction="#onCollect4" text="Collect Id" />
+>>>>>>> main
    </children>
 </Pane>

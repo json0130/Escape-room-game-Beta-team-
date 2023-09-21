@@ -227,35 +227,32 @@ public class TutorialController implements Initializable {
 
     // Initialize the sentenceLabel
     sentenceLabel.setWrapText(true);
-
-    // Create a Timeline to display sentences
-    // Create a Timeline to display sentences
-    Timeline timeline =
-        new Timeline(
-            new KeyFrame(Duration.ZERO, event -> displayNextSentence()),
-            new KeyFrame(Duration.seconds(3)));
-    timeline.setCycleCount(sentences.size()); // Repeat for each sentence
-
-    scene
-        .sceneProperty()
-        .addListener(
-            (observable, oldScene, newScene) -> {
-              if (newScene != null) {
-                // Start displaying sentences
-                displayNextSentence();
-                timeline.play();
-              }
-            });
-
-    keyPressed.addListener(
-        ((observableValue, aBoolean, t1) -> {
-          if (!aBoolean) {
-            timer.start();
-          } else {
-            timer.stop();
-          }
+        scene.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            if (newScene != null) {
+                PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
+                pauseTransition.setOnFinished(event -> {
+                    // Create a Timeline to display sentences
+                    Timeline timeline = new Timeline(
+                        new KeyFrame(Duration.ZERO, events -> displayNextSentence()),
+                        new KeyFrame(Duration.seconds(1.5))
+                    );
+                    timeline.setCycleCount(sentences.size()); // Repeat for each sentence
+                    // Start displaying sentences
+                    displayNextSentence();
+                    timeline.play();
+                });
+                pauseTransition.play();
+            }
+        });
+        
+        keyPressed.addListener(((observableValue, aBoolean, t1) -> {
+            if(!aBoolean){
+                timer.start();
+            } else {
+                timer.stop();
+            }
         }));
-  }
+    }
 
   @FXML
   private void playRock() {
