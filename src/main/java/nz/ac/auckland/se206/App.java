@@ -72,7 +72,7 @@ public class App extends Application {
     SceneManager.addScene(AppUi.INTRO, loadFxml("start"));
 
     scene = new Scene(SceneManager.getScene(AppUi.INTRO), 1000, 650);
-
+    stage.setResizable(false);
     stage.setScene(scene);
     stage.show();
   }

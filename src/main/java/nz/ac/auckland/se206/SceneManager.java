@@ -2,7 +2,6 @@ package nz.ac.auckland.se206;
  import java.util.HashMap;
  import javafx.scene.Parent;
 
-
  public class SceneManager {
    public enum AppUi {
      CHAT,
@@ -13,7 +12,11 @@ package nz.ac.auckland.se206;
       INTRO,
       TILEPUZZLE,
       TILEROOM,
-      ROOM3
+      ROOM3,
+      END,
+    WIN,
+    LOSE,
+    END1
 
    }
 

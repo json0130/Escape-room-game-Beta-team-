@@ -21,6 +21,7 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
@@ -33,6 +34,7 @@ public class IntroController implements Initializable {
   @FXML private Button mediumButton;
   @FXML private Button hardButton;
   @FXML private Button startButton;
+  @FXML private Button tutorial;
   @FXML private ImageView spaceship;
   @FXML private ImageView background;
   @FXML private ImageView background2;
@@ -44,6 +46,8 @@ public class IntroController implements Initializable {
   @FXML private Label medium;
   @FXML private Label hard;
   @FXML private Label title;
+  @FXML private Label letter;
+  @FXML private Rectangle letterbox;
 
   private boolean animationStarted = false;
   @FXML private boolean isLevelSelected = false;
@@ -78,6 +82,15 @@ public class IntroController implements Initializable {
           "-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: drak blue;");
     }
     isLevelSelected = true;
+
+    // set the difficulty
+    if (event.getSource() == easyButton) {
+      GameState.difficulty = "EASY";
+    } else if (event.getSource() == mediumButton) {
+      GameState.difficulty = "MEDIUM";
+    } else if (event.getSource() == hardButton) {
+      GameState.difficulty = "HARD";
+    }
   }
 
   @FXML
@@ -100,20 +113,20 @@ public class IntroController implements Initializable {
 
     switch (cButton.getId()) {
       case "minB2":
-        App.timerSeconds = 12;
-        App.chosenTimer = 12;
+        App.timerSeconds = 120;
+        App.chosenTimer = 120;
         break;
       case "minB4":
-        App.timerSeconds = 24;
-        App.chosenTimer = 24;
+        App.timerSeconds = 240;
+        App.chosenTimer = 240;
         break;
       case "minB6":
-        App.timerSeconds = 36;
-        App.chosenTimer = 36;
+        App.timerSeconds = 360;
+        App.chosenTimer = 360;
         break;
       default:
-        App.timerSeconds = 12;
-        App.chosenTimer = 12;
+        App.timerSeconds = 120;
+        App.chosenTimer = 120;
     }
     System.out.println(App.timerSeconds);
 
@@ -129,14 +142,35 @@ public class IntroController implements Initializable {
   }
 
   @FXML
-  private void startAnimation() {
-    if (!animationStarted) {
-      spaceship.setVisible(true);
-      background2.setVisible(true);
+  private void startButtonClicked(ActionEvent event) {
+    if (isLevelSelected && isTimeSelected) {
+      startButton.setDisable(true);
+      startButton.setVisible(false);
+      letter.setVisible(true);
+      letterbox.setVisible(true);
+      tutorial.setVisible(true);
+
       minB2.setDisable(false);
       minB4.setDisable(false);
       minB6.setDisable(false);
+      minB2.setVisible(false);
+      minB4.setVisible(false);
+      minB6.setVisible(false);
+      easyButton.setVisible(false);
+      mediumButton.setVisible(false);
+      hardButton.setVisible(false);
+    }
+  }
+
+  @FXML
+  private void startAnimation(ActionEvent events) {
+    if (!animationStarted) {
+      spaceship.setVisible(true);
+      background2.setVisible(true);
       background3.setVisible(false);
+      letter.setVisible(false);
+      letterbox.setVisible(false);
+      tutorial.setVisible(false);
 
       // Create a timeline to continuously increase the scaling factor
       Timeline continuousScaling =
@@ -286,6 +320,10 @@ public class IntroController implements Initializable {
     minB2.setVisible(false);
     minB4.setVisible(false);
     minB6.setVisible(false);
+    letter.setVisible(false);
+    letterbox.setVisible(false);
+    tutorial.setVisible(false);
+
     background2.setVisible(false);
     startButton.setVisible(false);
     background3.setVisible(false);

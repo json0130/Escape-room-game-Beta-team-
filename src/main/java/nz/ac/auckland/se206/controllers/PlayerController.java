@@ -4,11 +4,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.Action;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -27,6 +30,7 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import javafx.scene.layout.Pane;
 import java.net.URL;
@@ -54,6 +58,9 @@ public class PlayerController implements Initializable {
     @FXML private Label computer;
     @FXML private Label closet;
     @FXML private Label control;
+    @FXML private Label difficultyLabel;
+    @FXML private Label hintLabel;
+    @FXML private Label hintLabel2;
 
     @FXML private Rectangle wall;
     @FXML private Rectangle wall1;
@@ -81,7 +88,6 @@ public class PlayerController implements Initializable {
   @FXML private Pane scene;
 
   @FXML private Button reset;
-
   private double previousX;
   private double previousY;
 
@@ -178,6 +184,8 @@ public class PlayerController implements Initializable {
             timer.stop();
           }
         }));
+        // if difficulty is selected, label is updated
+        detectDifficulty();
     }
     public void checkRoom1(ImageView player, Rectangle room1) {
         if (player.getBoundsInParent().intersects(room1.getBoundsInParent())) {
@@ -305,5 +313,40 @@ public class PlayerController implements Initializable {
     @FXML
     public void onRoom3(ActionEvent event) {
         App.setScene(AppUi.ROOM3);
+    }
+
+    public void detectDifficulty() {
+        Timer labelTimer = new Timer(true);
+        labelTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (GameState.difficulty != null) {
+                    if (GameState.difficulty == "MEDIUM") {
+                        Platform.runLater(()-> updateLabels());
+                        if (GameState.numOfHints == 0) {
+                            labelTimer.cancel();
+                        }
+                    } else {
+                        Platform.runLater(()-> updateLabels());
+                        labelTimer.cancel();
+                    }
+                }
+            }
+        }, 0, 500); 
+    }
+
+    private void updateLabels() {
+        difficultyLabel.setText(GameState.difficulty);
+        if (GameState.difficulty == "EASY") {
+            hintLabel.setText("UNLIMITED");
+        } else if (GameState.difficulty == "MEDIUM") {
+            hintLabel.setText(String.valueOf(GameState.numOfHints));
+            hintLabel2.setText("HINTS");
+            if (GameState.numOfHints == 1) {
+                hintLabel2.setText("HINT");
+            }
+        } else {
+            hintLabel.setText("NO");
+        }
     }
 }

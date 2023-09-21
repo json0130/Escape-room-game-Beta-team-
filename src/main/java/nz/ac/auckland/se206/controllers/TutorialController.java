@@ -6,11 +6,12 @@ import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
 import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
-import javafx.application.Platform;
+import javafx.animation.Timeline;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -18,6 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -65,13 +67,20 @@ public class TutorialController implements Initializable {
   private double previousY;
 
   private boolean collisionDetected = false;
+  private boolean isInstructionDone = false;
+
+  @FXML private Label sentenceLabel;
+  private List<String> sentences = new ArrayList<>();
+  private int currentSentenceIndex = 0;
 
   AnimationTimer collisionTimer =
       new AnimationTimer() {
         @Override
         public void handle(long now) {
           checkCollision(player, rocks);
-          checkFinish(player, c3);
+          if (isInstructionDone) {
+            checkFinish(player, c3);
+          }
         }
       };
 
@@ -101,8 +110,7 @@ public class TutorialController implements Initializable {
 
   @FXML
   private void skipTutorial(ActionEvent event) {
-    App.timerTimeline.play();
-    App.setScene(AppUi.PLAYER);
+    App.setScene(AppUi.ANIMATION);
     collisionTimer.stop();
     timer.stop();
   }
@@ -118,6 +126,28 @@ public class TutorialController implements Initializable {
     setMovement(r2, false, 3, -900, 0, 4);
     setMovement(r3, false, 4, -900, -0, 3);
     setMovement(r4, false, 2, -900, 0, 5);
+  }
+
+  private List<String> parseSentences(String paragraph) {
+    String[] sentenceArray = paragraph.split("[.!?]"); // Split the paragraph into sentences
+    // Add each sentence to the List
+    List<String> sentences = new ArrayList<>();
+    for (String sentence : sentenceArray) {
+      sentences.add(sentence.trim());
+    }
+    return sentences;
+  }
+
+  private void displayNextSentence() {
+    if (currentSentenceIndex < sentences.size()) {
+      String nextSentence = sentences.get(currentSentenceIndex);
+      sentenceLabel.setText(nextSentence);
+      currentSentenceIndex++;
+    } else {
+      // All sentences are displayed, so call playRock
+      playRock();
+      isInstructionDone = true;
+    }
   }
 
   private void setRotate(Circle c, boolean reverse, int angle, int duration) {
@@ -160,7 +190,6 @@ public class TutorialController implements Initializable {
           // Start the animation again
           sequentialTransition.playFromStart();
         });
-
     sequentialTransition.play();
   }
 
@@ -176,6 +205,13 @@ public class TutorialController implements Initializable {
     r4.setLayoutX(950);
     r4.setLayoutY(550);
 
+    String paragraph =
+        "Hello, I am the Game master of this game and my name is ROBI. This is a simple tutorial"
+            + " game which will help you to get used to keyboard control. Start with 'W' to move"
+            + " up. 'A' to move left. 'S' to move down. 'D' to move right. Try to avoid the rocks"
+            + " and reach the finish line";
+    sentences = parseSentences(paragraph);
+
     shapesize = player.getFitHeight();
     movementSetup();
 
@@ -189,13 +225,25 @@ public class TutorialController implements Initializable {
     previousX = player.getLayoutX();
     previousY = player.getLayoutY();
 
+    // Initialize the sentenceLabel
+    sentenceLabel.setWrapText(true);
+
+    // Create a Timeline to display sentences
+    // Create a Timeline to display sentences
+    Timeline timeline =
+        new Timeline(
+            new KeyFrame(Duration.ZERO, event -> displayNextSentence()),
+            new KeyFrame(Duration.seconds(3)));
+    timeline.setCycleCount(sentences.size()); // Repeat for each sentence
+
     scene
         .sceneProperty()
         .addListener(
             (observable, oldScene, newScene) -> {
               if (newScene != null) {
-                // Schedule the playRock method to run after the scene is shown
-                Platform.runLater(this::playRock);
+                // Start displaying sentences
+                displayNextSentence();
+                timeline.play();
               }
             });
 
@@ -226,8 +274,9 @@ public class TutorialController implements Initializable {
     if (!collisionDetected) {
       for (ImageView rock : rocks) {
         if (player.getBoundsInParent().intersects(rock.getBoundsInParent())) {
-          player.setLayoutX(previousX); // Restore the player's previous X position
-          player.setLayoutY(previousY); // Restore the player's previous Y position
+          // Collision detected, move the player back a bit
+          player.setLayoutX(previousX - 10);
+          player.setLayoutY(previousY);
           collisionDetected = true;
           progressBar.setProgress(health -= 0.25); // Decrease the progress bar
           if (health == 0) {
