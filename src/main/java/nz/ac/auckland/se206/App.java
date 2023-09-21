@@ -66,12 +66,21 @@ public class App extends Application {
     passcode = r.nextInt((9999 - 1000) + 1) + 1000;
     GameState.password = String.valueOf(passcode);
 
+    SceneManager.addScene(AppUi.ROOM1, loadFxml("room1"));
     SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
+    SceneManager.addScene(AppUi.PLAYER, loadFxml("player"));
+    SceneManager.addScene(AppUi.END, loadFxml("end"));
+    SceneManager.addScene(AppUi.WIN, loadFxml("win"));
+    SceneManager.addScene(AppUi.LOSE, loadFxml("lose"));
+    SceneManager.addScene(AppUi.END1, loadFxml("end1"));
     SceneManager.addScene(AppUi.TUTORIAL, loadFxml("tutorial"));
     SceneManager.addScene(AppUi.ANIMATION, loadFxml("animation"));
     SceneManager.addScene(AppUi.INTRO, loadFxml("start"));
-
+    SceneManager.addScene(AppUi.TILEPUZZLE, loadFxml("tilegamedesk"));
+    SceneManager.addScene(AppUi.TILEROOM, loadFxml("tilegameroom"));
+    SceneManager.addScene(AppUi.ROOM3, loadFxml("room3"));
     scene = new Scene(SceneManager.getScene(AppUi.INTRO), 1000, 650);
+    
     stage.setResizable(false);
     stage.setScene(scene);
     stage.show();

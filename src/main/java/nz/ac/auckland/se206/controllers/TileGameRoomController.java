@@ -146,7 +146,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
     walls.add(wall20);
 
     // if difficulty is selected, label is updated
-      detectDifficulty();
+    detectDifficulty();
 
     shapesize = player.getFitWidth();
     movementSetup();
