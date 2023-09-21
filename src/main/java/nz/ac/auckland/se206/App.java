@@ -53,7 +53,9 @@ public class App extends Application {
     SceneManager.addScene(AppUi.ROOM, loadFxml("room"));
     SceneManager.addScene(AppUi.END, loadFxml("end"));
     SceneManager.addScene(AppUi.WIN, loadFxml("win"));
-    scene = new Scene(SceneManager.getScene(AppUi.WIN), 1000, 600);
+    SceneManager.addScene(AppUi.LOSE, loadFxml("lose"));
+    SceneManager.addScene(AppUi.END1, loadFxml("end1"));
+    scene = new Scene(SceneManager.getScene(AppUi.END), 1000, 650);
     stage.setScene(scene);
     stage.show();
   }

@@ -17,6 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -30,15 +31,47 @@ import javafx.event.ActionEvent;
 
 public class EndController implements Initializable {
 
-    @FXML
-    private Label win;
-    @FXML
-    private Label lose;
+    @FXML private Label win;
+    @FXML private Label lose;
     @FXML private Pane scene;
+    @FXML private Button button;
+    @FXML private Button s;
+    @FXML private Button start;
+    @FXML private ImageView e1;
+    @FXML private ImageView background;
+    @FXML private ImageView spaceship;
+
     @FXML
-    private Button button;
-    @FXML   
-    private ImageView e1;
+    private void endingAnimation(ActionEvent events){
+        // Create a timeline to continuously increase the scaling factor
+             Timeline continuousScaling = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(background.scaleXProperty(), 1.0)),
+                new KeyFrame(Duration.ZERO, new KeyValue(background.scaleYProperty(), 1.0)),
+                new KeyFrame(Duration.seconds(1), new KeyValue(background.scaleXProperty(), 1.5)),
+                new KeyFrame(Duration.seconds(1), new KeyValue(background.scaleYProperty(), 1.5)),
+                new KeyFrame(Duration.seconds(1.4), new KeyValue(background.scaleXProperty(), 3)),
+                new KeyFrame(Duration.seconds(1.4), new KeyValue(background.scaleYProperty(), 3)),
+                new KeyFrame(Duration.seconds(2.4), new KeyValue(background.scaleXProperty(), 6)),
+                new KeyFrame(Duration.seconds(2.4), new KeyValue(background.scaleYProperty(), 6))
+        );
+        continuousScaling.setCycleCount(1); // Play the animation once
+
+        // Create a translate animation for the r1
+        TranslateTransition Translation = new TranslateTransition(Duration.seconds(2.4), background);
+
+        // Set the animation properties
+        
+        Translation.setCycleCount(1); // Play the animation once
+        Translation.setAutoReverse(false); // Don't reverse the animation
+
+        // Start the animations
+        continuousScaling.play();
+        Translation.play();
+        // Enable the button when the animation is finished
+            Translation.setOnFinished(event -> {
+                App.setScene(AppUi.END1);
+            });
+    }
 
     @FXML
     private void startAnimation(ActionEvent events) {
@@ -85,22 +118,42 @@ public class EndController implements Initializable {
         translateTransition.play();
     }
 
-    private void explosionAnimation(ImageView e1){
-        // Create a scale transition to continuously increase the scaling factor
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1), e1);
-        scaleTransition.setFromX(1.0);
-        scaleTransition.setFromY(1.0);
-        scaleTransition.setToX(3.0); // Scale factor on X-axis
-        scaleTransition.setToY(3.0); // Scale factor on Y-axis
-        scaleTransition.setCycleCount(1); // Play the animation once
+    @FXML
+    private void endAnimation(ActionEvent events) { 
+            spaceship.setVisible(true);
 
-        // Start the scale animation
-        scaleTransition.play();
-        // Enable the button when the animation is finished
-            scaleTransition.setOnFinished(event -> {
-                App.setScene(AppUi.PLAYER);
+            // Create a timeline to continuously increase the scaling factor
+            Timeline continuousScaling = new Timeline(
+                    new KeyFrame(Duration.ZERO, new KeyValue(spaceship.scaleXProperty(), 1.0)),
+                    new KeyFrame(Duration.ZERO, new KeyValue(spaceship.scaleYProperty(), 1.0)),
+                    new KeyFrame(Duration.seconds(3), new KeyValue(spaceship.scaleXProperty(), 5.0)),
+                    new KeyFrame(Duration.seconds(3), new KeyValue(spaceship.scaleYProperty(), 5.0))
+            );
+            continuousScaling.setCycleCount(1); // Play the animation once
+
+            // Create a path for the spaceship to follow (a curve)
+            Path path = new Path();
+            path.getElements().addAll(
+                    new MoveTo(400, 300),          // Start at the left corner
+                    new CubicCurveTo(
+                            -200, -100,              // Control point 1
+                            1000, -700,              // Control point 2
+                            1300, -1000                // End at the right end of the scene
+                    )
+            );
+
+            // Create a path transition
+            PathTransition spaceshipPathTransition = new PathTransition(Duration.seconds(3), path, spaceship);
+            spaceshipPathTransition.setCycleCount(1); // Play the animation once
+
+            // Start the animations
+            continuousScaling.play();
+            spaceshipPathTransition.play();
+
+            // Enable the button when the animation is finished
+            spaceshipPathTransition.setOnFinished(event -> {
+                App.setScene(AppUi.WIN);
             });
-    
     }
 
     @Override
@@ -109,7 +162,7 @@ public class EndController implements Initializable {
         // scene.sceneProperty().addListener((observable, oldScene, newScene) -> {
         //     if (newScene != null) {
         //         // Schedule the playRock method to run after the scene is shown
-        //         Platform.runLater(this::startAnimation);
+        //         Platform.runLater(this::endingAnimation);
         //     }
         // });
     }

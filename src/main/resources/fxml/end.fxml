@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
 
-
-<Pane fx:id="spaceship1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.EndController">
+<Pane fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.EndController">
    <children>
-      <Circle fx:id="spaceship1" fill="DODGERBLUE" layoutX="160.0" layoutY="507.0" radius="47.0" stroke="BLACK" strokeType="INSIDE" />
+      <ImageView fx:id="background" fitHeight="654.0" fitWidth="1233.0" layoutX="-96.0" layoutY="-8.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly%2020230921124134.png" />
+         </image>
+      </ImageView>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#8a8a8a78" height="682.0" layoutX="-45.0" layoutY="-20.0" opacity="0.37" stroke="BLACK" strokeType="INSIDE" width="1058.0" />
+      <ImageView fitHeight="770.0" fitWidth="1134.0" layoutX="-86.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly_spaceship_cockpit_47432-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="start" layoutX="206.0" layoutY="98.0" mnemonicParsing="false" onAction="#endingAnimation" text="Button" />
    </children>
 </Pane>
