@@ -100,11 +100,6 @@
          </font>
       </Label>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
-      <Label layoutX="5.0" layoutY="6.0" prefHeight="37.0" prefWidth="304.0" text="2MIN 30SEC" textFill="WHITE">
-         <font>
-            <Font name="Arial" size="32.0" />
-         </font>
-      </Label>
       <Label fx:id="difficultyLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="362.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
          <font>
             <Font size="32.0" />
@@ -120,6 +115,7 @@
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
+      <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
       <fx:include source="countdowntimer.fxml" />
       <Circle fill="WHITE" layoutX="864.0" layoutY="107.0" radius="53.0" stroke="WHITE" strokeType="INSIDE" />
       <ImageView fx:id="gameMasterBox" fitHeight="643.0" fitWidth="676.0" layoutX="346.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
