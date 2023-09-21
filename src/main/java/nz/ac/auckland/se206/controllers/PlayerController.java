@@ -24,6 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -55,11 +56,12 @@ public class PlayerController implements Initializable {
 
   List<Rectangle> walls = new ArrayList<>();
 
-  @FXML private ImageView player;
-  @FXML private Rectangle room1;
-  @FXML private Rectangle room2;
-  @FXML private Rectangle room3;
-  @FXML private Rectangle black;
+    @FXML private ImageView player;
+    @FXML private Rectangle room1;
+    @FXML private Rectangle room2;
+    @FXML private Rectangle room3;
+    @FXML private Rectangle black;
+  @FXML private ImageView gameMasterBox;
 
   @FXML private Label playerLabel;
   @FXML private Label main;
@@ -96,16 +98,15 @@ public class PlayerController implements Initializable {
   @FXML private Pane scene;
 
   @FXML private Button reset;
+  @FXML private Button btnSend;
+  @FXML private Button btnClose;
+  @FXML private TextArea chatTextArea;
+  @FXML private TextField inputText;
   private double previousX;
   private double previousY;
 
   @FXML private Label countdownLabel;
 
-  @FXML private Rectangle gpt;
-  @FXML private Rectangle gptBackground;
-  @FXML private TextArea chatTextArea;
-  @FXML private TextField inputText;
-  @FXML private Button sendButton;
 
   private ChatCompletionRequest chatCompletionRequest;
   public static boolean hintContained = false;
@@ -199,10 +200,6 @@ public class PlayerController implements Initializable {
     walls.add(wall20);
     walls.add(wall21);
 
-    gptBackground.setVisible(false);
-    chatTextArea.setVisible(false);
-    inputText.setVisible(false);
-    sendButton.setVisible(false);
 
     //     // when the enter key is pressed, message is sent
     // inputText.setOnKeyPressed(
@@ -266,6 +263,12 @@ public class PlayerController implements Initializable {
         };
     Thread introThread = new Thread(introTask);
     introThread.start();
+
+    gameMasterBox.setVisible(false);
+    inputText.setVisible(false);
+    chatTextArea.setVisible(false);
+    btnClose.setVisible(false);
+    btnSend.setVisible(false);
   }
 
   public void checkRoom1(ImageView player, Rectangle room1) {
@@ -470,11 +473,26 @@ public class PlayerController implements Initializable {
   }
 
   @FXML
-  private void callGPT(MouseEvent event) {
-    // if the player clicked the gpt rectangle, the gpt scene is loaded
-    chatTextArea.setVisible(true);
+  public void clickGameMaster(MouseEvent event) {
+    gameMasterBox.setVisible(true);
     inputText.setVisible(true);
-    sendButton.setVisible(true);
-    gptBackground.setVisible(true);
+    chatTextArea.setVisible(true);
+    btnClose.setVisible(true);
+    btnSend.setVisible(true);
   }
+
+  @FXML
+  public void onClose(ActionEvent event) {
+    gameMasterBox.setVisible(false);
+    inputText.setVisible(false);
+    chatTextArea.setVisible(false);
+    btnClose.setVisible(false);
+    btnSend.setVisible(false);
+  }
+
+  @FXML
+  public void onSend(ActionEvent event) {
+    
+  }
+
 }

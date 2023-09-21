@@ -21,6 +21,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -82,9 +84,16 @@ public class Room1Controller implements Initializable {
   @FXML private ImageView crew3Indicator;
   @FXML private ImageView crew4Indicator;
 
+   @FXML private ImageView gameMasterBox;
+
   @FXML private Label difficultyLabel;
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
+
+    @FXML private Button btnSend;
+  @FXML private Button btnClose;
+  @FXML private TextArea chatTextArea;
+  @FXML private TextField inputText;
 
   private FadeTransition fadeTransition;
   public static String riddleAnswer;
@@ -188,6 +197,12 @@ public class Room1Controller implements Initializable {
     detectDifficulty();
 
     crewCollisionTimer.start();
+
+    gameMasterBox.setVisible(false);
+    inputText.setVisible(false);
+    chatTextArea.setVisible(false);
+    btnClose.setVisible(false);
+    btnSend.setVisible(false);
   }
 
   // When crew1 is clicked and the riddle was resolved, id1 is shown only for 2 seconds
@@ -529,6 +544,27 @@ public class Room1Controller implements Initializable {
         }
       };
 
+      @FXML
+  public void clickGameMaster(MouseEvent event) {
+    gameMasterBox.setVisible(true);
+    inputText.setVisible(true);
+    chatTextArea.setVisible(true);
+    btnClose.setVisible(true);
+    btnSend.setVisible(true);
+  }
+
+  @FXML
+  public void onClose(ActionEvent event) {
+    gameMasterBox.setVisible(false);
+    inputText.setVisible(false);
+    chatTextArea.setVisible(false);
+    btnClose.setVisible(false);
+    btnSend.setVisible(false);
+  }
+
+  @FXML
+  public void onSend(ActionEvent event) {}
+    
   @FXML
   private void soundButttonClick() {
     String soundEffect = "src/main/resources/sounds/button-click.mp3";
