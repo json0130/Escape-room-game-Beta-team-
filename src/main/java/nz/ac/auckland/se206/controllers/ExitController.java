@@ -1,0 +1,486 @@
+package nz.ac.auckland.se206.controllers;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
+import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.GameState;
+import nz.ac.auckland.se206.SceneManager.AppUi;
+
+public class ExitController implements Initializable {
+  @FXML private Button one;
+  @FXML private Button two;
+  @FXML private Button three;
+  @FXML private Button four;
+  @FXML private Button five;
+  @FXML private Button six;
+  @FXML private Button seven;
+  @FXML private Button eight;
+  @FXML private Button nine;
+  @FXML private Button zero;
+  @FXML private Button enter;
+  @FXML private Button reset;
+  @FXML private Button button;
+  @FXML private Button exit;
+
+  @FXML private ImageView door;
+  @FXML private ImageView lever;
+  @FXML private ImageView idCaptain;
+  @FXML private ImageView idChef;
+  @FXML private ImageView idDoctor;
+  @FXML private ImageView idEngineer;
+  @FXML private ImageView pad;
+  @FXML private ImageView background;
+  @FXML private ImageView background2;
+
+  @FXML private TextArea screen;
+  @FXML private Rectangle idScanner;
+  @FXML private Rectangle ids;
+  @FXML private Rectangle light;
+  @FXML private Rectangle monitor;
+  @FXML private Label idLabel;
+
+  private Boolean isDoorShown = false;
+  private double startX;
+  private double startY;
+  private double angle;
+  private String password = "";
+
+  private double mouseAnchorX;
+  private double mouseAnchorY;
+
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
+
+    screen.setEditable(false);
+    makeInvisible();
+    makeDraggable(idCaptain);
+    makeDraggable(idChef);
+    makeDraggable(idDoctor);
+    makeDraggable(idEngineer);
+    collisionTimer.start();
+  }
+
+  private void makeInvisible(){
+    idScanner.setVisible(false);
+    light.setVisible(false);
+    idLabel.setVisible(false);
+    ids.setVisible(false);
+    idCaptain.setVisible(false);
+    idChef.setVisible(false);
+    idDoctor.setVisible(false);
+    idEngineer.setVisible(false);
+    screen.setVisible(false);
+    one.setVisible(false);
+    two.setVisible(false);
+    three.setVisible(false);
+    four.setVisible(false);
+    five.setVisible(false);
+    six.setVisible(false);
+    seven.setVisible(false);
+    eight.setVisible(false);
+    nine.setVisible(false);
+    zero.setVisible(false);
+    enter.setVisible(false);
+    reset.setVisible(false);
+    pad.setVisible(false);
+    exit.setVisible(false);
+  }
+
+  // when the rectangle is clicked, the keypad is shown
+  @FXML
+  private void monitorClicked(MouseEvent event) {
+    screen.setVisible(true);
+    one.setVisible(true);
+    two.setVisible(true);
+    three.setVisible(true);
+    four.setVisible(true);
+    five.setVisible(true);
+    six.setVisible(true);
+    seven.setVisible(true);
+    eight.setVisible(true);
+    nine.setVisible(true);
+    zero.setVisible(true);
+    enter.setVisible(true);
+    reset.setVisible(true);
+    pad.setVisible(true);
+    monitor.setVisible(false);
+    exit.setVisible(true);
+  }
+
+  @FXML
+  private void clickExit(ActionEvent event) {
+    screen.setVisible(false);
+    one.setVisible(false);
+    two.setVisible(false);
+    three.setVisible(false);
+    four.setVisible(false);
+    five.setVisible(false);
+    six.setVisible(false);
+    seven.setVisible(false);
+    eight.setVisible(false);
+    nine.setVisible(false);
+    zero.setVisible(false);
+    enter.setVisible(false);
+    reset.setVisible(false);
+    pad.setVisible(false);
+    exit.setVisible(false);
+    monitor.setVisible(true);
+  }
+
+  // Lever is draggable while the exit is not shown
+  @FXML
+  public void pressLever(MouseEvent event) {
+    if (!isDoorShown) {
+      startX = event.getSceneX();
+      startY = event.getSceneY();
+    }
+  }
+
+  @FXML
+  public void dragLever(MouseEvent event) {
+    if (!isDoorShown) {
+      double deltaX = event.getSceneX() - startX;
+      double deltaY = event.getSceneY() - startY;
+      angle = Math.toDegrees(Math.atan2(deltaY, deltaX));
+
+      if (angle < 0) {
+        angle = 0;
+      } else if (angle > 180) {
+        angle = 180;
+      }
+      lever.setRotate(angle);
+      startX = event.getSceneX();
+      startY = event.getSceneY();
+      // check if the angle is 180
+      checkRotation(angle);
+    }
+  }
+
+  // if the angle is 180, exit is shown
+  private void checkRotation(double angle) {
+    if (angle == 180) {
+      TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(3), door);
+      translateTransition.setByY(-650);
+      translateTransition.play();
+      isDoorShown = true;
+    }
+  }
+
+  // if the door is not shown, enlarge lever on hover
+  @FXML
+  private void enterLever(MouseEvent event) {
+    if (!isDoorShown) {
+      ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), lever);
+      scaleTransition.setToX(1.1);
+      scaleTransition.setToY(1.1);
+      scaleTransition.play();
+    }
+  }
+
+  @FXML
+  private void exitLever(MouseEvent event) {
+    if (!isDoorShown) {
+      ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), lever);
+      scaleTransition.setToX(1.0);
+      scaleTransition.setToY(1.0);
+      scaleTransition.play();
+      one.setDisable(false);
+      two.setDisable(false);
+      three.setDisable(false);
+      four.setDisable(false);
+      five.setDisable(false);
+      six.setDisable(false);
+      seven.setDisable(false);
+      eight.setDisable(false);
+      nine.setDisable(false);
+      zero.setDisable(false);
+      enter.setDisable(false);
+      reset.setDisable(false);
+    }
+  }
+
+  @FXML
+  private void onOne(ActionEvent event) {
+    password += "1";
+    screen.setText(password);
+  }
+
+  @FXML
+  private void onTwo(ActionEvent event) {
+
+    password += "2";
+
+    screen.setText(password);
+  }
+
+  @FXML
+  private void onThree(ActionEvent event) {
+
+    password += "3";
+
+    screen.setText(password);
+  }
+
+  @FXML
+  private void onFour(ActionEvent event) {
+
+    password += "4";
+
+    screen.setText(password);
+  }
+
+  @FXML
+  private void onFive(ActionEvent event) {
+
+    password += "5";
+
+    screen.setText(password);
+  }
+
+  @FXML
+  private void onSix(ActionEvent event) {
+
+    password += "6";
+
+    screen.setText(password);
+  }
+
+  @FXML
+  private void onSeven(ActionEvent event) {
+    password += "7";
+    screen.setText(password);
+  }
+
+  @FXML
+  private void onEight(ActionEvent event) {
+    password += "8";
+    screen.setText(password);
+  }
+
+  @FXML
+  private void onNine(ActionEvent event) {
+    password += "9";
+    screen.setText(password);
+  }
+
+  @FXML
+  private void onZero(ActionEvent event) {
+    password += "0";
+    screen.setText(password);
+  }
+
+  @FXML
+  private void onEnter(ActionEvent events) {
+    if (password == "") {
+      return;
+    }
+    // incorrect password, show incorrect and reset the password
+    if (!password.equals(GameState.password)) {
+      screen.setText("INCORRECT");
+      Thread clearThread =
+          new Thread(
+              () -> {
+                try {
+                  Thread.sleep(1000); // Sleep for 1 second
+                } catch (InterruptedException e) {
+                  e.printStackTrace();
+                }
+                Platform.runLater(() -> screen.clear());
+              });
+      clearThread.start();
+      password = "";
+      // correct password, buttons are disabled to prevent further change in correctPassword state
+    } else {
+      screen.setText("CORRECT");
+      GameState.correctPassword = true;
+      background.setVisible(false);
+
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
+            pauseTransition.setOnFinished(event -> {
+                screen.setVisible(false);
+                one.setVisible(false);
+                two.setVisible(false);
+                three.setVisible(false);
+                four.setVisible(false);
+                five.setVisible(false);
+                six.setVisible(false);
+                seven.setVisible(false);
+                eight.setVisible(false);
+                nine.setVisible(false);
+                zero.setVisible(false);
+                enter.setVisible(false);
+                reset.setVisible(false);
+                pad.setVisible(false);
+
+                idScanner.setVisible(true);
+                light.setVisible(true);
+                idLabel.setVisible(true);
+            });
+            pauseTransition.play();
+      
+      // one.setDisable(true);
+      // two.setDisable(true);
+      // three.setDisable(true);
+      // four.setDisable(true);
+      // five.setDisable(true);
+      // six.setDisable(true);
+      // seven.setDisable(true);
+      // eight.setDisable(true);
+      // nine.setDisable(true);
+      // zero.setDisable(true);
+      // enter.setDisable(true);
+      // reset.setDisable(true);
+    }
+  }
+
+  // reset the typed password
+  @FXML
+  private void onReset() {
+    password = "";
+    screen.setText("");
+  }
+
+  // when the scanner is clicked, ids are shown depending on its state
+  @FXML
+  private void clickIdScanner(MouseEvent event) {
+    // if the ids are not shown and the correct id was not tagged yet
+    if (ids.isVisible() == false && !GameState.correctId) {
+      ids.setVisible(true);
+      idCaptain.setVisible(true);
+      idChef.setVisible(true);
+      idDoctor.setVisible(true);
+      idEngineer.setVisible(true);
+
+      if (GameState.isCaptainCollected) {
+        idCaptain.setLayoutX(272);
+        idCaptain.setLayoutY(118);
+        idCaptain.setVisible(true);
+      }
+      if (GameState.isChefCollected) {
+        idChef.setLayoutX(272);
+        idChef.setLayoutY(210);
+        idChef.setVisible(true);
+      }
+      if (GameState.isDoctorCollected) {
+        idDoctor.setLayoutX(272);
+        idDoctor.setLayoutY(303);
+        idDoctor.setVisible(true);
+      }
+      if (GameState.isEngineerCollected) {
+        idEngineer.setLayoutX(272);
+        idEngineer.setLayoutY(392);
+        idEngineer.setVisible(true);
+      }
+    } else {
+      ids.setVisible(false);
+      idCaptain.setVisible(false);
+      idChef.setVisible(false);
+      idDoctor.setVisible(false);
+      idEngineer.setVisible(false);
+    }
+  }
+
+  // idcards can be dragged
+  public void makeDraggable(Node node) {
+
+    node.setOnMousePressed(
+        mouseEvent -> {
+          mouseAnchorX = mouseEvent.getX();
+          mouseAnchorY = mouseEvent.getY();
+        });
+
+    node.setOnMouseDragged(
+        mouseEvent -> {
+          node.setLayoutX(mouseEvent.getSceneX() - mouseAnchorX);
+          node.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY);
+        });
+  }
+
+  AnimationTimer collisionTimer =
+      new AnimationTimer() {
+        @Override
+        public void handle(long timeStamp) {
+          checkCollision(idCaptain, idScanner);
+          checkCollision(idChef, idScanner);
+          checkCollision(idDoctor, idScanner);
+          checkCollision(idEngineer, idScanner);
+        }
+    
+
+        private void checkCollision(Node node1, Node node2) {
+          if (node1.getBoundsInParent().intersects(node2.getBoundsInParent())) {
+            if (Room1Controller.riddleAnswer == "captain") {
+              if (node1 == idCaptain) {
+                light.setFill(Color.GREEN);
+                GameState.correctId = true;
+                ids.setVisible(false);
+                idCaptain.setVisible(false);
+                idChef.setVisible(false);
+                idDoctor.setVisible(false);
+                idEngineer.setVisible(false);
+              } else {
+                light.setFill(Color.RED);
+              }
+            } else if (Room1Controller.riddleAnswer == "chef") {
+              if (node1 == idChef) {
+                light.setFill(Color.GREEN);
+                GameState.correctId = true;
+                ids.setVisible(false);
+                idCaptain.setVisible(false);
+                idChef.setVisible(false);
+                idDoctor.setVisible(false);
+                idEngineer.setVisible(false);
+              } else {
+                light.setFill(Color.RED);
+              }
+            } else if (Room1Controller.riddleAnswer == "doctor") {
+              if (node1 == idDoctor) {
+                light.setFill(Color.GREEN);
+                GameState.correctId = true;
+                ids.setVisible(false);
+                idCaptain.setVisible(false);
+                idChef.setVisible(false);
+                idDoctor.setVisible(false);
+                idEngineer.setVisible(false);
+              } else {
+                light.setFill(Color.RED);
+              }
+            } else if (Room1Controller.riddleAnswer == "engineer") {
+              if (node1 == idEngineer) {
+                light.setFill(Color.GREEN);
+                GameState.correctId = true;
+                ids.setVisible(false);
+                idCaptain.setVisible(false);
+                idChef.setVisible(false);
+                idDoctor.setVisible(false);
+                idEngineer.setVisible(false);
+              } else {
+                light.setFill(Color.RED);
+              }
+            }
+          }
+        }
+      };
+
+  @FXML
+  private void back(ActionEvent event) {
+    App.setScene(AppUi.PLAYER);
+  }
+}
