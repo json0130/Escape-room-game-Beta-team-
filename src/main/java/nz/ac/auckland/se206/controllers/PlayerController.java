@@ -26,8 +26,6 @@ import javafx.scene.shape.Rectangle;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import javafx.util.Duration;
-import nz.ac.auckland.se206.App;
-import nz.ac.auckland.se206.SceneManager.AppUi;
 import javafx.scene.layout.Pane;
 import java.net.URL;
 
@@ -81,7 +79,6 @@ public class PlayerController implements Initializable {
   @FXML private Pane scene;
 
   @FXML private Button reset;
-
   private double previousX;
   private double previousY;
 
