@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -15,13 +16,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.LetterGenerator;
-import nz.ac.auckland.se206.Tile;
 import nz.ac.auckland.se206.SceneManager.AppUi;
+import nz.ac.auckland.se206.Tile;
 import nz.ac.auckland.se206.gpt.ChatMessage;
 import nz.ac.auckland.se206.gpt.GptPromptEngineering;
 import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
@@ -555,7 +558,7 @@ public class TileGameDeskController {
   }
 
   @FXML
-  private void onCaptchaButtonClick(){
+  private void onCaptchaButtonClick() {
     // welcomeScreen.setVisible(false);
     // puzzleTutorial.setVisible(false);
     // loadCaptchaButton.setVisible(false);
@@ -563,12 +566,22 @@ public class TileGameDeskController {
   }
 
   @FXML
-  private void onpuzzleInfoButtonClick(){
+  private void onpuzzleInfoButtonClick() {
     tutorialScreen.setVisible(true);
   }
 
   @FXML
-  private void onPuzzleGoBackClick(){
+  private void onPuzzleGoBackClick() {
     App.setScene(AppUi.TILEROOM);
+
+    String musicFile = "src\\main\\resources\\sounds\\Background-Music.mp3";
+    Media media = new Media(new File(musicFile).toURI().toString());
+
+    App.mediaPlayer.stop();
+    App.mediaPlayer = new MediaPlayer(media);
+    App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    App.mediaPlayer.setVolume(0.1);
+    App.mediaPlayer.setAutoPlay(true);
+    System.out.println("click");
   }
 }
