@@ -179,7 +179,7 @@ public class PlayerController implements Initializable {
     public void checkRoom1(ImageView player, Rectangle room1) {
         if (player.getBoundsInParent().intersects(room1.getBoundsInParent())) {
             room1.setVisible(true);
-            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
+            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
             pauseTransition.setOnFinished(event -> {
                 // Adjust the player's position to be right in front of the room
                 player.setLayoutX(272);
@@ -196,11 +196,11 @@ public class PlayerController implements Initializable {
     public void checkRoom2(ImageView player, Rectangle room2) {
         if (player.getBoundsInParent().intersects(room2.getBoundsInParent())) {
             room2.setVisible(true);
-            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
+            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
             pauseTransition.setOnFinished(event -> {
                 // Adjust the player's position to be right in front of the room
-                player.setLayoutX(487);
-                player.setLayoutY(244);
+                player.setLayoutX(500);
+                player.setLayoutY(284);
                 App.setScene(AppUi.TILEROOM);
                 timer.stop();
             });
@@ -213,12 +213,13 @@ public class PlayerController implements Initializable {
     public void checkRoom3(ImageView player, Rectangle room3) {
         if (player.getBoundsInParent().intersects(room3.getBoundsInParent())) {
             room3.setVisible(true);
-            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
+            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
             pauseTransition.setOnFinished(event -> {
                 // Adjust the player's position to be right in front of the room
                 player.setLayoutX(674);
                 player.setLayoutY(292);
                 App.setScene(AppUi.ROOM3);
+                timer.stop();
             });
             pauseTransition.play();
         } else {

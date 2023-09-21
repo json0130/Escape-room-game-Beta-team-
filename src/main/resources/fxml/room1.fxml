@@ -60,6 +60,8 @@
             <Image url="@../images/Firefly_spaceship_game_character_walking_48398-removebg-preview.png" />
          </image>
       </ImageView>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="62.0" layoutX="389.0" layoutY="588.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+      <Rectangle fx:id="exit" arcHeight="5.0" arcWidth="5.0" fill="#f89d00" height="62.0" layoutX="389.0" layoutY="605.0" opacity="0.65" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+      <Rectangle fx:id="wall1" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="31.0" layoutX="-8.0" layoutY="194.0" opacity="0.41" stroke="BLACK" strokeType="INSIDE" width="1019.0" />
+      <Rectangle fx:id="wall2" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="53.0" layoutX="431.0" layoutY="221.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="100.0" />
    </children>
 </Pane>

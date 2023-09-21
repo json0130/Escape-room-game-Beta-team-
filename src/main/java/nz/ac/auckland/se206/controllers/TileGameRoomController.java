@@ -54,8 +54,26 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
 
   @FXML private Rectangle exit;
   @FXML private Rectangle wall;
-  @FXML private Rectangle wall1;
   @FXML private Rectangle wall2;
+  @FXML private Rectangle wall3;
+  @FXML private Rectangle wall4;
+  @FXML private Rectangle wall5;
+  @FXML private Rectangle wall6;
+  @FXML private Rectangle wall7;
+  @FXML private Rectangle wall8;
+  @FXML private Rectangle wall9;
+  @FXML private Rectangle wall10;
+  @FXML private Rectangle wall11;
+  @FXML private Rectangle wall12;
+  @FXML private Rectangle wall13;
+  @FXML private Rectangle wall14;
+  @FXML private Rectangle wall15;
+  @FXML private Rectangle wall16;
+  @FXML private Rectangle wall17;
+  @FXML private Rectangle wall18;
+  @FXML private Rectangle wall19;
+  @FXML private Rectangle wall20;
+
 
   @FXML private Button btnRoom1;
   @FXML private Button button;
@@ -98,6 +116,26 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
   public void initialize(URL url, ResourceBundle resourceBundle) {
     // Initialization code goes here
     walls.add(wall);
+    walls.add(wall2);
+    walls.add(wall3);
+    walls.add(wall4);
+    walls.add(wall5);
+    walls.add(wall6);
+    walls.add(wall7);
+    walls.add(wall8);
+    walls.add(wall9);
+    walls.add(wall10);
+    walls.add(wall11);
+    walls.add(wall12);
+    walls.add(wall13);
+    walls.add(wall14);
+    walls.add(wall15);
+    walls.add(wall16);
+    walls.add(wall17);
+    walls.add(wall18);
+    walls.add(wall19);
+    walls.add(wall20);
+
 
     shapesize = player.getFitWidth();
     movementSetup();
@@ -120,7 +158,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
 
   public void checkExit(ImageView player, Rectangle exit) {
         if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
-            exit.setVisible(true);
+            exit.setOpacity(1);
             PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
             pauseTransition.setOnFinished(event -> {
                 // Adjust the player's position to be right in front of the room
@@ -131,7 +169,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
             });
             pauseTransition.play();
         } else {
-            exit.setVisible(false);
+            exit.setOpacity(0.6);
         }
     }
 
@@ -140,7 +178,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
           if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
               player.setLayoutX(previousX); // Restore the player's previous X position
               player.setLayoutY(previousY); // Restore the player's previous Y position
-              System.out.println("Collision detected");
                // Exit the loop as soon as a collision is detected
           }
       }

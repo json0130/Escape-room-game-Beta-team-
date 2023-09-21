@@ -2,10 +2,13 @@ package nz.ac.auckland.se206.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
@@ -18,6 +21,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.SceneManager.AppUi;
@@ -33,11 +37,17 @@ public class Room1Controller implements Initializable {
   private int movementVariable = 5;
   private double shapesize;
 
+  List<Rectangle> walls = new ArrayList<>();
+
   @FXML private ImageView player;
   @FXML private Pane scene;
 
   private double previousX;
   private double previousY;
+
+  @FXML private Rectangle exit;
+  @FXML private Rectangle wall1;
+  @FXML private Rectangle wall2;
 
   @FXML private ImageView crew1;
   @FXML private ImageView crew2;
@@ -49,7 +59,17 @@ public class Room1Controller implements Initializable {
   @FXML private ImageView idDoctor;
   @FXML private ImageView idEngineer;
 
+
   public static String riddleAnswer;
+
+  AnimationTimer collisionTimer =
+      new AnimationTimer() {
+        @Override
+        public void handle(long now) {
+          checkCollision2(player, walls);
+          checkExit(player, exit);
+        }
+      };
 
   AnimationTimer timer =
       new AnimationTimer() {
@@ -92,6 +112,9 @@ public class Room1Controller implements Initializable {
     idDoctor.setVisible(false);
     idChef.setVisible(false);
     idEngineer.setVisible(false);
+
+    walls.add(wall1);
+    walls.add(wall2);
 
     shapesize = player.getFitWidth();
     movementSetup();
@@ -271,6 +294,33 @@ public class Room1Controller implements Initializable {
     scaleTransition.setToX(1.0);
     scaleTransition.setToY(1.0);
     scaleTransition.play();
+  }
+
+  public void checkExit(ImageView player, Rectangle exit) {
+        if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
+            exit.setOpacity(1);
+            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+            pauseTransition.setOnFinished(event -> {
+                // Adjust the player's position to be right in front of the room
+                player.setLayoutX(436);
+                player.setLayoutY(488);
+                App.setScene(AppUi.PLAYER);
+                timer.stop();
+            });
+            pauseTransition.play();
+        } else {
+          exit.setOpacity(0.6);
+        }
+    }
+
+    public void checkCollision2(ImageView player, List<Rectangle> walls){
+      for(Rectangle wall : walls){
+          if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
+              player.setLayoutX(previousX); // Restore the player's previous X position
+              player.setLayoutY(previousY); // Restore the player's previous Y position
+               // Exit the loop as soon as a collision is detected
+          }
+      }
   }
 
    @FXML
