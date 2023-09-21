@@ -5,12 +5,15 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -18,6 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -46,6 +50,11 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
 
   private double previousX;
   private double previousY;
+
+
+  @FXML private Label difficultyLabel;
+  @FXML private Label hintLabel;
+  @FXML private Label hintLabel2;
 
   @FXML private Rectangle door;
   @FXML private Rectangle window;
@@ -136,6 +145,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
     walls.add(wall19);
     walls.add(wall20);
 
+    // if difficulty is selected, label is updated
+      detectDifficulty();
 
     shapesize = player.getFitWidth();
     movementSetup();
@@ -335,6 +346,41 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
     App.setScene(AppUi.TILEPUZZLE);
     System.out.println("click");
   }
+
+  public void detectDifficulty() {
+        Timer labelTimer = new Timer(true);
+        labelTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (GameState.difficulty != null) {
+                    if (GameState.difficulty == "MEDIUM") {
+                        Platform.runLater(()-> updateLabels());
+                        if (GameState.numOfHints == 0) {
+                            labelTimer.cancel();
+                        }
+                    } else {
+                        Platform.runLater(()-> updateLabels());
+                        labelTimer.cancel();
+                    }
+                }
+            }
+        }, 0, 500); 
+    }
+
+    private void updateLabels() {
+        difficultyLabel.setText(GameState.difficulty);
+        if (GameState.difficulty == "EASY") {
+            hintLabel.setText("UNLIMITED");
+        } else if (GameState.difficulty == "MEDIUM") {
+            hintLabel.setText(String.valueOf(GameState.numOfHints));
+            hintLabel2.setText("HINTS");
+            if (GameState.numOfHints == 1) {
+                hintLabel2.setText("HINT");
+            }
+        } else {
+            hintLabel.setText("NO");
+        }
+    }
   @FXML
   private void back(ActionEvent event) throws IOException {
     App.setScene(AppUi.PLAYER);

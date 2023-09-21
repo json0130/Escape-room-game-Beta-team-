@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
+import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.gpt.ChatMessage;
 import nz.ac.auckland.se206.gpt.GptPromptEngineering;
 import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
@@ -71,7 +72,8 @@ public class ChatController {
    * @throws ApiProxyException if there is an error communicating with the API proxy
    */
   private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
-    chatCompletionRequest = new ChatCompletionRequest().setN(1).setTemperature(0.5).setTopP(0.2).setMaxTokens(100);
+    chatCompletionRequest =
+        new ChatCompletionRequest().setN(1).setTemperature(0.5).setTopP(0.2).setMaxTokens(100);
     Task<ChatMessage> runningGptTask =
         new Task<ChatMessage>() {
           @Override
@@ -118,11 +120,11 @@ public class ChatController {
       return;
     }
 
-    if (message.contains("hint") || message.contains("Hint")){
+    if (message.contains("hint") || message.contains("Hint")) {
       hintContained = true;
     }
 
-    if (message.contains("answer") || message.contains("Answer")){
+    if (message.contains("answer") || message.contains("Answer")) {
       answerContained = true;
     }
 
@@ -148,6 +150,6 @@ public class ChatController {
    */
   @FXML
   private void onGoBack(ActionEvent event) throws ApiProxyException, IOException {
-    App.setRoot("room1");
+    App.setScene(AppUi.ROOM1);
   }
 }

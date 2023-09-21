@@ -1,14 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="538.0" prefWidth="767.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.TileGameRoomController">
    <children>
+      <ImageView fitHeight="759.0" fitWidth="1288.0" layoutX="-13.0" layoutY="-5.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly%2020230921012743.png" />
+         </image>
+      </ImageView>
+      <Rectangle fx:id="startTileGame" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f00" height="126.0" layoutX="373.0" layoutY="71.0" onMouseClicked="#onTileGameButtonClick" stroke="TRANSPARENT" strokeType="INSIDE" width="432.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
+      <Label layoutX="5.0" layoutY="6.0" prefHeight="37.0" prefWidth="304.0" text="2MIN 30SEC" textFill="WHITE">
+         <font>
+            <Font name="Arial" size="32.0" />
+         </font>
+      </Label>
+      <Label fx:id="difficultyLabel" alignment="CENTER" layoutX="362.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
+         <font>
+            <Font name="Arial" size="32.0" />
+         </font>
+      </Label>
+      <Label fx:id="hintLabel" alignment="CENTER_RIGHT" layoutX="660.0" layoutY="6.0" prefHeight="37.0" prefWidth="230.0" text="UNLIMITED" textFill="WHITE">
+         <font>
+            <Font name="Arial" size="32.0" />
+         </font>
+      </Label>
+      <Label fx:id="hintLabel2" alignment="CENTER_RIGHT" layoutX="900.0" layoutY="6.0" prefHeight="37.0" prefWidth="96.0" text="HINTS" textFill="WHITE">
+         <font>
+            <Font name="Arial" size="32.0" />
+         </font>
+      </Label>
+      <Rectangle fx:id="startTileGame" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f00" height="104.0" layoutX="538.0" layoutY="161.0" onMouseClicked="#onTileGameButtonClick" stroke="TRANSPARENT" strokeType="INSIDE" width="131.0" />
+      <Button fx:id="button" layoutX="114.0" layoutY="393.0" mnemonicParsing="false" onAction="#back" text="Button" />
       <Pane fx:id="scene" prefHeight="650.0" prefWidth="1000.0">
          <children>
             <ImageView fitHeight="667.0" fitWidth="1207.0" layoutX="-95.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
@@ -46,5 +77,6 @@
             <Button fx:id="button" mnemonicParsing="false" onAction="#back" opacity="0.0" text="Button" />
          </children>
       </Pane>
+      <fx:include layoutX="900.0" layoutY="-20.0" source="countdowntimer.fxml" />
    </children>
 </AnchorPane>

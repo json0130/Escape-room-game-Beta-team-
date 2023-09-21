@@ -2,19 +2,15 @@ package nz.ac.auckland.se206;
 
 import java.io.IOException;
 import java.util.Random;
-
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
-import nz.ac.auckland.se206.SceneManager.AppUi;
-import nz.ac.auckland.se206.controllers.CountdownTimerController;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
+import javafx.stage.Stage;
+import nz.ac.auckland.se206.SceneManager.AppUi;
 
 /**
  * This is the entry point of the JavaFX application, while you can change this class, it should
@@ -24,11 +20,13 @@ public class App extends Application {
 
   public static int timerSeconds = 120;
   private Label countdownLabel;
-  private Timeline countdownTimeline;
   private static Scene scene;
-   private StackPane mainLayout;
+  private StackPane mainLayout;
   public static boolean tileGameComplete = false;
   public static int passcode;
+  public static Boolean timerStarted = false;
+  public static Timeline timerTimeline;
+  public static int chosenTimer;
 
   public static void main(final String[] args) {
 
@@ -40,10 +38,9 @@ public class App extends Application {
   }
 
   public static void setScene(AppUi fxml) {
-     scene.setRoot(SceneManager.getScene(fxml));
-   }
+    scene.setRoot(SceneManager.getScene(fxml));
+  }
 
-  
   /**
    * Returns the node associated to the input file. The method expects that the file is located in
    * "src/main/resources/fxml".
@@ -52,7 +49,7 @@ public class App extends Application {
    * @return The node of the input file.
    * @throws IOException If the file is not found.
    */
-  private static Parent loadFxml(final String fxml) throws IOException {
+  public static Parent loadFxml(final String fxml) throws IOException {
     return new FXMLLoader(App.class.getResource("/fxml/" + fxml + ".fxml")).load();
   }
 
@@ -64,28 +61,19 @@ public class App extends Application {
    */
   @Override
   public void start(final Stage stage) throws IOException {
-    
+
     Random r = new Random();
     passcode = r.nextInt((9999 - 1000) + 1) + 1000;
     GameState.password = String.valueOf(passcode);
 
-    SceneManager.addScene(AppUi.ROOM1, loadFxml("room1"));
     SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
-    SceneManager.addScene(AppUi.PLAYER, loadFxml("player"));
-    SceneManager.addScene(AppUi.END, loadFxml("end"));
-    SceneManager.addScene(AppUi.WIN, loadFxml("win"));
-    SceneManager.addScene(AppUi.LOSE, loadFxml("lose"));
-    SceneManager.addScene(AppUi.END1, loadFxml("end1"));
     SceneManager.addScene(AppUi.TUTORIAL, loadFxml("tutorial"));
     SceneManager.addScene(AppUi.ANIMATION, loadFxml("animation"));
     SceneManager.addScene(AppUi.INTRO, loadFxml("start"));
-    SceneManager.addScene(AppUi.TILEPUZZLE, loadFxml("tilegamedesk"));
-    SceneManager.addScene(AppUi.TILEROOM, loadFxml("tilegameroom"));
-    SceneManager.addScene(AppUi.ROOM3, loadFxml("room3"));
-    scene = new Scene(SceneManager.getScene(AppUi.INTRO), 1000, 650);
 
+    scene = new Scene(SceneManager.getScene(AppUi.INTRO), 1000, 650);
+    stage.setResizable(false);
     stage.setScene(scene);
     stage.show();
-
   }
 }

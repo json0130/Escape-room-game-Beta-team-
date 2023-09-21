@@ -27,4 +27,6 @@ public class GameState {
   public static boolean isRiddleGiven = false;
 
   public static int numOfHints = 5;
+
+  public static String difficulty;
 }
