@@ -150,8 +150,6 @@ public class ExitController implements Initializable {
           }
         }));
 
-    
-    changeOpacity();
     screen.setEditable(false);
     makeInvisible();
     makeDraggable(idCaptain);
@@ -169,8 +167,8 @@ public class ExitController implements Initializable {
         PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
         pauseTransition.setOnFinished(event -> {
             // Adjust the player's position to be right in front of the room
-            player.setLayoutX(436);
-            player.setLayoutY(488);
+            player.setLayoutX(68);
+            player.setLayoutY(508);
             App.setScene(AppUi.PLAYER);
             timer.stop();
         });
@@ -319,6 +317,7 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
     pad.setVisible(false);
     exit.setVisible(false);
     monitor.setVisible(true);
+    player.setVisible(true);
   }
 
   @FXML
