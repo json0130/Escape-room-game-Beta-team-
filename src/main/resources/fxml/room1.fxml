@@ -16,42 +16,42 @@
          </image>
       </ImageView>
       <Button fx:id="btnRiddle" layoutX="38.0" layoutY="410.0" mnemonicParsing="false" onAction="#onRiddle" text="Riddle" />
-      <ImageView fx:id="crew1" fitHeight="150.0" fitWidth="200.0" layoutX="74.0" layoutY="150.0" onMouseClicked="#clickCrew1" onMouseEntered="#enterCrew1" onMouseExited="#exitCrew1" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="crew1" fitHeight="273.0" fitWidth="151.0" layoutX="-59.0" layoutY="99.0" onMouseClicked="#clickCrew1" opacity="0.0" pickOnBounds="true" rotate="-30.0">
          <image>
             <Image url="@../images/room1/costume.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="crew2" fitHeight="150.0" fitWidth="200.0" layoutX="312.0" layoutY="150.0" onMouseClicked="#clickCrew2" onMouseEntered="#enterCrew2" onMouseExited="#exitCrew2" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="crew2" fitHeight="221.0" fitWidth="96.0" layoutX="78.0" layoutY="52.0" onMouseClicked="#clickCrew2" opacity="0.0" pickOnBounds="true" rotate="-30.0">
          <image>
             <Image url="@../images/room1/costume.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="crew3" fitHeight="150.0" fitWidth="200.0" layoutX="560.0" layoutY="150.0" onMouseClicked="#clickCrew3" onMouseEntered="#enterCrew3" onMouseExited="#exitCrew3" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="crew3" fitHeight="239.0" fitWidth="102.0" layoutX="796.0" layoutY="52.0" onMouseClicked="#clickCrew3" opacity="0.0" pickOnBounds="true" rotate="30.0">
          <image>
             <Image url="@../images/room1/costume.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="crew4" fitHeight="150.0" fitWidth="200.0" layoutX="794.0" layoutY="229.0" onMouseClicked="#clickCrew4" onMouseEntered="#enterCrew4" onMouseExited="#exitCrew4" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="crew4" fitHeight="284.0" fitWidth="131.0" layoutX="921.0" layoutY="117.0" onMouseClicked="#clickCrew4" opacity="0.0" pickOnBounds="true" rotate="30.0">
          <image>
             <Image url="@../images/room1/costume.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="idCaptain" fitHeight="153.0" fitWidth="250.0" layoutX="255.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="idCaptain" fitHeight="153.0" fitWidth="250.0" layoutX="223.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/idcaptain.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="idChef" fitHeight="153.0" fitWidth="244.0" layoutX="499.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="idChef" fitHeight="153.0" fitWidth="244.0" layoutX="525.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/idchef.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="idDoctor" fitHeight="166.0" fitWidth="250.0" layoutX="8.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="idDoctor" fitHeight="166.0" fitWidth="250.0" layoutX="135.0" layoutY="347.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/iddoctor.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="idEngineer" fitHeight="153.0" fitWidth="250.0" layoutX="707.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="idEngineer" fitHeight="153.0" fitWidth="250.0" layoutX="639.0" layoutY="347.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/idengineer.png" />
          </image>
@@ -79,5 +79,9 @@
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
+      <Button fx:id="btnCollect1" layoutX="311.0" layoutY="468.0" mnemonicParsing="false" onAction="#onCollect1" text="Collect Id" />
+      <Button fx:id="btnCollect2" layoutX="392.0" layoutY="246.0" mnemonicParsing="false" onAction="#onCollect2" text="Collect Id" />
+      <Button fx:id="btnCollect3" layoutX="694.0" layoutY="246.0" mnemonicParsing="false" onAction="#onCollect3" text="Collect Id" />
+      <Button fx:id="btnCollect4" layoutX="813.0" layoutY="468.0" mnemonicParsing="false" onAction="#onCollect4" text="Collect Id" />
    </children>
 </Pane>
