@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Random;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -73,7 +74,7 @@ public class App extends Application {
     GameState.password = String.valueOf(passcode);
 
     String musicFile =
-        "src\\main\\resources\\sounds\\Background-Music.mp3"; // Replace with the actual path to
+        "src/main/resources/sounds/Background-Music.mp3"; // Replace with the actual path to
     // your audio file
     Media media = new Media(new File(musicFile).toURI().toString());
     mediaPlayer = new MediaPlayer(media);
@@ -99,8 +100,21 @@ public class App extends Application {
     SceneManager.addScene(AppUi.ROOM3, loadFxml("room3"));
     scene = new Scene(SceneManager.getScene(AppUi.INTRO), 1000, 650);
 
+    stage.setOnCloseRequest(
+        event -> {
+          event.consume(); // Consume the event, preventing the default close action
+          handleCloseRequest(stage);
+        });
+
     stage.setResizable(false);
     stage.setScene(scene);
     stage.show();
+  }
+
+  private void handleCloseRequest(Stage primaryStage) {
+
+    primaryStage.close();
+    Platform.exit();
+    System.exit(0);
   }
 }
