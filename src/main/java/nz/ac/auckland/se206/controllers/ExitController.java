@@ -7,7 +7,12 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -77,6 +82,7 @@ public class ExitController implements Initializable {
   @FXML private ImageView pad;
   @FXML private ImageView background;
   @FXML private ImageView background2;
+  @FXML private ImageView background3;
 
   @FXML private TextArea screen;
   @FXML private Rectangle idScanner;
@@ -125,6 +131,7 @@ public class ExitController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    background.setOpacity(1);
     walls.add(wall);
 
     shapesize = player.getFitWidth();
@@ -143,6 +150,8 @@ public class ExitController implements Initializable {
           }
         }));
 
+    
+    changeOpacity();
     screen.setEditable(false);
     makeInvisible();
     makeDraggable(idCaptain);
@@ -289,6 +298,7 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
     pad.setVisible(true);
     monitor.setVisible(false);
     exit.setVisible(true);
+    player.setVisible(false);
   }
 
   @FXML
@@ -405,7 +415,6 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
     } else {
       screen.setText("CORRECT");
       GameState.correctPassword = true;
-      background.setVisible(false);
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
       pauseTransition.setOnFinished(
@@ -426,24 +435,9 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
             pad.setVisible(false);
             exit.setVisible(false);
 
-            idScanner.setVisible(true);
-            light.setVisible(true);
-            idLabel.setVisible(true);
+            changeOpacity();
           });
       pauseTransition.play();
-
-      // one.setDisable(true);
-      // two.setDisable(true);
-      // three.setDisable(true);
-      // four.setDisable(true);
-      // five.setDisable(true);
-      // six.setDisable(true);
-      // seven.setDisable(true);
-      // eight.setDisable(true);
-      // nine.setDisable(true);
-      // zero.setDisable(true);
-      // enter.setDisable(true);
-      // reset.setDisable(true);
     }
   }
 
@@ -539,6 +533,7 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
                 idChef.setVisible(false);
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
+                changeOpacity2();
               } else {
                 light.setFill(Color.RED);
               }
@@ -551,6 +546,7 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
                 idChef.setVisible(false);
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
+                changeOpacity2();
               } else {
                 light.setFill(Color.RED);
               }
@@ -563,6 +559,7 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
                 idChef.setVisible(false);
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
+                changeOpacity2();
               } else {
                 light.setFill(Color.RED);
               }
@@ -575,6 +572,7 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
                 idChef.setVisible(false);
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
+                changeOpacity2();
               } else {
                 light.setFill(Color.RED);
               }
@@ -620,6 +618,75 @@ public void checkCollision2(ImageView player, List<Rectangle> walls){
       hintLabel.setText("NO");
     }
   }
+
+  private void changeOpacity() {
+        // Create a FadeTransition for background
+        FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(2), background);
+        fadeTransition1.setFromValue(1.0); // Start with fully opaque
+        fadeTransition1.setToValue(0.0); // Fade to fully transparent
+        fadeTransition1.play(); // Start the animation for background
+
+        // Create a FadeTransition for background2
+        FadeTransition fadeTransition2 = new FadeTransition(Duration.seconds(2), background2);
+        fadeTransition2.setFromValue(0.0); // Start with fully transparent
+        fadeTransition2.setToValue(1.0); // Fade to fully opaque
+        fadeTransition2.play(); // Start the animation for background2
+        idScanner.setVisible(true);
+        light.setVisible(true);
+        idLabel.setVisible(true);
+  }
+
+  private void changeOpacity2() {
+    if (GameState.correctId) {
+        // Create a FadeTransition for both background images
+        FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(2), background2);
+        fadeTransition1.setToValue(0.0); // Set the target opacity value (1.0 for fully opaque)
+        fadeTransition1.play(); // Start the animation for background1
+        idScanner.setVisible(false);
+        light.setVisible(false);
+        idLabel.setVisible(false);
+
+        FadeTransition fadeTransition2 = new FadeTransition(Duration.seconds(2), background3);
+        fadeTransition2.setToValue(1.0); // Set the target opacity value (1.0 for fully opaque)
+        fadeTransition2.play(); // Start the animation for background2
+
+        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.0));
+            pauseTransition.setOnFinished(event -> {
+                // Adjust the player's position to be right in front of the room
+                endingAnimation();
+            });
+            pauseTransition.play();
+    }
+  }
+
+  private void endingAnimation(){
+        // Create a timeline to continuously increase the scaling factor
+             Timeline continuousScaling = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(background3.scaleXProperty(), 1.0)),
+                new KeyFrame(Duration.ZERO, new KeyValue(background3.scaleYProperty(), 1.0)),
+                new KeyFrame(Duration.seconds(3), new KeyValue(background3.scaleXProperty(), 2)),
+                new KeyFrame(Duration.seconds(3), new KeyValue(background3.scaleYProperty(), 2))
+        );
+        continuousScaling.setCycleCount(1); // Play the animation once
+
+        // Create a translate animation for the r1
+        TranslateTransition Translation = new TranslateTransition(Duration.seconds(2.0), background3);
+
+        // Set the animation properties
+        
+        Translation.setCycleCount(1); // Play the animation once
+        Translation.setAutoReverse(false); // Don't reverse the animation
+
+        // Start the animations
+        continuousScaling.play();
+        Translation.play();
+        // Enable the button when the animation is finished
+            Translation.setOnFinished(event -> {
+                App.setScene(AppUi.END);
+            });
+    }
+
+
 
   @FXML
   private void back(ActionEvent event) {
