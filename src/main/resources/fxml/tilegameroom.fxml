@@ -56,5 +56,6 @@
             </ImageView>
          </children>
       </Pane>
+      <fx:include layoutX="900.0" layoutY="-20.0" source="countdowntimer.fxml" />
    </children>
 </AnchorPane>
