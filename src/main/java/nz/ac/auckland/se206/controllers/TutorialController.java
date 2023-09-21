@@ -70,6 +70,7 @@ public class TutorialController implements Initializable {
     private double previousY;
 
     private boolean collisionDetected = false;
+    private boolean isInstructionDone = false;
 
     @FXML private Label sentenceLabel;
     private List<String> sentences = new ArrayList<>();
@@ -80,7 +81,9 @@ public class TutorialController implements Initializable {
         @Override
         public void handle(long now) {
             checkCollision(player, rocks);
-            checkFinish(player, c3);
+            if(isInstructionDone){
+                checkFinish(player, c3);
+            }
         }
     };
 
@@ -109,7 +112,7 @@ public class TutorialController implements Initializable {
 
     @FXML 
     private void skipTutorial(ActionEvent event){
-        App.setScene(AppUi.PLAYER);
+        App.setScene(AppUi.ANIMATION);
         collisionTimer.stop();
         timer.stop();
     }
@@ -145,6 +148,7 @@ public class TutorialController implements Initializable {
         } else {
             // All sentences are displayed, so call playRock
             playRock();
+            isInstructionDone = true;
         }
     }
     
@@ -160,35 +164,34 @@ public class TutorialController implements Initializable {
     }
 
     private void setMovement(ImageView r, boolean reverse, int duration, double endX, double endY, int delaySeconds) {
-    double startX = r.getTranslateX();
-    double startY = r.getTranslateY();
+        double startX = r.getTranslateX();
+        double startY = r.getTranslateY();
 
-    Path path = new Path();
-    path.getElements().add(new MoveTo(startX, startY));
-    path.getElements().add(new LineTo(endX, endY));
+        Path path = new Path();
+        path.getElements().add(new MoveTo(startX, startY));
+        path.getElements().add(new LineTo(endX, endY));
 
-    PathTransition pathTransition = new PathTransition();
-    pathTransition.setNode(r);
-    pathTransition.setPath(path);
-    pathTransition.setDuration(Duration.seconds(duration));
-    pathTransition.setCycleCount(reverse ? Animation.INDEFINITE : 1);
-    pathTransition.setAutoReverse(reverse);
+        PathTransition pathTransition = new PathTransition();
+        pathTransition.setNode(r);
+        pathTransition.setPath(path);
+        pathTransition.setDuration(Duration.seconds(duration));
+        pathTransition.setCycleCount(reverse ? Animation.INDEFINITE : 1);
+        pathTransition.setAutoReverse(reverse);
 
-    SequentialTransition sequentialTransition = new SequentialTransition();
-    sequentialTransition.getChildren().addAll(
-        new PauseTransition(Duration.seconds(delaySeconds)),
-        pathTransition
-    );
+        SequentialTransition sequentialTransition = new SequentialTransition();
+        sequentialTransition.getChildren().addAll(
+            new PauseTransition(Duration.seconds(delaySeconds)),
+            pathTransition
+        );
 
-    sequentialTransition.setOnFinished(event -> {
-        // Reset the position of the ImageView to its original location
-        r.setTranslateX(startX);
-        r.setTranslateY(startY);
+        sequentialTransition.setOnFinished(event -> {
+            // Reset the position of the ImageView to its original location
+            r.setTranslateX(startX);
+            r.setTranslateY(startY);
 
-        // Start the animation again
-        sequentialTransition.playFromStart();
-    });
-
+            // Start the animation again
+            sequentialTransition.playFromStart();
+        });
     sequentialTransition.play();
 }
 
@@ -235,14 +238,10 @@ public class TutorialController implements Initializable {
             if (newScene != null) {
                 // Start displaying sentences
                 displayNextSentence();
-        
-                // Create a Timeline to display sentences
-                
                 timeline.play();
             }
         });
         
-
         keyPressed.addListener(((observableValue, aBoolean, t1) -> {
             if(!aBoolean){
                 timer.start();

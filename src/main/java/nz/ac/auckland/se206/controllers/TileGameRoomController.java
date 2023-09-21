@@ -101,22 +101,18 @@ public class TileGameRoomController implements javafx.fxml.Initializable{
         e -> {
           if (e.getCode() == KeyCode.W) {
             wPressed.set(true);
-            System.out.println("w pressed");
           }
 
           if (e.getCode() == KeyCode.A) {
             aPressed.set(true);
-            System.out.println("a pressed");
           }
 
           if (e.getCode() == KeyCode.S) {
             sPressed.set(true);
-            System.out.println("s pressed");
           }
 
           if (e.getCode() == KeyCode.D) {
             dPressed.set(true);
-            System.out.println("d pressed");
           }
         });
 
