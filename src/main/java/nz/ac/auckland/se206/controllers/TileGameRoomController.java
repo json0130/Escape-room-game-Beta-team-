@@ -10,6 +10,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -85,6 +86,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   @FXML private Button btnRoom1;
   @FXML private Button button;
+  @FXML ImageView eMark;
+  TranslateTransition translate = new TranslateTransition();
 
   AnimationTimer collisionTimer =
       new AnimationTimer() {
@@ -121,7 +124,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    // Initialization code goes here
+    animateExclamationMark();
+
     walls.add(wall);
     walls.add(wall2);
     walls.add(wall3);
@@ -341,6 +345,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   @FXML
   public void onTileGameButtonClick() throws IOException {
+    translate.stop();
+    eMark.setVisible(false);
     App.setScene(AppUi.TILEPUZZLE);
 
     String musicFile = "src/main/resources/sounds/Tile-Game-Background-Music_1.mp3";
@@ -395,5 +401,17 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML
   private void back(ActionEvent event) throws IOException {
     App.setScene(AppUi.PLAYER);
+  }
+
+  @FXML
+  private void animateExclamationMark() {
+    translate.setNode(eMark);
+    translate.setDuration(Duration.millis(1000));
+    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setByX(0);
+    translate.setByY(20);
+    translate.setAutoReverse(true);
+
+    translate.play();
   }
 }
