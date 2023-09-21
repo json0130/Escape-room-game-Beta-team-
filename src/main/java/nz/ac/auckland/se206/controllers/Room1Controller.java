@@ -15,6 +15,7 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,6 +27,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import javafx.stage.Stage;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
@@ -52,6 +54,7 @@ public class Room1Controller implements Initializable {
   @FXML private Rectangle exit;
   @FXML private Rectangle wall1;
   @FXML private Rectangle wall2;
+  @FXML private Rectangle heading;
 
   @FXML private Button btnCollect1;
   @FXML private Button btnCollect2;
@@ -108,6 +111,17 @@ public class Room1Controller implements Initializable {
       };
 
   public void initialize(URL url, ResourceBundle resource) {
+    shapesize = player.getFitWidth();
+    movementSetup();
+
+    collisionTimer.start();
+    
+    walls.add(wall1);
+    walls.add(wall2);
+
+    previousX = player.getLayoutX();
+    previousY = player.getLayoutY();
+
     Random random = new Random();
     int randomNumber = random.nextInt(4);
     if (randomNumber == 0) {
@@ -124,15 +138,6 @@ public class Room1Controller implements Initializable {
     idDoctor.setVisible(false);
     idChef.setVisible(false);
     idEngineer.setVisible(false);
-
-    walls.add(wall1);
-    walls.add(wall2);
-
-    shapesize = player.getFitWidth();
-    movementSetup();
-
-    previousX = player.getLayoutX();
-    previousY = player.getLayoutY();
 
     keyPressed.addListener(
         ((observableValue, aBoolean, t1) -> {
@@ -290,8 +295,10 @@ public class Room1Controller implements Initializable {
   
 
   public void checkExit(ImageView player, Rectangle exit) {
+    System.out.println("Checking exit");
         if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
             exit.setOpacity(1);
+            System.out.println("Exit");
             PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
             pauseTransition.setOnFinished(event -> {
                 // Adjust the player's position to be right in front of the room
@@ -311,6 +318,7 @@ public class Room1Controller implements Initializable {
           if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
               player.setLayoutX(previousX); // Restore the player's previous X position
               player.setLayoutY(previousY); // Restore the player's previous Y position
+              System.out.println("Collision");
                // Exit the loop as soon as a collision is detected
           }
       }

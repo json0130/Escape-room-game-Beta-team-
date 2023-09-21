@@ -31,6 +31,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.gpt.ChatMessage;
@@ -39,6 +40,7 @@ import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
+import nz.ac.auckland.se206.speech.TextToSpeech;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
@@ -70,7 +72,9 @@ public class PlayerController implements Initializable {
     @FXML private Rectangle room1;
     @FXML private Rectangle room2;
     @FXML private Rectangle room3;
+    @FXML private Rectangle black;
 
+    @FXML private Label playerLabel;
     @FXML private Label main;
     @FXML private Label computer;
     @FXML private Label closet;
@@ -142,6 +146,8 @@ public class PlayerController implements Initializable {
       new AnimationTimer() {
         @Override
         public void handle(long now){
+                playerLabel.setVisible(false);
+                black.setVisible(false);
             
                 previousX = player.getLayoutX(); // Update previousX
                 previousY = player.getLayoutY(); // Update previousY
@@ -164,6 +170,10 @@ public class PlayerController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        introTextToSpeech();
+        playerLabel.setVisible(true);
+        black.setVisible(true);
+
         room1.setVisible(false);
         room2.setVisible(false);
         room3.setVisible(false);
@@ -241,7 +251,34 @@ public class PlayerController implements Initializable {
         }));
         // if difficulty is selected, label is updated
         detectDifficulty();
+
+        Platform.runLater(
+        () -> {
+          Stage stage = (Stage) scene.getScene().getWindow();
+
+          stage.setOnCloseRequest(
+              event -> {
+                Platform.exit();
+                System.exit(0);
+              });
+        });
     }
+
+    private void introTextToSpeech() {
+    Task<Void> introTask =
+        new Task<>() {
+
+          @Override
+          protected Void call() throws Exception {
+            TextToSpeech textToSpeech = new TextToSpeech();
+            textToSpeech.speak("Welcome to STARSHIP ESCAPE 1!");
+            return null;
+          }
+        };
+    Thread introThread = new Thread(introTask);
+    introThread.start();
+  }
+
     public void checkRoom1(ImageView player, Rectangle room1) {
         if (player.getBoundsInParent().intersects(room1.getBoundsInParent())) {
             room1.setVisible(true);
@@ -415,319 +452,5 @@ public class PlayerController implements Initializable {
       gptBackground.setVisible(true);
 
     }
-
-      /**
-   * Appends a chat message to the chat text area.
-   *
-   * @param msg the chat message to append
-   */
-  private void appendChatMessage(ChatMessage msg) {
-    chatTextArea.appendText(msg.getRole() + ": " + msg.getContent() + "\n\n");
-  }
-
-  /**
-   * Runs the GPT model with a given chat message.
-   *
-   * @param msg the chat message to process
-   * @return the response chat message
-   * @throws ApiProxyException if there is an error communicating with the API proxy
-   */
-  private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
-    chatCompletionRequest.addMessage(msg);
-    try {
-        ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
-        Choice result = chatCompletionResult.getChoices().iterator().next();
-        chatCompletionRequest.addMessage(result.getChatMessage());
-        return result.getChatMessage();
-    } catch (ApiProxyException e) {
-        e.printStackTrace();
-        return null;
-    }
-}
-
-  /**
-   * Sends a message to the GPT model.
-   *
-   * @param event the action event triggered by the send button
-   * @throws ApiProxyException if there is an error communicating with the API proxy
-   * @throws IOException if there is an I/O error
-   */
-  @FXML
-  private void onSendMessage(ActionEvent event) throws ApiProxyException, IOException {
-    String message = inputText.getText();
-    if (message.trim().isEmpty()) {
-      return;
-    }
-    inputText.clear();
-    
-    // Store the user message for GPT response
-    lastUserMessage = message;
-
-    if ((GameState.difficulty == "MEDIUM") && (GameState.numOfHints <= 0)) {
-      // Inform the user that they have reached the hint limit
-      Platform.runLater(
-          () -> {
-            chatTextArea.setText("You've used all of hints for Medium difficulty." +
-            "You can still ask for help, but you will not get any hints.");
-            
-            PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
-            delay.setOnFinished(
-                event1 -> {
-                  
-                });
-            delay.play();
-          });
-      return; // Exit the method without sending a message to GPT
-    }
-
-    // Create a background thread for running GPT
-    Thread backgroundThread =
-        new Thread(
-            () -> {
-              ChatMessage lastMsg = null;
-              try {
-
-                if (GameState.difficulty == "EASY") {
-                  // Handle Easy difficulty
-                  lastMsg =
-                      runGpt(
-                          new ChatMessage(
-                              "user",
-                              "The user is asking for help regarding the following request: "
-                                  + message
-                                   + "First determine if the user is asking for help or not. This"
-                                  + " help can be related to not knowing what to do, or asking for"
-                                  + " what to find or asking for what is the next step."
-                                  + " The user may ask for what to do,"
-                                  + " and that is considered a asking for help. If you think the"
-                                  + " user is not asking for a hint or help, reply back to their"
-                                  + " message. However, if you believe it is the user asking for"
-                                  + " help, start your prompt with \"hint: \"."
-                                  + ". If the user's request is related to not knowing what to do, if"
-                                  + GameState.isPlayerInMap
-                                  + " is true and"
-                                  + GameState.isRiddleResolved
-                                  + " is false or if"
-                                  + GameState.isIdCorrected
-                                  + " is false, tell them to go to the closet room, if"
-                                  + GameState.foundPasscode
-                                  + " is false, tell them to go to the computer room."
-                                  + " if not tell them to go to the control room."
-                                  + "If the user's request is related to not knowing what to do, if"
-                                  + GameState.isPlayerInRoom1
-                                  + " is true and if"
-                                  + GameState.isRiddleResolved
-                                  + " is false, tell them to solve the riddle by putting the books, if"
-                                  + GameState.isIdCorrected
-                                  + " is false, tell them to try find the space suits in the room, if not"
-                                  + " tell them they can leave this room."
-                                  + "If the user's request is related to not knowing what to do, if"
-                                  + GameState.isPlayerInRoom2
-                                  + " is true and if"
-                                  + GameState.foundComputer
-                                  + " is false, tell them to move around the room and find the computer, if"
-                                  + GameState.isPuzzledSolved
-                                  + " is false, tell them to solve the puzzle by clicking the tile, if"
-                                  + GameState.foundPasscode
-                                  + " is false, tell them to find the passcode file in the computer screen, if not"
-                                  + " tell them they can leave this room."
-                                  + "If the user's request is related to not knowing what to do, if"
-                                  + GameState.isPlayerInRoom3
-                                  + " is true and if"
-                                  + GameState.isRiddleResolved
-                                  + " is false, tell them to go to closet room and solve riddle, if"
-                                  + GameState.isIdCorrected
-                                  + " is false, tell them to go to closet room and check the space suits, if"
-                                  + GameState.foundPasscode
-                                  + " is false, tell them to go to computer room and find the passcode."
-                                  + "If the user's request is related to not knowing what to do, if"
-                                  + GameState.isPlayerInRoom3
-                                  + " is true and if"
-                                  + GameState.foundMonitor
-                                  + " is false, tell them to move around the room and find the monitor, if"
-                                  + GameState.isPasscodeCorrect
-                                  + " is false, tell them to enter the passcode in the monitor, if"
-                                  + GameState.isIdChecked
-                                  + " is false, tell them to check the id cards in the ID scanner, if not"
-                                  + " tell them they."
-                                  + " Also, only write down the answers- do not talk"
-                                  + " about what the user has typed in."));
-                } else if (GameState.difficulty == "MEDIUM") {
-                  // Handle Medium difficulty
-
-                  lastMsg =
-                      runGpt(
-                          new ChatMessage(
-                              "user",
-                              "The user's message is:"
-                                  + message
-                                  + "First determine if the user is asking for help or not. This"
-                                  + " help can be related to not knowing what to do, or asking for"
-                                  + " what to find or asking for what is the next step."
-                                  + " The user may ask for what to do,"
-                                  + " and that is considered a asking for help. If you think the"
-                                  + " user is not asking for a hint or help, reply back to their"
-                                  + " message. However, if you believe it is the user asking for"
-                                  + " help, start your prompt with \"hint: \"."
-                                  + ". If the user's request is related to not knowing what to do, if"
-                                  + GameState.isPlayerInMap
-                                  + " is true and"
-                                  + GameState.isRiddleResolved
-                                  + " is false or if"
-                                  + GameState.isIdCorrected
-                                  + " is false, tell them to go to the closet room, if"
-                                  + GameState.foundPasscode
-                                  + " is false, tell them to go to the computer room."
-                                  + " if not tell them to go to the control room."
-                                  + "If the user's request is related to not knowing what to do, if"
-                                  + GameState.isPlayerInRoom1
-                                  + " is true and if"
-                                  + GameState.isRiddleResolved
-                                  + " is false, tell them to solve the riddle by putting the books, if"
-                                  + GameState.isIdCorrected
-                                  + " is false, tell them to try find the space suits in the room, if not"
-                                  + " tell them they can leave this room."
-                                  + "If the user's request is related to not knowing what to do, if"
-                                  + GameState.isPlayerInRoom2
-                                  + " is true and if"
-                                  + GameState.foundComputer
-                                  + " is false, tell them to move around the room and find the computer, if"
-                                  + GameState.isPuzzledSolved
-                                  + " is false, tell them to solve the puzzle by clicking the tile, if"
-                                  + GameState.foundPasscode
-                                  + " is false, tell them to find the passcode file in the computer screen, if not"
-                                  + " tell them they can leave this room."
-                                  + "If the user's request is related to not knowing what to do, if"
-                                  + GameState.isPlayerInRoom3
-                                  + " is true and if"
-                                  + GameState.isRiddleResolved
-                                  + " is false, tell them to go to closet room and solve riddle, if"
-                                  + GameState.isIdCorrected
-                                  + " is false, tell them to go to closet room and check the space suits, if"
-                                  + GameState.foundPasscode
-                                  + " is false, tell them to go to computer room and find the passcode."
-                                  + "If the user's request is related to not knowing what to do, if"
-                                  + GameState.isPlayerInRoom3
-                                  + " is true and if"
-                                  + GameState.foundMonitor
-                                  + " is false, tell them to move around the room and find the monitor, if"
-                                  + GameState.isPasscodeCorrect
-                                  + " is false, tell them to enter the passcode in the monitor, if"
-                                  + GameState.isIdChecked
-                                  + " is false, tell them to check the id cards in the ID scanner, if not"
-                                  + " tell them they."
-                                  + " Also, only write down the answers- do not talk"
-                                  + " about what the user has typed in."));
-                  if (isHintRequest(lastMsg)) {
-                    // Check hint limit for Medium difficulty
-                    GameState.numOfHints--; // Decrease the hint count
-                    // Provide hints or guidance for Medium difficulty
-                    // Example: runGpt(new ChatMessage("user", "Can you give me a hint?"));
-                    System.out.println(isHintRequest(lastMsg));
-                    System.out.println(GameState.numOfHints);
-                  }
-                } else if (GameState.difficulty == "HARD") {
-                  lastMsg =
-                      runGpt(
-                          new ChatMessage(
-                              "user",
-                              "The user's message is: "
-                                  + message
-                                  + "First determine if the user is asking for help or not. This"
-                                  + " help can be related to not knowing what to do, or asking for"
-                                  + " what to find or asking for what is the next step."
-                                  + " The user may ask for what to do,"
-                                  + " and that is considered a asking for help. If you think the"
-                                  + " user is not asking for a hint or help, reply back to their"
-                                  + " message. However, if you believe it is the user asking for"
-                                  + " help, start your prompt with \"hint: \"."
-                                  + ". If the user's request is related to not knowing what to do, if"
-                                  + GameState.isPlayerInMap
-                                  + " is true and"
-                                  + GameState.isRiddleResolved
-                                  + " is false or if"
-                                  + GameState.isIdCorrected
-                                  + " is false, tell them to go to the closet room, if"
-                                  + GameState.foundPasscode
-                                  + " is false, tell them to go to the computer room."
-                                  + " if not tell them to go to the control room."
-                                  + "If the user's request is related to not knowing what to do, if"
-                                  + GameState.isPlayerInRoom1
-                                  + " is true and if"
-                                  + GameState.isRiddleResolved
-                                  + " is false, tell them to solve the riddle by putting the books, if"
-                                  + GameState.isIdCorrected
-                                  + " is false, tell them to try find the space suits in the room, if not"
-                                  + " tell them they can leave this room."
-                                  + "If the user's request is related to not knowing what to do, if"
-                                  + GameState.isPlayerInRoom2
-                                  + " is true and if"
-                                  + GameState.foundComputer
-                                  + " is false, tell them to move around the room and find the computer, if"
-                                  + GameState.isPuzzledSolved
-                                  + " is false, tell them to solve the puzzle by clicking the tile, if"
-                                  + GameState.foundPasscode
-                                  + " is false, tell them to find the passcode file in the computer screen, if not"
-                                  + " tell them they can leave this room."
-                                  + "If the user's request is related to not knowing what to do, if"
-                                  + GameState.isPlayerInRoom3
-                                  + " is true and if"
-                                  + GameState.isRiddleResolved
-                                  + " is false, tell them to go to closet room and solve riddle, if"
-                                  + GameState.isIdCorrected
-                                  + " is false, tell them to go to closet room and check the space suits, if"
-                                  + GameState.foundPasscode
-                                  + " is false, tell them to go to computer room and find the passcode."
-                                  + "If the user's request is related to not knowing what to do, if"
-                                  + GameState.isPlayerInRoom3
-                                  + " is true and if"
-                                  + GameState.foundMonitor
-                                  + " is false, tell them to move around the room and find the monitor, if"
-                                  + GameState.isPasscodeCorrect
-                                  + " is false, tell them to enter the passcode in the monitor, if"
-                                  + GameState.isIdChecked
-                                  + " is false, tell them to check the id cards in the ID scanner, if not"
-                                  + " tell them they."
-                                  + " Also, only write down the answers- do not talk"
-                                  + " about what the user has typed in. The"
-                                  + " important thing is that you never help the user."));
-                }
-
-              } catch (ApiProxyException e) {
-                e.printStackTrace();
-              }
-
-              final ChatMessage finalLastMsg = lastMsg;
-              Platform.runLater(
-                  () -> {
-                    // Update the UI with the response
-                    if (finalLastMsg != null) {
-                      chatTextArea.setText(finalLastMsg.getContent());
-                    }
-                    
-                    PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
-                    delay.setOnFinished(
-                        event1 -> {
-                          
-                        });
-                    delay.play();
-                  });
-            });
-
-    // Start the background thread
-    backgroundThread.start();
-  }
-
-  private boolean isHintRequest(ChatMessage messageFromGpt) {
-    // Extract the content of the message from GPT's response
-    String gptResponse = messageFromGpt.getContent().toLowerCase();
-
-    // Check if the GPT response starts with "hint: "
-    if (gptResponse.startsWith("hint: ")) {
-      return true;
-    }
-    // If the GPT response does not start with "hint: ", it's not a hint request
-    return false;
-  }
 
 }
