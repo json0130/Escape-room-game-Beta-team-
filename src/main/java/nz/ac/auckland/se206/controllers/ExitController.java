@@ -2,6 +2,9 @@ package nz.ac.auckland.se206.controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
@@ -12,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
@@ -45,6 +49,9 @@ public class ExitController implements Initializable {
   @FXML private ImageView idChef;
   @FXML private ImageView idDoctor;
   @FXML private ImageView idEngineer;
+  @FXML private Label difficultyLabel;
+  @FXML private Label hintLabel;
+  @FXML private Label hintLabel2;
   @FXML private ImageView pad;
   @FXML private ImageView background;
   @FXML private ImageView background2;
@@ -75,6 +82,8 @@ public class ExitController implements Initializable {
     makeDraggable(idDoctor);
     makeDraggable(idEngineer);
     collisionTimer.start();
+    // if difficulty is selected, label is updated
+    detectDifficulty();
   }
 
   private void makeInvisible(){
@@ -124,6 +133,10 @@ public class ExitController implements Initializable {
     exit.setVisible(true);
   }
 
+    
+  
+
+
   @FXML
   private void clickExit(ActionEvent event) {
     screen.setVisible(false);
@@ -143,6 +156,8 @@ public class ExitController implements Initializable {
     exit.setVisible(false);
     monitor.setVisible(true);
   }
+
+
 
   // Lever is draggable while the exit is not shown
   @FXML
@@ -479,6 +494,41 @@ public class ExitController implements Initializable {
         }
       };
 
+
+    public void detectDifficulty() {
+        Timer labelTimer = new Timer(true);
+        labelTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (GameState.difficulty != null) {
+                    if (GameState.difficulty == "MEDIUM") {
+                        Platform.runLater(()-> updateLabels());
+                        if (GameState.numOfHints == 0) {
+                            labelTimer.cancel();
+                        }
+                    } else {
+                        Platform.runLater(()-> updateLabels());
+                        labelTimer.cancel();
+                    }
+                }
+            }
+        }, 0, 500); 
+    }
+
+    private void updateLabels() {
+        difficultyLabel.setText(GameState.difficulty);
+        if (GameState.difficulty == "EASY") {
+            hintLabel.setText("UNLIMITED");
+        } else if (GameState.difficulty == "MEDIUM") {
+            hintLabel.setText(String.valueOf(GameState.numOfHints));
+            hintLabel2.setText("HINTS");
+            if (GameState.numOfHints == 1) {
+                hintLabel2.setText("HINT");
+            }
+        } else {
+            hintLabel.setText("NO");
+        }
+    }
   @FXML
   private void back(ActionEvent event) {
     App.setScene(AppUi.PLAYER);
