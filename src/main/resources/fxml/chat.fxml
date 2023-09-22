@@ -13,5 +13,6 @@
     <TextField fx:id="inputText" layoutX="35.0" layoutY="341.0" prefHeight="26.0" prefWidth="435.0" />
     <Button fx:id="sendButton" layoutX="505.0" layoutY="342.0" mnemonicParsing="false" onAction="#onSendMessage" text="Send" />
     <Button layoutX="505.0" layoutY="367.0" mnemonicParsing="false" onAction="#onGoBack" text="Go Back" />
+    <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
   </children>
 </AnchorPane>
