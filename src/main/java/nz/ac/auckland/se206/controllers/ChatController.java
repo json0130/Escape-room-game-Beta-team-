@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -9,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
@@ -115,6 +118,7 @@ public class ChatController {
    */
   @FXML
   private void onSendMessage(ActionEvent event) throws ApiProxyException, IOException {
+    soundButttonClick();
     String message = inputText.getText();
     if (message.trim().isEmpty()) {
       return;
@@ -150,8 +154,15 @@ public class ChatController {
    */
   @FXML
   private void onGoBack(ActionEvent event) throws ApiProxyException, IOException {
+    soundButttonClick();
     App.setScene(AppUi.ROOM1);
   }
 
-  
+  @FXML
+  private void soundButttonClick() {
+    String soundEffect = "src/main/resources/sounds/button-click.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
+  }
 }

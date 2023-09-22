@@ -1,34 +1,36 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
-import java.util.Timer;
-import java.util.TimerTask;
-import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import javafx.stage.Stage;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
@@ -82,9 +84,16 @@ public class Room1Controller implements Initializable {
   @FXML private ImageView crew3Indicator;
   @FXML private ImageView crew4Indicator;
 
+   @FXML private ImageView gameMasterBox;
+
   @FXML private Label difficultyLabel;
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
+
+    @FXML private Button btnSend;
+  @FXML private Button btnClose;
+  @FXML private TextArea chatTextArea;
+  @FXML private TextField inputText;
 
   private FadeTransition fadeTransition;
   public static String riddleAnswer;
@@ -106,24 +115,24 @@ public class Room1Controller implements Initializable {
   AnimationTimer timer =
       new AnimationTimer() {
         @Override
-        public void handle(long now){
-            
-                previousX = player.getLayoutX(); // Update previousX
-                previousY = player.getLayoutY(); // Update previousY
+        public void handle(long now) {
 
-                if(wPressed.get()){
-                    player.setLayoutY(player.getLayoutY() - movementVariable);
-                }
-                if(aPressed.get()){
-                    player.setLayoutX(player.getLayoutX() - movementVariable);
-                }
-                if(sPressed.get()){
-                    player.setLayoutY(player.getLayoutY() + movementVariable);
-                }
-                if(dPressed.get()){
-                    player.setLayoutX(player.getLayoutX() + movementVariable);
-                }
-                squareBorder();
+          previousX = player.getLayoutX(); // Update previousX
+          previousY = player.getLayoutY(); // Update previousY
+
+          if (wPressed.get()) {
+            player.setLayoutY(player.getLayoutY() - movementVariable);
+          }
+          if (aPressed.get()) {
+            player.setLayoutX(player.getLayoutX() - movementVariable);
+          }
+          if (sPressed.get()) {
+            player.setLayoutY(player.getLayoutY() + movementVariable);
+          }
+          if (dPressed.get()) {
+            player.setLayoutX(player.getLayoutX() + movementVariable);
+          }
+          squareBorder();
         }
       };
 
@@ -132,7 +141,7 @@ public class Room1Controller implements Initializable {
     movementSetup();
 
     collisionTimer.start();
-    
+
     walls.add(wall1);
 
     previousX = player.getLayoutX();
@@ -144,7 +153,7 @@ public class Room1Controller implements Initializable {
       riddleAnswer = "captain";
     } else if (randomNumber == 1) {
       riddleAnswer = "doctor";
-    } else if (randomNumber == 2 ) {
+    } else if (randomNumber == 2) {
       riddleAnswer = "chef";
     } else if (randomNumber == 3) {
       riddleAnswer = "engineer";
@@ -188,6 +197,12 @@ public class Room1Controller implements Initializable {
     detectDifficulty();
 
     crewCollisionTimer.start();
+
+    gameMasterBox.setVisible(false);
+    inputText.setVisible(false);
+    chatTextArea.setVisible(false);
+    btnClose.setVisible(false);
+    btnSend.setVisible(false);
   }
 
   // When crew1 is clicked and the riddle was resolved, id1 is shown only for 2 seconds
@@ -196,20 +211,20 @@ public class Room1Controller implements Initializable {
 
     if (!GameState.isDoctorCollected && isCrew1Colliding) {
       idDoctor.setVisible(true);
-    btnCollect1.setVisible(true);
+      btnCollect1.setVisible(true);
 
-    Thread hideImageThread =
-        new Thread(
-            () -> {
-              try {
-                Thread.sleep(5000); // Sleep for 5 seconds
-              } catch (InterruptedException e) {
-                e.printStackTrace();
-              }
-              // id becomes invisible again
-              Platform.runLater(() -> hideId1());
-            });
-    hideImageThread.start();
+      Thread hideImageThread =
+          new Thread(
+              () -> {
+                try {
+                  Thread.sleep(5000); // Sleep for 5 seconds
+                } catch (InterruptedException e) {
+                  e.printStackTrace();
+                }
+                // id becomes invisible again
+                Platform.runLater(() -> hideId1());
+              });
+      hideImageThread.start();
     }
   }
 
@@ -224,20 +239,20 @@ public class Room1Controller implements Initializable {
   public void clickCrew2(MouseEvent event) throws IOException {
     if (!GameState.isCaptainCollected && isCrew2Colliding) {
       idCaptain.setVisible(true);
-    btnCollect2.setVisible(true);
+      btnCollect2.setVisible(true);
 
-    Thread hideImageThread =
-        new Thread(
-            () -> {
-              try {
-                Thread.sleep(5000); // Sleep for 5 seconds
-              } catch (InterruptedException e) {
-                e.printStackTrace();
-              }
-              // id becomes invisible again
-              Platform.runLater(() -> hideId2());
-            });
-    hideImageThread.start();
+      Thread hideImageThread =
+          new Thread(
+              () -> {
+                try {
+                  Thread.sleep(5000); // Sleep for 5 seconds
+                } catch (InterruptedException e) {
+                  e.printStackTrace();
+                }
+                // id becomes invisible again
+                Platform.runLater(() -> hideId2());
+              });
+      hideImageThread.start();
     }
   }
 
@@ -250,22 +265,22 @@ public class Room1Controller implements Initializable {
   // When crew3 is clicked and the riddle was resolved, id3 is shown only for 2 seconds
   @FXML
   public void clickCrew3(MouseEvent event) throws IOException {
-    if(!GameState.isChefCollected && isCrew3Colliding) {
+    if (!GameState.isChefCollected && isCrew3Colliding) {
       idChef.setVisible(true);
-    btnCollect3.setVisible(true);
+      btnCollect3.setVisible(true);
 
-    Thread hideImageThread =
-        new Thread(
-            () -> {
-              try {
-                Thread.sleep(5000); // Sleep for 5 seconds
-              } catch (InterruptedException e) {
-                e.printStackTrace();
-              }
-              // id becomes invisible again
-              Platform.runLater(() -> hideId3());
-            });
-    hideImageThread.start();
+      Thread hideImageThread =
+          new Thread(
+              () -> {
+                try {
+                  Thread.sleep(5000); // Sleep for 5 seconds
+                } catch (InterruptedException e) {
+                  e.printStackTrace();
+                }
+                // id becomes invisible again
+                Platform.runLater(() -> hideId3());
+              });
+      hideImageThread.start();
     }
   }
 
@@ -280,20 +295,20 @@ public class Room1Controller implements Initializable {
   public void clickCrew4(MouseEvent event) throws IOException {
     if (!GameState.isEngineerCollected && isCrew4Colliding) {
       idEngineer.setVisible(true);
-    btnCollect4.setVisible(true);
+      btnCollect4.setVisible(true);
 
-    Thread hideImageThread =
-        new Thread(
-            () -> {
-              try {
-                Thread.sleep(5000); // Sleep for 5 seconds
-              } catch (InterruptedException e) {
-                e.printStackTrace();
-              }
-              // id becomes invisible again
-              Platform.runLater(() -> hideId4());
-            });
-    hideImageThread.start();
+      Thread hideImageThread =
+          new Thread(
+              () -> {
+                try {
+                  Thread.sleep(5000); // Sleep for 5 seconds
+                } catch (InterruptedException e) {
+                  e.printStackTrace();
+                }
+                // id becomes invisible again
+                Platform.runLater(() -> hideId4());
+              });
+      hideImageThread.start();
     }
   }
 
@@ -308,14 +323,17 @@ public class Room1Controller implements Initializable {
     GameState.isDoctorCollected = true;
     hideId1();
   }
+
   public void onCollect2() {
     GameState.isCaptainCollected = true;
     hideId2();
   }
+
   public void onCollect3() {
     GameState.isChefCollected = true;
     hideId3();
   }
+
   public void onCollect4() {
     GameState.isEngineerCollected = true;
     hideId4();
@@ -323,55 +341,55 @@ public class Room1Controller implements Initializable {
 
   @FXML
   public void onRiddle(ActionEvent evnet) throws IOException {
+    soundButttonClick();
     App.setScene(AppUi.CHAT);
   }
 
-  
-
   public void checkExit(ImageView player, Rectangle exit) {
-        if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
-            exit.setOpacity(1);
-            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-            pauseTransition.setOnFinished(event -> {
-                // Adjust the player's position to be right in front of the room
-                player.setLayoutX(433);
-                player.setLayoutY(475);
-                App.setScene(AppUi.PLAYER);
-                timer.stop();
-            });
-            pauseTransition.play();
-        } else {
-          exit.setOpacity(0.6);
-        }
+    if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
+      exit.setOpacity(1);
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+      pauseTransition.setOnFinished(
+          event -> {
+            // Adjust the player's position to be right in front of the room
+            player.setLayoutX(433);
+            player.setLayoutY(475);
+            App.setScene(AppUi.PLAYER);
+            timer.stop();
+          });
+      pauseTransition.play();
+    } else {
+      exit.setOpacity(0.6);
     }
-
-    public void checkCollision2(ImageView player, List<Rectangle> walls){
-      for(Rectangle wall : walls){
-          if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
-              player.setLayoutX(previousX); // Restore the player's previous X position
-              player.setLayoutY(previousY); // Restore the player's previous Y position
-               // Exit the loop as soon as a collision is detected
-          }
-      }
   }
 
-  private void checkMonitor(ImageView player, Rectangle wall2){
+  public void checkCollision2(ImageView player, List<Rectangle> walls) {
+    for (Rectangle wall : walls) {
+      if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
+        player.setLayoutX(previousX); // Restore the player's previous X position
+        player.setLayoutY(previousY); // Restore the player's previous Y position
+        // Exit the loop as soon as a collision is detected
+      }
+    }
+  }
+
+  private void checkMonitor(ImageView player, Rectangle wall2) {
     if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
       blinkingRectangle.setOpacity(1);
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-      pauseTransition.setOnFinished(event -> {
-          // Adjust the player's position to be right in front of the room
-          blinkingRectangle.setOpacity(0);
-          btnRiddle.setVisible(true);
-      });
+      pauseTransition.setOnFinished(
+          event -> {
+            // Adjust the player's position to be right in front of the room
+            blinkingRectangle.setOpacity(0);
+            btnRiddle.setVisible(true);
+          });
       pauseTransition.play();
-  } else {
-    btnRiddle.setVisible(false);
-
+    } else {
+      btnRiddle.setVisible(false);
+    }
   }
-  }
 
-   @FXML
+  @FXML
   public void movementSetup() {
     scene.setOnKeyPressed(
         e -> {
@@ -441,42 +459,45 @@ public class Room1Controller implements Initializable {
   }
 
   public void detectDifficulty() {
-        Timer labelTimer = new Timer(true);
-        labelTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                if (GameState.difficulty != null) {
-                    if (GameState.difficulty == "MEDIUM") {
-                        Platform.runLater(()-> updateLabels());
-                        if (GameState.numOfHints == 0) {
-                            labelTimer.cancel();
-                        }
-                    } else {
-                        Platform.runLater(()-> updateLabels());
-                        labelTimer.cancel();
-                    }
+    Timer labelTimer = new Timer(true);
+    labelTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (GameState.difficulty != null) {
+              if (GameState.difficulty == "MEDIUM") {
+                Platform.runLater(() -> updateLabels());
+                if (GameState.numOfHints == 0) {
+                  labelTimer.cancel();
                 }
+              } else {
+                Platform.runLater(() -> updateLabels());
+                labelTimer.cancel();
+              }
             }
-        }, 0, 500); 
-    }
+          }
+        },
+        0,
+        500);
+  }
 
-    private void updateLabels() {
-        difficultyLabel.setText(GameState.difficulty);
-        if (GameState.difficulty == "EASY") {
-            hintLabel.setText("UNLIMITED");
-        } else if (GameState.difficulty == "MEDIUM") {
-            hintLabel.setText(String.valueOf(GameState.numOfHints));
-            hintLabel2.setText("HINTS");
-            if (GameState.numOfHints == 1) {
-                hintLabel2.setText("HINT");
-            }
-        } else {
-            hintLabel.setText("NO");
-        }
+  private void updateLabels() {
+    difficultyLabel.setText(GameState.difficulty);
+    if (GameState.difficulty == "EASY") {
+      hintLabel.setText("UNLIMITED");
+    } else if (GameState.difficulty == "MEDIUM") {
+      hintLabel.setText(String.valueOf(GameState.numOfHints));
+      hintLabel2.setText("HINTS");
+      if (GameState.numOfHints == 1) {
+        hintLabel2.setText("HINT");
+      }
+    } else {
+      hintLabel.setText("NO");
     }
+  }
 
-    // Detect if the character goes closer to costumes
-    AnimationTimer crewCollisionTimer =
+  // Detect if the character goes closer to costumes
+  AnimationTimer crewCollisionTimer =
       new AnimationTimer() {
         @Override
         public void handle(long now) {
@@ -522,4 +543,33 @@ public class Room1Controller implements Initializable {
           }
         }
       };
+
+      @FXML
+  public void clickGameMaster(MouseEvent event) {
+    gameMasterBox.setVisible(true);
+    inputText.setVisible(true);
+    chatTextArea.setVisible(true);
+    btnClose.setVisible(true);
+    btnSend.setVisible(true);
+  }
+
+  @FXML
+  public void onClose(ActionEvent event) {
+    gameMasterBox.setVisible(false);
+    inputText.setVisible(false);
+    chatTextArea.setVisible(false);
+    btnClose.setVisible(false);
+    btnSend.setVisible(false);
+  }
+
+  @FXML
+  public void onSend(ActionEvent event) {}
+    
+  @FXML
+  private void soundButttonClick() {
+    String soundEffect = "src/main/resources/sounds/button-click.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
+  }
 }

@@ -291,6 +291,7 @@ public class TileGameDeskController {
 
       clearTile(currentTile);
       System.out.println("Moved Left");
+      soundTileClick();
       // If the tile on the Right is empty, swap them.
     } else if (currentTile.getRightTile() != null && currentTile.getRightTile().isFree() == true) {
       currentTile.getRightTile().setCurrentImage(currentTile.getImage());
@@ -307,6 +308,7 @@ public class TileGameDeskController {
 
       clearTile(currentTile);
       System.out.println("Moved Right");
+      soundTileClick();
       // If the tile on the bottom is empty, swap them.
     } else if (currentTile.getBottomTile() != null
         && currentTile.getBottomTile().isFree() == true) {
@@ -324,6 +326,7 @@ public class TileGameDeskController {
 
       clearTile(currentTile);
       System.out.println("Moved Bottom");
+      soundTileClick();
       // If the tile on the Top is empty, swap them.
     } else if (currentTile.getTopTile() != null && currentTile.getTopTile().isFree() == true) {
       currentTile.getTopTile().setCurrentImage(currentTile.getImage());
@@ -333,11 +336,13 @@ public class TileGameDeskController {
       currentTile.getTopTile().getImage().setLayoutY(currentTile.getTopTile().getYCoordinates());
 
       clearTile(currentTile);
+      soundTileClick();
 
     } else {
       return;
     }
     System.out.println("Moved Top");
+
     // Checks if swapping the tiles causes the game to be over and the player to have won.
     checkIfWon();
   }
@@ -593,5 +598,13 @@ public class TileGameDeskController {
     App.mediaPlayer.setVolume(0.1);
     App.mediaPlayer.setAutoPlay(true);
     System.out.println("click");
+  }
+
+  @FXML
+  private void soundTileClick() {
+    String soundEffect = "src/main/resources/sounds/tile-move.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
   }
 }

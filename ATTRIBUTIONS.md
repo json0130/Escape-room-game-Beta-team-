@@ -7,3 +7,8 @@
 <a href="https://www.flaticon.com/free-icons/businesswoman" title="businesswoman icons">Businesswoman icons created by pojok d - Flaticon</a>
 
 <a href="https://www.flaticon.com/free-icons/person" title="person icons">Person icons created by Vitaly Gorbachev - Flaticon</a>
+
+<a href="https://www.flaticon.com/free-icons/dialogue" title="dialogue icons">Dialogue icons created by AbtoCreative - Flaticon</a>
+
+<a href="https://www.flaticon.com/free-icons/question-mark" title="question mark icons">Question mark icons created by Creatype - Flaticon</a>
+
