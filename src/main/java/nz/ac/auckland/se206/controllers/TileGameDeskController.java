@@ -98,7 +98,7 @@ public class TileGameDeskController {
   @FXML private ImageView welcomeScreen;
   @FXML private ImageView bigScreenOff;
   @FXML private ImageView smallScreenOff;
-  @FXML private Rectangle powerButton;
+  // @FXML private Rectangle powerButton;
   @FXML private Text wordText;
   @FXML private Button releaseAirLockButton;
   @FXML private Label crewMemberName;
@@ -121,6 +121,7 @@ public class TileGameDeskController {
   @FXML private Pane tutorialScreen;
   @FXML private Button puzzleInfoButton;
   @FXML private Button leaveComputerButton;
+  @FXML private ImageView powerButton;
 
   /**
    * Initializes the room view, it is called when the room loads.
@@ -187,42 +188,42 @@ public class TileGameDeskController {
           break;
         case (1):
           // ImageTwo = new ImageView(aPath);
-          refactorImage(imageTwo, 135, 0, currentLetter, imagePath);
-          tileTwo.tileInitialise(imageTwo, false, currentLetter, 135, 0);
+          refactorImage(imageTwo, 121, 0, currentLetter, imagePath);
+          tileTwo.tileInitialise(imageTwo, false, currentLetter, 121, 0);
           tileTwo.setTilePos(tileOne, tileThree, tileFive, null);
           break;
         case (2):
           // ImageThree = new ImageView(aPath);
-          refactorImage(imageThree, 270, 0, currentLetter, imagePath);
-          tileThree.tileInitialise(imageThree, false, currentLetter, 270, 0);
+          refactorImage(imageThree, 246, 0, currentLetter, imagePath);
+          tileThree.tileInitialise(imageThree, false, currentLetter, 246, 0);
           tileThree.setTilePos(tileTwo, null, tileSix, null);
           break;
         case (3):
-          refactorImage(imageFour, 0, 135, currentLetter, imagePath);
-          tileFour.tileInitialise(imageFour, false, currentLetter, 0, 135);
+          refactorImage(imageFour, 0, 120, currentLetter, imagePath);
+          tileFour.tileInitialise(imageFour, false, currentLetter, 0, 120);
           tileFour.setTilePos(null, tileFive, tileSeven, tileOne);
           break;
         case (4):
-          refactorImage(imageFive, 135, 135, currentLetter, imagePath);
-          tileFive.tileInitialise(imageFive, false, currentLetter, 135, 135);
+          refactorImage(imageFive, 120, 120, currentLetter, imagePath);
+          tileFive.tileInitialise(imageFive, false, currentLetter, 120, 120);
           tileFive.setTilePos(tileFour, tileSix, tileEight, tileTwo);
           break;
         case (5):
-          refactorImage(imageSix, 270, 135, currentLetter, imagePath);
-          tileSix.tileInitialise(imageSix, false, currentLetter, 270, 135);
+          refactorImage(imageSix, 245, 120, currentLetter, imagePath);
+          tileSix.tileInitialise(imageSix, false, currentLetter, 245, 120);
           tileSix.setTilePos(tileFive, null, tileNine, tileThree);
           break;
         case (6):
-          refactorImage(imageSeven, 0, 260, currentLetter, imagePath);
-          tileSeven.tileInitialise(imageSeven, false, currentLetter, 0, 260);
+          refactorImage(imageSeven, 0, 245, currentLetter, imagePath);
+          tileSeven.tileInitialise(imageSeven, false, currentLetter, 0, 245);
           tileSeven.setTilePos(null, tileEight, null, tileFour);
           break;
         case (7):
-          refactorImage(imageEight, 135, 260, currentLetter, imagePath);
-          tileEight.tileInitialise(imageEight, false, currentLetter, 135, 260);
+          refactorImage(imageEight, 120, 245, currentLetter, imagePath);
+          tileEight.tileInitialise(imageEight, false, currentLetter, 120, 245);
           tileEight.setTilePos(tileSeven, tileNine, null, tileFive);
 
-          tileNine.tileInitialise(null, true, null, 260, 260);
+          tileNine.tileInitialise(null, true, null, 240, 240);
           tileNine.setTilePos(tileEight, null, null, tileSix);
           break;
         default:
@@ -290,6 +291,7 @@ public class TileGameDeskController {
 
       clearTile(currentTile);
       System.out.println("Moved Left");
+      soundTileClick();
       // If the tile on the Right is empty, swap them.
     } else if (currentTile.getRightTile() != null && currentTile.getRightTile().isFree() == true) {
       currentTile.getRightTile().setCurrentImage(currentTile.getImage());
@@ -306,6 +308,7 @@ public class TileGameDeskController {
 
       clearTile(currentTile);
       System.out.println("Moved Right");
+      soundTileClick();
       // If the tile on the bottom is empty, swap them.
     } else if (currentTile.getBottomTile() != null
         && currentTile.getBottomTile().isFree() == true) {
@@ -323,6 +326,7 @@ public class TileGameDeskController {
 
       clearTile(currentTile);
       System.out.println("Moved Bottom");
+      soundTileClick();
       // If the tile on the Top is empty, swap them.
     } else if (currentTile.getTopTile() != null && currentTile.getTopTile().isFree() == true) {
       currentTile.getTopTile().setCurrentImage(currentTile.getImage());
@@ -332,11 +336,13 @@ public class TileGameDeskController {
       currentTile.getTopTile().getImage().setLayoutY(currentTile.getTopTile().getYCoordinates());
 
       clearTile(currentTile);
+      soundTileClick();
 
     } else {
       return;
     }
     System.out.println("Moved Top");
+
     // Checks if swapping the tiles causes the game to be over and the player to have won.
     checkIfWon();
   }
@@ -486,6 +492,7 @@ public class TileGameDeskController {
   private void onPowerButtonPressed() {
 
     bigScreenOff.setVisible(false);
+    loadCaptchaButton.setVisible(true);
     System.out.println("hi");
     smallScreenOff.setVisible(false);
   }
@@ -563,11 +570,13 @@ public class TileGameDeskController {
     // puzzleTutorial.setVisible(false);
     // loadCaptchaButton.setVisible(false);
     tutorialScreen.setVisible(false);
+    loadCaptchaButton.setVisible(false);
   }
 
   @FXML
   private void onpuzzleInfoButtonClick() {
     tutorialScreen.setVisible(true);
+    loadCaptchaButton.setVisible(true);
   }
 
   @FXML
@@ -589,5 +598,13 @@ public class TileGameDeskController {
     App.mediaPlayer.setVolume(0.1);
     App.mediaPlayer.setAutoPlay(true);
     System.out.println("click");
+  }
+
+  @FXML
+  private void soundTileClick() {
+    String soundEffect = "src/main/resources/sounds/tile-move.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
   }
 }

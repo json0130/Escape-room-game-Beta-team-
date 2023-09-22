@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -15,6 +16,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -55,6 +58,7 @@ public class IntroController implements Initializable {
 
   @FXML
   private void levelButtonClicked(ActionEvent event) {
+    soundButttonClick();
 
     easyButton.setOnMouseEntered(null); // Disable hover effect
     mediumButton.setOnMouseEntered(null); // Disable hover effect
@@ -95,6 +99,7 @@ public class IntroController implements Initializable {
 
   @FXML
   private void minBClicked(ActionEvent events) {
+    soundButttonClick();
 
     minB2.setOnMouseEntered(null); // Disable hover effect
     minB4.setOnMouseEntered(null); // Disable hover effect
@@ -143,6 +148,7 @@ public class IntroController implements Initializable {
 
   @FXML
   private void startButtonClicked(ActionEvent event) {
+    soundButttonClick();
     if (isLevelSelected && isTimeSelected) {
       startButton.setDisable(true);
       startButton.setVisible(false);
@@ -164,6 +170,7 @@ public class IntroController implements Initializable {
 
   @FXML
   private void startAnimation(ActionEvent events) {
+    soundButttonClick();
     if (!animationStarted) {
       spaceship.setVisible(true);
       background2.setVisible(true);
@@ -316,5 +323,13 @@ public class IntroController implements Initializable {
     background2.setVisible(false);
     startButton.setVisible(false);
     background3.setVisible(false);
+  }
+
+  @FXML
+  private void soundButttonClick() {
+    String soundEffect = "src/main/resources/sounds/button-click.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
   }
 }

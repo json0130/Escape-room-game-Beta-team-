@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -114,24 +117,24 @@ public class ExitController implements Initializable {
   AnimationTimer timer =
       new AnimationTimer() {
         @Override
-        public void handle(long now){
-            
-                previousX = player.getLayoutX(); // Update previousX
-                previousY = player.getLayoutY(); // Update previousY
+        public void handle(long now) {
 
-                if(wPressed.get()){
-                    player.setLayoutY(player.getLayoutY() - movementVariable);
-                }
-                if(aPressed.get()){
-                    player.setLayoutX(player.getLayoutX() - movementVariable);
-                }
-                if(sPressed.get()){
-                    player.setLayoutY(player.getLayoutY() + movementVariable);
-                }
-                if(dPressed.get()){
-                    player.setLayoutX(player.getLayoutX() + movementVariable);
-                }
-                squareBorder();
+          previousX = player.getLayoutX(); // Update previousX
+          previousY = player.getLayoutY(); // Update previousY
+
+          if (wPressed.get()) {
+            player.setLayoutY(player.getLayoutY() - movementVariable);
+          }
+          if (aPressed.get()) {
+            player.setLayoutX(player.getLayoutX() - movementVariable);
+          }
+          if (sPressed.get()) {
+            player.setLayoutY(player.getLayoutY() + movementVariable);
+          }
+          if (dPressed.get()) {
+            player.setLayoutX(player.getLayoutX() + movementVariable);
+          }
+          squareBorder();
         }
       };
 
@@ -158,13 +161,13 @@ public class ExitController implements Initializable {
           }
         }));
 
-        fadeTransition = new FadeTransition(Duration.seconds(1), monitor);
-        fadeTransition.setFromValue(1.0);
-        fadeTransition.setToValue(0.0);
-        fadeTransition.setCycleCount(FadeTransition.INDEFINITE); // Blink indefinitely
-        fadeTransition.setAutoReverse(true); // Reverse the animation
-        // Start the animation
-        fadeTransition.play();
+    fadeTransition = new FadeTransition(Duration.seconds(1), monitor);
+    fadeTransition.setFromValue(1.0);
+    fadeTransition.setToValue(0.0);
+    fadeTransition.setCycleCount(FadeTransition.INDEFINITE); // Blink indefinitely
+    fadeTransition.setAutoReverse(true); // Reverse the animation
+    // Start the animation
+    fadeTransition.play();
 
     screen.setEditable(false);
     makeInvisible();
@@ -179,48 +182,50 @@ public class ExitController implements Initializable {
 
   public void checkExit(ImageView player, Rectangle exit1) {
     if (player.getBoundsInParent().intersects(exit1.getBoundsInParent())) {
-        exit1.setOpacity(1);
-        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-        pauseTransition.setOnFinished(event -> {
+      exit1.setOpacity(1);
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+      pauseTransition.setOnFinished(
+          event -> {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(68);
             player.setLayoutY(508);
             App.setScene(AppUi.PLAYER);
             timer.stop();
-        });
-        pauseTransition.play();
+          });
+      pauseTransition.play();
     } else {
-        exit1.setOpacity(0.6);
+      exit1.setOpacity(0.6);
     }
-}
+  }
 
-public void checkCollision2(ImageView player, List<Rectangle> walls){
-  for(Rectangle wall : walls){
+  public void checkCollision2(ImageView player, List<Rectangle> walls) {
+    for (Rectangle wall : walls) {
       if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
-          player.setLayoutX(previousX); // Restore the player's previous X position
-          player.setLayoutY(previousY); // Restore the player's previous Y position
-           // Exit the loop as soon as a collision is detected
+        player.setLayoutX(previousX); // Restore the player's previous X position
+        player.setLayoutY(previousY); // Restore the player's previous Y position
+        // Exit the loop as soon as a collision is detected
       }
+    }
   }
-}
 
-private void checkComputer(ImageView player, Rectangle wall2){
-  if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
-    monitor.setOpacity(1);
-    PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-    pauseTransition.setOnFinished(event -> {
-        // Adjust the player's position to be right in front of the room
-        monitor.setFill(javafx.scene.paint.Color.WHITE);
-        clickButton.setVisible(true);
-    });
-    pauseTransition.play();
-} else {
-    clickButton.setVisible(false);
-    monitor.setFill(javafx.scene.paint.Color.TRANSPARENT);
+  private void checkComputer(ImageView player, Rectangle wall2) {
+    if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
+      monitor.setOpacity(1);
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+      pauseTransition.setOnFinished(
+          event -> {
+            // Adjust the player's position to be right in front of the room
+            monitor.setFill(javafx.scene.paint.Color.WHITE);
+            clickButton.setVisible(true);
+          });
+      pauseTransition.play();
+    } else {
+      clickButton.setVisible(false);
+      monitor.setFill(javafx.scene.paint.Color.TRANSPARENT);
+    }
   }
-}
 
-@FXML
+  @FXML
   public void movementSetup() {
     scene.setOnKeyPressed(
         e -> {
@@ -284,7 +289,7 @@ private void checkComputer(ImageView player, Rectangle wall2){
     }
   }
 
-  private void makeInvisible(){
+  private void makeInvisible() {
     idScanner.setVisible(false);
     light.setVisible(false);
     idLabel.setVisible(false);
@@ -371,60 +376,70 @@ private void checkComputer(ImageView player, Rectangle wall2){
 
   @FXML
   private void onOne(ActionEvent event) {
+    soundButttonClick();
     password += "1";
     screen.setText(password);
   }
 
   @FXML
   private void onTwo(ActionEvent event) {
+    soundButttonClick();
     password += "2";
     screen.setText(password);
   }
 
   @FXML
   private void onThree(ActionEvent event) {
+    soundButttonClick();
     password += "3";
     screen.setText(password);
   }
 
   @FXML
   private void onFour(ActionEvent event) {
+    soundButttonClick();
     password += "4";
     screen.setText(password);
   }
 
   @FXML
   private void onFive(ActionEvent event) {
+    soundButttonClick();
     password += "5";
     screen.setText(password);
   }
 
   @FXML
   private void onSix(ActionEvent event) {
+    soundButttonClick();
     password += "6";
     screen.setText(password);
   }
 
   @FXML
   private void onSeven(ActionEvent event) {
+    soundButttonClick();
     password += "7";
     screen.setText(password);
   }
 
   @FXML
   private void onEight(ActionEvent event) {
+    soundButttonClick();
     password += "8";
     screen.setText(password);
   }
 
   @FXML
   private void onNine(ActionEvent event) {
+    soundButttonClick();
     password += "9";
     screen.setText(password);
   }
 
   @FXML
   private void onZero(ActionEvent event) {
+    soundButttonClick();
     password += "0";
     screen.setText(password);
   }
@@ -436,6 +451,7 @@ private void checkComputer(ImageView player, Rectangle wall2){
     }
     // incorrect password, show incorrect and reset the password
     if (!password.equals(GameState.password)) {
+      soundIncorrect();
       screen.setText("INCORRECT");
       Thread clearThread =
           new Thread(
@@ -451,6 +467,7 @@ private void checkComputer(ImageView player, Rectangle wall2){
       password = "";
       // correct password, buttons are disabled to prevent further change in correctPassword state
     } else {
+      soundCorrect();
       screen.setText("CORRECT");
       GameState.correctPassword = true;
 
@@ -521,7 +538,6 @@ private void checkComputer(ImageView player, Rectangle wall2){
   public void makeDraggable(ImageView imageView) {
     double originalX = imageView.getLayoutX();
     double originalY = imageView.getLayoutY();
-  
 
     imageView.setOnMousePressed(
         mouseEvent -> {
@@ -546,7 +562,6 @@ private void checkComputer(ImageView player, Rectangle wall2){
           imageView.setLayoutX(originalX);
           imageView.setLayoutY(originalY);
         });
-
   }
 
   AnimationTimer collisionTimer =
@@ -564,6 +579,7 @@ private void checkComputer(ImageView player, Rectangle wall2){
             if (Room1Controller.riddleAnswer == "captain") {
               if (node1 == idCaptain) {
                 light.setFill(Color.GREEN);
+                soundCorrectCard();
                 GameState.correctId = true;
                 ids.setVisible(false);
                 idCaptain.setVisible(false);
@@ -572,11 +588,13 @@ private void checkComputer(ImageView player, Rectangle wall2){
                 idEngineer.setVisible(false);
                 changeOpacity2();
               } else {
+                soundIncorrect();
                 light.setFill(Color.RED);
               }
             } else if (Room1Controller.riddleAnswer == "chef") {
               if (node1 == idChef) {
                 light.setFill(Color.GREEN);
+                soundCorrectCard();
                 GameState.correctId = true;
                 ids.setVisible(false);
                 idCaptain.setVisible(false);
@@ -585,11 +603,13 @@ private void checkComputer(ImageView player, Rectangle wall2){
                 idEngineer.setVisible(false);
                 changeOpacity2();
               } else {
+                soundIncorrect();
                 light.setFill(Color.RED);
               }
             } else if (Room1Controller.riddleAnswer == "doctor") {
               if (node1 == idDoctor) {
                 light.setFill(Color.GREEN);
+                soundCorrectCard();
                 GameState.correctId = true;
                 ids.setVisible(false);
                 idCaptain.setVisible(false);
@@ -598,11 +618,13 @@ private void checkComputer(ImageView player, Rectangle wall2){
                 idEngineer.setVisible(false);
                 changeOpacity2();
               } else {
+                soundIncorrect();
                 light.setFill(Color.RED);
               }
             } else if (Room1Controller.riddleAnswer == "engineer") {
               if (node1 == idEngineer) {
                 light.setFill(Color.GREEN);
+                soundCorrectCard();
                 GameState.correctId = true;
                 ids.setVisible(false);
                 idCaptain.setVisible(false);
@@ -611,6 +633,7 @@ private void checkComputer(ImageView player, Rectangle wall2){
                 idEngineer.setVisible(false);
                 changeOpacity2();
               } else {
+                soundIncorrect();
                 light.setFill(Color.RED);
               }
             }
@@ -657,33 +680,32 @@ private void checkComputer(ImageView player, Rectangle wall2){
   }
 
   private void changeOpacity() {
-        // Create a FadeTransition for background
-        FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(2), background);
-        fadeTransition1.setFromValue(1.0); // Start with fully opaque
-        fadeTransition1.setToValue(0.0); // Fade to fully transparent
-        fadeTransition1.play(); // Start the animation for background
+    // Create a FadeTransition for background
+    FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(2), background);
+    fadeTransition1.setFromValue(1.0); // Start with fully opaque
+    fadeTransition1.setToValue(0.0); // Fade to fully transparent
+    fadeTransition1.play(); // Start the animation for background
 
-        // Create a FadeTransition for background2
-        FadeTransition fadeTransition2 = new FadeTransition(Duration.seconds(2), background2);
-        fadeTransition2.setFromValue(0.0); // Start with fully transparent
-        fadeTransition2.setToValue(1.0); // Fade to fully opaque
-        fadeTransition2.play(); // Start the animation for background2
-        idScanner.setVisible(true);
-        light.setVisible(true);
-        idLabel.setVisible(true);
+    // Create a FadeTransition for background2
+    FadeTransition fadeTransition2 = new FadeTransition(Duration.seconds(2), background2);
+    fadeTransition2.setFromValue(0.0); // Start with fully transparent
+    fadeTransition2.setToValue(1.0); // Fade to fully opaque
+    fadeTransition2.play(); // Start the animation for background2
+    idScanner.setVisible(true);
+    light.setVisible(true);
+    idLabel.setVisible(true);
   }
 
   private void changeOpacity2() {
     if (GameState.correctId) {
-        // Create a FadeTransition for both background images
-        FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(2), background2);
-        fadeTransition1.setToValue(0.0); // Set the target opacity value (1.0 for fully opaque)
-        fadeTransition1.play(); // Start the animation for background1
-        
+      // Create a FadeTransition for both background images
+      FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(2), background2);
+      fadeTransition1.setToValue(0.0); // Set the target opacity value (1.0 for fully opaque)
+      fadeTransition1.play(); // Start the animation for background1
 
-        FadeTransition fadeTransition2 = new FadeTransition(Duration.seconds(2), background3);
-        fadeTransition2.setToValue(1.0); // Set the target opacity value (1.0 for fully opaque)
-        fadeTransition2.play(); // Start the animation for background2
+      FadeTransition fadeTransition2 = new FadeTransition(Duration.seconds(2), background3);
+      fadeTransition2.setToValue(1.0); // Set the target opacity value (1.0 for fully opaque)
+      fadeTransition2.play(); // Start the animation for background2
 
         PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.0));
             pauseTransition.setOnFinished(event -> {
@@ -697,35 +719,68 @@ private void checkComputer(ImageView player, Rectangle wall2){
     }
   }
 
-  private void endingAnimation(){
-        // Create a timeline to continuously increase the scaling factor
-             Timeline continuousScaling = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(background3.scaleXProperty(), 1.0)),
-                new KeyFrame(Duration.ZERO, new KeyValue(background3.scaleYProperty(), 1.0)),
-                new KeyFrame(Duration.seconds(3), new KeyValue(background3.scaleXProperty(), 2)),
-                new KeyFrame(Duration.seconds(3), new KeyValue(background3.scaleYProperty(), 2))
-        );
-        continuousScaling.setCycleCount(1); // Play the animation once
+  private void endingAnimation() {
+    // Create a timeline to continuously increase the scaling factor
+    Timeline continuousScaling =
+        new Timeline(
+            new KeyFrame(Duration.ZERO, new KeyValue(background3.scaleXProperty(), 1.0)),
+            new KeyFrame(Duration.ZERO, new KeyValue(background3.scaleYProperty(), 1.0)),
+            new KeyFrame(Duration.seconds(3), new KeyValue(background3.scaleXProperty(), 2)),
+            new KeyFrame(Duration.seconds(3), new KeyValue(background3.scaleYProperty(), 2)));
+    continuousScaling.setCycleCount(1); // Play the animation once
 
-        // Create a translate animation for the r1
-        TranslateTransition Translation = new TranslateTransition(Duration.seconds(2.0), background3);
+    // Create a translate animation for the r1
+    TranslateTransition Translation = new TranslateTransition(Duration.seconds(2.0), background3);
 
-        // Set the animation properties
-        
-        Translation.setCycleCount(1); // Play the animation once
-        Translation.setAutoReverse(false); // Don't reverse the animation
+    // Set the animation properties
 
-        // Start the animations
-        continuousScaling.play();
-        Translation.play();
-        // Enable the button when the animation is finished
-            Translation.setOnFinished(event -> {
-                App.setScene(AppUi.END);
-            });
-    }
+    Translation.setCycleCount(1); // Play the animation once
+    Translation.setAutoReverse(false); // Don't reverse the animation
+
+    // Start the animations
+    continuousScaling.play();
+    Translation.play();
+    // Enable the button when the animation is finished
+    Translation.setOnFinished(
+        event -> {
+          App.setScene(AppUi.END);
+        });
+  }
 
   @FXML
   private void back(ActionEvent event) {
     App.setScene(AppUi.PLAYER);
+  }
+
+  @FXML
+  private void soundButttonClick() {
+    String soundEffect = "src/main/resources/sounds/button-click.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
+  }
+
+  @FXML
+  private void soundCorrect() {
+    String soundEffect = "src/main/resources/sounds/correct.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
+  }
+
+  @FXML
+  private void soundIncorrect() {
+    String soundEffect = "src/main/resources/sounds/incorrect.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
+  }
+
+  @FXML
+  private void soundCorrectCard() {
+    String soundEffect = "src/main/resources/sounds/correct-card.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
   }
 }

@@ -1,6 +1,5 @@
 package nz.ac.auckland.se206.controllers;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -11,6 +10,7 @@ import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -25,8 +25,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
@@ -89,6 +87,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   @FXML private Button btnRoom1;
   @FXML private Button button;
+  @FXML ImageView eMark;
+  TranslateTransition translate = new TranslateTransition();
 
   AnimationTimer collisionTimer =
       new AnimationTimer() {
@@ -126,7 +126,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    // Initialization code goes here
+    animateExclamationMark();
+
     walls.add(wall);
     walls.add(wall2);
     walls.add(wall3);
@@ -176,7 +177,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     fadeTransition.setAutoReverse(true); // Reverse the animation
     // Start the animation
     fadeTransition.play();
-
   }
 
   public void checkExit(ImageView player, Rectangle exit) {
@@ -207,21 +207,21 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     }
   }
 
-  private void checkComputer(ImageView player, Rectangle wall2){
+  private void checkComputer(ImageView player, Rectangle wall2) {
     if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
       blinkingRectangle.setOpacity(1);
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-      pauseTransition.setOnFinished(event -> {
-          // Adjust the player's position to be right in front of the room
-          blinkingRectangle.setFill(javafx.scene.paint.Color.WHITE);
-          clickButton.setVisible(true);
-      });
+      pauseTransition.setOnFinished(
+          event -> {
+            // Adjust the player's position to be right in front of the room
+            blinkingRectangle.setFill(javafx.scene.paint.Color.WHITE);
+            clickButton.setVisible(true);
+          });
       pauseTransition.play();
-  } else {
+    } else {
       clickButton.setVisible(false);
     }
   }
-
 
   @FXML
   public void movementSetup() {
@@ -372,6 +372,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   @FXML
   public void onTileGameButtonClick() throws IOException {
+    translate.stop();
+    eMark.setVisible(false);
     App.setScene(AppUi.TILEPUZZLE);
   }
 
@@ -416,5 +418,17 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML
   private void back(ActionEvent event) throws IOException {
     App.setScene(AppUi.PLAYER);
+  }
+
+  @FXML
+  private void animateExclamationMark() {
+    translate.setNode(eMark);
+    translate.setDuration(Duration.millis(1000));
+    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setByX(0);
+    translate.setByY(20);
+    translate.setAutoReverse(true);
+
+    translate.play();
   }
 }
