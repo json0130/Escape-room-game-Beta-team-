@@ -55,5 +55,10 @@
          </font>
       </Label>
       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
+      <ImageView fx:id="glitch" fitHeight="428.0" fitWidth="727.0" layoutX="139.0" layoutY="129.0" pickOnBounds="true" visible="false">
+         <image>
+            <Image url="@../images/glitch-effect-black-background.jpg" />
+         </image>
+      </ImageView>
   </children>
 </AnchorPane>
