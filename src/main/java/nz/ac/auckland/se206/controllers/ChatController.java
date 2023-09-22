@@ -37,10 +37,10 @@ public class ChatController {
   @FXML private ImageView robotThink;
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
+  @FXML private ImageView glitch;
 
   private ChatCompletionRequest chatCompletionRequest;
-  public static boolean hintContained = false;
-  public static boolean answerContained = false;
+  public static boolean isRiddleGiven = false;
 
   /**
    * Initializes the chat view, loading the riddle.
@@ -49,7 +49,6 @@ public class ChatController {
    */
   @FXML
   public void initialize() throws ApiProxyException {
-    detectDifficulty();
     // when the enter key is pressed, message is sent
     inputText.setOnKeyPressed(
         event -> {
@@ -63,10 +62,8 @@ public class ChatController {
           }
         });
     chatTextArea.setEditable(false);
-
-    chatCompletionRequest =
-        new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.5).setMaxTokens(100);
-    runGpt(new ChatMessage("user", GptPromptEngineering.getGameMaster()));
+    detectDifficulty();
+    System.out.println(Room1Controller.riddleAnswer);
   }
 
   /**
@@ -86,8 +83,7 @@ public class ChatController {
    * @throws ApiProxyException if there is an error communicating with the API proxy
    */
   private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
-    chatCompletionRequest =
-        new ChatCompletionRequest().setN(1).setTemperature(0.5).setTopP(0.2).setMaxTokens(100);
+    glitch.setVisible(true);
     Task<ChatMessage> runningGptTask =
         new Task<ChatMessage>() {
           @Override
@@ -105,6 +101,11 @@ public class ChatController {
                         && result.getChatMessage().getContent().startsWith("Correct")) {
                       GameState.isRiddleResolved = true;
                     }
+                    if (result.getChatMessage().getRole().equals("assistant")
+                        && result.getChatMessage().getContent().startsWith("Hint")) {
+                      GameState.numOfHints--;
+                    }
+                    glitch.setVisible(false);
                   });
               return result.getChatMessage();
             } catch (ApiProxyException e) {
@@ -135,25 +136,17 @@ public class ChatController {
       return;
     }
 
-    if (message.contains("hint") || message.contains("Hint")) {
-      hintContained = true;
-    }
-
-    if (message.contains("answer") || message.contains("Answer")) {
-      answerContained = true;
-    }
-
     inputText.clear();
     ChatMessage msg = new ChatMessage("user", message);
     appendChatMessage(msg);
-
-    message += " " + GptPromptEngineering.getGameMaster();
-    msg = new ChatMessage("user", message);
 
     ChatMessage lastMsg = runGpt(msg);
     robotThink();
     if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("Correct")) {
       GameState.isRiddleResolved = true;
+    }
+    if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("hint")) {
+      GameState.numOfHints--;
     }
   }
 
@@ -187,11 +180,42 @@ public class ChatController {
             if (GameState.difficulty != null) {
               if (GameState.difficulty == "MEDIUM") {
                 Platform.runLater(() -> updateLabels());
+                if (!isRiddleGiven) {
+                  chatCompletionRequest =
+                      new ChatCompletionRequest()
+                          .setN(1)
+                          .setTemperature(0.5)
+                          .setTopP(0.5)
+                          .setMaxTokens(100);
+                  try {
+                    runGpt(
+                        new ChatMessage(
+                            "user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
+                  } catch (ApiProxyException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                  }
+                  isRiddleGiven = true;
+                }
                 if (GameState.numOfHints == 0) {
                   labelTimer.cancel();
                 }
               } else {
                 Platform.runLater(() -> updateLabels());
+                chatCompletionRequest =
+                    new ChatCompletionRequest()
+                        .setN(1)
+                        .setTemperature(0.5)
+                        .setTopP(0.5)
+                        .setMaxTokens(100);
+                try {
+                  runGpt(
+                      new ChatMessage(
+                          "user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
+                } catch (ApiProxyException e) {
+                  // TODO Auto-generated catch block
+                  e.printStackTrace();
+                }
                 labelTimer.cancel();
               }
             }

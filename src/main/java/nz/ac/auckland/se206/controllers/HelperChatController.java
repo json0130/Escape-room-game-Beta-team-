@@ -58,8 +58,7 @@ public class HelperChatController {
 
     chatCompletionRequest =
         new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.5).setMaxTokens(100);
-    // runGpt(new ChatMessage("user", GptPromptEngineering.getGameMaster()));
-
+    runGpt(new ChatMessage("user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
   }
 
   /**
