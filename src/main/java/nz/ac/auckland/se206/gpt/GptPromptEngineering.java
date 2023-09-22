@@ -1,8 +1,6 @@
 package nz.ac.auckland.se206.gpt;
 
 import nz.ac.auckland.se206.GameState;
-import nz.ac.auckland.se206.controllers.ChatController;
-import nz.ac.auckland.se206.controllers.Room1Controller;
 
 /** Utility class for generating GPT prompt engineering strings. */
 public class GptPromptEngineering {
@@ -13,8 +11,7 @@ public class GptPromptEngineering {
    * @param wordToGuess the word to be guessed in the riddle
    * @return the generated prompt engineering string
    */
-
-   public static String getRiddleAnswer(String letters) {
+  public static String getRiddleAnswer(String letters) {
     return "Use these nine letters: "
         + letters
         + " to form a 3 letter noun of a common object and send it to me. Please only answer with"
@@ -22,40 +19,34 @@ public class GptPromptEngineering {
         + " speech marks or a full stop or any other text in your answer.";
   }
 
-  public static String getRiddleWithGivenWord(String wordToGuess) {
-    return "You are the AI of an escape room. Provide a riddle with an answer "+wordToGuess+". You should not reveal the answer.";
-  }
+  public static String riddleAi(String answer) {
 
-  public static String getRiddleHint(String wordToGuess) {
-    return "You provide a hint for a riddle with an undisclosed answer" + wordToGuess+ ".";
-  }
-
-  public static String getNoMoreHint() {
-    return "Tell users that 5 hints are already used up.";
-  }
-
-  public static String getAnswerChecker() {
-    return "If users exactly say "+ Room1Controller.riddleAnswer+ ", you should say 'Correct.' If not, say 'Incorrect' and suggest to include 'hint' in their message for a hint.";
-  }
-
-  public static String getGameMaster() {
-    if (! GameState.isRiddleGiven) {
-      GameState.isRiddleGiven = true;
-      return getRiddleWithGivenWord(Room1Controller.riddleAnswer);
-    } else if (ChatController.hintContained && GameState.numOfHints > 0) {
-      ChatController.hintContained = false;
-      GameState.numOfHints--;
-      return getRiddleHint(Room1Controller.riddleAnswer);
-    } else if (ChatController.hintContained && GameState.numOfHints <= 0){
-      ChatController.hintContained = false;
-      return getNoMoreHint();
+    if (GameState.difficulty == "EASY") {
+      return "You are a game master in a starship escape room game. Provide a riddle with an answer"
+          + answer
+          + ". You can provide a hint regarding the riddle only if the user asks a hint, but you"
+          + " must say 'hint' first when you give a hint. You never reveal or say the answer even if the user asks. If"
+          + " the user gives the correct answer, say 'Correct'. If not, say 'Incorrect'. You never say or reveal the answer.";
+    } else if (GameState.difficulty == "MEDIUM") {
+      return "You are a game master in a starship escape room game. Provide a riddle with an answer"
+          + answer + "You never reveal or say the answer."
+          + ". Then check if"
+          + GameState.numOfHints
+          + " is bigger than 0. If so, when the user asks a hint, you can provide a hint regarding"
+          + " the riddler, but you must say 'hint' first when you give a hint. You never"
+          + " reveal or say the answer. If "
+          + GameState.numOfHints
+          + " is less than or equal to 0, you should say 'the user used up all hints' and never give"
+          + " a hint. You should never reveal or say the answer. If the user gives"
+          + " the correct answer, say 'Correct'. If not, say 'Incorrect'";
+    } else if (GameState.difficulty == "HARD") {
+      return "You are a game master in a starship escape room game. Provide a riddle with an answer"
+          + answer
+          + "You cannot include the answer in the riddle. You cannot provide hint. You should never"
+          + " reveal or say the answer. If the"
+          + " user gives the correct answer, say 'Correct'. If not, say 'Incorrect'. You never reveal or say the answer.";
     } else {
-      if (ChatController.answerContained) {
-        ChatController.answerContained = false;
-        return "You must say you cannot reveal the answer.";
-      } else {
-        return getAnswerChecker();
-      }
+      return null;
     }
   }
 }
