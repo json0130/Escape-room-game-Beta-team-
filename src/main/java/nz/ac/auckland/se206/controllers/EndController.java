@@ -36,6 +36,7 @@ public class EndController implements Initializable {
     @FXML private Label win;
     @FXML private Label youWin;
     @FXML private Label lose;
+    @FXML private Label lose1;
     @FXML private Pane scene;
     @FXML private Button button;
     @FXML private Button s;
@@ -179,6 +180,24 @@ public class EndController implements Initializable {
             });
     }
 
+    @FXML
+    private void loseAnimation(){
+        lose.setVisible(true);
+        // Show the lose for 3 seconds and fadetransition to lose 1
+        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(3.0));
+        pauseTransition.setOnFinished(events -> {
+            FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(2), lose);
+            fadeTransition1.setToValue(0.0); // Set the target opacity value (1.0 for fully opaque)
+            fadeTransition1.play(); // Start the animation for background1
+            lose1.setVisible(true);
+            lose.setVisible(false);
+
+            FadeTransition fadeTransition2 = new FadeTransition(Duration.seconds(2), lose1);
+            fadeTransition2.setToValue(1.0); // Set the target opacity value (1.0 for fully opaque)
+            fadeTransition2.play(); // Start the animation for background2
+        });
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (scene != null) {
@@ -189,7 +208,9 @@ public class EndController implements Initializable {
                         if (newScene != null) {
                             // Schedule the endingAnimation to run after the scene is shown
                             Platform.runLater(this::endingAnimation);
+                            Platform.runLater(this::loseAnimation);
                             youWin.setVisible(false);
+                            lose1.setVisible(false);
                         }
                     });
         }

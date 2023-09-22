@@ -85,6 +85,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private Rectangle blinkingRectangle;
   private FadeTransition fadeTransition;
 
+  private boolean nextToButton = false;
   @FXML private Button btnRoom1;
   @FXML private Button button;
   @FXML ImageView eMark;
@@ -96,7 +97,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
         public void handle(long now) {
           checkCollision2(player, walls);
           checkExit(player, exit);
-          checkComputer(player, startTileGame);
+          checkMonitor(player, blinkingRectangle);
         }
       };
 
@@ -148,7 +149,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     walls.add(wall18);
     walls.add(wall19);
     walls.add(wall20);
-    clickButton.setVisible(false);
 
     // if difficulty is selected, label is updated
     detectDifficulty();
@@ -207,21 +207,43 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     }
   }
 
-  private void checkComputer(ImageView player, Rectangle wall2) {
-    if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
+  private void checkMonitor(ImageView player, Rectangle wa) {
+    if (player.getBoundsInParent().intersects(wa.getBoundsInParent())) {
       blinkingRectangle.setOpacity(1);
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-      pauseTransition.setOnFinished(
-          event -> {
-            // Adjust the player's position to be right in front of the room
-            blinkingRectangle.setFill(javafx.scene.paint.Color.WHITE);
-            clickButton.setVisible(true);
-          });
+      pauseTransition.setOnFinished(event -> {
+          // Adjust the player's position to be right in front of the room
+          blinkingRectangle.setFill(javafx.scene.paint.Color.WHITE);
+          clickButton.setVisible(true);
+          nextToButton = true;
+      });
       pauseTransition.play();
-    } else {
-      clickButton.setVisible(false);
-    }
+  } else {
+    clickButton.setVisible(false);
+    blinkingRectangle.setFill(javafx.scene.paint.Color.TRANSPARENT);
+    nextToButton = false;
+
   }
+  }
+
+  // private void checkComputer(ImageView player, Rectangle blinkingRectangle) {
+  //   if (player.getBoundsInParent().intersects(blinkingRectangle.getBoundsInParent())) {
+  //     blinkingRectangle.setOpacity(1);
+  //     nextToButton = true;
+  //     System.out.println("next to button");
+  //     PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+  //     pauseTransition.setOnFinished(
+  //         event -> {
+  //           // Adjust the player's position to be right in front of the room
+  //           blinkingRectangle.setFill(javafx.scene.paint.Color.WHITE);
+  //           clickButton.setVisible(true);
+  //         });
+  //     pauseTransition.play();
+  //   } else {
+  //     clickButton.setVisible(false);
+  //     nextToButton = false;
+  //   }
+  // }
 
   @FXML
   public void movementSetup() {
@@ -374,7 +396,10 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   public void onTileGameButtonClick() throws IOException {
     translate.stop();
     eMark.setVisible(false);
-    App.setScene(AppUi.TILEPUZZLE);
+    if(nextToButton){
+      App.setScene(AppUi.TILEPUZZLE);
+      System.out.println("button clicked");
+    }
   }
 
   public void detectDifficulty() {

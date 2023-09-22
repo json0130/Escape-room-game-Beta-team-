@@ -225,6 +225,10 @@ public class IntroController implements Initializable {
 
   private void updateTimer(ActionEvent event) {
     App.timerSeconds--;
+    if (App.timerSeconds <= 0) {
+      App.timerTimeline.stop();
+      App.setScene(AppUi.LOSE);
+    }
     //System.out.println("Actual timer: " + App.timerSeconds);
   }
 

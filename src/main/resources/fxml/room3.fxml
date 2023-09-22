@@ -7,6 +7,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
@@ -22,7 +23,7 @@
             <Image url="@../images/Firefly%2020230920215509.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="background" fitHeight="616.0" fitWidth="1088.0" layoutX="-37.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="background" fitHeight="616.0" fitWidth="1088.0" layoutX="-32.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly%2020230920220330.png" />
          </image>
@@ -33,6 +34,12 @@
             <Image url="@../images/Firefly_spaceship_passcode_touchpad_2D_46452-removebg-preview.png" />
          </image>
       </ImageView>
+      <Rectangle fx:id="monitor" arcHeight="5.0" arcWidth="5.0" fill="#aa00ff00" height="71.0" layoutX="451.0" layoutY="336.0" onMouseClicked="#monitorClicked" stroke="#aa00ff" strokeType="INSIDE" strokeWidth="3.0" width="114.0" />
+      <Label fx:id="clickButton" layoutX="465.0" layoutY="364.0" text="Click Me">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
       <Group layoutX="400.0" layoutY="293.0">
          <children>
             <Button fx:id="zero" layoutX="-53.0" layoutY="192.0" mnemonicParsing="false" onAction="#onZero" prefHeight="36.0" prefWidth="100.0" text="0">
@@ -97,7 +104,6 @@
             </Button>
          </children>
       </Group>
-      <Rectangle fx:id="monitor" arcHeight="5.0" arcWidth="5.0" fill="#aa00ff00" height="71.0" layoutX="451.0" layoutY="346.0" onMouseClicked="#monitorClicked" stroke="#aa00ff" strokeType="INSIDE" strokeWidth="3.0" width="114.0" />
       <Rectangle fx:id="idScanner" arcHeight="5.0" arcWidth="5.0" height="74.0" layoutX="356.0" layoutY="331.0" onMouseClicked="#clickIdScanner" stroke="BLACK" strokeType="INSIDE" width="95.0" />
       <Label fx:id="idLabel" layoutX="376.0" layoutY="356.0" text="Tag ID" textFill="WHITE">
          <font>
@@ -157,18 +163,14 @@
             <Image url="@../images/Firefly_spaceship_game_character_walking_48398-removebg-preview.png" />
          </image>
       </ImageView>
-      <Rectangle fx:id="exit1" arcHeight="5.0" arcWidth="5.0" fill="#ff95008e" height="216.0" layoutX="-17.0" layoutY="441.0" stroke="BLACK" strokeType="INSIDE" width="52.0" />
+      <Rectangle fx:id="exit1" arcHeight="5.0" arcWidth="5.0" fill="#ff95008e" height="216.0" layoutX="-17.0" layoutY="441.0" stroke="BLACK" strokeType="INSIDE" width="63.0" />
       <Rectangle fx:id="wall" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff" height="25.0" layoutX="35.0" layoutY="431.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="955.0" />
       <Rectangle fx:id="clickMonitor" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="83.0" layoutX="434.0" layoutY="410.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="146.0" />
-      <Label fx:id="clickButton" layoutX="465.0" layoutY="364.0" text="Click Me">
-         <font>
-            <Font size="23.0" />
-         </font>
-      </Label>
-      <Button fx:id="exit2" layoutX="913.0" layoutY="99.0" mnemonicParsing="false" onAction="#clickExit" prefHeight="19.0" prefWidth="35.0" text="X">
+      <Button fx:id="exit2" layoutX="913.0" layoutY="99.0" mnemonicParsing="false" onAction="#clickExit2" prefHeight="19.0" prefWidth="35.0" text="X">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
+      <Polygon fill="WHITE" layoutX="85.0" layoutY="518.0" points="-80.33332061767578, 32.5714111328125, -51.0000114440918, 87.23809814453125, -51.0000114440918, -22.761932373046875" stroke="BLACK" strokeType="INSIDE" />
    </children>
 </Pane>
