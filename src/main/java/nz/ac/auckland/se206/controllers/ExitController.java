@@ -707,15 +707,16 @@ public class ExitController implements Initializable {
       fadeTransition2.setToValue(1.0); // Set the target opacity value (1.0 for fully opaque)
       fadeTransition2.play(); // Start the animation for background2
 
-        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.0));
-            pauseTransition.setOnFinished(event -> {
-              idScanner.setVisible(false);
-              light.setVisible(false);
-              idLabel.setVisible(false);
-                // Adjust the player's position to be right in front of the room
-                endingAnimation();
-            });
-            pauseTransition.play();
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.0));
+      pauseTransition.setOnFinished(
+          event -> {
+            idScanner.setVisible(false);
+            light.setVisible(false);
+            idLabel.setVisible(false);
+            // Adjust the player's position to be right in front of the room
+            endingAnimation();
+          });
+      pauseTransition.play();
     }
   }
 

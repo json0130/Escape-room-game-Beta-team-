@@ -19,8 +19,10 @@ public class GameState {
 
   /** Indicates whether the riddle has been resolved. */
   public static boolean foundRiddle = false;
-    /** Indicates whether the riddle is given or not */
+
+  /** Indicates whether the riddle is given or not */
   public static boolean isRiddleGiven = false;
+
   public static boolean isRiddleResolved = false;
   public static boolean isIdCorrected = false;
 

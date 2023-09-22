@@ -1,7 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
@@ -25,7 +24,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
-import nz.ac.auckland.se206.SceneManager;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class IntroController implements Initializable {
@@ -225,7 +223,7 @@ public class IntroController implements Initializable {
 
   private void updateTimer(ActionEvent event) {
     App.timerSeconds--;
-    //System.out.println("Actual timer: " + App.timerSeconds);
+    // System.out.println("Actual timer: " + App.timerSeconds);
   }
 
   @FXML
