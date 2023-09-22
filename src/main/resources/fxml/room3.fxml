@@ -152,7 +152,6 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <fx:include layoutX="900.0" layoutY="-20.0" source="countdowntimer.fxml" />
       <ImageView fx:id="player" fitHeight="131.0" fitWidth="150.0" layoutX="68.0" layoutY="508.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly_spaceship_game_character_walking_48398-removebg-preview.png" />

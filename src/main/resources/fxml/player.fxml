@@ -78,6 +78,11 @@
             <Image url="@../images/Firefly_20230920010238-removebg-preview.png" />
          </image>
       </ImageView>
+      <Label fx:id="playerLabel" layoutX="268.0" layoutY="209.0" text="PLAYER" textFill="WHITE">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
       <Rectangle fx:id="wall21" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="190.0" layoutX="231.0" layoutY="425.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
       <Label fx:id="main" layoutX="151.0" layoutY="137.0" prefHeight="77.0" prefWidth="165.0" text="MAIN ROOM" textAlignment="CENTER" textFill="WHITE">
          <font>
@@ -99,6 +104,11 @@
             <Font size="26.0" />
          </font>
       </Label>
+      <ImageView fx:id="player" fitHeight="50.0" fitWidth="56.0" layoutX="281.0" layoutY="237.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/images-removebg-preview.png" />
+         </image>
+      </ImageView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
       <Label fx:id="difficultyLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="362.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
          <font>
@@ -116,7 +126,6 @@
          </font>
       </Label>
       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
-      <fx:include source="countdowntimer.fxml" />
       <Circle fill="WHITE" layoutX="864.0" layoutY="107.0" radius="53.0" stroke="WHITE" strokeType="INSIDE" />
       <ImageView fx:id="gameMasterBox" fitHeight="643.0" fitWidth="676.0" layoutX="346.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
          <image>
@@ -142,15 +151,5 @@
       </ImageView>
 
       <Rectangle fx:id="black" arcHeight="5.0" arcWidth="5.0" fill="#1f1f1fac" height="606.0" layoutX="-6.0" layoutY="46.0" stroke="BLACK" strokeType="INSIDE" width="1008.0" />
-      <ImageView fx:id="player" fitHeight="50.0" fitWidth="56.0" layoutX="281.0" layoutY="237.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/images-removebg-preview.png" />
-         </image>
-      </ImageView>
-      <Label fx:id="playerLabel" layoutX="268.0" layoutY="209.0" text="PLAYER" textFill="WHITE">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Label>
    </children>
 </Pane>
