@@ -74,6 +74,7 @@ public class ExitController implements Initializable {
   @FXML private Button reset;
   @FXML private Button button;
   @FXML private Button exit;
+  @FXML private Button exit2;
 
   @FXML private ImageView idCaptain;
   @FXML private ImageView idChef;
@@ -312,6 +313,10 @@ public class ExitController implements Initializable {
     reset.setVisible(false);
     pad.setVisible(false);
     exit.setVisible(false);
+    clickButton.setVisible(false);
+    monitor.setVisible(false);
+    clickMonitor.setVisible(false);
+    exit2.setVisible(false);
   }
 
   // when the rectangle is clicked, the keypad is shown
@@ -334,9 +339,6 @@ public class ExitController implements Initializable {
     monitor.setVisible(false);
     exit.setVisible(true);
     player.setVisible(false);
-    clickButton.setVisible(false);
-    monitor.setOpacity(0);
-    clickMonitor.setVisible(false);
   }
 
   @FXML
@@ -362,6 +364,17 @@ public class ExitController implements Initializable {
   }
 
   @FXML
+  private void clickExit2(ActionEvent event) {
+    player.setVisible(true);
+    exit2.setVisible(false);
+    idCaptain.setVisible(false);
+    idChef.setVisible(false);
+    idDoctor.setVisible(false);
+    idEngineer.setVisible(false);
+    ids.setVisible(false);
+  }
+
+  @FXML
   private void onOne(ActionEvent event) {
     soundButttonClick();
     password += "1";
@@ -372,7 +385,6 @@ public class ExitController implements Initializable {
   private void onTwo(ActionEvent event) {
     soundButttonClick();
     password += "2";
-
     screen.setText(password);
   }
 
@@ -380,7 +392,6 @@ public class ExitController implements Initializable {
   private void onThree(ActionEvent event) {
     soundButttonClick();
     password += "3";
-
     screen.setText(password);
   }
 
@@ -388,7 +399,6 @@ public class ExitController implements Initializable {
   private void onFour(ActionEvent event) {
     soundButttonClick();
     password += "4";
-
     screen.setText(password);
   }
 
@@ -396,7 +406,6 @@ public class ExitController implements Initializable {
   private void onFive(ActionEvent event) {
     soundButttonClick();
     password += "5";
-
     screen.setText(password);
   }
 
@@ -404,7 +413,6 @@ public class ExitController implements Initializable {
   private void onSix(ActionEvent event) {
     soundButttonClick();
     password += "6";
-
     screen.setText(password);
   }
 
@@ -481,8 +489,10 @@ public class ExitController implements Initializable {
             reset.setVisible(false);
             pad.setVisible(false);
             exit.setVisible(false);
-            clickButton.setVisible(false);
-
+            clickButton.setOpacity(0);
+            monitor.setOpacity(0);
+            clickMonitor.setVisible(false);
+            exit2.setVisible(true);
             changeOpacity();
           });
       pauseTransition.play();
@@ -692,21 +702,20 @@ public class ExitController implements Initializable {
       FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(2), background2);
       fadeTransition1.setToValue(0.0); // Set the target opacity value (1.0 for fully opaque)
       fadeTransition1.play(); // Start the animation for background1
-      idScanner.setVisible(false);
-      light.setVisible(false);
-      idLabel.setVisible(false);
 
       FadeTransition fadeTransition2 = new FadeTransition(Duration.seconds(2), background3);
       fadeTransition2.setToValue(1.0); // Set the target opacity value (1.0 for fully opaque)
       fadeTransition2.play(); // Start the animation for background2
 
-      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.0));
-      pauseTransition.setOnFinished(
-          event -> {
-            // Adjust the player's position to be right in front of the room
-            endingAnimation();
-          });
-      pauseTransition.play();
+        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.0));
+            pauseTransition.setOnFinished(event -> {
+              idScanner.setVisible(false);
+              light.setVisible(false);
+              idLabel.setVisible(false);
+                // Adjust the player's position to be right in front of the room
+                endingAnimation();
+            });
+            pauseTransition.play();
     }
   }
 

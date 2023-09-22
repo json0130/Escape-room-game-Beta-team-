@@ -3,6 +3,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.PathTransition;
@@ -21,6 +22,7 @@ import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.SceneManager.AppUi;
@@ -32,6 +34,7 @@ import javafx.event.ActionEvent;
 public class EndController implements Initializable {
 
     @FXML private Label win;
+    @FXML private Label youWin;
     @FXML private Label lose;
     @FXML private Pane scene;
     @FXML private Button button;
@@ -40,9 +43,11 @@ public class EndController implements Initializable {
     @FXML private ImageView e1;
     @FXML private ImageView background;
     @FXML private ImageView spaceship;
+    @FXML private ImageView ship;
+    @FXML private Rectangle grey;
 
     @FXML
-    private void endingAnimation(ActionEvent events){
+    private void endingAnimation(){
         // Create a timeline to continuously increase the scaling factor
              Timeline continuousScaling = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(background.scaleXProperty(), 1.0)),
@@ -69,9 +74,26 @@ public class EndController implements Initializable {
         Translation.play();
         // Enable the button when the animation is finished
             Translation.setOnFinished(event -> {
-                App.setScene(AppUi.END1);
-                endAnimation();
-            });
+                // Adjust the background scale to original size
+                grey.setVisible(false);
+                background.setScaleX(1.0);
+                background.setScaleY(1.0);
+                FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(2), ship);
+                fadeTransition1.setToValue(0.0); // Set the target opacity value (1.0 for fully opaque)
+                fadeTransition1.play(); // Start the animation for background1
+                
+
+                FadeTransition fadeTransition2 = new FadeTransition(Duration.seconds(2), grey);
+                fadeTransition2.setToValue(1.0); // Set the target opacity value (1.0 for fully opaque)
+                fadeTransition2.play(); // Start the animation for background2
+
+                PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.0));
+                    pauseTransition.setOnFinished(events -> {
+                        // Adjust the player's position to be right in front of the room
+                        endAnimation();
+                    });
+                    pauseTransition.play();
+                    });
     }
 
     @FXML
@@ -153,19 +175,23 @@ public class EndController implements Initializable {
 
             // Enable the button when the animation is finished
             spaceshipPathTransition.setOnFinished(event -> {
-                App.setScene(AppUi.WIN);
-                animation();
+                youWin.setVisible(true);
             });
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        // scene.sceneProperty().addListener((observable, oldScene, newScene) -> {
-        //     if (newScene != null) {
-        //         // Schedule the playRock method to run after the scene is shown
-        //         Platform.runLater(this::endingAnimation);
-        //     }
-        // });
+        if (scene != null) {
+            scene
+                .sceneProperty()
+                .addListener(
+                    (observable, oldScene, newScene) -> {
+                        if (newScene != null) {
+                            // Schedule the endingAnimation to run after the scene is shown
+                            Platform.runLater(this::endingAnimation);
+                            youWin.setVisible(false);
+                        }
+                    });
+        }
     }
 }

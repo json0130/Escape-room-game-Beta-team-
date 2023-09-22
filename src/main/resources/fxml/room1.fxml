@@ -18,12 +18,6 @@
             <Image url="@../images/Firefly%2020230921004116.png" />
          </image>
       </ImageView>
-      <Button fx:id="btnRiddle" layoutX="38.0" layoutY="410.0" mnemonicParsing="false" onAction="#onRiddle" text="Riddle" />
-      <ImageView fx:id="player" fitHeight="121.0" fitWidth="131.0" layoutX="429.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/Firefly_spaceship_game_character_walking_48398-removebg-preview.png" />
-         </image>
-      </ImageView>
       <ImageView fx:id="crew1" fitHeight="273.0" fitWidth="151.0" layoutX="-59.0" layoutY="99.0" onMouseClicked="#clickCrew1" opacity="0.0" pickOnBounds="true" rotate="-30.0">
          <image>
             <Image url="@../images/room1/costume.png" />
@@ -64,11 +58,11 @@
             <Image url="@../images/idphotos/idengineer.png" />
          </image>
       </ImageView>
-      <Button fx:id="backButton" layoutX="37.0" layoutY="475.0" mnemonicParsing="false" onAction="#back" text="Back" />
+      <Button fx:id="backButton" layoutX="37.0" layoutY="475.0" mnemonicParsing="false" onAction="#back" opacity="0.0" text="Back" />
       <Rectangle fx:id="exit" arcHeight="5.0" arcWidth="5.0" fill="#f89d00" height="50.0" layoutX="413.0" layoutY="617.0" opacity="0.65" stroke="BLACK" strokeType="INSIDE" width="161.0" />
       <Rectangle fx:id="wall1" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="31.0" layoutX="-8.0" layoutY="189.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="1019.0" />
       <Rectangle fx:id="wall2" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="53.0" layoutX="431.0" layoutY="221.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="100.0" />
-      <ImageView fx:id="player" fitHeight="121.0" fitWidth="131.0" layoutX="139.0" layoutY="304.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="player" fitHeight="121.0" fitWidth="131.0" layoutX="433.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly_spaceship_game_character_walking_48398-removebg-preview.png" />
          </image>
@@ -93,8 +87,8 @@
       <Button fx:id="btnCollect2" layoutX="392.0" layoutY="246.0" mnemonicParsing="false" onAction="#onCollect2" text="Collect Id" />
       <Button fx:id="btnCollect3" layoutX="694.0" layoutY="246.0" mnemonicParsing="false" onAction="#onCollect3" text="Collect Id" />
       <Button fx:id="btnCollect4" layoutX="813.0" layoutY="468.0" mnemonicParsing="false" onAction="#onCollect4" text="Collect Id" />
-      <Rectangle fx:id="blinkingRectangle" arcHeight="100.0" arcWidth="100.0" fill="TRANSPARENT" height="96.0" layoutX="432.0" layoutY="167.0" stroke="#ff6a00" strokeType="INSIDE" strokeWidth="3.0" width="96.0" />
-      <Button fx:id="btnRiddle" layoutX="445.0" layoutY="188.0" mnemonicParsing="false" onAction="#onRiddle" prefHeight="53.0" prefWidth="72.0" text="Click Me" />
+      <Rectangle fx:id="blinkingRectangle" arcHeight="70.0" arcWidth="70.0" fill="TRANSPARENT" height="96.0" layoutX="432.0" layoutY="167.0" onMouseClicked="#onRiddle" stroke="#ff6a00" strokeType="INSIDE" strokeWidth="3.0" width="96.0" />
+      <Button fx:id="btnRiddle" layoutX="90.0" layoutY="554.0" mnemonicParsing="false" onAction="#onRiddle" prefHeight="53.0" prefWidth="72.0" text="Click Me" />
       <Rectangle fx:id="crew1Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="80.0" layoutX="95.0" layoutY="351.0" opacity="0.0" rotate="40.0" stroke="BLACK" strokeType="INSIDE" width="44.0" />
       <Rectangle fx:id="crew2Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="31.0" layoutX="182.0" layoutY="241.0" opacity="0.0" rotate="-50.0" stroke="BLACK" strokeType="INSIDE" width="68.0" />
       <Rectangle fx:id="crew3Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="62.0" layoutX="727.0" layoutY="222.0" opacity="0.0" rotate="-40.0" stroke="BLACK" strokeType="INSIDE" width="44.0" />
@@ -119,6 +113,11 @@
             <Image url="@../images/indicator_triangle.png" />
          </image>
       </ImageView>
+      <Label fx:id="clickLabel" layoutX="441.0" layoutY="197.0" prefHeight="37.0" prefWidth="85.0" text="CLICK ME">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
       <Circle fill="WHITE" layoutX="943.0" layoutY="103.0" radius="53.0" stroke="WHITE" strokeType="INSIDE" />
       <ImageView fx:id="gameMaster" fitHeight="83.0" fitWidth="86.0" layoutX="902.0" layoutY="62.0" onMouseClicked="#clickGameMaster" pickOnBounds="true" preserveRatio="true">
          <image>

@@ -83,7 +83,7 @@ public class IntroController implements Initializable {
       mediumButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black;");
       hardButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black;");
       clickedButton.setStyle(
-          "-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: drak blue;");
+          "-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: dark blue;");
     }
     isLevelSelected = true;
 
@@ -141,7 +141,7 @@ public class IntroController implements Initializable {
       minB2.setStyle("-fx-background-color: transparent; -fx-text-fill: black;");
       minB4.setStyle("-fx-background-color: transparent; -fx-text-fill: black;");
       minB6.setStyle("-fx-background-color: transparent; -fx-text-fill: black;");
-      cButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: drak blue;");
+      cButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: dark blue;");
     }
     isTimeSelected = true;
   }
@@ -214,17 +214,6 @@ public class IntroController implements Initializable {
             startButton.setDisable(false);
             App.setScene(AppUi.TUTORIAL);
 
-            // try {
-            //   SceneManager.addScene(AppUi.ROOM3, App.loadFxml("room3"));
-            //   SceneManager.addScene(AppUi.ROOM1, App.loadFxml("room1"));
-            //   SceneManager.addScene(AppUi.PLAYER, App.loadFxml("player"));
-            //   SceneManager.addScene(AppUi.TILEPUZZLE, App.loadFxml("tilegamedesk"));
-            //   SceneManager.addScene(AppUi.TILEROOM, App.loadFxml("tilegameroom"));
-            // } catch (IOException e) {
-            //   // TODO Auto-generated catch block
-            //   e.printStackTrace();
-            // }
-
             App.timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), this::updateTimer));
             App.timerTimeline.setCycleCount(App.timerSeconds);
             // App.timerTimeline.play();
@@ -236,7 +225,7 @@ public class IntroController implements Initializable {
 
   private void updateTimer(ActionEvent event) {
     App.timerSeconds--;
-    System.out.println("Actual timer: " + App.timerSeconds);
+    //System.out.println("Actual timer: " + App.timerSeconds);
   }
 
   @FXML
@@ -245,12 +234,12 @@ public class IntroController implements Initializable {
         e -> {
           // Change the style of the button for 0.2 seconds only and back to original style
           button.setStyle(
-              "-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: drak blue;");
-          PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.9));
+              "-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: dark blue;");
+          PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
           pauseTransition.setOnFinished(
               event -> {
                 button.setStyle(
-                    "-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: whilte;"
+                    "-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: white;"
                         + " -fx-border-color: white; -fx-border-width: 2px; -fx-border-radius:"
                         + " 5px");
               });
@@ -265,7 +254,7 @@ public class IntroController implements Initializable {
         e -> {
 
           // Delay the hiding of elements by 3 seconds
-          PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.5));
+          PauseTransition pauseTransition = new PauseTransition(Duration.seconds(1.5));
           pauseTransition.setOnFinished(
               event -> {
                 // Hide label and box
@@ -282,12 +271,12 @@ public class IntroController implements Initializable {
         e -> {
           // Change the style of the button for 0.2 seconds only and back to original style
           button.setStyle(
-              "-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: drak blue;");
+              "-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: dark blue;");
           PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
           pauseTransition.setOnFinished(
               event -> {
                 button.setStyle(
-                    "-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: whilte;"
+                    "-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: white;"
                         + " -fx-border-color: white; -fx-border-width: 2px; -fx-border-radius:"
                         + " 5px");
               });
@@ -297,7 +286,7 @@ public class IntroController implements Initializable {
     button.setOnMouseExited(
         e -> {
           // Delay the hiding of elements by 3 seconds
-          PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.5));
+          PauseTransition pauseTransition = new PauseTransition(Duration.seconds(1.5));
           pauseTransition.setOnFinished(
               event -> {
                 // Return the button to its original position

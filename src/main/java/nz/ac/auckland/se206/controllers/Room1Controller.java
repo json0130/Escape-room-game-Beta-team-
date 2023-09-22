@@ -89,6 +89,7 @@ public class Room1Controller implements Initializable {
   @FXML private Label difficultyLabel;
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
+  @FXML private Label clickLabel;
 
     @FXML private Button btnSend;
   @FXML private Button btnClose;
@@ -187,6 +188,7 @@ public class Room1Controller implements Initializable {
     btnCollect4.setVisible(false);
     btnRiddle.setVisible(false);
     blinkingRectangle.setVisible(true);
+    clickLabel.setVisible(false);
 
     crew1Indicator.setVisible(false);
     crew2Indicator.setVisible(false);
@@ -346,22 +348,21 @@ public class Room1Controller implements Initializable {
   }
 
   public void checkExit(ImageView player, Rectangle exit) {
-    if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
-      exit.setOpacity(1);
-      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-      pauseTransition.setOnFinished(
-          event -> {
-            // Adjust the player's position to be right in front of the room
-            player.setLayoutX(433);
-            player.setLayoutY(475);
-            App.setScene(AppUi.PLAYER);
-            timer.stop();
-          });
-      pauseTransition.play();
-    } else {
-      exit.setOpacity(0.6);
+        if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
+            exit.setOpacity(1);
+            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+            pauseTransition.setOnFinished(event -> {
+                // Adjust the player's position to be right in front of the room
+                player.setLayoutX(433);
+                player.setLayoutY(468);
+                App.setScene(AppUi.PLAYER);
+                timer.stop();
+            });
+            pauseTransition.play();
+        } else {
+          exit.setOpacity(0.6);
+        }
     }
-  }
 
   public void checkCollision2(ImageView player, List<Rectangle> walls) {
     for (Rectangle wall : walls) {
@@ -377,16 +378,17 @@ public class Room1Controller implements Initializable {
     if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
       blinkingRectangle.setOpacity(1);
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-      pauseTransition.setOnFinished(
-          event -> {
-            // Adjust the player's position to be right in front of the room
-            blinkingRectangle.setOpacity(0);
-            btnRiddle.setVisible(true);
-          });
+      pauseTransition.setOnFinished(event -> {
+          // Adjust the player's position to be right in front of the room
+          blinkingRectangle.setFill(javafx.scene.paint.Color.WHITE);
+          clickLabel.setVisible(true);
+      });
       pauseTransition.play();
-    } else {
-      btnRiddle.setVisible(false);
-    }
+  } else {
+    clickLabel.setVisible(false);
+    blinkingRectangle.setFill(javafx.scene.paint.Color.TRANSPARENT);
+
+  }
   }
 
   @FXML
