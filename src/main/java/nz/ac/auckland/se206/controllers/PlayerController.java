@@ -9,6 +9,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -60,7 +61,8 @@ public class PlayerController implements Initializable {
   @FXML private Rectangle room2;
   @FXML private Rectangle room3;
   @FXML private Rectangle black;
-  @FXML private ImageView gameMasterBox;
+  // @FXML private ImageView gameMasterBox;
+  @FXML private ImageView gameMaster;
 
   @FXML private Label playerLabel;
   @FXML private Label main;
@@ -159,6 +161,7 @@ public class PlayerController implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
+    animateRobot();
     introTextToSpeech();
     playerLabel.setVisible(true);
     black.setVisible(true);
@@ -261,11 +264,11 @@ public class PlayerController implements Initializable {
     Thread introThread = new Thread(introTask);
     introThread.start();
 
-    gameMasterBox.setVisible(false);
-    inputText.setVisible(false);
-    chatTextArea.setVisible(false);
-    btnClose.setVisible(false);
-    btnSend.setVisible(false);
+    // gameMasterBox.setVisible(false);
+    // inputText.setVisible(false);
+    // chatTextArea.setVisible(false);
+    // btnClose.setVisible(false);
+    // btnSend.setVisible(false);
   }
 
   public void checkRoom1(ImageView player, Rectangle room1) {
@@ -481,13 +484,26 @@ public class PlayerController implements Initializable {
 
   @FXML
   public void onClose(ActionEvent event) {
-    gameMasterBox.setVisible(false);
-    inputText.setVisible(false);
-    chatTextArea.setVisible(false);
-    btnClose.setVisible(false);
-    btnSend.setVisible(false);
+    // gameMasterBox.setVisible(false);
+    // inputText.setVisible(false);
+    // chatTextArea.setVisible(false);
+    // btnClose.setVisible(false);
+    // btnSend.setVisible(false);
   }
 
   @FXML
   public void onSend(ActionEvent event) {}
+
+  @FXML
+  private void animateRobot() {
+    TranslateTransition translate = new TranslateTransition();
+    translate.setNode(gameMaster);
+    translate.setDuration(Duration.millis(1000));
+    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setByX(0);
+    translate.setByY(20);
+    translate.setAutoReverse(true);
+
+    translate.play();
+  }
 }
