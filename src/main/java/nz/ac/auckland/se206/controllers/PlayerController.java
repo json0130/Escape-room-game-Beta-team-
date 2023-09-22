@@ -24,7 +24,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -56,11 +55,11 @@ public class PlayerController implements Initializable {
 
   List<Rectangle> walls = new ArrayList<>();
 
-    @FXML private ImageView player;
-    @FXML private Rectangle room1;
-    @FXML private Rectangle room2;
-    @FXML private Rectangle room3;
-    @FXML private Rectangle black;
+  @FXML private ImageView player;
+  @FXML private Rectangle room1;
+  @FXML private Rectangle room2;
+  @FXML private Rectangle room3;
+  @FXML private Rectangle black;
   @FXML private ImageView gameMasterBox;
 
   @FXML private Label playerLabel;
@@ -106,7 +105,6 @@ public class PlayerController implements Initializable {
   private double previousY;
 
   @FXML private Label countdownLabel;
-
 
   private ChatCompletionRequest chatCompletionRequest;
   public static boolean hintContained = false;
@@ -199,7 +197,6 @@ public class PlayerController implements Initializable {
     walls.add(wall19);
     walls.add(wall20);
     walls.add(wall21);
-
 
     //     // when the enter key is pressed, message is sent
     // inputText.setOnKeyPressed(
@@ -474,11 +471,12 @@ public class PlayerController implements Initializable {
 
   @FXML
   public void clickGameMaster(MouseEvent event) {
-    gameMasterBox.setVisible(true);
-    inputText.setVisible(true);
-    chatTextArea.setVisible(true);
-    btnClose.setVisible(true);
-    btnSend.setVisible(true);
+    App.setScene(AppUi.HELPERCHAT);
+    // gameMasterBox.setVisible(true);
+    // inputText.setVisible(true);
+    // chatTextArea.setVisible(true);
+    // btnClose.setVisible(true);
+    // btnSend.setVisible(true);
   }
 
   @FXML
@@ -491,8 +489,5 @@ public class PlayerController implements Initializable {
   }
 
   @FXML
-  public void onSend(ActionEvent event) {
-    
-  }
-
+  public void onSend(ActionEvent event) {}
 }
