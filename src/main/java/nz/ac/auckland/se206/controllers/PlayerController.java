@@ -39,6 +39,9 @@ import nz.ac.auckland.se206.speech.TextToSpeech;
 
 public class PlayerController implements Initializable {
 
+  public static boolean hintContained = false;
+  public static boolean answerContained = false;
+
   private BooleanProperty wPressed = new SimpleBooleanProperty();
   private BooleanProperty aPressed = new SimpleBooleanProperty();
   private BooleanProperty sPressed = new SimpleBooleanProperty();
@@ -109,8 +112,6 @@ public class PlayerController implements Initializable {
   @FXML private Label countdownLabel;
 
   private ChatCompletionRequest chatCompletionRequest;
-  public static boolean hintContained = false;
-  public static boolean answerContained = false;
   private String lastUserMessage = ""; // Track the last user message for GPT response
 
   @FXML
@@ -227,21 +228,6 @@ public class PlayerController implements Initializable {
                 System.exit(0);
               });
         });
-  }
-
-  private void introTextToSpeech() {
-    Task<Void> introTask =
-        new Task<>() {
-
-          @Override
-          protected Void call() throws Exception {
-            TextToSpeech textToSpeech = new TextToSpeech();
-            textToSpeech.speak("Welcome to STARSHIP ESCAPE 1!");
-            return null;
-          }
-        };
-    Thread introThread = new Thread(introTask);
-    introThread.start();
   }
 
   public void checkRoom1(ImageView player, Rectangle room1) {
@@ -422,6 +408,27 @@ public class PlayerController implements Initializable {
         500);
   }
 
+  @FXML
+  public void clickGameMaster(MouseEvent event) {
+    App.previousRoom = AppUi.PLAYER;
+    App.setScene(AppUi.HELPERCHAT);
+  }
+
+  private void introTextToSpeech() {
+    Task<Void> introTask =
+        new Task<>() {
+
+          @Override
+          protected Void call() throws Exception {
+            TextToSpeech textToSpeech = new TextToSpeech();
+            textToSpeech.speak("Welcome to STARSHIP ESCAPE 1!");
+            return null;
+          }
+        };
+    Thread introThread = new Thread(introTask);
+    introThread.start();
+  }
+
   // update the header labels as the hint decreases
   private void updateLabels() {
     difficultyLabel.setText(GameState.difficulty);
@@ -437,18 +444,6 @@ public class PlayerController implements Initializable {
       hintLabel.setText("NO");
     }
   }
-
-  @FXML
-  public void clickGameMaster(MouseEvent event) {
-    App.previousRoom = AppUi.PLAYER;
-    App.setScene(AppUi.HELPERCHAT);
-  }
-
-  @FXML
-  public void onClose(ActionEvent event) {}
-
-  @FXML
-  public void onSend(ActionEvent event) {}
 
   // game master robot moves
   @FXML

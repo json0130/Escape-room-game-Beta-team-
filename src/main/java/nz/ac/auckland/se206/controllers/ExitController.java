@@ -212,26 +212,6 @@ public class ExitController implements Initializable {
     }
   }
 
-  // if the player moves closer to the computer, button for keypad appears
-  private void checkComputer(ImageView player, Rectangle wall2) {
-    if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
-      monitor.setOpacity(1);
-      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-      pauseTransition.setOnFinished(
-          event -> {
-            // Adjust the player's position to be right in front of the room
-            nextToButton = true;
-            monitor.setFill(javafx.scene.paint.Color.WHITE);
-            clickButton.setVisible(true);
-          });
-      pauseTransition.play();
-    } else {
-      nextToButton = false;
-      clickButton.setVisible(false);
-      monitor.setFill(javafx.scene.paint.Color.TRANSPARENT);
-    }
-  }
-
   // code for player movement using wasd keys
   @FXML
   public void movementSetup() {
@@ -295,6 +275,80 @@ public class ExitController implements Initializable {
 
     if (player.getLayoutY() > bottom) {
       player.setLayoutY(bottom);
+    }
+  }
+
+  // idcards can be dragged
+  public void makeDraggable(ImageView imageView) {
+    double originalX = imageView.getLayoutX();
+    double originalY = imageView.getLayoutY();
+
+    imageView.setOnMousePressed(
+        mouseEvent -> {
+          mouseAnchorX = mouseEvent.getX();
+          mouseAnchorY = mouseEvent.getY();
+        });
+
+    imageView.setOnMouseDragged(
+        mouseEvent -> {
+          // Calculate the new position based on the mouse movement
+          double newX = mouseEvent.getSceneX() - mouseAnchorX;
+          double newY = mouseEvent.getSceneY() - mouseAnchorY;
+
+          // Update the layout of the image
+          imageView.setLayoutX(newX);
+          imageView.setLayoutY(newY);
+        });
+
+    imageView.setOnMouseReleased(
+        mouseEvent -> {
+          // Return the image to its original position
+          imageView.setLayoutX(originalX);
+          imageView.setLayoutY(originalY);
+        });
+  }
+
+  // detect change in gamestate difficulty which is seleced in intro scene
+  public void detectDifficulty() {
+    Timer labelTimer = new Timer(true);
+    labelTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (GameState.difficulty != null) {
+              if (GameState.difficulty == "MEDIUM") {
+                Platform.runLater(() -> updateLabels());
+                if (GameState.numOfHints == 0) {
+                  labelTimer.cancel();
+                }
+              } else {
+                Platform.runLater(() -> updateLabels());
+                labelTimer.cancel();
+              }
+            }
+          }
+        },
+        0,
+        500);
+  }
+
+  // if the player moves closer to the computer, button for keypad appears
+  private void checkComputer(ImageView player, Rectangle wall2) {
+    if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
+      monitor.setOpacity(1);
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+      pauseTransition.setOnFinished(
+          event -> {
+            // Adjust the player's position to be right in front of the room
+            nextToButton = true;
+            monitor.setFill(javafx.scene.paint.Color.WHITE);
+            clickButton.setVisible(true);
+          });
+      pauseTransition.play();
+    } else {
+      nextToButton = false;
+      clickButton.setVisible(false);
+      monitor.setFill(javafx.scene.paint.Color.TRANSPARENT);
     }
   }
 
@@ -547,36 +601,6 @@ public class ExitController implements Initializable {
     }
   }
 
-  // idcards can be dragged
-  public void makeDraggable(ImageView imageView) {
-    double originalX = imageView.getLayoutX();
-    double originalY = imageView.getLayoutY();
-
-    imageView.setOnMousePressed(
-        mouseEvent -> {
-          mouseAnchorX = mouseEvent.getX();
-          mouseAnchorY = mouseEvent.getY();
-        });
-
-    imageView.setOnMouseDragged(
-        mouseEvent -> {
-          // Calculate the new position based on the mouse movement
-          double newX = mouseEvent.getSceneX() - mouseAnchorX;
-          double newY = mouseEvent.getSceneY() - mouseAnchorY;
-
-          // Update the layout of the image
-          imageView.setLayoutX(newX);
-          imageView.setLayoutY(newY);
-        });
-
-    imageView.setOnMouseReleased(
-        mouseEvent -> {
-          // Return the image to its original position
-          imageView.setLayoutX(originalX);
-          imageView.setLayoutY(originalY);
-        });
-  }
-
   // check if correct id cards are tagged on the pad
   AnimationTimer collisionTimer =
       new AnimationTimer() {
@@ -659,30 +683,6 @@ public class ExitController implements Initializable {
           }
         }
       };
-
-  // detect change in gamestate difficulty which is seleced in intro scene
-  public void detectDifficulty() {
-    Timer labelTimer = new Timer(true);
-    labelTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            if (GameState.difficulty != null) {
-              if (GameState.difficulty == "MEDIUM") {
-                Platform.runLater(() -> updateLabels());
-                if (GameState.numOfHints == 0) {
-                  labelTimer.cancel();
-                }
-              } else {
-                Platform.runLater(() -> updateLabels());
-                labelTimer.cancel();
-              }
-            }
-          }
-        },
-        0,
-        500);
-  }
 
   // update the labels of hint and difficulty as the game progresses
   private void updateLabels() {
