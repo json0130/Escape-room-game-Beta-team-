@@ -380,70 +380,70 @@ public class ExitController implements Initializable {
 
   @FXML
   private void onOne(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "1";
     screen.setText(password);
   }
 
   @FXML
   private void onTwo(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "2";
     screen.setText(password);
   }
 
   @FXML
   private void onThree(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "3";
     screen.setText(password);
   }
 
   @FXML
   private void onFour(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "4";
     screen.setText(password);
   }
 
   @FXML
   private void onFive(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "5";
     screen.setText(password);
   }
 
   @FXML
   private void onSix(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "6";
     screen.setText(password);
   }
 
   @FXML
   private void onSeven(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "7";
     screen.setText(password);
   }
 
   @FXML
   private void onEight(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "8";
     screen.setText(password);
   }
 
   @FXML
   private void onNine(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "9";
     screen.setText(password);
   }
 
   @FXML
   private void onZero(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "0";
     screen.setText(password);
   }
@@ -759,7 +759,7 @@ public class ExitController implements Initializable {
   }
 
   @FXML
-  private void soundButttonClick() {
+  private void clickSoundButtton() {
     String soundEffect = "src/main/resources/sounds/button-click.mp3";
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);

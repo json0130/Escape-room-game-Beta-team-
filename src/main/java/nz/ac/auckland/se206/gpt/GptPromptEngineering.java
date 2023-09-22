@@ -23,7 +23,8 @@ public class GptPromptEngineering {
   }
 
   public static String getRiddleWithGivenWord(String wordToGuess) {
-    return "You are the AI of an escape room. Provide a riddle with an answer "+wordToGuess+". You should not reveal the answer.";
+    return "You are the AI of an escape room. Provide a riddle with an answer "+wordToGuess+". "
+    + "You should not reveal the answer.";
   }
 
   public static String getRiddleHint(String wordToGuess) {
@@ -35,7 +36,8 @@ public class GptPromptEngineering {
   }
 
   public static String getAnswerChecker() {
-    return "If users exactly say "+ Room1Controller.riddleAnswer+ ", you should say 'Correct.' If not, say 'Incorrect' and suggest to include 'hint' in their message for a hint.";
+    return "If users exactly say "+ Room1Controller.riddleAnswer+ ", you should say 'Correct.' "
+    + "If not, say 'Incorrect' and suggest to include 'hint' in their message for a hint.";
   }
 
   public static String getGameMaster() {

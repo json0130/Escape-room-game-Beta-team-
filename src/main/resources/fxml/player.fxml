@@ -141,15 +141,15 @@
       </ImageView>
 
       <Rectangle fx:id="black" arcHeight="5.0" arcWidth="5.0" fill="#1f1f1fac" height="606.0" layoutX="-6.0" layoutY="46.0" stroke="BLACK" strokeType="INSIDE" width="1008.0" />
-      <Label fx:id="playerLabel" layoutX="268.0" layoutY="209.0" text="PLAYER" textFill="WHITE">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Label>
       <ImageView fx:id="player" fitHeight="50.0" fitWidth="56.0" layoutX="281.0" layoutY="237.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/images-removebg-preview.png" />
          </image>
       </ImageView>
+      <Label fx:id="playerLabel" layoutX="268.0" layoutY="209.0" text="PLAYER" textFill="WHITE">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
    </children>
 </Pane>
