@@ -97,6 +97,7 @@ public class ExitController implements Initializable {
   @FXML private Label idLabel;
   @FXML private Label clickButton;
 
+  private boolean nextToButton = false;
   private FadeTransition fadeTransition;
 
   private String password = "";
@@ -215,11 +216,13 @@ public class ExitController implements Initializable {
       pauseTransition.setOnFinished(
           event -> {
             // Adjust the player's position to be right in front of the room
+            nextToButton = true;
             monitor.setFill(javafx.scene.paint.Color.WHITE);
             clickButton.setVisible(true);
           });
       pauseTransition.play();
     } else {
+      nextToButton = false;
       clickButton.setVisible(false);
       monitor.setFill(javafx.scene.paint.Color.TRANSPARENT);
     }
@@ -314,15 +317,14 @@ public class ExitController implements Initializable {
     pad.setVisible(false);
     exit.setVisible(false);
     clickButton.setVisible(false);
-    monitor.setVisible(false);
-    clickMonitor.setVisible(false);
     exit2.setVisible(false);
   }
 
   // when the rectangle is clicked, the keypad is shown
   @FXML
   private void monitorClicked(MouseEvent event) {
-    screen.setVisible(true);
+    if(nextToButton){
+      screen.setVisible(true);
     one.setVisible(true);
     two.setVisible(true);
     three.setVisible(true);
@@ -339,6 +341,8 @@ public class ExitController implements Initializable {
     monitor.setVisible(false);
     exit.setVisible(true);
     player.setVisible(false);
+    clickMonitor.setVisible(false);
+    } 
   }
 
   @FXML
@@ -489,8 +493,8 @@ public class ExitController implements Initializable {
             reset.setVisible(false);
             pad.setVisible(false);
             exit.setVisible(false);
-            clickButton.setOpacity(0);
-            monitor.setOpacity(0);
+            clickButton.setVisible(false);
+            monitor.setVisible(false);
             clickMonitor.setVisible(false);
             exit2.setVisible(true);
             changeOpacity();
@@ -698,6 +702,7 @@ public class ExitController implements Initializable {
 
   private void changeOpacity2() {
     if (GameState.correctId) {
+      player.setVisible(false);
       // Create a FadeTransition for both background images
       FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(2), background2);
       fadeTransition1.setToValue(0.0); // Set the target opacity value (1.0 for fully opaque)

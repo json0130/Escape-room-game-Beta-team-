@@ -8,6 +8,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
@@ -59,7 +60,6 @@
          </image>
       </ImageView>
       <Button fx:id="backButton" layoutX="37.0" layoutY="475.0" mnemonicParsing="false" onAction="#back" opacity="0.0" text="Back" />
-      <Rectangle fx:id="exit" arcHeight="5.0" arcWidth="5.0" fill="#f89d00" height="50.0" layoutX="413.0" layoutY="617.0" opacity="0.65" stroke="BLACK" strokeType="INSIDE" width="161.0" />
       <Rectangle fx:id="wall1" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="31.0" layoutX="-8.0" layoutY="189.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="1019.0" />
       <Rectangle fx:id="wall2" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="53.0" layoutX="431.0" layoutY="221.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="100.0" />
       <ImageView fx:id="player" fitHeight="121.0" fitWidth="131.0" layoutX="433.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true">
@@ -87,7 +87,6 @@
       <Button fx:id="btnCollect2" layoutX="392.0" layoutY="246.0" mnemonicParsing="false" onAction="#onCollect2" text="Collect Id" />
       <Button fx:id="btnCollect3" layoutX="694.0" layoutY="246.0" mnemonicParsing="false" onAction="#onCollect3" text="Collect Id" />
       <Button fx:id="btnCollect4" layoutX="813.0" layoutY="468.0" mnemonicParsing="false" onAction="#onCollect4" text="Collect Id" />
-      <Rectangle fx:id="blinkingRectangle" arcHeight="70.0" arcWidth="70.0" fill="TRANSPARENT" height="96.0" layoutX="432.0" layoutY="167.0" onMouseClicked="#onRiddle" stroke="#ff6a00" strokeType="INSIDE" strokeWidth="3.0" width="96.0" />
       <Button fx:id="btnRiddle" layoutX="90.0" layoutY="554.0" mnemonicParsing="false" onAction="#onRiddle" prefHeight="53.0" prefWidth="72.0" text="Click Me" />
       <Rectangle fx:id="crew1Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="80.0" layoutX="95.0" layoutY="351.0" opacity="0.0" rotate="40.0" stroke="BLACK" strokeType="INSIDE" width="44.0" />
       <Rectangle fx:id="crew2Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="31.0" layoutX="182.0" layoutY="241.0" opacity="0.0" rotate="-50.0" stroke="BLACK" strokeType="INSIDE" width="68.0" />
@@ -113,11 +112,6 @@
             <Image url="@../images/indicator_triangle.png" />
          </image>
       </ImageView>
-      <Label fx:id="clickLabel" layoutX="441.0" layoutY="197.0" prefHeight="37.0" prefWidth="85.0" text="CLICK ME">
-         <font>
-            <Font size="17.0" />
-         </font>
-      </Label>
       <Circle fill="WHITE" layoutX="943.0" layoutY="103.0" radius="53.0" stroke="WHITE" strokeType="INSIDE" />
       <ImageView fx:id="gameMaster" fitHeight="83.0" fitWidth="86.0" layoutX="902.0" layoutY="62.0" onMouseClicked="#clickGameMaster" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -141,6 +135,14 @@
             <Font name="Arial" size="14.0" />
          </font>
       </Button>
+      <Rectangle fx:id="blinkingRectangle" arcHeight="70.0" arcWidth="70.0" fill="TRANSPARENT" height="96.0" layoutX="432.0" layoutY="167.0" onMouseClicked="#onRiddle" stroke="#ff6a00" strokeType="INSIDE" strokeWidth="3.0" width="96.0" />
+      <Label fx:id="clickLabel" layoutX="441.0" layoutY="197.0" prefHeight="37.0" prefWidth="85.0" text="CLICK ME">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
+      <Rectangle fx:id="exit" arcHeight="5.0" arcWidth="5.0" fill="#f89d00" height="50.0" layoutX="413.0" layoutY="617.0" opacity="0.65" stroke="BLACK" strokeType="INSIDE" width="161.0" />
+      <Polygon fill="WHITE" layoutX="494.0" layoutY="591.0" points="-50.0, 40.0, 50.0, 40.0, -1.1348876953125, 53.3333740234375" stroke="WHITE" strokeType="INSIDE" />
    </children>
 </Pane>

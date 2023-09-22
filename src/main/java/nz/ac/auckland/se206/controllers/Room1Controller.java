@@ -103,6 +103,8 @@ public class Room1Controller implements Initializable {
   public boolean isCrew3Colliding = false;
   public boolean isCrew4Colliding = false;
 
+  private boolean nextToButton = false;
+
   AnimationTimer collisionTimer =
       new AnimationTimer() {
         @Override
@@ -342,9 +344,11 @@ public class Room1Controller implements Initializable {
   }
 
   @FXML
-  public void onRiddle(ActionEvent evnet) throws IOException {
-    soundButttonClick();
-    App.setScene(AppUi.CHAT);
+  public void onRiddle(MouseEvent evnet) throws IOException {
+    if(nextToButton) {
+      soundButttonClick();
+      App.setScene(AppUi.CHAT);
+    }
   }
 
   public void checkExit(ImageView player, Rectangle exit) {
@@ -379,17 +383,19 @@ public class Room1Controller implements Initializable {
     if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
       blinkingRectangle.setOpacity(1);
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-      pauseTransition.setOnFinished(
-          event -> {
-            // Adjust the player's position to be right in front of the room
-            blinkingRectangle.setFill(javafx.scene.paint.Color.WHITE);
-            clickLabel.setVisible(true);
-          });
+      pauseTransition.setOnFinished(event -> {
+          // Adjust the player's position to be right in front of the room
+          blinkingRectangle.setFill(javafx.scene.paint.Color.WHITE);
+          clickLabel.setVisible(true);
+          nextToButton = true;
+      });
       pauseTransition.play();
-    } else {
-      clickLabel.setVisible(false);
-      blinkingRectangle.setFill(javafx.scene.paint.Color.TRANSPARENT);
-    }
+  } else {
+    clickLabel.setVisible(false);
+    blinkingRectangle.setFill(javafx.scene.paint.Color.TRANSPARENT);
+    nextToButton = false;
+
+  }
   }
 
   @FXML
