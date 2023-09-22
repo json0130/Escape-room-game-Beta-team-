@@ -183,6 +183,7 @@ public class ExitController implements Initializable {
     detectDifficulty();
   }
 
+  // if the charcter collides rectangle for exit, scene changes back to map
   public void checkExit(ImageView player, Rectangle exit1) {
     if (player.getBoundsInParent().intersects(exit1.getBoundsInParent())) {
       exit1.setOpacity(1);
@@ -211,6 +212,7 @@ public class ExitController implements Initializable {
     }
   }
 
+  // if the player moves closer to the computer, button for keypad appears
   private void checkComputer(ImageView player, Rectangle wall2) {
     if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
       monitor.setOpacity(1);
@@ -230,6 +232,7 @@ public class ExitController implements Initializable {
     }
   }
 
+  // code for player movement using wasd keys
   @FXML
   public void movementSetup() {
     scene.setOnKeyPressed(
@@ -271,6 +274,7 @@ public class ExitController implements Initializable {
         });
   }
 
+  // prevent the player moves out of the window
   public void squareBorder() {
     double left = 0;
     double right = scene.getWidth() - shapesize;
@@ -294,6 +298,7 @@ public class ExitController implements Initializable {
     }
   }
 
+  // make all the nodes invisible at once
   private void makeInvisible() {
     idScanner.setVisible(false);
     light.setVisible(false);
@@ -347,6 +352,7 @@ public class ExitController implements Initializable {
     }
   }
 
+  // if exit is clicked, unrelated node becomes invisible
   @FXML
   private void clickExit(ActionEvent event) {
     screen.setVisible(false);
@@ -450,6 +456,7 @@ public class ExitController implements Initializable {
     screen.setText(password);
   }
 
+  // enter key on the keypand is entered, it checks the passcode
   @FXML
   private void onEnter(ActionEvent events) {
     if (password == "") {
@@ -570,6 +577,7 @@ public class ExitController implements Initializable {
         });
   }
 
+  // check if correct id cards are tagged on the pad
   AnimationTimer collisionTimer =
       new AnimationTimer() {
         @Override
@@ -580,8 +588,10 @@ public class ExitController implements Initializable {
           checkCollision(idEngineer, idScanner);
         }
 
+        // detect collision between two objects
         private void checkCollision(Node node1, Node node2) {
           if (node1.getBoundsInParent().intersects(node2.getBoundsInParent())) {
+            // if the anwer is captain, idcaptain give green light, others give red
             if (Room1Controller.riddleAnswer == "captain") {
               if (node1 == idCaptain) {
                 light.setFill(Color.GREEN);
@@ -597,6 +607,7 @@ public class ExitController implements Initializable {
                 soundIncorrect();
                 light.setFill(Color.RED);
               }
+              // only chef id gives green light, others give red
             } else if (Room1Controller.riddleAnswer == "chef") {
               if (node1 == idChef) {
                 light.setFill(Color.GREEN);
@@ -612,6 +623,7 @@ public class ExitController implements Initializable {
                 soundIncorrect();
                 light.setFill(Color.RED);
               }
+              // only doctor gives green light, others give red
             } else if (Room1Controller.riddleAnswer == "doctor") {
               if (node1 == idDoctor) {
                 light.setFill(Color.GREEN);
@@ -627,6 +639,7 @@ public class ExitController implements Initializable {
                 soundIncorrect();
                 light.setFill(Color.RED);
               }
+              // only engineer gives green light, others give red
             } else if (Room1Controller.riddleAnswer == "engineer") {
               if (node1 == idEngineer) {
                 light.setFill(Color.GREEN);
@@ -647,6 +660,7 @@ public class ExitController implements Initializable {
         }
       };
 
+  // detect change in gamestate difficulty which is seleced in intro scene
   public void detectDifficulty() {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
@@ -670,6 +684,7 @@ public class ExitController implements Initializable {
         500);
   }
 
+  // update the labels of hint and difficulty as the game progresses
   private void updateLabels() {
     difficultyLabel.setText(GameState.difficulty);
     if (GameState.difficulty == "EASY") {
@@ -797,6 +812,7 @@ public class ExitController implements Initializable {
     App.setScene(AppUi.HELPERCHAT);
   }
 
+  // game master robot animation
   @FXML
   private void animateRobot() {
     TranslateTransition translate = new TranslateTransition();

@@ -201,27 +201,6 @@ public class PlayerController implements Initializable {
     walls.add(wall20);
     walls.add(wall21);
 
-    //     // when the enter key is pressed, message is sent
-    // inputText.setOnKeyPressed(
-    //     event -> {
-    //       if (event.getCode() == KeyCode.ENTER) {
-    //         try {
-    //           onSendMessage(new ActionEvent());
-    //         } catch (ApiProxyException | IOException e) {
-    //           e.printStackTrace();
-    //         }
-    //       }
-    //     });
-    // chatTextArea.setEditable(false);
-
-    // chatCompletionRequest =
-    //     new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.5).setMaxTokens(100);
-    //   try {
-    //     runGpt(new ChatMessage("user", GptPromptEngineering.getGameMaster()));
-    //   } catch (ApiProxyException e) {
-    //     e.printStackTrace();
-    //   }
-
     collisionTimer.start();
 
     previousX = player.getLayoutX();
@@ -263,22 +242,11 @@ public class PlayerController implements Initializable {
         };
     Thread introThread = new Thread(introTask);
     introThread.start();
-
-    // gameMasterBox.setVisible(false);
-    // inputText.setVisible(false);
-    // chatTextArea.setVisible(false);
-    // btnClose.setVisible(false);
-    // btnSend.setVisible(false);
   }
 
   public void checkRoom1(ImageView player, Rectangle room1) {
     if (player.getBoundsInParent().intersects(room1.getBoundsInParent())) {
       room1.setVisible(true);
-
-      // System.out.println(mediaPlayer.getMedia());
-      // if (mediaPlayer.getStatus() != MediaPlayer.Status.PLAYING) {
-      //   // soundDoorOpen();
-      // }
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
@@ -299,9 +267,6 @@ public class PlayerController implements Initializable {
     if (player.getBoundsInParent().intersects(room2.getBoundsInParent())) {
       room2.setVisible(true);
 
-      // if (mediaPlayer.getStatus() != MediaPlayer.Status.PLAYING) {
-      //   soundDoorOpen();
-      // }
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
@@ -335,9 +300,6 @@ public class PlayerController implements Initializable {
         App.mediaPlayer.setAutoPlay(true);
       }
 
-      // if (mediaPlayer.getStatus() != MediaPlayer.Status.PLAYING) {
-      //   soundDoorOpen();
-      // }
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
@@ -364,6 +326,7 @@ public class PlayerController implements Initializable {
     }
   }
 
+  // code for enabling palyer to move using wasd keys
   @FXML
   public void movementSetup() {
     scene.setOnKeyPressed(
@@ -405,6 +368,7 @@ public class PlayerController implements Initializable {
         });
   }
 
+  // border that the player cannot move outof the window
   public void squareBorder() {
     double left = 0;
     double right = scene.getWidth() - shapesize;
@@ -434,6 +398,7 @@ public class PlayerController implements Initializable {
     App.setScene(AppUi.ROOM3);
   }
 
+  // detect if there is change isn gamestate difficulty in the intro page using timer
   public void detectDifficulty() {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
@@ -457,6 +422,7 @@ public class PlayerController implements Initializable {
         500);
   }
 
+  // update the header labels as the hint decreases
   private void updateLabels() {
     difficultyLabel.setText(GameState.difficulty);
     if (GameState.difficulty == "EASY") {
@@ -475,25 +441,15 @@ public class PlayerController implements Initializable {
   @FXML
   public void clickGameMaster(MouseEvent event) {
     App.setScene(AppUi.HELPERCHAT);
-    // gameMasterBox.setVisible(true);
-    // inputText.setVisible(true);
-    // chatTextArea.setVisible(true);
-    // btnClose.setVisible(true);
-    // btnSend.setVisible(true);
   }
 
   @FXML
-  public void onClose(ActionEvent event) {
-    // gameMasterBox.setVisible(false);
-    // inputText.setVisible(false);
-    // chatTextArea.setVisible(false);
-    // btnClose.setVisible(false);
-    // btnSend.setVisible(false);
-  }
+  public void onClose(ActionEvent event) {}
 
   @FXML
   public void onSend(ActionEvent event) {}
 
+  // game master robot moves
   @FXML
   private void animateRobot() {
     TranslateTransition translate = new TranslateTransition();

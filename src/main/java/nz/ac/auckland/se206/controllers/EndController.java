@@ -26,19 +26,19 @@ import javafx.util.Duration;
 
 public class EndController implements Initializable {
 
-    @FXML private Label win;
-    @FXML private Label youWin;
-    @FXML private Label lose;
-    @FXML private Label lose1;
-    @FXML private Pane scene;
-    @FXML private Button button;
-    @FXML private Button s;
-    @FXML private Button start;
-    @FXML private ImageView e1;
-    @FXML private ImageView background;
-    @FXML private ImageView spaceship;
-    @FXML private ImageView ship;
-    @FXML private Rectangle grey;
+  @FXML private Label win;
+  @FXML private Label youWin;
+  @FXML private Label lose;
+  @FXML private Label lose1;
+  @FXML private Pane scene;
+  @FXML private Button button;
+  @FXML private Button s;
+  @FXML private Button start;
+  @FXML private ImageView e1;
+  @FXML private ImageView background;
+  @FXML private ImageView spaceship;
+  @FXML private ImageView ship;
+  @FXML private Rectangle grey;
 
   @FXML
   private void endingAnimation() {
@@ -190,5 +190,5 @@ public class EndController implements Initializable {
                 }
               });
     }
-}
+  }
 }

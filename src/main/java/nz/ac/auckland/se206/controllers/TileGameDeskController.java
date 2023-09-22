@@ -427,13 +427,6 @@ public class TileGameDeskController {
 
         disableImages();
 
-        // try {
-        //   Thread.sleep(1000);
-        // } catch (InterruptedException e) {
-        //   // TODO Auto-generated catch block
-        //   e.printStackTrace();
-        // }
-
         showHomeScreen();
       }
     }
@@ -478,7 +471,6 @@ public class TileGameDeskController {
           protected Void call() throws Exception {
             textToSpeech.setInterupt();
             textToSpeech.speak(dialogueText.getText());
-            // textToSpeech.terminate();
             return null;
           }
         };
@@ -516,13 +508,6 @@ public class TileGameDeskController {
     imageSeven.setVisible(false);
     imageEight.setVisible(false);
   }
-
-  // @FXML
-  // private void showWelcomeScreen() {
-  //   welcomeScreen.setVisible(true);
-  //   crewMemberName.setVisible(true);
-  //   loadingGif.setVisible(true);
-  // }
 
   @FXML
   private void showHomeScreen() {
@@ -568,9 +553,6 @@ public class TileGameDeskController {
 
   @FXML
   private void onCaptchaButtonClick() {
-    // welcomeScreen.setVisible(false);
-    // puzzleTutorial.setVisible(false);
-    // loadCaptchaButton.setVisible(false);
     tutorialScreen.setVisible(false);
     loadCaptchaButton.setVisible(false);
   }
@@ -602,6 +584,7 @@ public class TileGameDeskController {
     System.out.println("click");
   }
 
+  // sound for tile game
   @FXML
   private void soundTileClick() {
     String soundEffect = "src/main/resources/sounds/tile-move.mp3";
@@ -615,6 +598,7 @@ public class TileGameDeskController {
     App.setScene(AppUi.HELPERCHAT);
   }
 
+  // game master animation
   @FXML
   private void animateRobot() {
     TranslateTransition translate = new TranslateTransition();
