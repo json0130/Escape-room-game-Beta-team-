@@ -40,6 +40,22 @@ public class EndController implements Initializable {
   @FXML private ImageView ship;
   @FXML private Rectangle grey;
 
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
+    if (scene != null) {
+      scene
+          .sceneProperty()
+          .addListener(
+              (observable, oldScene, newScene) -> {
+                if (newScene != null) {
+                  // Schedule the endingAnimation to run after the scene is shown
+                  Platform.runLater(this::endingAnimation);
+                  youWin.setVisible(false);
+                }
+              });
+    }
+  }
+
   @FXML
   private void endingAnimation() {
     // Create a timeline to continuously increase the scaling factor
@@ -174,21 +190,5 @@ public class EndController implements Initializable {
         event -> {
           youWin.setVisible(true);
         });
-  }
-
-  @Override
-  public void initialize(URL location, ResourceBundle resources) {
-    if (scene != null) {
-      scene
-          .sceneProperty()
-          .addListener(
-              (observable, oldScene, newScene) -> {
-                if (newScene != null) {
-                  // Schedule the endingAnimation to run after the scene is shown
-                  Platform.runLater(this::endingAnimation);
-                  youWin.setVisible(false);
-                }
-              });
-    }
   }
 }

@@ -54,6 +54,35 @@ public class IntroController implements Initializable {
   @FXML private boolean isLevelSelected = false;
   @FXML private boolean isTimeSelected = false;
 
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
+
+    buttonHovered(easyButton, easy, easybox);
+    buttonHovered(mediumButton, medium, mediumbox);
+    buttonHovered(hardButton, hard, hardbox);
+    miniuteButtonHovered(minB2);
+    miniuteButtonHovered(minB4);
+    miniuteButtonHovered(minB6);
+
+    easybox.setVisible(false);
+    mediumbox.setVisible(false);
+    hardbox.setVisible(false);
+    easy.setVisible(false);
+    medium.setVisible(false);
+    hard.setVisible(false);
+    spaceship.setVisible(false);
+    minB2.setVisible(false);
+    minB4.setVisible(false);
+    minB6.setVisible(false);
+    letter.setVisible(false);
+    letterbox.setVisible(false);
+    tutorial.setVisible(false);
+
+    background2.setVisible(false);
+    startButton.setVisible(false);
+    background3.setVisible(false);
+  }
+
   @FXML
   private void levelButtonClicked(ActionEvent event) {
     soundButttonClick();
@@ -227,7 +256,7 @@ public class IntroController implements Initializable {
       App.timerTimeline.stop();
       App.setScene(AppUi.LOSE);
     }
-    //System.out.println("Actual timer: " + App.timerSeconds);
+    // System.out.println("Actual timer: " + App.timerSeconds);
   }
 
   @FXML
@@ -296,35 +325,6 @@ public class IntroController implements Initializable {
               });
           pauseTransition.play();
         });
-  }
-
-  @Override
-  public void initialize(URL location, ResourceBundle resources) {
-
-    buttonHovered(easyButton, easy, easybox);
-    buttonHovered(mediumButton, medium, mediumbox);
-    buttonHovered(hardButton, hard, hardbox);
-    miniuteButtonHovered(minB2);
-    miniuteButtonHovered(minB4);
-    miniuteButtonHovered(minB6);
-
-    easybox.setVisible(false);
-    mediumbox.setVisible(false);
-    hardbox.setVisible(false);
-    easy.setVisible(false);
-    medium.setVisible(false);
-    hard.setVisible(false);
-    spaceship.setVisible(false);
-    minB2.setVisible(false);
-    minB4.setVisible(false);
-    minB6.setVisible(false);
-    letter.setVisible(false);
-    letterbox.setVisible(false);
-    tutorial.setVisible(false);
-
-    background2.setVisible(false);
-    startButton.setVisible(false);
-    background3.setVisible(false);
   }
 
   @FXML

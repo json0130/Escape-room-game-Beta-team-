@@ -66,6 +66,60 @@ public class ChatController {
     System.out.println(Room1Controller.riddleAnswer);
   }
 
+  public void detectDifficulty() {
+    Timer labelTimer = new Timer(true);
+    labelTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (GameState.difficulty != null) {
+              if (GameState.difficulty == "MEDIUM") {
+                Platform.runLater(() -> updateLabels());
+                if (!isRiddleGiven) {
+                  chatCompletionRequest =
+                      new ChatCompletionRequest()
+                          .setN(1)
+                          .setTemperature(0.5)
+                          .setTopP(0.5)
+                          .setMaxTokens(100);
+                  try {
+                    runGpt(
+                        new ChatMessage(
+                            "user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
+                  } catch (ApiProxyException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                  }
+                  isRiddleGiven = true;
+                }
+                if (GameState.numOfHints == 0) {
+                  labelTimer.cancel();
+                }
+              } else {
+                Platform.runLater(() -> updateLabels());
+                chatCompletionRequest =
+                    new ChatCompletionRequest()
+                        .setN(1)
+                        .setTemperature(0.5)
+                        .setTopP(0.5)
+                        .setMaxTokens(100);
+                try {
+                  runGpt(
+                      new ChatMessage(
+                          "user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
+                } catch (ApiProxyException e) {
+                  // TODO Auto-generated catch block
+                  e.printStackTrace();
+                }
+                labelTimer.cancel();
+              }
+            }
+          }
+        },
+        0,
+        500);
+  }
+
   /**
    * Appends a chat message to the chat text area.
    *
@@ -169,60 +223,6 @@ public class ChatController {
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
-  }
-
-  public void detectDifficulty() {
-    Timer labelTimer = new Timer(true);
-    labelTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            if (GameState.difficulty != null) {
-              if (GameState.difficulty == "MEDIUM") {
-                Platform.runLater(() -> updateLabels());
-                if (!isRiddleGiven) {
-                  chatCompletionRequest =
-                      new ChatCompletionRequest()
-                          .setN(1)
-                          .setTemperature(0.5)
-                          .setTopP(0.5)
-                          .setMaxTokens(100);
-                  try {
-                    runGpt(
-                        new ChatMessage(
-                            "user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
-                  } catch (ApiProxyException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                  }
-                  isRiddleGiven = true;
-                }
-                if (GameState.numOfHints == 0) {
-                  labelTimer.cancel();
-                }
-              } else {
-                Platform.runLater(() -> updateLabels());
-                chatCompletionRequest =
-                    new ChatCompletionRequest()
-                        .setN(1)
-                        .setTemperature(0.5)
-                        .setTopP(0.5)
-                        .setMaxTokens(100);
-                try {
-                  runGpt(
-                      new ChatMessage(
-                          "user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
-                } catch (ApiProxyException e) {
-                  // TODO Auto-generated catch block
-                  e.printStackTrace();
-                }
-                labelTimer.cancel();
-              }
-            }
-          }
-        },
-        0,
-        500);
   }
 
   private void updateLabels() {
