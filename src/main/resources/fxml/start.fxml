@@ -12,16 +12,16 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.IntroController">
+<Pane fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.IntroController">
    <children>
       <ImageView fx:id="background" fitHeight="707.0" fitWidth="1021.0" layoutX="-7.0" layoutY="-47.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly%20Space%20background%20with%20spaceship%20flying%20around%2053452.jpg" />
          </image>
       </ImageView>
-      <Label fx:id="title" alignment="CENTER" layoutX="175.0" layoutY="172.0" prefHeight="106.0" prefWidth="637.0" style="-fx-border-color: white;" styleClass="stroked-label" stylesheets="@../css/stroked-label.css" text="STARSHIP ESCAPE I" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+      <Label fx:id="title" alignment="CENTER" layoutX="175.0" layoutY="172.0" prefHeight="106.0" prefWidth="637.0" style="-fx-border-color: white; -fx-background-color: grey; -fx-opacity: 0.8;" text="STARSHIP ESCAPE I" textAlignment="CENTER" textFill="WHITE" wrapText="true">
          <font>
-            <Font name="ACaslonPro-Regular" size="53.0" />
+            <Font name="ACaslonPro-Semibold" size="53.0" />
          </font>
       </Label>
       <Pane fx:id="background3" layoutX="-13.0" layoutY="-15.0" opacity="0.47" prefHeight="681.0" prefWidth="1026.0" style="-fx-background-color: black;" />
@@ -224,12 +224,15 @@
             <Image url="@../images/Firefly_3D_spaceship_more_sharp_edges__going_80_degree_upward__bright_colour_spaceship_47271-removebg-preview.png" />
          </image>
       </ImageView>
-      <Rectangle fx:id="letterbox" arcHeight="20.0" arcWidth="20.0" fill="#0b0b0bd9" height="611.0" layoutX="227.0" layoutY="17.0" stroke="#ffffff95" strokeType="INSIDE" strokeWidth="3.0" width="542.0" />
+      <Rectangle fx:id="letterbox" arcHeight="20.0" arcWidth="20.0" fill="#0b0b0bd9" height="530.0" layoutX="227.0" layoutY="84.0" stroke="#ffffff95" strokeType="INSIDE" strokeWidth="3.0" width="542.0" />
       <Label fx:id="letter" alignment="CENTER" layoutX="190.0" layoutY="45.0" prefHeight="556.0" prefWidth="620.0" text="STARSHIP ESCAPE I&#10;&#10;Welcome aboard, intrepid space explorer! 🚀🌌 &#10;Prepare to embark on a thrilling cosmic adventure &#10;like no other as you step into the world of our &#10;spaceship escape room game. Get ready to test &#10;your wits and problem-solving skills through the &#10;mission. Solve mind-bending puzzles and &#10;ultimately find your way to escape this &#10;spaceship before time runs out. &#10;&#10;Before we start the game, let me introduce &#10;you to some key controls it will help you.&#10;&#10; Let the adventure begin! 🌠🌏🔐" textAlignment="CENTER" textFill="WHITE">
          <font>
-            <Font name="ACaslonPro-Italic" size="26.0" />
+            <Font name="Arial Bold" size="20.0" />
          </font>
       </Label>
-      <Button fx:id="tutorial" layoutX="732.0" layoutY="539.0" mnemonicParsing="false" onAction="#startAnimation" prefHeight="66.0" prefWidth="170.0" text="Button" />
+      <Button fx:id="tutorial" layoutX="402.0" layoutY="527.0" mnemonicParsing="false" onAction="#startAnimation" prefHeight="66.0" prefWidth="189.0" text="LET'S GO">
+         <font>
+            <Font name="Arial Bold Italic" size="18.0" />
+         </font></Button>
    </children>
 </Pane>
