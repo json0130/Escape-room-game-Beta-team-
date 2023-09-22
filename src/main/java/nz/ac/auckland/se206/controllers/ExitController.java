@@ -96,6 +96,7 @@ public class ExitController implements Initializable {
   @FXML private Rectangle clickMonitor;
   @FXML private Label idLabel;
   @FXML private Label clickButton;
+  @FXML private ImageView gameMaster;
 
   private boolean nextToButton = false;
   private FadeTransition fadeTransition;
@@ -141,6 +142,7 @@ public class ExitController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    animateRobot();
     background.setOpacity(1);
     clickButton.setVisible(false);
 
@@ -323,26 +325,26 @@ public class ExitController implements Initializable {
   // when the rectangle is clicked, the keypad is shown
   @FXML
   private void monitorClicked(MouseEvent event) {
-    if(nextToButton){
+    if (nextToButton) {
       screen.setVisible(true);
-    one.setVisible(true);
-    two.setVisible(true);
-    three.setVisible(true);
-    four.setVisible(true);
-    five.setVisible(true);
-    six.setVisible(true);
-    seven.setVisible(true);
-    eight.setVisible(true);
-    nine.setVisible(true);
-    zero.setVisible(true);
-    enter.setVisible(true);
-    reset.setVisible(true);
-    pad.setVisible(true);
-    monitor.setVisible(false);
-    exit.setVisible(true);
-    player.setVisible(false);
-    clickMonitor.setVisible(false);
-    } 
+      one.setVisible(true);
+      two.setVisible(true);
+      three.setVisible(true);
+      four.setVisible(true);
+      five.setVisible(true);
+      six.setVisible(true);
+      seven.setVisible(true);
+      eight.setVisible(true);
+      nine.setVisible(true);
+      zero.setVisible(true);
+      enter.setVisible(true);
+      reset.setVisible(true);
+      pad.setVisible(true);
+      monitor.setVisible(false);
+      exit.setVisible(true);
+      player.setVisible(false);
+      clickMonitor.setVisible(false);
+    }
   }
 
   @FXML
@@ -788,5 +790,23 @@ public class ExitController implements Initializable {
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
+  }
+
+  @FXML
+  private void onGameMasterClick() {
+    App.setScene(AppUi.HELPERCHAT);
+  }
+
+  @FXML
+  private void animateRobot() {
+    TranslateTransition translate = new TranslateTransition();
+    translate.setNode(gameMaster);
+    translate.setDuration(Duration.millis(1000));
+    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setByX(0);
+    translate.setByY(20);
+    translate.setAutoReverse(true);
+
+    translate.play();
   }
 }

@@ -66,6 +66,11 @@
             </ImageView>
             <Button fx:id="button" layoutX="14.0" layoutY="296.0" mnemonicParsing="false" onAction="#back" opacity="0.0" text="Button" />
             <Polygon fill="WHITE" layoutX="483.0" layoutY="585.0" points="-50.0, 40.0, 50.0, 40.0, -1.333343505859375, 51.66668701171875" stroke="WHITE" strokeType="INSIDE" />
+            <ImageView fx:id="gameMaster" fitHeight="150.0" fitWidth="200.0" layoutX="175.0" layoutY="280.0" onMouseClicked="#onGameMasterClick" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/robotfloat.png" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />

@@ -162,5 +162,10 @@
             <Image url="@../images/power.gif" />
          </image>
       </ImageView>
+      <ImageView fx:id="gameMaster" fitHeight="418.0" fitWidth="197.0" layoutX="3.0" layoutY="46.0" onMouseClicked="#onGameMasterClick" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/robotfloat.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

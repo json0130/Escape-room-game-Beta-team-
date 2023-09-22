@@ -113,11 +113,6 @@
          </font>
       </Label>
       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
-      <ImageView fx:id="gameMaster" fitHeight="96.0" fitWidth="119.0" layoutX="535.0" layoutY="347.0" onMouseClicked="#clickGameMaster" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/robotfloat.png" />
-         </image>
-      </ImageView>
 
       <Rectangle fx:id="black" arcHeight="5.0" arcWidth="5.0" fill="#1f1f1fac" height="606.0" layoutX="-6.0" layoutY="46.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="1008.0" />
       <Label fx:id="playerLabel" layoutX="268.0" layoutY="209.0" text="PLAYER" textFill="WHITE">
@@ -128,6 +123,11 @@
       <ImageView fx:id="player" fitHeight="50.0" fitWidth="56.0" layoutX="281.0" layoutY="237.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/images-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="gameMaster" fitHeight="96.0" fitWidth="119.0" layoutX="535.0" layoutY="347.0" onMouseClicked="#clickGameMaster" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/robotfloat.png" />
          </image>
       </ImageView>
    </children>
