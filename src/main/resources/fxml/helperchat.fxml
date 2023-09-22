@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.HelperChatController">
+  <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d7d7d7" height="299.0" layoutX="638.0" layoutY="136.0" stroke="BLACK" strokeType="INSIDE" width="296.0" />
+      <Label layoutX="8.0" layoutY="6.0" text="HELPER AI" />
+    <TextArea fx:id="chatTextArea" layoutX="35.0" layoutY="26.0" prefHeight="299.0" prefWidth="538.0" wrapText="true" />
+    <TextField fx:id="inputText" layoutX="35.0" layoutY="341.0" prefHeight="26.0" prefWidth="435.0" />
+    <Button fx:id="sendButton" layoutX="505.0" layoutY="342.0" mnemonicParsing="false" onAction="#onSendMessage" text="Send" />
+    <Button layoutX="904.0" layoutY="35.0" mnemonicParsing="false" onAction="#onGoBack" text="Go Back" />
+      <ImageView fx:id="robotBase" fitHeight="184.0" fitWidth="200.0" layoutX="686.0" layoutY="215.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/base.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="robotThink" fitHeight="184.0" fitWidth="200.0" layoutX="685.0" layoutY="215.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/robot-think.gif" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="robotReply" fitHeight="184.0" fitWidth="200.0" layoutX="685.0" layoutY="215.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/reply.png" />
+         </image>
+      </ImageView>
+  </children>
+</AnchorPane>
