@@ -228,25 +228,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     }
   }
 
-  // private void checkComputer(ImageView player, Rectangle blinkingRectangle) {
-  //   if (player.getBoundsInParent().intersects(blinkingRectangle.getBoundsInParent())) {
-  //     blinkingRectangle.setOpacity(1);
-  //     nextToButton = true;
-  //     System.out.println("next to button");
-  //     PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-  //     pauseTransition.setOnFinished(
-  //         event -> {
-  //           // Adjust the player's position to be right in front of the room
-  //           blinkingRectangle.setFill(javafx.scene.paint.Color.WHITE);
-  //           clickButton.setVisible(true);
-  //         });
-  //     pauseTransition.play();
-  //   } else {
-  //     clickButton.setVisible(false);
-  //     nextToButton = false;
-  //   }
-  // }
-
+  // code for player movement using wasd keys
   @FXML
   public void movementSetup() {
     scene.setOnKeyPressed(
@@ -288,6 +270,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
         });
   }
 
+  // prevent the player moves out of the window
   public void squareBorder() {
     double left = 0;
     double right = scene.getWidth() - shapesize;
@@ -404,6 +387,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     }
   }
 
+  // detect change in game state difficulty which is selected in the intro scene
   public void detectDifficulty() {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
@@ -411,11 +395,13 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
           @Override
           public void run() {
             if (GameState.difficulty != null) {
+              // if medium, need to turn on the timer long for hint reduction
               if (GameState.difficulty == "MEDIUM") {
                 Platform.runLater(() -> updateLabels());
                 if (GameState.numOfHints == 0) {
                   labelTimer.cancel();
                 }
+                // easy and hard, turn off just after difficulty selection
               } else {
                 Platform.runLater(() -> updateLabels());
                 labelTimer.cancel();
@@ -427,6 +413,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
         500);
   }
 
+  // labels for hint and difficulty updates as the game progress
   private void updateLabels() {
     difficultyLabel.setText(GameState.difficulty);
     if (GameState.difficulty == "EASY") {
@@ -447,6 +434,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     App.setScene(AppUi.PLAYER);
   }
 
+  // exclamation mark for monitor animation
   @FXML
   private void animateExclamationMark() {
     translate.setNode(eMark);
@@ -465,6 +453,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     App.setScene(AppUi.HELPERCHAT);
   }
 
+  // game master robot animation
   @FXML
   private void animateRobot() {
     TranslateTransition translate = new TranslateTransition();

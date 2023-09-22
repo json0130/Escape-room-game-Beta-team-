@@ -85,7 +85,6 @@ public class Room1Controller implements Initializable {
   @FXML private ImageView crew3Indicator;
   @FXML private ImageView crew4Indicator;
 
-  // @FXML private ImageView gameMasterBox;
   @FXML private ImageView gameMaster;
 
   @FXML private Label difficultyLabel;
@@ -107,6 +106,7 @@ public class Room1Controller implements Initializable {
 
   private boolean nextToButton = false;
 
+  // timer for collsion check between monitor and walls
   AnimationTimer collisionTimer =
       new AnimationTimer() {
         @Override
@@ -117,6 +117,7 @@ public class Room1Controller implements Initializable {
         }
       };
 
+  // Prevent the character moves outside of the window
   AnimationTimer timer =
       new AnimationTimer() {
         @Override
@@ -153,6 +154,7 @@ public class Room1Controller implements Initializable {
     previousX = player.getLayoutX();
     previousY = player.getLayoutY();
 
+    // randomly choose riddle answer
     Random random = new Random();
     int randomNumber = random.nextInt(4);
     if (randomNumber == 0) {
@@ -204,12 +206,6 @@ public class Room1Controller implements Initializable {
     detectDifficulty();
 
     crewCollisionTimer.start();
-
-    // gameMasterBox.setVisible(false);
-    // inputText.setVisible(false);
-    // chatTextArea.setVisible(false);
-    // btnClose.setVisible(false);
-    // btnSend.setVisible(false);
   }
 
   // When crew1 is clicked and the riddle was resolved, id1 is shown only for 2 seconds
@@ -235,6 +231,7 @@ public class Room1Controller implements Initializable {
     }
   }
 
+  // hide id and button and indicator at once
   private void hideId1() {
     idDoctor.setVisible(false);
     btnCollect1.setVisible(false);
@@ -263,6 +260,7 @@ public class Room1Controller implements Initializable {
     }
   }
 
+  // hide id and button and indicator at once
   private void hideId2() {
     idCaptain.setVisible(false);
     btnCollect2.setVisible(false);
@@ -291,6 +289,7 @@ public class Room1Controller implements Initializable {
     }
   }
 
+  // hide id and button and indicator at once
   private void hideId3() {
     idChef.setVisible(false);
     btnCollect3.setVisible(false);
@@ -319,6 +318,7 @@ public class Room1Controller implements Initializable {
     }
   }
 
+  // hide id and button and indicator at once
   private void hideId4() {
     idEngineer.setVisible(false);
     btnCollect4.setVisible(false);
@@ -354,6 +354,7 @@ public class Room1Controller implements Initializable {
     }
   }
 
+  // if the character collides the box, it will move to the map
   public void checkExit(ImageView player, Rectangle exit) {
     if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
       exit.setOpacity(1);
@@ -372,16 +373,17 @@ public class Room1Controller implements Initializable {
     }
   }
 
+  // Exit the loop as soon as a collision is detected
   public void checkCollision2(ImageView player, List<Rectangle> walls) {
     for (Rectangle wall : walls) {
       if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
         player.setLayoutX(previousX); // Restore the player's previous X position
         player.setLayoutY(previousY); // Restore the player's previous Y position
-        // Exit the loop as soon as a collision is detected
       }
     }
   }
 
+  // if the character collides with the mointor, button to the riddle chat scene appears
   private void checkMonitor(ImageView player, Rectangle wall2) {
     if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
       blinkingRectangle.setOpacity(1);
@@ -401,6 +403,7 @@ public class Room1Controller implements Initializable {
     }
   }
 
+  // code for player movement using wasd keys
   @FXML
   public void movementSetup() {
     scene.setOnKeyPressed(
@@ -442,6 +445,7 @@ public class Room1Controller implements Initializable {
         });
   }
 
+  // prevent the player moves out of the window
   public void squareBorder() {
     double left = 0;
     double right = scene.getWidth() - shapesize;
@@ -470,12 +474,14 @@ public class Room1Controller implements Initializable {
     App.setScene(AppUi.PLAYER);
   }
 
+  // detect change in the game state difficulty in the intro scene
   public void detectDifficulty() {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
         new TimerTask() {
           @Override
           public void run() {
+            // if the level is medium, hint count keeps detected
             if (GameState.difficulty != null) {
               if (GameState.difficulty == "MEDIUM") {
                 Platform.runLater(() -> updateLabels());
@@ -493,6 +499,7 @@ public class Room1Controller implements Initializable {
         500);
   }
 
+  // update labels for difficulty and hints as the game progress
   private void updateLabels() {
     difficultyLabel.setText(GameState.difficulty);
     if (GameState.difficulty == "EASY") {
@@ -560,24 +567,7 @@ public class Room1Controller implements Initializable {
   public void clickGameMaster(MouseEvent event) {
     App.previousRoom = AppUi.ROOM1;
     App.setScene(AppUi.HELPERCHAT);
-    // gameMasterBox.setVisible(true);
-    // inputText.setVisible(true);
-    // chatTextArea.setVisible(true);
-    // btnClose.setVisible(true);
-    // btnSend.setVisible(true);
   }
-
-  @FXML
-  public void onClose(ActionEvent event) {
-    // gameMasterBox.setVisible(false);
-    // inputText.setVisible(false);
-    // chatTextArea.setVisible(false);
-    // btnClose.setVisible(false);
-    // btnSend.setVisible(false);
-  }
-
-  @FXML
-  public void onSend(ActionEvent event) {}
 
   @FXML
   private void soundButttonClick() {
@@ -587,6 +577,7 @@ public class Room1Controller implements Initializable {
     mediaPlayer.setAutoPlay(true);
   }
 
+  // game master animation
   @FXML
   private void animateRobot() {
     TranslateTransition translate = new TranslateTransition();
