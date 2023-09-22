@@ -71,6 +71,7 @@ public class ExitController implements Initializable {
   @FXML private Button reset;
   @FXML private Button button;
   @FXML private Button exit;
+  @FXML private Button exit2;
 
   @FXML private ImageView idCaptain;
   @FXML private ImageView idChef;
@@ -307,6 +308,10 @@ private void checkComputer(ImageView player, Rectangle wall2){
     reset.setVisible(false);
     pad.setVisible(false);
     exit.setVisible(false);
+    clickButton.setVisible(false);
+    monitor.setVisible(false);
+    clickMonitor.setVisible(false);
+    exit2.setVisible(false);
   }
 
   // when the rectangle is clicked, the keypad is shown
@@ -329,9 +334,6 @@ private void checkComputer(ImageView player, Rectangle wall2){
     monitor.setVisible(false);
     exit.setVisible(true);
     player.setVisible(false);
-    clickButton.setVisible(false);
-    monitor.setOpacity(0);
-    clickMonitor.setVisible(false);
   }
 
   @FXML
@@ -354,7 +356,17 @@ private void checkComputer(ImageView player, Rectangle wall2){
     monitor.setVisible(true);
     player.setVisible(true);
     clickMonitor.setVisible(true);
+  }
 
+  @FXML
+  private void clickExit2(ActionEvent event) {
+    player.setVisible(true);
+    exit2.setVisible(false);
+    idCaptain.setVisible(false);
+    idChef.setVisible(false);
+    idDoctor.setVisible(false);
+    idEngineer.setVisible(false);
+    ids.setVisible(false);
   }
 
   @FXML
@@ -365,41 +377,31 @@ private void checkComputer(ImageView player, Rectangle wall2){
 
   @FXML
   private void onTwo(ActionEvent event) {
-
     password += "2";
-
     screen.setText(password);
   }
 
   @FXML
   private void onThree(ActionEvent event) {
-
     password += "3";
-
     screen.setText(password);
   }
 
   @FXML
   private void onFour(ActionEvent event) {
-
     password += "4";
-
     screen.setText(password);
   }
 
   @FXML
   private void onFive(ActionEvent event) {
-
     password += "5";
-
     screen.setText(password);
   }
 
   @FXML
   private void onSix(ActionEvent event) {
-
     password += "6";
-
     screen.setText(password);
   }
 
@@ -470,8 +472,10 @@ private void checkComputer(ImageView player, Rectangle wall2){
             reset.setVisible(false);
             pad.setVisible(false);
             exit.setVisible(false);
-            clickButton.setVisible(false);
-
+            clickButton.setOpacity(0);
+            monitor.setOpacity(0);
+            clickMonitor.setVisible(false);
+            exit2.setVisible(true);
             changeOpacity();
           });
       pauseTransition.play();
@@ -675,9 +679,7 @@ private void checkComputer(ImageView player, Rectangle wall2){
         FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(2), background2);
         fadeTransition1.setToValue(0.0); // Set the target opacity value (1.0 for fully opaque)
         fadeTransition1.play(); // Start the animation for background1
-        idScanner.setVisible(false);
-        light.setVisible(false);
-        idLabel.setVisible(false);
+        
 
         FadeTransition fadeTransition2 = new FadeTransition(Duration.seconds(2), background3);
         fadeTransition2.setToValue(1.0); // Set the target opacity value (1.0 for fully opaque)
@@ -685,6 +687,9 @@ private void checkComputer(ImageView player, Rectangle wall2){
 
         PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.0));
             pauseTransition.setOnFinished(event -> {
+              idScanner.setVisible(false);
+              light.setVisible(false);
+              idLabel.setVisible(false);
                 // Adjust the player's position to be right in front of the room
                 endingAnimation();
             });
@@ -718,8 +723,6 @@ private void checkComputer(ImageView player, Rectangle wall2){
                 App.setScene(AppUi.END);
             });
     }
-
-
 
   @FXML
   private void back(ActionEvent event) {

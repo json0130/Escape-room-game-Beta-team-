@@ -85,6 +85,7 @@ public class Room1Controller implements Initializable {
   @FXML private Label difficultyLabel;
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
+  @FXML private Label clickLabel;
 
   private FadeTransition fadeTransition;
   public static String riddleAnswer;
@@ -178,6 +179,7 @@ public class Room1Controller implements Initializable {
     btnCollect4.setVisible(false);
     btnRiddle.setVisible(false);
     blinkingRectangle.setVisible(true);
+    clickLabel.setVisible(false);
 
     crew1Indicator.setVisible(false);
     crew2Indicator.setVisible(false);
@@ -322,7 +324,7 @@ public class Room1Controller implements Initializable {
   }
 
   @FXML
-  public void onRiddle(ActionEvent evnet) throws IOException {
+  public void onRiddle(MouseEvent evnet) throws IOException {
     App.setScene(AppUi.CHAT);
   }
 
@@ -335,7 +337,7 @@ public class Room1Controller implements Initializable {
             pauseTransition.setOnFinished(event -> {
                 // Adjust the player's position to be right in front of the room
                 player.setLayoutX(433);
-                player.setLayoutY(475);
+                player.setLayoutY(468);
                 App.setScene(AppUi.PLAYER);
                 timer.stop();
             });
@@ -361,12 +363,13 @@ public class Room1Controller implements Initializable {
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(event -> {
           // Adjust the player's position to be right in front of the room
-          blinkingRectangle.setOpacity(0);
-          btnRiddle.setVisible(true);
+          blinkingRectangle.setFill(javafx.scene.paint.Color.WHITE);
+          clickLabel.setVisible(true);
       });
       pauseTransition.play();
   } else {
-    btnRiddle.setVisible(false);
+    clickLabel.setVisible(false);
+    blinkingRectangle.setFill(javafx.scene.paint.Color.TRANSPARENT);
 
   }
   }
