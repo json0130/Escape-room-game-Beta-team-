@@ -1,6 +1,5 @@
 package nz.ac.auckland.se206.controllers;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -9,6 +8,7 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
@@ -25,8 +25,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
@@ -61,6 +59,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private Rectangle window;
   @FXML private Rectangle vase;
   @FXML private Rectangle startTileGame;
+  @FXML private Label clickButton;
 
   @FXML private Rectangle exit;
   @FXML private Rectangle wall;
@@ -83,6 +82,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private Rectangle wall18;
   @FXML private Rectangle wall19;
   @FXML private Rectangle wall20;
+  @FXML private Rectangle blinkingRectangle;
+  private FadeTransition fadeTransition;
 
   @FXML private Button btnRoom1;
   @FXML private Button button;
@@ -95,6 +96,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
         public void handle(long now) {
           checkCollision2(player, walls);
           checkExit(player, exit);
+          checkComputer(player, startTileGame);
         }
       };
 
@@ -146,6 +148,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     walls.add(wall18);
     walls.add(wall19);
     walls.add(wall20);
+    clickButton.setVisible(false);
 
     // if difficulty is selected, label is updated
     detectDifficulty();
@@ -166,6 +169,14 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             timer.stop();
           }
         }));
+
+    fadeTransition = new FadeTransition(Duration.seconds(1), blinkingRectangle);
+    fadeTransition.setFromValue(1.0);
+    fadeTransition.setToValue(0.0);
+    fadeTransition.setCycleCount(FadeTransition.INDEFINITE); // Blink indefinitely
+    fadeTransition.setAutoReverse(true); // Reverse the animation
+    // Start the animation
+    fadeTransition.play();
   }
 
   public void checkExit(ImageView player, Rectangle exit) {
@@ -193,6 +204,22 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
         player.setLayoutY(previousY); // Restore the player's previous Y position
         // Exit the loop as soon as a collision is detected
       }
+    }
+  }
+
+  private void checkComputer(ImageView player, Rectangle wall2) {
+    if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
+      blinkingRectangle.setOpacity(1);
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+      pauseTransition.setOnFinished(
+          event -> {
+            // Adjust the player's position to be right in front of the room
+            blinkingRectangle.setFill(javafx.scene.paint.Color.WHITE);
+            clickButton.setVisible(true);
+          });
+      pauseTransition.play();
+    } else {
+      clickButton.setVisible(false);
     }
   }
 
@@ -348,16 +375,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     translate.stop();
     eMark.setVisible(false);
     App.setScene(AppUi.TILEPUZZLE);
-
-    String musicFile = "src/main/resources/sounds/Tile-Game-Background-Music_1.mp3";
-    Media media = new Media(new File(musicFile).toURI().toString());
-
-    App.mediaPlayer.stop();
-    App.mediaPlayer = new MediaPlayer(media);
-    App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-    App.mediaPlayer.setVolume(0.1);
-    App.mediaPlayer.setAutoPlay(true);
-    System.out.println("click");
   }
 
   public void detectDifficulty() {

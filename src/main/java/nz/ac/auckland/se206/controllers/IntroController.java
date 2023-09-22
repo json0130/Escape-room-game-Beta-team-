@@ -207,16 +207,16 @@ public class IntroController implements Initializable {
             startButton.setDisable(false);
             App.setScene(AppUi.TUTORIAL);
 
-            try {
-              SceneManager.addScene(AppUi.ROOM3, App.loadFxml("room3"));
-              SceneManager.addScene(AppUi.ROOM1, App.loadFxml("room1"));
-              SceneManager.addScene(AppUi.PLAYER, App.loadFxml("player"));
-              SceneManager.addScene(AppUi.TILEPUZZLE, App.loadFxml("tilegamedesk"));
-              SceneManager.addScene(AppUi.TILEROOM, App.loadFxml("tilegameroom"));
-            } catch (IOException e) {
-              // TODO Auto-generated catch block
-              e.printStackTrace();
-            }
+            // try {
+            //   SceneManager.addScene(AppUi.ROOM3, App.loadFxml("room3"));
+            //   SceneManager.addScene(AppUi.ROOM1, App.loadFxml("room1"));
+            //   SceneManager.addScene(AppUi.PLAYER, App.loadFxml("player"));
+            //   SceneManager.addScene(AppUi.TILEPUZZLE, App.loadFxml("tilegamedesk"));
+            //   SceneManager.addScene(AppUi.TILEROOM, App.loadFxml("tilegameroom"));
+            // } catch (IOException e) {
+            //   // TODO Auto-generated catch block
+            //   e.printStackTrace();
+            // }
 
             App.timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), this::updateTimer));
             App.timerTimeline.setCycleCount(App.timerSeconds);

@@ -18,6 +18,11 @@
             <Image url="@../images/TileMinigameScene.png" />
          </image>
       </ImageView>
+      <ImageView fitHeight="511.0" fitWidth="282.0" layoutX="677.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/background2.png" />
+         </image>
+      </ImageView>
       <Pane layoutX="267.0" layoutY="111.0" prefHeight="364.0" prefWidth="355.0">
          <children>
             <ImageView fx:id="imageOne" fitHeight="125.0" fitWidth="125.0" pickOnBounds="true" preserveRatio="true" />
@@ -53,6 +58,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
+                  <Button fx:id="loadCaptchaButton" layoutX="116.0" layoutY="296.0" mnemonicParsing="false" onAction="#onCaptchaButtonClick" prefHeight="43.0" prefWidth="114.0" text="Load Captcha" visible="false" />
                   <ImageView fx:id="bigScreenOff" fitHeight="374.0" fitWidth="375.0" layoutX="-11.0" layoutY="-10.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/BigScreenOffImage.png" />
@@ -124,17 +130,19 @@
             </Pane>
          </children>
       </Pane>
-      <Text fx:id="wordText" layoutX="711.0" layoutY="241.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="187.5">
+      <Text fx:id="wordText" fill="WHITE" layoutX="710.0" layoutY="230.0" rotate="-6.3" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="187.5">
          <font>
             <Font name="Arial Bold" size="83.0" />
          </font>
       </Text>
-      <Label layoutX="725.0" layoutY="131.0" text="YOUR WORD">
+      <Label layoutX="714.0" layoutY="123.0" rotate="-8.1" text="YOUR WORD:" textFill="WHITE">
          <font>
             <Font name="Arial Black" size="23.0" />
          </font>
       </Label>
-      <ImageView fx:id="smallScreenOff" fitHeight="535.0" fitWidth="282.0" layoutX="674.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" visible="false">
+      <fx:include layoutX="699.0" layoutY="412.0" source="countdowntimer.fxml" />
+      <Button fx:id="puzzleInfoButton" layoutX="899.0" layoutY="480.0" mnemonicParsing="false" onAction="#onpuzzleInfoButtonClick" text="INFO" />
+      <ImageView fx:id="smallScreenOff" fitHeight="535.0" fitWidth="282.0" layoutX="674.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/SmallScreenOffImage.png" />
          </image>
@@ -144,18 +152,15 @@
             <Font name="Arial Black" size="13.0" />
          </font>
       </Button>
-      <fx:include layoutX="699.0" layoutY="412.0" source="countdowntimer.fxml" />
       <ImageView disable="true" fitHeight="426.0" fitWidth="457.0" layoutX="245.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/frame.png" />
          </image>
       </ImageView>
-      <Button fx:id="loadCaptchaButton" layoutX="393.0" layoutY="414.0" mnemonicParsing="false" onAction="#onCaptchaButtonClick" text="Load Captcha" visible="false" />
       <ImageView fx:id="powerButton" fitHeight="19.0" fitWidth="17.0" layoutX="436.0" layoutY="486.0" onMouseClicked="#onPowerButtonPressed" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/power.gif" />
          </image>
       </ImageView>
-      <Button fx:id="puzzleInfoButton" layoutX="899.0" layoutY="480.0" mnemonicParsing="false" onAction="#onpuzzleInfoButtonClick" text="INFO" />
    </children>
 </AnchorPane>
