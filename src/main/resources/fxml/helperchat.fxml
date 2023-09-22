@@ -17,19 +17,19 @@
     <TextField fx:id="inputText" layoutX="35.0" layoutY="341.0" prefHeight="26.0" prefWidth="435.0" />
     <Button fx:id="sendButton" layoutX="505.0" layoutY="342.0" mnemonicParsing="false" onAction="#onSendMessage" text="Send" />
     <Button layoutX="904.0" layoutY="35.0" mnemonicParsing="false" onAction="#onGoBack" text="Go Back" />
-      <ImageView fx:id="robotThink" fitHeight="184.0" fitWidth="200.0" layoutX="685.0" layoutY="215.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="robotBase" fitHeight="184.0" fitWidth="200.0" layoutX="686.0" layoutY="215.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/reply.png" />
+            <Image url="@../images/base.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="robotReply" fitHeight="184.0" fitWidth="200.0" layoutX="685.0" layoutY="215.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="robotThink" fitHeight="184.0" fitWidth="200.0" layoutX="685.0" layoutY="215.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/robot-think.gif" />
          </image>
       </ImageView>
-      <ImageView fx:id="robotBase" fitHeight="184.0" fitWidth="200.0" layoutX="686.0" layoutY="215.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="robotReply" fitHeight="184.0" fitWidth="200.0" layoutX="685.0" layoutY="215.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/base.png" />
+            <Image url="@../images/reply.png" />
          </image>
       </ImageView>
   </children>

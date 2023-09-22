@@ -389,12 +389,15 @@ public class HelperChatController {
                   () -> {
                     // Update the UI with the response
                     if (finalLastMsg != null) {
-                      robotReply();
+
                       chatTextArea.setText(message);
                     }
 
                     PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
-                    delay.setOnFinished(event1 -> {});
+                    delay.setOnFinished(
+                        event1 -> {
+                          robotThink();
+                        });
 
                     delay.play();
                   });
@@ -441,12 +444,39 @@ public class HelperChatController {
     robotBase.setVisible(false);
     robotReply.setVisible(false);
     robotThink.setVisible(true);
+
+    Platform.runLater(
+        () -> {
+          PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
+          delay.setOnFinished(
+              event1 -> {
+                robotReply();
+              });
+          delay.play();
+        });
   }
 
   @FXML
   private void robotReply() {
     robotBase.setVisible(false);
     robotReply.setVisible(true);
+    robotThink.setVisible(false);
+
+    Platform.runLater(
+        () -> {
+          PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
+          delay.setOnFinished(
+              event1 -> {
+                robotIdle();
+              });
+          delay.play();
+        });
+  }
+
+  @FXML
+  private void robotIdle() {
+    robotBase.setVisible(true);
+    robotReply.setVisible(false);
     robotThink.setVisible(false);
   }
 }
