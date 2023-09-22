@@ -165,6 +165,10 @@
             <Font size="23.0" />
          </font>
       </Label>
-       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
+      <Button fx:id="exit2" layoutX="913.0" layoutY="99.0" mnemonicParsing="false" onAction="#clickExit" prefHeight="19.0" prefWidth="35.0" text="X">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
    </children>
 </Pane>
