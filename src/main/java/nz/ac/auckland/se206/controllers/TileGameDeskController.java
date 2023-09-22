@@ -122,6 +122,7 @@ public class TileGameDeskController {
   @FXML private Button puzzleInfoButton;
   @FXML private Button leaveComputerButton;
   @FXML private ImageView powerButton;
+  @FXML private ImageView gameMaster;
 
   /**
    * Initializes the room view, it is called when the room loads.
@@ -129,6 +130,7 @@ public class TileGameDeskController {
    * @throws ApiProxyException
    */
   public void initialize() throws ApiProxyException {
+    animateRobot();
     timerSeconds = 120;
 
     // dialogueList.add("WHO DARES DISTURB MY SLUMBER!?!");
@@ -606,5 +608,23 @@ public class TileGameDeskController {
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
+  }
+
+  @FXML
+  private void onGameMasterClick() {
+    App.setScene(AppUi.HELPERCHAT);
+  }
+
+  @FXML
+  private void animateRobot() {
+    TranslateTransition translate = new TranslateTransition();
+    translate.setNode(gameMaster);
+    translate.setDuration(Duration.millis(1000));
+    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setByX(0);
+    translate.setByY(20);
+    translate.setAutoReverse(true);
+
+    translate.play();
   }
 }

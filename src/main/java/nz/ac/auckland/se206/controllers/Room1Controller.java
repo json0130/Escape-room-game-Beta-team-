@@ -12,6 +12,7 @@ import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -84,7 +85,8 @@ public class Room1Controller implements Initializable {
   @FXML private ImageView crew3Indicator;
   @FXML private ImageView crew4Indicator;
 
-  @FXML private ImageView gameMasterBox;
+  // @FXML private ImageView gameMasterBox;
+  @FXML private ImageView gameMaster;
 
   @FXML private Label difficultyLabel;
   @FXML private Label hintLabel;
@@ -140,6 +142,7 @@ public class Room1Controller implements Initializable {
       };
 
   public void initialize(URL url, ResourceBundle resource) {
+    animateRobot();
     shapesize = player.getFitWidth();
     movementSetup();
 
@@ -202,11 +205,11 @@ public class Room1Controller implements Initializable {
 
     crewCollisionTimer.start();
 
-    gameMasterBox.setVisible(false);
-    inputText.setVisible(false);
-    chatTextArea.setVisible(false);
-    btnClose.setVisible(false);
-    btnSend.setVisible(false);
+    // gameMasterBox.setVisible(false);
+    // inputText.setVisible(false);
+    // chatTextArea.setVisible(false);
+    // btnClose.setVisible(false);
+    // btnSend.setVisible(false);
   }
 
   // When crew1 is clicked and the riddle was resolved, id1 is shown only for 2 seconds
@@ -345,7 +348,7 @@ public class Room1Controller implements Initializable {
 
   @FXML
   public void onRiddle(MouseEvent evnet) throws IOException {
-    if(nextToButton) {
+    if (nextToButton) {
       soundButttonClick();
       App.setScene(AppUi.CHAT);
     }
@@ -383,19 +386,19 @@ public class Room1Controller implements Initializable {
     if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
       blinkingRectangle.setOpacity(1);
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-      pauseTransition.setOnFinished(event -> {
-          // Adjust the player's position to be right in front of the room
-          blinkingRectangle.setFill(javafx.scene.paint.Color.WHITE);
-          clickLabel.setVisible(true);
-          nextToButton = true;
-      });
+      pauseTransition.setOnFinished(
+          event -> {
+            // Adjust the player's position to be right in front of the room
+            blinkingRectangle.setFill(javafx.scene.paint.Color.WHITE);
+            clickLabel.setVisible(true);
+            nextToButton = true;
+          });
       pauseTransition.play();
-  } else {
-    clickLabel.setVisible(false);
-    blinkingRectangle.setFill(javafx.scene.paint.Color.TRANSPARENT);
-    nextToButton = false;
-
-  }
+    } else {
+      clickLabel.setVisible(false);
+      blinkingRectangle.setFill(javafx.scene.paint.Color.TRANSPARENT);
+      nextToButton = false;
+    }
   }
 
   @FXML
@@ -555,20 +558,21 @@ public class Room1Controller implements Initializable {
 
   @FXML
   public void clickGameMaster(MouseEvent event) {
-    gameMasterBox.setVisible(true);
-    inputText.setVisible(true);
-    chatTextArea.setVisible(true);
-    btnClose.setVisible(true);
-    btnSend.setVisible(true);
+    App.setScene(AppUi.HELPERCHAT);
+    // gameMasterBox.setVisible(true);
+    // inputText.setVisible(true);
+    // chatTextArea.setVisible(true);
+    // btnClose.setVisible(true);
+    // btnSend.setVisible(true);
   }
 
   @FXML
   public void onClose(ActionEvent event) {
-    gameMasterBox.setVisible(false);
-    inputText.setVisible(false);
-    chatTextArea.setVisible(false);
-    btnClose.setVisible(false);
-    btnSend.setVisible(false);
+    // gameMasterBox.setVisible(false);
+    // inputText.setVisible(false);
+    // chatTextArea.setVisible(false);
+    // btnClose.setVisible(false);
+    // btnSend.setVisible(false);
   }
 
   @FXML
@@ -580,5 +584,18 @@ public class Room1Controller implements Initializable {
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
+  }
+
+  @FXML
+  private void animateRobot() {
+    TranslateTransition translate = new TranslateTransition();
+    translate.setNode(gameMaster);
+    translate.setDuration(Duration.millis(1000));
+    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setByX(0);
+    translate.setByY(20);
+    translate.setAutoReverse(true);
+
+    translate.play();
   }
 }

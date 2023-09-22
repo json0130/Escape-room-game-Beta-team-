@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -31,6 +32,9 @@ public class ChatController {
   @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
   @FXML private Button sendButton;
+  @FXML private ImageView robotBase;
+  @FXML private ImageView robotReply;
+  @FXML private ImageView robotThink;
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
   @FXML private ImageView glitch;
@@ -137,6 +141,7 @@ public class ChatController {
     appendChatMessage(msg);
 
     ChatMessage lastMsg = runGpt(msg);
+    robotThink();
     if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("Correct")) {
       GameState.isRiddleResolved = true;
     }
@@ -232,5 +237,46 @@ public class ChatController {
     } else {
       hintLabel.setText("NO");
     }
+  }
+
+  @FXML
+  private void robotThink() {
+    robotBase.setVisible(false);
+    robotReply.setVisible(false);
+    robotThink.setVisible(true);
+
+    Platform.runLater(
+        () -> {
+          PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
+          delay.setOnFinished(
+              event1 -> {
+                robotReply();
+              });
+          delay.play();
+        });
+  }
+
+  @FXML
+  private void robotReply() {
+    robotBase.setVisible(false);
+    robotReply.setVisible(true);
+    robotThink.setVisible(false);
+
+    Platform.runLater(
+        () -> {
+          PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
+          delay.setOnFinished(
+              event1 -> {
+                robotIdle();
+              });
+          delay.play();
+        });
+  }
+
+  @FXML
+  private void robotIdle() {
+    robotBase.setVisible(true);
+    robotReply.setVisible(false);
+    robotThink.setVisible(false);
   }
 }

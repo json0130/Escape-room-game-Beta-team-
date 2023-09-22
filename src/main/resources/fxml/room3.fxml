@@ -172,5 +172,10 @@
          </font>
       </Button>
       <Polygon fill="WHITE" layoutX="85.0" layoutY="518.0" points="-80.33332061767578, 32.5714111328125, -51.0000114440918, 87.23809814453125, -51.0000114440918, -22.761932373046875" stroke="BLACK" strokeType="INSIDE" />
+      <ImageView fx:id="gameMaster" fitHeight="150.0" fitWidth="200.0" layoutX="32.0" layoutY="63.0" onMouseClicked="#onGameMasterClick" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/robotfloat.png" />
+         </image>
+      </ImageView>
    </children>
 </Pane>

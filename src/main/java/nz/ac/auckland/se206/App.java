@@ -84,6 +84,7 @@ public class App extends Application {
     mediaPlayer.setVolume(0.05);
     mediaPlayer.setAutoPlay(true);
 
+    SceneManager.addScene(AppUi.HELPERCHAT, loadFxml("helperchat"));
     SceneManager.addScene(AppUi.ROOM1, loadFxml("room1"));
     SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
     SceneManager.addScene(AppUi.PLAYER, loadFxml("player"));

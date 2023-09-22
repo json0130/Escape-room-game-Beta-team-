@@ -89,6 +89,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private Button btnRoom1;
   @FXML private Button button;
   @FXML ImageView eMark;
+  @FXML private ImageView gameMaster;
   TranslateTransition translate = new TranslateTransition();
 
   AnimationTimer collisionTimer =
@@ -128,6 +129,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     animateExclamationMark();
+    animateRobot();
 
     walls.add(wall);
     walls.add(wall2);
@@ -211,19 +213,19 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     if (player.getBoundsInParent().intersects(wa.getBoundsInParent())) {
       blinkingRectangle.setOpacity(1);
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-      pauseTransition.setOnFinished(event -> {
-          // Adjust the player's position to be right in front of the room
-          blinkingRectangle.setFill(javafx.scene.paint.Color.WHITE);
-          clickButton.setVisible(true);
-          nextToButton = true;
-      });
+      pauseTransition.setOnFinished(
+          event -> {
+            // Adjust the player's position to be right in front of the room
+            blinkingRectangle.setFill(javafx.scene.paint.Color.WHITE);
+            clickButton.setVisible(true);
+            nextToButton = true;
+          });
       pauseTransition.play();
-  } else {
-    clickButton.setVisible(false);
-    blinkingRectangle.setFill(javafx.scene.paint.Color.TRANSPARENT);
-    nextToButton = false;
-
-  }
+    } else {
+      clickButton.setVisible(false);
+      blinkingRectangle.setFill(javafx.scene.paint.Color.TRANSPARENT);
+      nextToButton = false;
+    }
   }
 
   // private void checkComputer(ImageView player, Rectangle blinkingRectangle) {
@@ -396,7 +398,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   public void onTileGameButtonClick() throws IOException {
     translate.stop();
     eMark.setVisible(false);
-    if(nextToButton){
+    if (nextToButton) {
       App.setScene(AppUi.TILEPUZZLE);
       System.out.println("button clicked");
     }
@@ -448,6 +450,24 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML
   private void animateExclamationMark() {
     translate.setNode(eMark);
+    translate.setDuration(Duration.millis(1000));
+    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setByX(0);
+    translate.setByY(20);
+    translate.setAutoReverse(true);
+
+    translate.play();
+  }
+
+  @FXML
+  private void onGameMasterClick() {
+    App.setScene(AppUi.HELPERCHAT);
+  }
+
+  @FXML
+  private void animateRobot() {
+    TranslateTransition translate = new TranslateTransition();
+    translate.setNode(gameMaster);
     translate.setDuration(Duration.millis(1000));
     translate.setCycleCount(TranslateTransition.INDEFINITE);
     translate.setByX(0);
