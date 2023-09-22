@@ -558,6 +558,7 @@ public class Room1Controller implements Initializable {
 
   @FXML
   public void clickGameMaster(MouseEvent event) {
+    App.previousRoom = AppUi.ROOM1;
     App.setScene(AppUi.HELPERCHAT);
     // gameMasterBox.setVisible(true);
     // inputText.setVisible(true);

@@ -16,9 +16,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
-import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.gpt.ChatMessage;
-import nz.ac.auckland.se206.gpt.GptPromptEngineering;
 import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult;
@@ -60,7 +58,8 @@ public class HelperChatController {
 
     chatCompletionRequest =
         new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.5).setMaxTokens(100);
-    runGpt(new ChatMessage("user", GptPromptEngineering.getGameMaster()));
+    // runGpt(new ChatMessage("user", GptPromptEngineering.getGameMaster()));
+
   }
 
   /**
@@ -165,64 +164,64 @@ public class HelperChatController {
                               "user",
                               "The user is asking for help regarding the following request: "
                                   + message
-                                  + "First determine if the user is asking for help or not. This"
+                                  + " First determine if the user is asking for help or not. This"
                                   + " help can be related to not knowing what to do, or asking for"
                                   + " what to find or asking for what is the next step. The user"
-                                  + " may ask for what to do, and that is considered a asking for"
+                                  + " may ask for what to do, and that is considered asking for"
                                   + " help. If you think the user is not asking for a hint or help,"
-                                  + " reply back to their message. However, if you believe it is"
-                                  + " the user asking for help, start your prompt with \"hint: \".."
-                                  + " If the user's request is related to not knowing what to do,"
-                                  + " if"
+                                  + " reply back to their message. However, if you believe the user"
+                                  + " is asking for help, start your prompt with \"hint: \".. If"
+                                  + " the user's request is related to not knowing what to do, if "
                                   + GameState.isPlayerInMap
-                                  + " is true and"
+                                  + " is true and "
                                   + GameState.isRiddleResolved
-                                  + " is false or if"
+                                  + " is false or if "
                                   + GameState.isIdCorrected
-                                  + " is false, tell them to go to the closet room, if"
+                                  + " is false, tell them to go to the closet room, if "
                                   + GameState.foundPasscode
-                                  + " is false, tell them to go to the computer room."
-                                  + " if not tell them to go to the control room."
-                                  + "If the user's request is related to not knowing what to do, if"
+                                  + " is false, tell them to go to the computer room. if not tell"
+                                  + " them to go to the control room.If the user's request is"
+                                  + " related to not knowing what to do, if "
                                   + GameState.isPlayerInRoom1
                                   + " is true and if"
                                   + GameState.isRiddleResolved
                                   + " is false, tell them to solve the riddle by putting the books,"
-                                  + " if"
+                                  + " if "
                                   + GameState.isIdCorrected
                                   + " is false, tell them to try find the space suits in the room,"
                                   + " if not tell them they can leave this room.If the user's"
-                                  + " request is related to not knowing what to do, if"
+                                  + " request is related to not knowing what to do, if "
                                   + GameState.isPlayerInRoom2
-                                  + " is true and if"
+                                  + " is true and if "
                                   + GameState.foundComputer
                                   + " is false, tell them to move around the room and find the"
-                                  + " computer, if"
+                                  + " computer, if "
                                   + GameState.isPuzzledSolved
                                   + " is false, tell them to solve the puzzle by clicking the tile,"
-                                  + " if"
+                                  + " if "
                                   + GameState.foundPasscode
                                   + " is false, tell them to find the passcode file in the computer"
                                   + " screen, if not tell them they can leave this room.If the"
-                                  + " user's request is related to not knowing what to do, if"
+                                  + " user's request is related to not knowing what to do, if "
                                   + GameState.isPlayerInRoom3
-                                  + " is true and if"
+                                  + " is true and if "
                                   + GameState.isRiddleResolved
                                   + " is false, tell them to go to closet room and solve riddle, if"
+                                  + " "
                                   + GameState.isIdCorrected
                                   + " is false, tell them to go to closet room and check the space"
-                                  + " suits, if"
+                                  + " suits, if "
                                   + GameState.foundPasscode
                                   + " is false, tell them to go to computer room and find the"
                                   + " passcode.If the user's request is related to not knowing what"
-                                  + " to do, if"
+                                  + " to do, if "
                                   + GameState.isPlayerInRoom3
-                                  + " is true and if"
+                                  + " is true and if "
                                   + GameState.foundMonitor
                                   + " is false, tell them to move around the room and find the"
-                                  + " monitor, if"
+                                  + " monitor, if "
                                   + GameState.isPasscodeCorrect
-                                  + " is false, tell them to enter the passcode in the monitor, if"
+                                  + " is false, tell them to enter the passcode in the monitor, if "
                                   + GameState.isIdChecked
                                   + " is false, tell them to check the id cards in the ID scanner,"
                                   + " if not tell them they. Also, only write down the answers- do"
@@ -428,7 +427,7 @@ public class HelperChatController {
   @FXML
   private void onGoBack(ActionEvent event) throws ApiProxyException, IOException {
     soundButttonClick();
-    App.setScene(AppUi.PLAYER);
+    App.setScene(App.previousRoom);
   }
 
   @FXML

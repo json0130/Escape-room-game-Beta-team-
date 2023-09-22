@@ -34,6 +34,7 @@ public class App extends Application {
   public static int chosenTimer;
   public static MediaPlayer mediaPlayer;
   public static String musicType = "starting";
+  public static AppUi previousRoom = AppUi.PLAYER;
 
   public static void main(final String[] args) {
     launch();

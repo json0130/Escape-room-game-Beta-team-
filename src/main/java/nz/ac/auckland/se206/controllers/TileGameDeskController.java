@@ -612,6 +612,7 @@ public class TileGameDeskController {
 
   @FXML
   private void onGameMasterClick() {
+    App.previousRoom = AppUi.TILEPUZZLE;
     App.setScene(AppUi.HELPERCHAT);
   }
 

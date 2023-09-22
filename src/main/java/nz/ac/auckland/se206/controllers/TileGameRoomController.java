@@ -461,6 +461,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   @FXML
   private void onGameMasterClick() {
+    App.previousRoom = AppUi.TILEROOM;
     App.setScene(AppUi.HELPERCHAT);
   }
 

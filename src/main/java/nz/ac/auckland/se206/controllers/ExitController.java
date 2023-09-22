@@ -794,6 +794,7 @@ public class ExitController implements Initializable {
 
   @FXML
   private void onGameMasterClick() {
+    App.previousRoom = AppUi.ROOM3;
     App.setScene(AppUi.HELPERCHAT);
   }
 
