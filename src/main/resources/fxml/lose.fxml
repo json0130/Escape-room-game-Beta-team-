@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.EndController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.EndController">
    <children>
-      <ImageView fitHeight="656.0" fitWidth="1211.0" layoutX="-27.0" layoutY="-21.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="673.0" fitWidth="1211.0" layoutX="-27.0" layoutY="-21.0" pickOnBounds="true">
          <image>
             <Image url="@../images/Firefly%20realistic%20space%20background%20with%20stars%2024052.jpg" />
          </image>
