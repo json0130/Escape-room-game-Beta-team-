@@ -12,3 +12,6 @@
 
 <a href="https://www.flaticon.com/free-icons/question-mark" title="question mark icons">Question mark icons created by Creatype - Flaticon</a>
 
+
+<a href="https://www.freepik.com/free-vector/monitor_3425242.htm#query=monitor&position=0&from_view=search&track=sph">Image by rawpixel.com</a> on Freepik
+

@@ -84,7 +84,7 @@ public class Room1Controller implements Initializable {
   @FXML private ImageView crew3Indicator;
   @FXML private ImageView crew4Indicator;
 
-   @FXML private ImageView gameMasterBox;
+  @FXML private ImageView gameMasterBox;
 
   @FXML private Label difficultyLabel;
   @FXML private Label hintLabel;
@@ -352,21 +352,22 @@ public class Room1Controller implements Initializable {
   }
 
   public void checkExit(ImageView player, Rectangle exit) {
-        if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
-            exit.setOpacity(1);
-            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-            pauseTransition.setOnFinished(event -> {
-                // Adjust the player's position to be right in front of the room
-                player.setLayoutX(433);
-                player.setLayoutY(468);
-                App.setScene(AppUi.PLAYER);
-                timer.stop();
-            });
-            pauseTransition.play();
-        } else {
-          exit.setOpacity(0.6);
-        }
+    if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
+      exit.setOpacity(1);
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+      pauseTransition.setOnFinished(
+          event -> {
+            // Adjust the player's position to be right in front of the room
+            player.setLayoutX(433);
+            player.setLayoutY(468);
+            App.setScene(AppUi.PLAYER);
+            timer.stop();
+          });
+      pauseTransition.play();
+    } else {
+      exit.setOpacity(0.6);
     }
+  }
 
   public void checkCollision2(ImageView player, List<Rectangle> walls) {
     for (Rectangle wall : walls) {
@@ -552,7 +553,7 @@ public class Room1Controller implements Initializable {
         }
       };
 
-      @FXML
+  @FXML
   public void clickGameMaster(MouseEvent event) {
     gameMasterBox.setVisible(true);
     inputText.setVisible(true);
@@ -572,7 +573,7 @@ public class Room1Controller implements Initializable {
 
   @FXML
   public void onSend(ActionEvent event) {}
-    
+
   @FXML
   private void soundButttonClick() {
     String soundEffect = "src/main/resources/sounds/button-click.mp3";
