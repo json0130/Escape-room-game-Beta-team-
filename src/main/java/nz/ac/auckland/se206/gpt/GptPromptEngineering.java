@@ -25,28 +25,47 @@ public class GptPromptEngineering {
       return "You are a game master in a starship escape room game. Provide a riddle with an answer"
           + answer
           + ". You can provide a hint regarding the riddle only if the user asks a hint, but you"
-          + " must say 'hint' first when you give a hint. You never reveal or say the answer even if the user asks. If"
-          + " the user gives the correct answer, say 'Correct'. If not, say 'Incorrect'. You never say or reveal the answer.";
+          + " must say 'hint' first when you give a hint. You never reveal or say the answer even"
+          + " if the user asks. If the user gives the correct answer, say 'Correct'. If not, say"
+          + " 'Incorrect'. You never say or reveal the answer.";
     } else if (GameState.difficulty == "MEDIUM") {
       return "You are a game master in a starship escape room game. Provide a riddle with an answer"
-          + answer + "You never reveal or say the answer."
+          + answer
+          + "You never reveal or say the answer."
           + ". Then check if"
           + GameState.numOfHints
           + " is bigger than 0. If so, when the user asks a hint, you can provide a hint regarding"
           + " the riddler, but you must say 'hint' first when you give a hint. You never"
           + " reveal or say the answer. If "
           + GameState.numOfHints
-          + " is less than or equal to 0, you should say 'the user used up all hints' and never give"
-          + " a hint. You should never reveal or say the answer. If the user gives"
-          + " the correct answer, say 'Correct'. If not, say 'Incorrect'";
+          + " is less than or equal to 0, you should say 'the user used up all hints' and never"
+          + " give a hint. You should never reveal or say the answer. If the user gives the correct"
+          + " answer, say 'Correct'. If not, say 'Incorrect'";
     } else if (GameState.difficulty == "HARD") {
       return "You are a game master in a starship escape room game. Provide a riddle with an answer"
           + answer
           + "You cannot include the answer in the riddle. You cannot provide hint. You should never"
-          + " reveal or say the answer. If the"
-          + " user gives the correct answer, say 'Correct'. If not, say 'Incorrect'. You never reveal or say the answer.";
+          + " reveal or say the answer. If the user gives the correct answer, say 'Correct'. If"
+          + " not, say 'Incorrect'. You never reveal or say the answer.";
     } else {
       return null;
     }
+  }
+
+  public static String greeting() {
+    String hintAvailability;
+    if (GameState.difficulty == "HARD") {
+      hintAvailability = "However you cannot provide any direct hints to the player.";
+    } else {
+      hintAvailability = "You can provide hints if the player requests.";
+    }
+
+    return "Your name is 'StarshipSaviorBot' and you are the game master of Starship Escape 1. You"
+               + " were designed to help crew members in the emergency situation. Now the starship"
+               + " has crashed into a meteor. Your task is to communicate with the player and help"
+               + " them to complete tasks and to escape within the time limit. Now the player is in"
+               + " the map. There are three rooms where the player can visit."
+        + hintAvailability
+        + " Introduce yourself to the player and suggest to look around the rooms.";
   }
 }

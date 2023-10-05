@@ -58,8 +58,8 @@ public class HelperChatController {
     chatTextArea.setEditable(false);
 
     chatCompletionRequest =
-        new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.5).setMaxTokens(100);
-    runGpt(new ChatMessage("user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
+        new ChatCompletionRequest().setN(1).setTemperature(0.5).setTopP(0.5).setMaxTokens(120);
+    runGpt(new ChatMessage("user", GptPromptEngineering.greeting()));
   }
 
   /**
@@ -79,8 +79,8 @@ public class HelperChatController {
    * @throws ApiProxyException if there is an error communicating with the API proxy
    */
   private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
-    chatCompletionRequest =
-        new ChatCompletionRequest().setN(1).setTemperature(0.5).setTopP(0.2).setMaxTokens(100);
+    // chatCompletionRequest =
+    //     new ChatCompletionRequest().setN(1).setTemperature(0.5).setTopP(0.2).setMaxTokens(100);
     Task<ChatMessage> runningGptTask =
         new Task<ChatMessage>() {
           @Override
@@ -91,14 +91,6 @@ public class HelperChatController {
               Choice result = chatCompletionResult.getChoices().iterator().next();
               chatCompletionRequest.addMessage(result.getChatMessage());
               appendChatMessage(result.getChatMessage());
-              // Check the correctness of player's answer for the riddle
-              Platform.runLater(
-                  () -> {
-                    if (result.getChatMessage().getRole().equals("assistant")
-                        && result.getChatMessage().getContent().startsWith("Correct")) {
-                      GameState.isRiddleResolved = true;
-                    }
-                  });
               return result.getChatMessage();
             } catch (ApiProxyException e) {
               // TODO handle exception appropriately
