@@ -18,7 +18,8 @@ public class SceneManager {
     WIN,
     LOSE,
     END1,
-    HELPERCHAT
+    HELPERCHAT,
+    AIWINDOW
   }
 
   private static HashMap<AppUi, Parent> scenes = new HashMap<AppUi, Parent>();
