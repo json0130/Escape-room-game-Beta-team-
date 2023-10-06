@@ -34,7 +34,6 @@ import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
-import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 
 public class PlayerController implements Initializable {
@@ -50,8 +49,6 @@ public class PlayerController implements Initializable {
   private BooleanBinding keyPressed = wPressed.or(aPressed).or(sPressed).or(dPressed);
   private int movementVariable = 5;
   private double shapesize;
-  private double progressSize = 4.0;
-  private Boolean soundPlaying = false;
 
   String soundEffect = "src/main/resources/sounds/door-open.mp3";
   Media media = new Media(new File(soundEffect).toURI().toString());
@@ -110,9 +107,6 @@ public class PlayerController implements Initializable {
   private double previousY;
 
   @FXML private Label countdownLabel;
-
-  private ChatCompletionRequest chatCompletionRequest;
-  private String lastUserMessage = ""; // Track the last user message for GPT response
 
   @FXML
   void start(ActionEvent event) {

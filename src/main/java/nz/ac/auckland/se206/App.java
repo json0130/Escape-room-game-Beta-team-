@@ -9,8 +9,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -23,9 +21,7 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
 public class App extends Application {
 
   public static int timerSeconds = 120;
-  private Label countdownLabel;
   private static Scene scene;
-  private StackPane mainLayout;
   public static boolean tileGameComplete = false;
   public static int passcode;
   public static Boolean timerStarted = false;
