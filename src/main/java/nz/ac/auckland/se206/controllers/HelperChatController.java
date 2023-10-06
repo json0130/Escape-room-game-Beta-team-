@@ -50,7 +50,6 @@ public class HelperChatController {
             try {
               onSendMessage(new ActionEvent());
             } catch (ApiProxyException | IOException e) {
-              // TODO Auto-generated catch block
               e.printStackTrace();
             }
           }
@@ -101,7 +100,6 @@ public class HelperChatController {
                   });
               return result.getChatMessage();
             } catch (ApiProxyException e) {
-              // TODO handle exception appropriately
               e.printStackTrace();
               return null;
             }

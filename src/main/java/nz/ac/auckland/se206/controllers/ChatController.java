@@ -56,7 +56,7 @@ public class ChatController {
             try {
               onSendMessage(new ActionEvent());
             } catch (ApiProxyException | IOException e) {
-              // TODO Auto-generated catch block
+            
               e.printStackTrace();
             }
           }
@@ -87,7 +87,7 @@ public class ChatController {
                         new ChatMessage(
                             "user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
                   } catch (ApiProxyException e) {
-                    // TODO Auto-generated catch block
+                  
                     e.printStackTrace();
                   }
                   isRiddleGiven = true;
@@ -108,7 +108,7 @@ public class ChatController {
                       new ChatMessage(
                           "user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
                 } catch (ApiProxyException e) {
-                  // TODO Auto-generated catch block
+                  
                   e.printStackTrace();
                 }
                 labelTimer.cancel();
@@ -163,7 +163,7 @@ public class ChatController {
                   });
               return result.getChatMessage();
             } catch (ApiProxyException e) {
-              // TODO handle exception appropriately
+            
               e.printStackTrace();
               return null;
             }

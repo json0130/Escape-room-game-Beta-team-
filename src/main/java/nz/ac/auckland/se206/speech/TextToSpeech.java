@@ -15,7 +15,6 @@ public class TextToSpeech {
       super(message);
     }
   }
-  private boolean interupt = false;
   /**
    * Main function to speak the given list of sentences.
    *
@@ -114,8 +113,8 @@ public class TextToSpeech {
     }
   }
 
-  public void setInterupt() {
-    this.interupt = true;
-    synthesizer.cancelAll();
-  }
+  // public void setInterupt() {
+  //   this.interupt = true;
+  //   synthesizer.cancelAll();
+  // }
 }

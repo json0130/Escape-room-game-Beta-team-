@@ -13,7 +13,6 @@ public class CountdownTimerController {
 
   @FXML private Label countdownLabel;
   @FXML private Timeline countdownTimeline;
-  private int remainingSeconds = App.timerSeconds;
 
   @FXML
   public void initialize() throws ApiProxyException {
