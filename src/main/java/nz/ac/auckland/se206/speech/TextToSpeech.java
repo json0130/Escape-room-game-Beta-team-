@@ -8,6 +8,9 @@ import javax.speech.synthesis.SynthesizerModeDesc;
 
 /** Text-to-speech API using the JavaX speech library. */
 public class TextToSpeech {
+
+  private boolean interupt = false;
+  private final Synthesizer synthesizer;
   
   /** Custom unchecked exception for Text-to-speech issues. */
   static class TextToSpeechException extends RuntimeException {
@@ -15,6 +18,7 @@ public class TextToSpeech {
       super(message);
     }
   }
+
   /**
    * Main function to speak the given list of sentences.
    *
@@ -25,15 +29,10 @@ public class TextToSpeech {
       throw new IllegalArgumentException(
           "You are not providing any arguments. You need to provide one or more sentences.");
     }
-
     final TextToSpeech textToSpeech = new TextToSpeech();
-
     textToSpeech.speak(args);
     textToSpeech.terminate();
   }
-
-  private final Synthesizer synthesizer;
-  
 
   /**
    * Constructs the TextToSpeech object creating and allocating the speech synthesizer. English

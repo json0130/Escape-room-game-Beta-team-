@@ -104,6 +104,8 @@ public class Room1Controller implements Initializable {
   public boolean isCrew3Colliding = false;
   public boolean isCrew4Colliding = false;
 
+  @FXML private Button toggleSoundButton;
+
   private boolean nextToButton = false;
 
   // timer for collsion check between monitor and walls
@@ -150,6 +152,9 @@ public class Room1Controller implements Initializable {
     collisionTimer.start();
 
     walls.add(wall1);
+
+     // Add an event handler to the Toggle Sound button
+     toggleSoundButton.setOnAction(event -> toggleSound());
 
     previousX = player.getLayoutX();
     previousY = player.getLayoutY();
@@ -577,6 +582,24 @@ public class Room1Controller implements Initializable {
     mediaPlayer.setAutoPlay(true);
   }
 
+  @FXML
+  private void toggleSound() {
+      if (GameState.isSoundEnabled) {
+          // Disable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.0); // Mute the media player
+          }
+          toggleSoundButton.setText("Enable Sound");
+      } else {
+          // Enable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+          }
+          toggleSoundButton.setText("Disable Sound");
+      }
+  
+      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  }
   // game master animation
   @FXML
   private void animateRobot() {

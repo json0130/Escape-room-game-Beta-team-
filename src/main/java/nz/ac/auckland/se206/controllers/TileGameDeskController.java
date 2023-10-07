@@ -20,6 +20,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.LetterGenerator;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.Tile;
@@ -78,6 +79,8 @@ public class TileGameDeskController {
   @FXML private ImageView imageSeven;
   @FXML private ImageView imageEight;
 
+  @FXML private Button toggleSoundButton;
+
   private Tile tileOne = new Tile();
   private Tile tileTwo = new Tile();
   private Tile tileThree = new Tile();
@@ -123,6 +126,9 @@ public class TileGameDeskController {
    * @throws ApiProxyException
    */
   public void initialize() throws ApiProxyException {
+    App.timerSeconds = 120;
+    // Add an event handler to the Toggle Sound button
+    toggleSoundButton.setOnAction(event -> toggleSound());
     animateRobot();
 
     // dialogueList.add("WHO DARES DISTURB MY SLUMBER!?!");
@@ -559,6 +565,25 @@ public class TileGameDeskController {
     mediaPlayer.setAutoPlay(true);
   }
 
+  @FXML
+  private void toggleSound() {
+      if (GameState.isSoundEnabled) {
+          // Disable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.0); // Mute the media player
+          }
+          toggleSoundButton.setText("Enable Sound");
+      } else {
+          // Enable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+          }
+          toggleSoundButton.setText("Disable Sound");
+      }
+  
+      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  }
+  
   @FXML
   private void onGameMasterClick() {
     App.previousRoom = AppUi.TILEPUZZLE;

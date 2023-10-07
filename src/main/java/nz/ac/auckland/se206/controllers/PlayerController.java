@@ -106,6 +106,9 @@ public class PlayerController implements Initializable {
   private double previousX;
   private double previousY;
 
+  @FXML private Button toggleSoundButton;
+  private boolean isSoundEnabled = true;
+
   @FXML private Label countdownLabel;
 
   @FXML

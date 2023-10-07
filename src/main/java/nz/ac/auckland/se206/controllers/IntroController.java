@@ -54,6 +54,8 @@ public class IntroController implements Initializable {
   @FXML private boolean isLevelSelected = false;
   @FXML private boolean isTimeSelected = false;
 
+  @FXML private Button toggleSoundButton;
+  
   @Override
   public void initialize(URL location, ResourceBundle resources) {
 
@@ -252,11 +254,15 @@ public class IntroController implements Initializable {
 
   private void updateTimer(ActionEvent event) {
     App.timerSeconds--;
-    if (App.timerSeconds <= 0) {
-      App.timerTimeline.stop();
-      App.setScene(AppUi.LOSE);
+    if(!GameState.isGameFinished){
+      if (App.timerSeconds <= 0) {
+        App.timerTimeline.stop();
+        App.setScene(AppUi.LOSE);
+      }
     }
-    // System.out.println("Actual timer: " + App.timerSeconds);
+    else{
+      App.timerTimeline.stop();
+    }
   }
 
   @FXML
@@ -327,6 +333,25 @@ public class IntroController implements Initializable {
         });
   }
 
+  @FXML
+  private void toggleSound() {
+      if (GameState.isSoundEnabled) {
+          // Disable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.0); // Mute the media player
+          }
+          toggleSoundButton.setText("Enable Sound");
+      } else {
+          // Enable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+          }
+          toggleSoundButton.setText("Disable Sound");
+      }
+  
+      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  }
+  
   @FXML
   private void soundButttonClick() {
     String soundEffect = "src/main/resources/sounds/button-click.mp3";
