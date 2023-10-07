@@ -77,8 +77,8 @@ public class GptPromptEngineering {
 
   public static String greetingRoom2() {
     return "Now the player is in the computer room. Players need to get a passcode which is"
-               + " required to escape the starship. Tell the player to move around the room and get"
-               + " the passcode.";
+        + " required to escape the starship. Tell the player to move around the room and get"
+        + " the passcode.";
   }
 
   public static String greetingRoom3() {
@@ -86,7 +86,7 @@ public class GptPromptEngineering {
         + " room using the passcode and id card. Introduce this room to the player. ";
   }
 
-  public static String easy(String message) {
+  public static String easy1(String message) {
     return "The user is asking for help regarding the following request: "
         + message
         + " First determine if the user is asking for help or not. This"
@@ -153,7 +153,7 @@ public class GptPromptEngineering {
         + " not talk about what the user has typed in.";
   }
 
-  public static String medium(String message) {
+  public static String medium1(String message) {
     return "The user's message is:"
         + message
         + "First determine if the user is asking for help or not. This"
@@ -220,7 +220,7 @@ public class GptPromptEngineering {
         + " not talk about what the user has typed in.";
   }
 
-  public static String hard(String message) {
+  public static String hard1(String message) {
     return "The user's message is: "
         + message
         + "First determine if the user is asking for help or not. This"
@@ -286,5 +286,181 @@ public class GptPromptEngineering {
         + " if not tell them they. Also, only write down the answers- do"
         + " not talk about what the user has typed in. The important"
         + " thing is that you never help the user.";
+  }
+
+  public static String easy(String message) {
+
+    String hint = "";
+    if (GameState.isPlayerInMap) {
+      if (!GameState.beenToRoom1 && !GameState.beenToRoom2 && !GameState.beenToRoom3) {
+        hint = "tell to visit the computer room or the closet room first";
+      } else if (!GameState.beenToRoom1) {
+        hint = "tell to visit the closet room.";
+      } else if (!GameState.isIdCollected) {
+        hint = "tell to collect id in the closet room";
+      } else if (!GameState.beenToRoom2) {
+        hint = "tell to visit the computer room.";
+      } else if (!GameState.foundPasscode) {
+        hint = "tell to find passcode in the computer room";
+      } else if (!GameState.beenToRoom3) {
+        hint = "tell to visit the control room";
+      } else if (!GameState.isPasscodeCorrect) {
+        hint = "tell to go to the computer room again to check the passcode";
+      } else if (!GameState.isIdChecked) {
+        hint = "tell to check the riddle answer again and collect the correct id";
+      }
+    } else if (GameState.isPlayerInRoom1) {
+      if (!GameState.isRiddleGiven) {
+        hint = "tell to interact with the monitor in the middle of the closet room";
+      } else if (!GameState.isRiddleResolved) {
+        hint = "tell to solve the riddle in the monitor";
+      } else if (!GameState.isIdCollected) {
+        hint = "tell to interact with spacesuits hanging on the wall";
+      } else if (!GameState.beenToRoom2) {
+        hint = "tell to go to the computer room";
+      } else if (!GameState.foundPasscode) {
+        hint = "tell to go to the computer room to find the passcode";
+      } else if (!GameState.beenToRoom3) {
+        hint = "tell to go to the control room";
+      } else if (!GameState.isPasscodeCorrect) {
+        hint = "tell to check the passcode again in the computer room";
+      } else if (!GameState.isIdChecked) {
+        hint = "tell to check the riddle answer again and collect the correct id";
+      }
+    } else if (GameState.isPlayerInRoom2) {
+      if (!GameState.foundComputer) {
+        hint = "tell to interact with the computer";
+      } else if (!GameState.isPuzzleSolved) {
+        hint =
+            "tell to move tiles so that the middle line mathces with the word in the side monitor";
+      } else if (!GameState.foundPasscode) {
+        hint = "tell to check the passcode file in the computer";
+      } else if (!GameState.beenToRoom1) {
+        hint = "tell to go to the closet room";
+      } else if (!GameState.isIdCollected) {
+        hint = "tell to go to the closet room to collect id cards";
+      } else if (!GameState.beenToRoom3) {
+        hint = "tell to go to the control room";
+      } else if (!GameState.isPasscodeCorrect) {
+        hint = "tell to check the passcode again";
+      } else if (!GameState.isIdChecked) {
+        hint = "tell to check the riddle answer again and collect the correct id";
+      }
+    } else if (GameState.isPlayerInRoom3) {
+      if (!GameState.beenToRoom1) {
+        hint = "tell to go to the closet room";
+      } else if (!GameState.beenToRoom2) {
+        hint = "tell to go to the computer room";
+      } else if (!GameState.foundMonitor) {
+        hint = "tell to interact with the monitor";
+      } else if (!GameState.isPasscodeCorrect) {
+        hint = "tell to go to the computer room and check the passcode again";
+      } else if (!GameState.isIdChecked) {
+        hint =
+            "tell to go to the closet room and check the riddle answer again to collect the correct"
+                + " id";
+      }
+    }
+
+    String intro =
+        "Naturally repond to the user. If the user was asking for"
+            + " hint, you can "
+            + hint
+            + ", but you must say 'hint' first. You only give a hint only when the user requested.";
+
+    return intro;
+  }
+
+  public static String medium(String message) {
+    String intro = "";
+    if (GameState.numOfHints <= 0) {
+      intro = " If you believe the" + " player is asking for hint, say you cannot give more hint. ";
+    } else {
+      String hint = "";
+      if (GameState.isPlayerInMap) {
+        if (!GameState.beenToRoom1 && !GameState.beenToRoom2 && !GameState.beenToRoom3) {
+          hint = "tell to visit the computer room or the closet room first";
+        } else if (!GameState.beenToRoom1) {
+          hint = "tell to visit the closet room.";
+        } else if (!GameState.isIdCollected) {
+          hint = "tell to collect id in the closet room";
+        } else if (!GameState.beenToRoom2) {
+          hint = "tell to visit the computer room.";
+        } else if (!GameState.foundPasscode) {
+          hint = "tell to find passcode in the computer room";
+        } else if (!GameState.beenToRoom3) {
+          hint = "tell to visit the control room";
+        } else if (!GameState.isPasscodeCorrect) {
+          hint = "tell to go to the computer room again to check the passcode";
+        } else if (!GameState.isIdChecked) {
+          hint = "tell to check the riddle answer again and collect the correct id";
+        }
+      } else if (GameState.isPlayerInRoom1) {
+        if (!GameState.isRiddleGiven) {
+          hint = "tell to interact with the monitor in the middle of the closet room";
+        } else if (!GameState.isRiddleResolved) {
+          hint = "tell to solve the riddle in the monitor";
+        } else if (!GameState.isIdCollected) {
+          hint = "tell to interact with spacesuits hanging on the wall";
+        } else if (!GameState.beenToRoom2) {
+          hint = "tell to go to the computer room";
+        } else if (!GameState.foundPasscode) {
+          hint = "tell to go to the computer room to find the passcode";
+        } else if (!GameState.beenToRoom3) {
+          hint = "tell to go to the control room";
+        } else if (!GameState.isPasscodeCorrect) {
+          hint = "tell to check the passcode again in the computer room";
+        } else if (!GameState.isIdChecked) {
+          hint = "tell to check the riddle answer again and collect the correct id";
+        }
+      } else if (GameState.isPlayerInRoom2) {
+        if (!GameState.foundComputer) {
+          hint = "tell to interact with the computer";
+        } else if (!GameState.isPuzzleSolved) {
+          hint =
+              "tell to move tiles so that the middle line mathces with the word in the side"
+                  + " monitor";
+        } else if (!GameState.foundPasscode) {
+          hint = "tell to check the passcode file in the computer";
+        } else if (!GameState.beenToRoom1) {
+          hint = "tell to go to the closet room";
+        } else if (!GameState.isIdCollected) {
+          hint = "tell to go to the closet room to collect id cards";
+        } else if (!GameState.beenToRoom3) {
+          hint = "tell to go to the control room";
+        } else if (!GameState.isPasscodeCorrect) {
+          hint = "tell to check the passcode again";
+        } else if (!GameState.isIdChecked) {
+          hint = "tell to check the riddle answer again and collect the correct id";
+        }
+      } else if (GameState.isPlayerInRoom3) {
+        if (!GameState.beenToRoom1) {
+          hint = "tell to go to the closet room";
+        } else if (!GameState.beenToRoom2) {
+          hint = "tell to go to the computer room";
+        } else if (!GameState.foundMonitor) {
+          hint = "tell to interact with the monitor";
+        } else if (!GameState.isPasscodeCorrect) {
+          hint = "tell to go to the computer room and check the passcode again";
+        } else if (!GameState.isIdChecked) {
+          hint =
+              "tell to go to the closet room and check the riddle answer again to collect the"
+                  + " correct id";
+        }
+      }
+
+      intro =
+          "Naturally repond to the user. If the user was asking for"
+              + " hint, you can "
+              + hint
+              + ", but you must say 'hint' first. You only give a hint only when the user"
+              + " requested.";
+    }
+
+    return intro;
+  }
+
+  public static String hard(String message) {
+    return null;
   }
 }
