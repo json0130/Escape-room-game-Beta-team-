@@ -22,6 +22,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.LetterGenerator;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.Tile;
@@ -426,7 +427,7 @@ public class TileGameDeskController {
         System.out.println("done");
 
         disableImages();
-
+        GameState.isPuzzleSolved = true;
         showHomeScreen();
       }
     }
@@ -526,6 +527,7 @@ public class TileGameDeskController {
     String stringPasscode = Integer.toString(currentPasscode);
     computerPasscodeLabel.setText(stringPasscode);
     passcodePane.setVisible(true);
+    GameState.foundPasscode = true;
 
     System.out.println("DONE1");
   }

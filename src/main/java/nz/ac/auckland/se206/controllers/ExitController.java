@@ -405,6 +405,8 @@ public class ExitController implements Initializable {
       exit.setVisible(true);
       player.setVisible(false);
       clickMonitor.setVisible(false);
+
+      GameState.foundMonitor = true;
     }
   }
 
@@ -538,7 +540,7 @@ public class ExitController implements Initializable {
     } else {
       soundCorrect();
       screen.setText("CORRECT");
-      GameState.correctPassword = true;
+      GameState.isPasscodeCorrect = true;
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
       pauseTransition.setOnFinished(
@@ -579,7 +581,7 @@ public class ExitController implements Initializable {
   @FXML
   private void clickIdScanner(MouseEvent event) {
     // if the ids are not shown and the correct id was not tagged yet
-    if (ids.isVisible() == false && !GameState.correctId) {
+    if (ids.isVisible() == false && !GameState.isIdChecked) {
       ids.setVisible(true);
 
       if (GameState.isCaptainCollected) {
@@ -622,7 +624,7 @@ public class ExitController implements Initializable {
               if (node1 == idCaptain) {
                 light.setFill(Color.GREEN);
                 soundCorrectCard();
-                GameState.correctId = true;
+                GameState.isIdChecked = true;
                 ids.setVisible(false);
                 idCaptain.setVisible(false);
                 idChef.setVisible(false);
@@ -638,7 +640,7 @@ public class ExitController implements Initializable {
               if (node1 == idChef) {
                 light.setFill(Color.GREEN);
                 soundCorrectCard();
-                GameState.correctId = true;
+                GameState.isIdChecked = true;
                 ids.setVisible(false);
                 idCaptain.setVisible(false);
                 idChef.setVisible(false);
@@ -654,7 +656,7 @@ public class ExitController implements Initializable {
               if (node1 == idDoctor) {
                 light.setFill(Color.GREEN);
                 soundCorrectCard();
-                GameState.correctId = true;
+                GameState.isIdChecked = true;
                 ids.setVisible(false);
                 idCaptain.setVisible(false);
                 idChef.setVisible(false);
@@ -670,7 +672,7 @@ public class ExitController implements Initializable {
               if (node1 == idEngineer) {
                 light.setFill(Color.GREEN);
                 soundCorrectCard();
-                GameState.correctId = true;
+                GameState.isIdChecked = true;
                 ids.setVisible(false);
                 idCaptain.setVisible(false);
                 idChef.setVisible(false);
@@ -720,7 +722,7 @@ public class ExitController implements Initializable {
   }
 
   private void changeOpacity2() {
-    if (GameState.correctId) {
+    if (GameState.isIdChecked) {
       player.setVisible(false);
       // Create a FadeTransition for both background images
       FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(2), background2);

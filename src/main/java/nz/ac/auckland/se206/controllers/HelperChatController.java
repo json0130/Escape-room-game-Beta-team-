@@ -172,7 +172,7 @@ public class HelperChatController {
                                   + " is true and "
                                   + GameState.isRiddleResolved
                                   + " is false or if "
-                                  + GameState.isIdCorrected
+                                  + GameState.isIdCollected
                                   + " is false, tell them to go to the closet room, if "
                                   + GameState.foundPasscode
                                   + " is false, tell them to go to the computer room. if not tell"
@@ -183,7 +183,7 @@ public class HelperChatController {
                                   + GameState.isRiddleResolved
                                   + " is false, tell them to solve the riddle by putting the books,"
                                   + " if "
-                                  + GameState.isIdCorrected
+                                  + GameState.isIdCollected
                                   + " is false, tell them to try find the space suits in the room,"
                                   + " if not tell them they can leave this room.If the user's"
                                   + " request is related to not knowing what to do, if "
@@ -192,7 +192,7 @@ public class HelperChatController {
                                   + GameState.foundComputer
                                   + " is false, tell them to move around the room and find the"
                                   + " computer, if "
-                                  + GameState.isPuzzledSolved
+                                  + GameState.isPuzzleSolved
                                   + " is false, tell them to solve the puzzle by clicking the tile,"
                                   + " if "
                                   + GameState.foundPasscode
@@ -204,7 +204,7 @@ public class HelperChatController {
                                   + GameState.isRiddleResolved
                                   + " is false, tell them to go to closet room and solve riddle, if"
                                   + " "
-                                  + GameState.isIdCorrected
+                                  + GameState.isIdCollected
                                   + " is false, tell them to go to closet room and check the space"
                                   + " suits, if "
                                   + GameState.foundPasscode
@@ -245,7 +245,7 @@ public class HelperChatController {
                                   + " is true and"
                                   + GameState.isRiddleResolved
                                   + " is false or if"
-                                  + GameState.isIdCorrected
+                                  + GameState.isIdCollected
                                   + " is false, tell them to go to the closet room, if"
                                   + GameState.foundPasscode
                                   + " is false, tell them to go to the computer room."
@@ -256,7 +256,7 @@ public class HelperChatController {
                                   + GameState.isRiddleResolved
                                   + " is false, tell them to solve the riddle by putting the books,"
                                   + " if"
-                                  + GameState.isIdCorrected
+                                  + GameState.isIdCollected
                                   + " is false, tell them to try find the space suits in the room,"
                                   + " if not tell them they can leave this room.If the user's"
                                   + " request is related to not knowing what to do, if"
@@ -265,7 +265,7 @@ public class HelperChatController {
                                   + GameState.foundComputer
                                   + " is false, tell them to move around the room and find the"
                                   + " computer, if"
-                                  + GameState.isPuzzledSolved
+                                  + GameState.isPuzzleSolved
                                   + " is false, tell them to solve the puzzle by clicking the tile,"
                                   + " if"
                                   + GameState.foundPasscode
@@ -276,7 +276,7 @@ public class HelperChatController {
                                   + " is true and if"
                                   + GameState.isRiddleResolved
                                   + " is false, tell them to go to closet room and solve riddle, if"
-                                  + GameState.isIdCorrected
+                                  + GameState.isIdCollected
                                   + " is false, tell them to go to closet room and check the space"
                                   + " suits, if"
                                   + GameState.foundPasscode
@@ -323,7 +323,7 @@ public class HelperChatController {
                                   + " is true and"
                                   + GameState.isRiddleResolved
                                   + " is false or if"
-                                  + GameState.isIdCorrected
+                                  + GameState.isIdCollected
                                   + " is false, tell them to go to the closet room, if"
                                   + GameState.foundPasscode
                                   + " is false, tell them to go to the computer room."
@@ -334,7 +334,7 @@ public class HelperChatController {
                                   + GameState.isRiddleResolved
                                   + " is false, tell them to solve the riddle by putting the books,"
                                   + " if"
-                                  + GameState.isIdCorrected
+                                  + GameState.isIdCollected
                                   + " is false, tell them to try find the space suits in the room,"
                                   + " if not tell them they can leave this room.If the user's"
                                   + " request is related to not knowing what to do, if"
@@ -343,7 +343,7 @@ public class HelperChatController {
                                   + GameState.foundComputer
                                   + " is false, tell them to move around the room and find the"
                                   + " computer, if"
-                                  + GameState.isPuzzledSolved
+                                  + GameState.isPuzzleSolved
                                   + " is false, tell them to solve the puzzle by clicking the tile,"
                                   + " if"
                                   + GameState.foundPasscode
@@ -354,7 +354,7 @@ public class HelperChatController {
                                   + " is true and if"
                                   + GameState.isRiddleResolved
                                   + " is false, tell them to go to closet room and solve riddle, if"
-                                  + GameState.isIdCorrected
+                                  + GameState.isIdCollected
                                   + " is false, tell them to go to closet room and check the space"
                                   + " suits, if"
                                   + GameState.foundPasscode

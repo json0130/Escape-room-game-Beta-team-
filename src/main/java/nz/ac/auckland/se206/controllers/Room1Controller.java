@@ -328,21 +328,25 @@ public class Room1Controller implements Initializable {
   // If collect button is pressed, id is corrected and state of idcollected changes
   public void onCollect1() {
     GameState.isDoctorCollected = true;
+    GameState.isIdCollected = true;
     hideId1();
   }
 
   public void onCollect2() {
     GameState.isCaptainCollected = true;
+    GameState.isIdCollected = true;
     hideId2();
   }
 
   public void onCollect3() {
     GameState.isChefCollected = true;
+    GameState.isIdCollected = true;
     hideId3();
   }
 
   public void onCollect4() {
     GameState.isEngineerCollected = true;
+    GameState.isIdCollected = true;
     hideId4();
   }
 
@@ -350,6 +354,7 @@ public class Room1Controller implements Initializable {
   public void onRiddle(MouseEvent evnet) throws IOException {
     if (nextToButton) {
       soundButttonClick();
+      GameState.isRiddleGiven = true;
       App.setScene(AppUi.CHAT);
     }
   }
