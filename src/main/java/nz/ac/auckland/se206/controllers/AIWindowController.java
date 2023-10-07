@@ -12,7 +12,6 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -38,8 +37,6 @@ public class AIWindowController {
   @FXML private ImageView robotBase;
   @FXML private ImageView robotReply;
   @FXML private ImageView robotThink;
-  @FXML private Label hintLabel;
-  @FXML private Label hintLabel2;
 
   @FXML private Pane aiPane;
   @FXML private Rectangle closeWindow;
@@ -100,7 +97,6 @@ public class AIWindowController {
           public void run() {
             if (GameState.difficulty != null) {
               if (GameState.difficulty == "MEDIUM") {
-                Platform.runLater(() -> updateLabels());
                 if (!isRiddleGiven) {
                   chatCompletionRequest =
                       new ChatCompletionRequest()
@@ -114,7 +110,6 @@ public class AIWindowController {
                   labelTimer.cancel();
                 }
               } else {
-                Platform.runLater(() -> updateLabels());
                 chatCompletionRequest =
                     new ChatCompletionRequest()
                         .setN(1)
@@ -233,20 +228,6 @@ public class AIWindowController {
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
-  }
-
-  private void updateLabels() {
-    if (GameState.difficulty == "EASY") {
-      hintLabel.setText("UNLIMITED");
-    } else if (GameState.difficulty == "MEDIUM") {
-      hintLabel.setText(String.valueOf(GameState.numOfHints));
-      hintLabel2.setText("HINTS");
-      if (GameState.numOfHints == 1) {
-        hintLabel2.setText("HINT");
-      }
-    } else {
-      hintLabel.setText("NO");
-    }
   }
 
   @FXML

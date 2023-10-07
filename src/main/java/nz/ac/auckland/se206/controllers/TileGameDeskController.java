@@ -124,6 +124,8 @@ public class TileGameDeskController {
   @FXML private ImageView powerButton;
   @FXML private ImageView gameMaster;
 
+  @FXML public Pane aiWindowController;
+
   /**
    * Initializes the room view, it is called when the room loads.
    *
@@ -595,8 +597,9 @@ public class TileGameDeskController {
 
   @FXML
   private void onGameMasterClick() {
-    App.previousRoom = AppUi.TILEPUZZLE;
-    App.setScene(AppUi.HELPERCHAT);
+    // App.previousRoom = AppUi.TILEPUZZLE;
+    // App.setScene(AppUi.HELPERCHAT);
+    aiWindowController.setVisible(true);
   }
 
   // game master animation

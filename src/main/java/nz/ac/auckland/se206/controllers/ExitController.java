@@ -98,6 +98,8 @@ public class ExitController implements Initializable {
   @FXML private Label clickButton;
   @FXML private ImageView gameMaster;
 
+  @FXML public Pane aiWindowController;
+
   private boolean nextToButton = false;
   private FadeTransition fadeTransition;
 
@@ -809,8 +811,9 @@ public class ExitController implements Initializable {
 
   @FXML
   private void onGameMasterClick() {
-    App.previousRoom = AppUi.ROOM3;
-    App.setScene(AppUi.HELPERCHAT);
+    // App.previousRoom = AppUi.ROOM3;
+    // App.setScene(AppUi.HELPERCHAT);
+    aiWindowController.setVisible(true);
   }
 
   // game master robot animation
