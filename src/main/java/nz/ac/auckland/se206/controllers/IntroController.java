@@ -54,6 +54,8 @@ public class IntroController implements Initializable {
   @FXML private boolean isLevelSelected = false;
   @FXML private boolean isTimeSelected = false;
 
+  @FXML private Button toggleSoundButton;
+
   @FXML
   private void levelButtonClicked(ActionEvent event) {
     soundButttonClick();
@@ -223,11 +225,15 @@ public class IntroController implements Initializable {
 
   private void updateTimer(ActionEvent event) {
     App.timerSeconds--;
-    if (App.timerSeconds <= 0) {
-      App.timerTimeline.stop();
-      App.setScene(AppUi.LOSE);
+    if(!GameState.isGameFinished){
+      if (App.timerSeconds <= 0) {
+        App.timerTimeline.stop();
+        App.setScene(AppUi.LOSE);
+      }
     }
-    //System.out.println("Actual timer: " + App.timerSeconds);
+    else{
+      App.timerTimeline.stop();
+    }
   }
 
   @FXML
@@ -308,6 +314,9 @@ public class IntroController implements Initializable {
     miniuteButtonHovered(minB4);
     miniuteButtonHovered(minB6);
 
+    // Add an event handler to the Toggle Sound button
+    toggleSoundButton.setOnAction(event -> toggleSound());
+
     easybox.setVisible(false);
     mediumbox.setVisible(false);
     hardbox.setVisible(false);
@@ -327,6 +336,25 @@ public class IntroController implements Initializable {
     background3.setVisible(false);
   }
 
+  @FXML
+  private void toggleSound() {
+      if (GameState.isSoundEnabled) {
+          // Disable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.0); // Mute the media player
+          }
+          toggleSoundButton.setText("Enable Sound");
+      } else {
+          // Enable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+          }
+          toggleSoundButton.setText("Disable Sound");
+      }
+  
+      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  }
+  
   @FXML
   private void soundButttonClick() {
     String soundEffect = "src/main/resources/sounds/button-click.mp3";

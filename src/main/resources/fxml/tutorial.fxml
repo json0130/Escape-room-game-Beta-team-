@@ -7,6 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <Pane fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.TutorialController">
@@ -65,5 +66,6 @@
             <Image url="@../images/다운로드__1_-removebg-preview.png" />
          </image>
       </ImageView>
+      <Rectangle fx:id="box" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="641.0" layoutX="429.0" layoutY="4.0" stroke="BLACK" strokeType="INSIDE" width="11.0" />
    </children>
 </Pane>

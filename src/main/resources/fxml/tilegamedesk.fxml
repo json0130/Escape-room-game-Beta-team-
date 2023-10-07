@@ -162,5 +162,6 @@
             <Image url="@../images/power.gif" />
          </image>
       </ImageView>
+      <Button fx:id="toggleSoundButton" layoutX="913.0" layoutY="24.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Button" />
    </children>
 </AnchorPane>

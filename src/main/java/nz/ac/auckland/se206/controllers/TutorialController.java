@@ -31,6 +31,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.SceneManager.AppUi;
@@ -60,6 +61,7 @@ public class TutorialController implements Initializable {
   @FXML private ImageView r2;
   @FXML private ImageView r3;
   @FXML private ImageView r4;
+  @FXML private Rectangle box;
 
   String soundEffect = "src/main/resources/sounds/rocket.mp3";
   Media media = new Media(new File(soundEffect).toURI().toString());
@@ -85,6 +87,7 @@ public class TutorialController implements Initializable {
         @Override
         public void handle(long now) {
           checkCollision(player, rocks);
+          checkCollision1(player, box);
           if (isInstructionDone) {
             checkFinish(player, c3);
           }
@@ -154,6 +157,7 @@ public class TutorialController implements Initializable {
     } else {
       // All sentences are displayed, so call playRock
       playRock();
+      box.setVisible(false);
       isInstructionDone = true;
     }
   }
@@ -306,6 +310,15 @@ public class TutorialController implements Initializable {
       App.setScene(AppUi.ANIMATION);
       collisionTimer.stop();
       timer.stop();
+    }
+  }
+
+  public void checkCollision1(ImageView player, Rectangle box) {
+    if(!isInstructionDone){
+      if (player.getBoundsInParent().intersects(box.getBoundsInParent())) {
+      player.setLayoutX(previousX);
+      player.setLayoutY(previousY);
+      }
     }
   }
 

@@ -100,6 +100,8 @@ public class ExitController implements Initializable {
   private boolean nextToButton = false;
   private FadeTransition fadeTransition;
 
+  @FXML private Button toggleSoundButton;
+
   private String password = "";
 
   private double mouseAnchorX;
@@ -145,6 +147,9 @@ public class ExitController implements Initializable {
     clickButton.setVisible(false);
 
     walls.add(wall);
+
+    // Add an event handler to the Toggle Sound button
+    toggleSoundButton.setOnAction(event -> toggleSound());
 
     shapesize = player.getFitWidth();
     movementSetup();
@@ -218,7 +223,9 @@ public class ExitController implements Initializable {
             // Adjust the player's position to be right in front of the room
             nextToButton = true;
             monitor.setFill(javafx.scene.paint.Color.WHITE);
-            clickButton.setVisible(true);
+            if(!GameState.correctPassword){
+              clickButton.setVisible(true);
+            }
           });
       pauseTransition.play();
     } else {
@@ -591,6 +598,7 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 changeOpacity2();
+                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -606,6 +614,7 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 changeOpacity2();
+                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -621,6 +630,7 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 changeOpacity2();
+                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -636,6 +646,7 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 changeOpacity2();
+                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -788,5 +799,24 @@ public class ExitController implements Initializable {
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
+  }
+
+  @FXML
+  private void toggleSound() {
+      if (GameState.isSoundEnabled) {
+          // Disable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.0); // Mute the media player
+          }
+          toggleSoundButton.setText("Enable Sound");
+      } else {
+          // Enable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+          }
+          toggleSoundButton.setText("Disable Sound");
+      }
+  
+      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
   }
 }

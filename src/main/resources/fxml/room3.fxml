@@ -34,8 +34,8 @@
             <Image url="@../images/Firefly_spaceship_passcode_touchpad_2D_46452-removebg-preview.png" />
          </image>
       </ImageView>
-      <Rectangle fx:id="monitor" arcHeight="5.0" arcWidth="5.0" fill="#aa00ff00" height="71.0" layoutX="451.0" layoutY="336.0" onMouseClicked="#monitorClicked" stroke="#aa00ff" strokeType="INSIDE" strokeWidth="3.0" width="114.0" />
-      <Label fx:id="clickButton" layoutX="465.0" layoutY="364.0" text="Click Me">
+      <Rectangle fx:id="monitor" arcHeight="5.0" arcWidth="5.0" fill="#aa00ff00" height="71.0" layoutX="453.0" layoutY="331.0" onMouseClicked="#monitorClicked" stroke="#aa00ff" strokeType="INSIDE" strokeWidth="3.0" width="114.0" />
+      <Label fx:id="clickButton" layoutX="465.0" layoutY="349.0" onMouseClicked="#monitorClicked" text="Click Me">
          <font>
             <Font size="23.0" />
          </font>
@@ -112,6 +112,22 @@
       </Label>
       <Rectangle fx:id="light" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="25.0" layoutX="433.0" layoutY="332.0" stroke="BLACK" strokeType="INSIDE" width="12.0" />
       <Rectangle fx:id="ids" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="409.0" layoutX="711.0" layoutY="99.0" stroke="#fffdfd" strokeType="INSIDE" width="237.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
+      <Label fx:id="difficultyLabel" alignment="CENTER" layoutX="220.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
+         <font>
+            <Font name="Arial" size="32.0" />
+         </font>
+      </Label>
+      <Label fx:id="hintLabel" alignment="CENTER_RIGHT" layoutX="518.0" layoutY="6.0" prefHeight="37.0" prefWidth="230.0" text="UNLIMITED" textFill="WHITE">
+         <font>
+            <Font name="Arial" size="32.0" />
+         </font>
+      </Label>
+      <Label fx:id="hintLabel2" alignment="CENTER_RIGHT" layoutX="758.0" layoutY="6.0" prefHeight="37.0" prefWidth="96.0" text="HINTS" textFill="WHITE">
+         <font>
+            <Font name="Arial" size="32.0" />
+         </font>
+      </Label>
       <ImageView fx:id="idCaptain" fitHeight="87.0" fitWidth="135.0" layoutX="762.0" layoutY="113.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/idcaptain.png" />
@@ -132,22 +148,6 @@
             <Image url="@../images/idphotos/idengineer.png" />
          </image>
       </ImageView>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
-      <Label fx:id="difficultyLabel" alignment="CENTER" layoutX="362.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
-         <font>
-            <Font name="Arial" size="32.0" />
-         </font>
-      </Label>
-      <Label fx:id="hintLabel" alignment="CENTER_RIGHT" layoutX="660.0" layoutY="6.0" prefHeight="37.0" prefWidth="230.0" text="UNLIMITED" textFill="WHITE">
-         <font>
-            <Font name="Arial" size="32.0" />
-         </font>
-      </Label>
-      <Label fx:id="hintLabel2" alignment="CENTER_RIGHT" layoutX="900.0" layoutY="6.0" prefHeight="37.0" prefWidth="96.0" text="HINTS" textFill="WHITE">
-         <font>
-            <Font name="Arial" size="32.0" />
-         </font>
-      </Label>
       <TextArea fx:id="screen" layoutX="348.0" layoutY="198.0" prefHeight="166.0" prefWidth="307.0" style="-fx-background-color: darkblue;">
          <font>
             <Font name="Arial" size="20.0" />
@@ -172,5 +172,7 @@
          </font>
       </Button>
       <Polygon fill="WHITE" layoutX="85.0" layoutY="518.0" points="-80.33332061767578, 32.5714111328125, -51.0000114440918, 87.23809814453125, -51.0000114440918, -22.761932373046875" stroke="BLACK" strokeType="INSIDE" />
+      <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
+      <Button fx:id="toggleSoundButton" layoutX="897.0" layoutY="12.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Button" />
    </children>
 </Pane>

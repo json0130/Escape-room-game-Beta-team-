@@ -68,17 +68,17 @@
          </image>
       </ImageView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
-      <Label fx:id="difficultyLabel" alignment="CENTER" layoutX="362.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
+      <Label fx:id="difficultyLabel" alignment="CENTER" layoutX="190.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
          <font>
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
-      <Label fx:id="hintLabel" alignment="CENTER_RIGHT" layoutX="660.0" layoutY="6.0" prefHeight="37.0" prefWidth="230.0" text="UNLIMITED" textFill="WHITE">
+      <Label fx:id="hintLabel" alignment="CENTER_RIGHT" layoutX="488.0" layoutY="6.0" prefHeight="37.0" prefWidth="230.0" text="UNLIMITED" textFill="WHITE">
          <font>
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
-      <Label fx:id="hintLabel2" layoutX="900.0" layoutY="6.0" prefHeight="37.0" prefWidth="96.0" text="HINTS" textFill="WHITE">
+      <Label fx:id="hintLabel2" layoutX="728.0" layoutY="6.0" prefHeight="37.0" prefWidth="96.0" text="HINTS" textFill="WHITE">
          <font>
             <Font name="Arial" size="32.0" />
          </font>
@@ -136,7 +136,7 @@
          </font>
       </Button>
       <Rectangle fx:id="blinkingRectangle" arcHeight="70.0" arcWidth="70.0" fill="TRANSPARENT" height="96.0" layoutX="432.0" layoutY="167.0" onMouseClicked="#onRiddle" stroke="#ff6a00" strokeType="INSIDE" strokeWidth="3.0" width="96.0" />
-      <Label fx:id="clickLabel" layoutX="441.0" layoutY="197.0" prefHeight="37.0" prefWidth="85.0" text="CLICK ME">
+      <Label fx:id="clickLabel" layoutX="441.0" layoutY="197.0" onMouseClicked="#onRiddle" prefHeight="37.0" prefWidth="85.0" text="CLICK ME">
          <font>
             <Font size="17.0" />
          </font>
@@ -144,5 +144,6 @@
       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
       <Rectangle fx:id="exit" arcHeight="5.0" arcWidth="5.0" fill="#f89d00" height="50.0" layoutX="413.0" layoutY="617.0" opacity="0.65" stroke="BLACK" strokeType="INSIDE" width="161.0" />
       <Polygon fill="WHITE" layoutX="494.0" layoutY="591.0" points="-50.0, 40.0, 50.0, 40.0, -1.1348876953125, 53.3333740234375" stroke="WHITE" strokeType="INSIDE" />
+      <Button fx:id="toggleSoundButton" layoutX="903.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Button" />
    </children>
 </Pane>
