@@ -26,7 +26,7 @@
          <font>
             <Font name="Arial" size="20.0" />
          </font></TextField>
-    <Button layoutX="807.0" layoutY="597.0" mnemonicParsing="false" onAction="#onGoBack" style="-fx-background-color: white;" text="Back to room">
+    <Button layoutX="847.0" layoutY="672.0" mnemonicParsing="false" onAction="#onGoBack" style="-fx-background-color: white;" text="Back to room" visible="false">
          <font>
             <Font name="Arial" size="23.0" />
          </font></Button>
@@ -39,38 +39,33 @@
             <Font name="Arial" size="25.0" />
          </font></Button>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="52.0" layoutX="140.0" layoutY="128.0" stroke="#062643" strokeType="INSIDE" width="725.0" />
-      <Label fx:id="hintLabel" alignment="CENTER_RIGHT" layoutX="615.0" layoutY="144.0" prefHeight="34.0" prefWidth="152.0" text="UNLIMITED" textFill="WHITE">
+      <Label fx:id="hintLabel" alignment="CENTER_RIGHT" layoutX="506.0" layoutY="132.0" prefHeight="34.0" prefWidth="152.0" text="UNLIMITED" textFill="WHITE">
          <font>
             <Font size="28.0" />
          </font>
       </Label>
-      <Label fx:id="hintLabel2" alignment="CENTER_RIGHT" layoutX="774.0" layoutY="144.0" prefHeight="34.0" prefWidth="85.0" text="HINTS" textFill="WHITE">
+      <Label fx:id="hintLabel2" alignment="CENTER_RIGHT" layoutX="665.0" layoutY="132.0" prefHeight="34.0" prefWidth="85.0" text="HINTS" textFill="WHITE">
          <font>
             <Font size="28.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="425.0" layoutY="48.0" text="RIDDLE" textFill="WHITE">
-         <font>
-            <Font name="Arial" size="50.0" />
-         </font>
-      </Label>
-      <Button layoutX="914.0" layoutY="26.0" mnemonicParsing="false" onAction="#onGoBack" text="Go Back" />
-      <ImageView fx:id="robotBase" fitHeight="184.0" fitWidth="200.0" layoutX="696.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true">
+      <Button layoutX="799.0" layoutY="143.0" mnemonicParsing="false" onAction="#onGoBack" text="Go Back" />
+      <ImageView fx:id="robotBase" fitHeight="184.0" fitWidth="200.0" layoutX="799.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/base.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="robotThink" fitHeight="184.0" fitWidth="200.0" layoutX="695.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="robotThink" fitHeight="184.0" fitWidth="200.0" layoutX="799.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/robot-think.gif" />
          </image>
       </ImageView>
-      <ImageView fx:id="robotReply" fitHeight="184.0" fitWidth="200.0" layoutX="695.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="robotReply" fitHeight="184.0" fitWidth="200.0" layoutX="799.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/reply.png" />
          </image>
       </ImageView>
-      <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
+      <fx:include layoutX="150.0" layoutY="94.0" source="countdowntimer.fxml" />
       <ImageView fx:id="glitch" fitHeight="428.0" fitWidth="727.0" layoutX="139.0" layoutY="129.0" pickOnBounds="true" visible="false">
          <image>
             <Image url="@../images/glitch-effect-black-background.jpg" />

@@ -15,6 +15,7 @@
             <Image url="@../images/Firefly%20realistic%20space%20background%20with%20stars%2024052.jpg" />
          </image>
       </ImageView>
+      <Pane fx:id="alert" layoutX="1.0" layoutY="-3.0" opacity="0.33" prefHeight="654.0" prefWidth="1002.0" style="-fx-background-color: red;" />
       <ImageView fitHeight="647.0" fitWidth="951.0" layoutX="17.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/test%20사본.png" />
@@ -96,7 +97,7 @@
             <Font size="26.0" />
          </font>
       </Label>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
+      <Rectangle fx:id="header" arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
       <Label fx:id="difficultyLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="200.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
          <font>
             <Font size="32.0" />

@@ -21,6 +21,7 @@
       <Circle fx:id="c2" fill="#1f93ff00" layoutX="860.0" layoutY="299.0" radius="58.0" stroke="#00d5ff" strokeType="INSIDE" strokeWidth="10.0" style="-fx-stroke-dash-array: 50;" />
       <Circle fx:id="c3" fill="#1f93ff00" layoutX="859.0" layoutY="298.0" radius="29.0" stroke="#006fff" strokeType="INSIDE" strokeWidth="7.0" style="-fx-stroke-dash-array: 30;" />
       <Button fx:id="button" layoutY="-30.0" mnemonicParsing="false" onAction="#play" text="Button" />
+      <Rectangle fx:id="box" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="650.0" layoutX="429.0" layoutY="-5.0" opacity="0.48" stroke="#ffffff00" strokeType="INSIDE" width="11.0" />
       <ImageView fx:id="player" fitHeight="105.0" fitWidth="163.0" layoutX="119.0" layoutY="273.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/rocket-spaceship-cartoon-icon-illustration-science-technology-icon-concept-isolated-premium-flat-cartoon-style-vector-removebg-preview.png" />
@@ -66,6 +67,5 @@
             <Image url="@../images/다운로드__1_-removebg-preview.png" />
          </image>
       </ImageView>
-      <Rectangle fx:id="box" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="641.0" layoutX="429.0" layoutY="4.0" stroke="BLACK" strokeType="INSIDE" width="11.0" />
    </children>
 </Pane>

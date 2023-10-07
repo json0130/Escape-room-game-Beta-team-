@@ -66,6 +66,9 @@ public class IntroController implements Initializable {
     miniuteButtonHovered(minB4);
     miniuteButtonHovered(minB6);
 
+    // Add an event handler to the Toggle Sound button
+    toggleSoundButton.setOnAction(event -> toggleSound());
+
     easybox.setVisible(false);
     mediumbox.setVisible(false);
     hardbox.setVisible(false);
