@@ -3,7 +3,7 @@ package nz.ac.auckland.se206;
 /** Represents the state of the game. */
 public class GameState {
 
-  public static boolean isPlayerInMap = false;
+  public static boolean isPlayerInMap = true;
   public static boolean beenToMap = false;
 
   public static boolean isPlayerInRoom1 = false;

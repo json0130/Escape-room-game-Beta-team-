@@ -2,6 +2,9 @@ package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -59,7 +62,8 @@ public class HelperChatController {
 
     chatCompletionRequest =
         new ChatCompletionRequest().setN(1).setTemperature(1).setTopP(1).setMaxTokens(100);
-    runGpt(new ChatMessage("user", GptPromptEngineering.greeting()));
+    // detect where the player is and print proper greeting messages
+    printGreeting();
   }
 
   /**
@@ -419,6 +423,7 @@ public class HelperChatController {
   @FXML
   private void onGoBack(ActionEvent event) throws ApiProxyException, IOException {
     soundButttonClick();
+    chatTextArea.clear();
     App.setScene(App.previousRoom);
   }
 
@@ -469,5 +474,55 @@ public class HelperChatController {
     robotBase.setVisible(true);
     robotReply.setVisible(false);
     robotThink.setVisible(false);
+  }
+
+  // This method is to print required greeting messages when the player visits each room. 
+  private void printGreeting() {
+    Timer greetingTimer = new Timer(true);
+    greetingTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            // If the player visits the map for the first time, game master introduces itself 
+            if (GameState.isPlayerInMap && !GameState.beenToMap) {
+              try {
+                runGpt(new ChatMessage("user", GptPromptEngineering.greeting()));
+                GameState.beenToMap = true;
+              } catch (ApiProxyException e) {
+                e.printStackTrace();
+              }
+              // If the player visits the closet room for the first time, game master introduces the closet room
+            } else if (GameState.isPlayerInRoom1 && !GameState.beenToRoom1) {
+              try {
+                runGpt(new ChatMessage("user", GptPromptEngineering.greetingRoom1()));
+                GameState.beenToRoom1 = true;
+              } catch (ApiProxyException e) {
+                e.printStackTrace();
+              }
+              // If the player visits the computer room for the first time, game master introduces the computer room
+            } else if (GameState.isPlayerInRoom2 && !GameState.beenToRoom2) {
+              try {
+                runGpt(new ChatMessage("user", GptPromptEngineering.greetingRoom2()));
+                GameState.beenToRoom2 = true;
+              } catch (ApiProxyException e) {
+                e.printStackTrace();
+              }
+              // If the player visits the control room for the first time, game master introduces the control room
+            } else if (GameState.isPlayerInRoom3 && !GameState.beenToRoom3) {
+              try {
+                runGpt(new ChatMessage("user", GptPromptEngineering.greetingRoom3()));
+                GameState.beenToRoom3 = true;
+              } catch (ApiProxyException e) {
+                e.printStackTrace();
+              }
+              // if all room has been visited once, timer is no longer needed so cancel the timer
+            } else if (GameState.beenToRoom1 && GameState.beenToRoom2 && GameState.beenToRoom3) {
+              greetingTimer.cancel();
+            }
+              
+          }
+        },
+        0,
+        100);
   }
 }
