@@ -19,7 +19,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.shape.Rectangle;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
@@ -39,7 +38,7 @@ public class AIWindowController {
   @FXML private ImageView robotThink;
 
   @FXML private Pane aiPane;
-  @FXML private Rectangle closeWindow;
+  @FXML private ImageView closeWindow;
 
   public static ChatCompletionRequest chatCompletionRequest;
   public static boolean isRiddleGiven = false;
