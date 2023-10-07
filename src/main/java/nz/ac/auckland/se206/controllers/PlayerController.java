@@ -111,6 +111,8 @@ public class PlayerController implements Initializable {
 
   @FXML private Label countdownLabel;
 
+  @FXML public Pane aiWindowController;
+
   private ChatCompletionRequest chatCompletionRequest;
   private String lastUserMessage = ""; // Track the last user message for GPT response
 
@@ -410,8 +412,12 @@ public class PlayerController implements Initializable {
 
   @FXML
   public void clickGameMaster(MouseEvent event) {
-    App.previousRoom = AppUi.PLAYER;
-    App.setScene(AppUi.HELPERCHAT);
+    // if (App.aiWindow == null) {
+    //   App.aiWindow = aiWindowController;
+    // } else {
+    //   aiWindowController = App.aiWindow;
+    // }
+    aiWindowController.setVisible(true);
   }
 
   private void introTextToSpeech() {

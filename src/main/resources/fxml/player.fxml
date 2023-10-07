@@ -130,5 +130,6 @@
             <Image url="@../images/robotfloat.png" />
          </image>
       </ImageView>
+      <fx:include fx:id="aiWindowController" source="aiwindow.fxml" />
    </children>
 </Pane>

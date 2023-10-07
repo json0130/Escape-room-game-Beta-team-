@@ -43,7 +43,7 @@ public class AIWindowController {
   @FXML private Pane aiPane;
   @FXML private Rectangle closeWindow;
 
-  private ChatCompletionRequest chatCompletionRequest;
+  public static ChatCompletionRequest chatCompletionRequest;
   public static boolean isRiddleGiven = false;
 
   /**
@@ -291,6 +291,17 @@ public class AIWindowController {
 
   @FXML
   private void onCloseWindowClick() {
+    App.aiWindow = chatCompletionRequest;
+    chatTextArea.clear();
+    chatTextArea.appendText("AI: How can I help?" + "\n\n");
     aiPane.setVisible(false);
   }
+
+  // private ChatCompletionRequest getChatCompletionRequest() {
+  //   return this.chatCompletionRequest;
+  // }
+
+  // private void setChatCompletionRequest(ChatCompletionRequest incoming) {
+  //   this.chatCompletionRequest = incoming;
+  // }
 }

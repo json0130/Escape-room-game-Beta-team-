@@ -15,6 +15,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import nz.ac.auckland.se206.SceneManager.AppUi;
+import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
 
 /**
  * This is the entry point of the JavaFX application, while you can change this class, it should
@@ -34,6 +35,7 @@ public class App extends Application {
   public static MediaPlayer mediaPlayer;
   public static String musicType = "starting";
   public static AppUi previousRoom = AppUi.PLAYER;
+  public static ChatCompletionRequest aiWindow;
 
   public static void main(final String[] args) {
     launch();
