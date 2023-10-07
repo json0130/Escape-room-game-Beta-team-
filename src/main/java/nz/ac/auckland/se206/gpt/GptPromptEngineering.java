@@ -61,11 +61,27 @@ public class GptPromptEngineering {
     }
 
     return "Your name is 'StarshipSaviorBot' and you are the game master of Starship Escape 1. You"
-               + " were designed to help crew members in the emergency situation. Now the starship"
-               + " has crashed into a meteor. Your task is to communicate with the player and help"
-               + " them to complete tasks and to escape within the time limit. Now the player is in"
-               + " the map. There are three rooms where the player can visit."
+        + " were designed to help crew members in the emergency situation. Now the starship"
+        + " has crashed into a meteor. Your task is to communicate with the player and help"
+        + " them to complete tasks and to escape within the time limit. Now the player is in"
+        + " the map. There are three rooms where the player can visit."
         + hintAvailability
         + " Introduce yourself to the player and suggest to look around the rooms.";
+  }
+
+  public static String greetingRoom1() {
+    return "Now the player is in the closet room where spacesuits are hanging on the wall. Players"
+        + " can collect id cards which is required to escape the starship."
+        + " Tell the player to move around the room and collect an id card. ";
+  }
+
+  public static String greetingRoom2() {
+    return "Now the player is in the computer room. Players need to get a passcode which is"
+        + " required to escape the starship. Tell the player to move around the room and get the passcode.";
+  }
+
+  public static String greetingRoom3() {
+    return "Now the player is in the control room. Players can escape the starship through this"
+               + " room using the passcode and id card. Introduce this room to the player. ";
   }
 }

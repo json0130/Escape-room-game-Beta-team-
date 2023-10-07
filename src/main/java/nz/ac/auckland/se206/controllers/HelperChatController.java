@@ -58,7 +58,7 @@ public class HelperChatController {
     chatTextArea.setEditable(false);
 
     chatCompletionRequest =
-        new ChatCompletionRequest().setN(1).setTemperature(0.5).setTopP(0.5).setMaxTokens(120);
+        new ChatCompletionRequest().setN(1).setTemperature(1).setTopP(1).setMaxTokens(100);
     runGpt(new ChatMessage("user", GptPromptEngineering.greeting()));
   }
 
