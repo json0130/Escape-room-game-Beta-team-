@@ -9,8 +9,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
-<?import nz.ac.auckland.se206.controllers.AIWindowController?>
-
 
 <Pane fx:id="aiPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" visible="false" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.AIWindowController">
    <children>
@@ -60,10 +58,6 @@
             <Image url="@../images/reply.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="glitch" fitHeight="428.0" fitWidth="727.0" layoutX="149.0" layoutY="139.0" pickOnBounds="true" visible="false">
-         <image>
-            <Image url="@../images/glitch-effect-black-background.jpg" />
-         </image>
-      </ImageView>
+      <Rectangle fx:id="closeWindow" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f" height="67.0" layoutX="14.0" layoutY="38.0" onMouseClicked="#onCloseWindowClick" stroke="BLACK" strokeType="INSIDE" width="76.0" />
    </children>
 </Pane>

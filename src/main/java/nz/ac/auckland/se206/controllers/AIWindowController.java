@@ -18,6 +18,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.shape.Rectangle;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
@@ -38,9 +39,9 @@ public class AIWindowController {
   @FXML private ImageView robotThink;
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
-  @FXML private ImageView glitch;
 
   @FXML private Pane aiPane;
+  @FXML private Rectangle closeWindow;
 
   private ChatCompletionRequest chatCompletionRequest;
   public static boolean isRiddleGiven = false;
@@ -140,7 +141,6 @@ public class AIWindowController {
    * @throws ApiProxyException if there is an error communicating with the API proxy
    */
   private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
-    glitch.setVisible(true);
     Task<ChatMessage> runningGptTask =
         new Task<ChatMessage>() {
           @Override
@@ -162,7 +162,6 @@ public class AIWindowController {
                         && result.getChatMessage().getContent().startsWith("Hint")) {
                       GameState.numOfHints--;
                     }
-                    glitch.setVisible(false);
                   });
               return result.getChatMessage();
             } catch (ApiProxyException e) {
@@ -283,9 +282,15 @@ public class AIWindowController {
     robotThink.setVisible(false);
   }
 
-  @FXML public void setPaneVisible(){
-    if(aiPane.isVisible() == false){
+  @FXML
+  public void setPaneVisible() {
+    if (aiPane.isVisible() == false) {
       aiPane.setVisible(true);
     }
+  }
+
+  @FXML
+  private void onCloseWindowClick() {
+    aiPane.setVisible(false);
   }
 }
