@@ -190,6 +190,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(436);
             player.setLayoutY(488);
+            GameState.isPlayerInMap = true;
+            GameState.isPlayerInRoom2 = false;
             App.setScene(AppUi.PLAYER);
             timer.stop();
           });

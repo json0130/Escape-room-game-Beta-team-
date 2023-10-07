@@ -193,6 +193,8 @@ public class ExitController implements Initializable {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(68);
             player.setLayoutY(508);
+            GameState.isPlayerInMap = true;
+            GameState.isPlayerInRoom3 = false;
             App.setScene(AppUi.PLAYER);
             timer.stop();
           });

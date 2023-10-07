@@ -364,6 +364,8 @@ public class Room1Controller implements Initializable {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(433);
             player.setLayoutY(468);
+            GameState.isPlayerInMap = true;
+            GameState.isPlayerInRoom1 = false;
             App.setScene(AppUi.PLAYER);
             timer.stop();
           });
