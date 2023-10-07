@@ -6,6 +6,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,7 +25,6 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.gpt.ChatMessage;
-import nz.ac.auckland.se206.gpt.GptPromptEngineering;
 import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult;
@@ -31,7 +32,7 @@ import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
 
 /** Controller class for the chat view. */
 public class AIWindowController {
-  @FXML private TextArea chatTextArea;
+  @FXML public TextArea chatTextArea;
   @FXML private TextField inputText;
   @FXML private Button sendButton;
   @FXML private ImageView robotBase;
@@ -68,6 +69,27 @@ public class AIWindowController {
     chatTextArea.setEditable(false);
     detectDifficulty();
     System.out.println(Room1Controller.riddleAnswer);
+
+    aiPane
+        .visibleProperty()
+        .addListener(
+            new ChangeListener<Boolean>() {
+              @Override
+              public void changed(
+                  ObservableValue<? extends Boolean> observable,
+                  Boolean oldValue,
+                  Boolean newValue) {
+                if (newValue) {
+                  chatTextArea.setText(App.aiWindow);
+                  chatTextArea.positionCaret(chatTextArea.getText().length());
+                  System.out.println("Pane is now visible");
+
+                } else {
+                  // Pane's visibility is set to false
+                  System.out.println("Pane is now invisible");
+                }
+              }
+            });
   }
 
   public void detectDifficulty() {
@@ -86,14 +108,6 @@ public class AIWindowController {
                           .setTemperature(0.5)
                           .setTopP(0.5)
                           .setMaxTokens(100);
-                  try {
-                    runGpt(
-                        new ChatMessage(
-                            "user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
-                  } catch (ApiProxyException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                  }
                   isRiddleGiven = true;
                 }
                 if (GameState.numOfHints == 0) {
@@ -107,14 +121,6 @@ public class AIWindowController {
                         .setTemperature(0.5)
                         .setTopP(0.5)
                         .setMaxTokens(100);
-                try {
-                  runGpt(
-                      new ChatMessage(
-                          "user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
-                } catch (ApiProxyException e) {
-                  // TODO Auto-generated catch block
-                  e.printStackTrace();
-                }
                 labelTimer.cancel();
               }
             }
@@ -130,7 +136,9 @@ public class AIWindowController {
    * @param msg the chat message to append
    */
   private void appendChatMessage(ChatMessage msg) {
-    chatTextArea.appendText(msg.getRole() + ": " + msg.getContent() + "\n\n");
+    App.aiWindow = App.aiWindow.concat((msg.getRole() + ": " + msg.getContent() + "\n\n"));
+    chatTextArea.setText(App.aiWindow);
+    chatTextArea.positionCaret(chatTextArea.getText().length());
   }
 
   /**
@@ -291,9 +299,9 @@ public class AIWindowController {
 
   @FXML
   private void onCloseWindowClick() {
-    App.aiWindow = chatCompletionRequest;
-    chatTextArea.clear();
-    chatTextArea.appendText("AI: How can I help?" + "\n\n");
+    chatTextArea.setText(App.aiWindow);
+    // chatTextArea.clear();
+    // chatTextArea.appendText("AI: How can I help?" + "\n\n");
     aiPane.setVisible(false);
   }
 
