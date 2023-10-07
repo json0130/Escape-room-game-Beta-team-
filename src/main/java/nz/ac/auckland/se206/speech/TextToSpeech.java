@@ -112,8 +112,8 @@ public class TextToSpeech {
     }
   }
 
-  public void setInterupt() {
-    this.interupt = true;
-    synthesizer.cancelAll();
-  }
+  // public void setInterupt() {
+  //   this.interupt = true;
+  //   synthesizer.cancelAll();
+  // }
 }

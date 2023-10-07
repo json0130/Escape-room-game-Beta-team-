@@ -63,6 +63,7 @@ public class TutorialController implements Initializable {
   @FXML private ImageView r4;
   @FXML private Rectangle box;
 
+  // sound for rocket movement
   String soundEffect = "src/main/resources/sounds/rocket.mp3";
   Media media = new Media(new File(soundEffect).toURI().toString());
   MediaPlayer mediaPlayer = new MediaPlayer(media);
@@ -94,6 +95,7 @@ public class TutorialController implements Initializable {
         }
       };
 
+  //  code for character movement using wasd movement
   AnimationTimer timer =
       new AnimationTimer() {
         @Override

@@ -5,10 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -32,7 +30,6 @@ import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
-import nz.ac.auckland.se206.speech.TextToSpeech;
 
 /**
  * Controller class for the room view. This class controls everything from dialogue, generating AI
@@ -57,13 +54,9 @@ public class TileGameDeskController {
   private int dialogueState = 0;
   private List<String> dialogueList = new ArrayList<String>();
   private TranslateTransition translate = new TranslateTransition();
-  private TextToSpeech textToSpeech = new TextToSpeech();
   private int tileClickCounter = 0;
 
-  private Duration duration = Duration.seconds(1);
-  private KeyFrame keyFrame;
   private Timeline timeline;
-  private int timerSeconds = 120;
 
   private ChatCompletionRequest chatCompletionRequest;
 
@@ -125,6 +118,7 @@ public class TileGameDeskController {
   @FXML private Button puzzleInfoButton;
   @FXML private Button leaveComputerButton;
   @FXML private ImageView powerButton;
+  @FXML private ImageView gameMaster;
 
   /**
    * Initializes the room view, it is called when the room loads.
@@ -132,9 +126,10 @@ public class TileGameDeskController {
    * @throws ApiProxyException
    */
   public void initialize() throws ApiProxyException {
-    timerSeconds = 120;
+    App.timerSeconds = 120;
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnAction(event -> toggleSound());
+    animateRobot();
 
     // dialogueList.add("WHO DARES DISTURB MY SLUMBER!?!");
     dialogueList.add("Ahhh... Another treasure hunter who wishes to steal from me!");
@@ -237,7 +232,6 @@ public class TileGameDeskController {
       try {
         imagePath.close();
       } catch (IOException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
@@ -430,13 +424,6 @@ public class TileGameDeskController {
 
         disableImages();
 
-        // try {
-        //   Thread.sleep(1000);
-        // } catch (InterruptedException e) {
-        //   // TODO Auto-generated catch block
-        //   e.printStackTrace();
-        // }
-
         showHomeScreen();
       }
     }
@@ -467,32 +454,6 @@ public class TileGameDeskController {
     translate.play();
   }
 
-  private String timerFormat(int seconds) {
-    int min = seconds / 60;
-    int remainingSecs = seconds % 60;
-    return String.format("%02   d:%02d", min, remainingSecs);
-  }
-
-  private void sayLine() {
-    Task<Void> sayLine =
-        new Task<Void>() {
-
-          @Override
-          protected Void call() throws Exception {
-            textToSpeech.setInterupt();
-            textToSpeech.speak(dialogueText.getText());
-            // textToSpeech.terminate();
-            return null;
-          }
-        };
-    Thread sayLineThread = new Thread(sayLine, "say third Line");
-    sayLineThread.start();
-  }
-
-  public String getRiddleAnswer() {
-    return riddleAnswer;
-  }
-
   @FXML
   private void onPowerButtonPressed() {
 
@@ -519,13 +480,6 @@ public class TileGameDeskController {
     imageSeven.setVisible(false);
     imageEight.setVisible(false);
   }
-
-  // @FXML
-  // private void showWelcomeScreen() {
-  //   welcomeScreen.setVisible(true);
-  //   crewMemberName.setVisible(true);
-  //   loadingGif.setVisible(true);
-  // }
 
   @FXML
   private void showHomeScreen() {
@@ -571,9 +525,6 @@ public class TileGameDeskController {
 
   @FXML
   private void onCaptchaButtonClick() {
-    // welcomeScreen.setVisible(false);
-    // puzzleTutorial.setVisible(false);
-    // loadCaptchaButton.setVisible(false);
     tutorialScreen.setVisible(false);
     loadCaptchaButton.setVisible(false);
   }
@@ -605,6 +556,7 @@ public class TileGameDeskController {
     System.out.println("click");
   }
 
+  // sound for tile game
   @FXML
   private void soundTileClick() {
     String soundEffect = "src/main/resources/sounds/tile-move.mp3";
@@ -630,5 +582,25 @@ public class TileGameDeskController {
       }
   
       GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  }
+  
+  @FXML
+  private void onGameMasterClick() {
+    App.previousRoom = AppUi.TILEPUZZLE;
+    App.setScene(AppUi.HELPERCHAT);
+  }
+
+  // game master animation
+  @FXML
+  private void animateRobot() {
+    TranslateTransition translate = new TranslateTransition();
+    translate.setNode(gameMaster);
+    translate.setDuration(Duration.millis(1000));
+    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setByX(0);
+    translate.setByY(20);
+    translate.setAutoReverse(true);
+
+    translate.play();
   }
 }

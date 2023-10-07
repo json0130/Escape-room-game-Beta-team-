@@ -26,19 +26,35 @@ import javafx.util.Duration;
 
 public class EndController implements Initializable {
 
-    @FXML private Label win;
-    @FXML private Label youWin;
-    @FXML private Label lose;
-    @FXML private Label lose1;
-    @FXML private Pane scene;
-    @FXML private Button button;
-    @FXML private Button s;
-    @FXML private Button start;
-    @FXML private ImageView e1;
-    @FXML private ImageView background;
-    @FXML private ImageView spaceship;
-    @FXML private ImageView ship;
-    @FXML private Rectangle grey;
+  @FXML private Label win;
+  @FXML private Label youWin;
+  @FXML private Label lose;
+  @FXML private Label lose1;
+  @FXML private Pane scene;
+  @FXML private Button button;
+  @FXML private Button s;
+  @FXML private Button start;
+  @FXML private ImageView e1;
+  @FXML private ImageView background;
+  @FXML private ImageView spaceship;
+  @FXML private ImageView ship;
+  @FXML private Rectangle grey;
+
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
+    if (scene != null) {
+      scene
+          .sceneProperty()
+          .addListener(
+              (observable, oldScene, newScene) -> {
+                if (newScene != null) {
+                  // Schedule the endingAnimation to run after the scene is shown
+                  Platform.runLater(this::endingAnimation);
+                  youWin.setVisible(false);
+                }
+              });
+    }
+  }
 
   @FXML
   private void endingAnimation() {
@@ -175,20 +191,4 @@ public class EndController implements Initializable {
           youWin.setVisible(true);
         });
   }
-
-  @Override
-  public void initialize(URL location, ResourceBundle resources) {
-    if (scene != null) {
-      scene
-          .sceneProperty()
-          .addListener(
-              (observable, oldScene, newScene) -> {
-                if (newScene != null) {
-                  // Schedule the endingAnimation to run after the scene is shown
-                  Platform.runLater(this::endingAnimation);
-                  youWin.setVisible(false);
-                }
-              });
-    }
-}
 }

@@ -9,6 +9,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -33,10 +34,12 @@ import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
-import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 
 public class PlayerController implements Initializable {
+
+  public static boolean hintContained = false;
+  public static boolean answerContained = false;
 
   private BooleanProperty wPressed = new SimpleBooleanProperty();
   private BooleanProperty aPressed = new SimpleBooleanProperty();
@@ -46,8 +49,6 @@ public class PlayerController implements Initializable {
   private BooleanBinding keyPressed = wPressed.or(aPressed).or(sPressed).or(dPressed);
   private int movementVariable = 5;
   private double shapesize;
-  private double progressSize = 4.0;
-  private Boolean soundPlaying = false;
 
   String soundEffect = "src/main/resources/sounds/door-open.mp3";
   Media media = new Media(new File(soundEffect).toURI().toString());
@@ -60,7 +61,8 @@ public class PlayerController implements Initializable {
   @FXML private Rectangle room2;
   @FXML private Rectangle room3;
   @FXML private Rectangle black;
-  @FXML private ImageView gameMasterBox;
+  // @FXML private ImageView gameMasterBox;
+  @FXML private ImageView gameMaster;
 
   @FXML private Label playerLabel;
   @FXML private Label main;
@@ -108,11 +110,6 @@ public class PlayerController implements Initializable {
   private boolean isSoundEnabled = true;
 
   @FXML private Label countdownLabel;
-
-  private ChatCompletionRequest chatCompletionRequest;
-  public static boolean hintContained = false;
-  public static boolean answerContained = false;
-  private String lastUserMessage = ""; // Track the last user message for GPT response
 
   @FXML
   void start(ActionEvent event) {
@@ -162,6 +159,7 @@ public class PlayerController implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
+    animateRobot();
     introTextToSpeech();
     playerLabel.setVisible(true);
     black.setVisible(true);
@@ -201,27 +199,6 @@ public class PlayerController implements Initializable {
     walls.add(wall20);
     walls.add(wall21);
 
-    //     // when the enter key is pressed, message is sent
-    // inputText.setOnKeyPressed(
-    //     event -> {
-    //       if (event.getCode() == KeyCode.ENTER) {
-    //         try {
-    //           onSendMessage(new ActionEvent());
-    //         } catch (ApiProxyException | IOException e) {
-    //           e.printStackTrace();
-    //         }
-    //       }
-    //     });
-    // chatTextArea.setEditable(false);
-
-    // chatCompletionRequest =
-    //     new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.5).setMaxTokens(100);
-    //   try {
-    //     runGpt(new ChatMessage("user", GptPromptEngineering.getGameMaster()));
-    //   } catch (ApiProxyException e) {
-    //     e.printStackTrace();
-    //   }
-
     collisionTimer.start();
 
     previousX = player.getLayoutX();
@@ -250,35 +227,9 @@ public class PlayerController implements Initializable {
         });
   }
 
-  private void introTextToSpeech() {
-    Task<Void> introTask =
-        new Task<>() {
-
-          @Override
-          protected Void call() throws Exception {
-            TextToSpeech textToSpeech = new TextToSpeech();
-            textToSpeech.speak("Welcome to STARSHIP ESCAPE 1!");
-            return null;
-          }
-        };
-    Thread introThread = new Thread(introTask);
-    introThread.start();
-
-    gameMasterBox.setVisible(false);
-    inputText.setVisible(false);
-    chatTextArea.setVisible(false);
-    btnClose.setVisible(false);
-    btnSend.setVisible(false);
-  }
-
   public void checkRoom1(ImageView player, Rectangle room1) {
     if (player.getBoundsInParent().intersects(room1.getBoundsInParent())) {
       room1.setVisible(true);
-
-      // System.out.println(mediaPlayer.getMedia());
-      // if (mediaPlayer.getStatus() != MediaPlayer.Status.PLAYING) {
-      //   // soundDoorOpen();
-      // }
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
@@ -299,9 +250,6 @@ public class PlayerController implements Initializable {
     if (player.getBoundsInParent().intersects(room2.getBoundsInParent())) {
       room2.setVisible(true);
 
-      // if (mediaPlayer.getStatus() != MediaPlayer.Status.PLAYING) {
-      //   soundDoorOpen();
-      // }
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
@@ -335,9 +283,6 @@ public class PlayerController implements Initializable {
         App.mediaPlayer.setAutoPlay(true);
       }
 
-      // if (mediaPlayer.getStatus() != MediaPlayer.Status.PLAYING) {
-      //   soundDoorOpen();
-      // }
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
@@ -364,6 +309,7 @@ public class PlayerController implements Initializable {
     }
   }
 
+  // code for enabling palyer to move using wasd keys
   @FXML
   public void movementSetup() {
     scene.setOnKeyPressed(
@@ -405,6 +351,7 @@ public class PlayerController implements Initializable {
         });
   }
 
+  // border that the player cannot move outof the window
   public void squareBorder() {
     double left = 0;
     double right = scene.getWidth() - shapesize;
@@ -434,6 +381,7 @@ public class PlayerController implements Initializable {
     App.setScene(AppUi.ROOM3);
   }
 
+  // detect if there is change isn gamestate difficulty in the intro page using timer
   public void detectDifficulty() {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
@@ -457,6 +405,28 @@ public class PlayerController implements Initializable {
         500);
   }
 
+  @FXML
+  public void clickGameMaster(MouseEvent event) {
+    App.previousRoom = AppUi.PLAYER;
+    App.setScene(AppUi.HELPERCHAT);
+  }
+
+  private void introTextToSpeech() {
+    Task<Void> introTask =
+        new Task<>() {
+
+          @Override
+          protected Void call() throws Exception {
+            TextToSpeech textToSpeech = new TextToSpeech();
+            textToSpeech.speak("Welcome to STARSHIP ESCAPE 1!");
+            return null;
+          }
+        };
+    Thread introThread = new Thread(introTask);
+    introThread.start();
+  }
+
+  // update the header labels as the hint decreases
   private void updateLabels() {
     difficultyLabel.setText(GameState.difficulty);
     if (GameState.difficulty == "EASY") {
@@ -472,24 +442,17 @@ public class PlayerController implements Initializable {
     }
   }
 
+  // game master robot moves
   @FXML
-  public void clickGameMaster(MouseEvent event) {
-    gameMasterBox.setVisible(true);
-    inputText.setVisible(true);
-    chatTextArea.setVisible(true);
-    btnClose.setVisible(true);
-    btnSend.setVisible(true);
-  }
+  private void animateRobot() {
+    TranslateTransition translate = new TranslateTransition();
+    translate.setNode(gameMaster);
+    translate.setDuration(Duration.millis(1000));
+    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setByX(0);
+    translate.setByY(20);
+    translate.setAutoReverse(true);
 
-  @FXML
-  public void onClose(ActionEvent event) {
-    gameMasterBox.setVisible(false);
-    inputText.setVisible(false);
-    chatTextArea.setVisible(false);
-    btnClose.setVisible(false);
-    btnSend.setVisible(false);
+    translate.play();
   }
-
-  @FXML
-  public void onSend(ActionEvent event) {}
 }

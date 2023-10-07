@@ -96,6 +96,7 @@ public class ExitController implements Initializable {
   @FXML private Rectangle clickMonitor;
   @FXML private Label idLabel;
   @FXML private Label clickButton;
+  @FXML private ImageView gameMaster;
 
   private boolean nextToButton = false;
   private FadeTransition fadeTransition;
@@ -143,6 +144,7 @@ public class ExitController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    animateRobot();
     background.setOpacity(1);
     clickButton.setVisible(false);
 
@@ -186,6 +188,7 @@ public class ExitController implements Initializable {
     detectDifficulty();
   }
 
+  // if the charcter collides rectangle for exit, scene changes back to map
   public void checkExit(ImageView player, Rectangle exit1) {
     if (player.getBoundsInParent().intersects(exit1.getBoundsInParent())) {
       exit1.setOpacity(1);
@@ -211,27 +214,6 @@ public class ExitController implements Initializable {
         player.setLayoutY(previousY); // Restore the player's previous Y position
         // Exit the loop as soon as a collision is detected
       }
-    }
-  }
-
-  private void checkComputer(ImageView player, Rectangle wall2) {
-    if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
-      monitor.setOpacity(1);
-      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
-      pauseTransition.setOnFinished(
-          event -> {
-            // Adjust the player's position to be right in front of the room
-            nextToButton = true;
-            monitor.setFill(javafx.scene.paint.Color.WHITE);
-            if(!GameState.correctPassword){
-              clickButton.setVisible(true);
-            }
-          });
-      pauseTransition.play();
-    } else {
-      nextToButton = false;
-      clickButton.setVisible(false);
-      monitor.setFill(javafx.scene.paint.Color.TRANSPARENT);
     }
   }
 
@@ -276,6 +258,7 @@ public class ExitController implements Initializable {
         });
   }
 
+  // prevent the player moves out of the window
   public void squareBorder() {
     double left = 0;
     double right = scene.getWidth() - shapesize;
@@ -299,6 +282,81 @@ public class ExitController implements Initializable {
     }
   }
 
+  // idcards can be dragged
+  public void makeDraggable(ImageView imageView) {
+    double originalX = imageView.getLayoutX();
+    double originalY = imageView.getLayoutY();
+
+    imageView.setOnMousePressed(
+        mouseEvent -> {
+          mouseAnchorX = mouseEvent.getX();
+          mouseAnchorY = mouseEvent.getY();
+        });
+
+    imageView.setOnMouseDragged(
+        mouseEvent -> {
+          // Calculate the new position based on the mouse movement
+          double newX = mouseEvent.getSceneX() - mouseAnchorX;
+          double newY = mouseEvent.getSceneY() - mouseAnchorY;
+
+          // Update the layout of the image
+          imageView.setLayoutX(newX);
+          imageView.setLayoutY(newY);
+        });
+
+    imageView.setOnMouseReleased(
+        mouseEvent -> {
+          // Return the image to its original position
+          imageView.setLayoutX(originalX);
+          imageView.setLayoutY(originalY);
+        });
+  }
+
+  // detect change in gamestate difficulty which is seleced in intro scene
+  public void detectDifficulty() {
+    Timer labelTimer = new Timer(true);
+    labelTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (GameState.difficulty != null) {
+              if (GameState.difficulty == "MEDIUM") {
+                Platform.runLater(() -> updateLabels());
+                if (GameState.numOfHints == 0) {
+                  labelTimer.cancel();
+                }
+              } else {
+                Platform.runLater(() -> updateLabels());
+                labelTimer.cancel();
+              }
+            }
+          }
+        },
+        0,
+        500);
+  }
+
+  // if the player moves closer to the computer, button for keypad appears
+  private void checkComputer(ImageView player, Rectangle wall2) {
+    if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
+      monitor.setOpacity(1);
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
+      pauseTransition.setOnFinished(
+          event -> {
+            // Adjust the player's position to be right in front of the room
+            nextToButton = true;
+            monitor.setFill(javafx.scene.paint.Color.WHITE);
+            clickButton.setVisible(true);
+          });
+      pauseTransition.play();
+    } else {
+      nextToButton = false;
+      clickButton.setVisible(false);
+      monitor.setFill(javafx.scene.paint.Color.TRANSPARENT);
+    }
+  }
+
+  // make all the nodes invisible at once
   private void makeInvisible() {
     idScanner.setVisible(false);
     light.setVisible(false);
@@ -330,28 +388,29 @@ public class ExitController implements Initializable {
   // when the rectangle is clicked, the keypad is shown
   @FXML
   private void monitorClicked(MouseEvent event) {
-    if(nextToButton){
+    if (nextToButton) {
       screen.setVisible(true);
-    one.setVisible(true);
-    two.setVisible(true);
-    three.setVisible(true);
-    four.setVisible(true);
-    five.setVisible(true);
-    six.setVisible(true);
-    seven.setVisible(true);
-    eight.setVisible(true);
-    nine.setVisible(true);
-    zero.setVisible(true);
-    enter.setVisible(true);
-    reset.setVisible(true);
-    pad.setVisible(true);
-    monitor.setVisible(false);
-    exit.setVisible(true);
-    player.setVisible(false);
-    clickMonitor.setVisible(false);
-    } 
+      one.setVisible(true);
+      two.setVisible(true);
+      three.setVisible(true);
+      four.setVisible(true);
+      five.setVisible(true);
+      six.setVisible(true);
+      seven.setVisible(true);
+      eight.setVisible(true);
+      nine.setVisible(true);
+      zero.setVisible(true);
+      enter.setVisible(true);
+      reset.setVisible(true);
+      pad.setVisible(true);
+      monitor.setVisible(false);
+      exit.setVisible(true);
+      player.setVisible(false);
+      clickMonitor.setVisible(false);
+    }
   }
 
+  // if exit is clicked, unrelated node becomes invisible
   @FXML
   private void clickExit(ActionEvent event) {
     screen.setVisible(false);
@@ -455,6 +514,7 @@ public class ExitController implements Initializable {
     screen.setText(password);
   }
 
+  // enter key on the keypand is entered, it checks the passcode
   @FXML
   private void onEnter(ActionEvent events) {
     if (password == "") {
@@ -545,36 +605,7 @@ public class ExitController implements Initializable {
     }
   }
 
-  // idcards can be dragged
-  public void makeDraggable(ImageView imageView) {
-    double originalX = imageView.getLayoutX();
-    double originalY = imageView.getLayoutY();
-
-    imageView.setOnMousePressed(
-        mouseEvent -> {
-          mouseAnchorX = mouseEvent.getX();
-          mouseAnchorY = mouseEvent.getY();
-        });
-
-    imageView.setOnMouseDragged(
-        mouseEvent -> {
-          // Calculate the new position based on the mouse movement
-          double newX = mouseEvent.getSceneX() - mouseAnchorX;
-          double newY = mouseEvent.getSceneY() - mouseAnchorY;
-
-          // Update the layout of the image
-          imageView.setLayoutX(newX);
-          imageView.setLayoutY(newY);
-        });
-
-    imageView.setOnMouseReleased(
-        mouseEvent -> {
-          // Return the image to its original position
-          imageView.setLayoutX(originalX);
-          imageView.setLayoutY(originalY);
-        });
-  }
-
+  // check if correct id cards are tagged on the pad
   AnimationTimer collisionTimer =
       new AnimationTimer() {
         @Override
@@ -585,8 +616,10 @@ public class ExitController implements Initializable {
           checkCollision(idEngineer, idScanner);
         }
 
+        // detect collision between two objects
         private void checkCollision(Node node1, Node node2) {
           if (node1.getBoundsInParent().intersects(node2.getBoundsInParent())) {
+            // if the anwer is captain, idcaptain give green light, others give red
             if (Room1Controller.riddleAnswer == "captain") {
               if (node1 == idCaptain) {
                 light.setFill(Color.GREEN);
@@ -603,6 +636,7 @@ public class ExitController implements Initializable {
                 soundIncorrect();
                 light.setFill(Color.RED);
               }
+              // only chef id gives green light, others give red
             } else if (Room1Controller.riddleAnswer == "chef") {
               if (node1 == idChef) {
                 light.setFill(Color.GREEN);
@@ -619,6 +653,7 @@ public class ExitController implements Initializable {
                 soundIncorrect();
                 light.setFill(Color.RED);
               }
+              // only doctor gives green light, others give red
             } else if (Room1Controller.riddleAnswer == "doctor") {
               if (node1 == idDoctor) {
                 light.setFill(Color.GREEN);
@@ -635,6 +670,7 @@ public class ExitController implements Initializable {
                 soundIncorrect();
                 light.setFill(Color.RED);
               }
+              // only engineer gives green light, others give red
             } else if (Room1Controller.riddleAnswer == "engineer") {
               if (node1 == idEngineer) {
                 light.setFill(Color.GREEN);
@@ -656,29 +692,7 @@ public class ExitController implements Initializable {
         }
       };
 
-  public void detectDifficulty() {
-    Timer labelTimer = new Timer(true);
-    labelTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            if (GameState.difficulty != null) {
-              if (GameState.difficulty == "MEDIUM") {
-                Platform.runLater(() -> updateLabels());
-                if (GameState.numOfHints == 0) {
-                  labelTimer.cancel();
-                }
-              } else {
-                Platform.runLater(() -> updateLabels());
-                labelTimer.cancel();
-              }
-            }
-          }
-        },
-        0,
-        500);
-  }
-
+  // update the labels of hint and difficulty as the game progresses
   private void updateLabels() {
     difficultyLabel.setText(GameState.difficulty);
     if (GameState.difficulty == "EASY") {
@@ -800,7 +814,6 @@ public class ExitController implements Initializable {
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
   }
-
   @FXML
   private void toggleSound() {
       if (GameState.isSoundEnabled) {
@@ -816,7 +829,26 @@ public class ExitController implements Initializable {
           }
           toggleSoundButton.setText("Disable Sound");
       }
-  
+
       GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  }
+  // game master animation
+  @FXML
+  private void animateRobot() {
+    TranslateTransition translate = new TranslateTransition();
+    translate.setNode(gameMaster);
+    translate.setDuration(Duration.millis(1000));
+    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setByX(0);
+    translate.setByY(20);
+    translate.setAutoReverse(true);
+
+    translate.play();
+  }
+
+  @FXML
+  public void clickGameMaster(MouseEvent event) {
+    App.previousRoom = AppUi.ROOM1;
+    App.setScene(AppUi.HELPERCHAT);
   }
 }

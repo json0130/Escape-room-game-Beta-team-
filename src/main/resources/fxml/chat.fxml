@@ -54,6 +54,27 @@
             <Font name="Arial" size="50.0" />
          </font>
       </Label>
+      <Button layoutX="914.0" layoutY="26.0" mnemonicParsing="false" onAction="#onGoBack" text="Go Back" />
+      <ImageView fx:id="robotBase" fitHeight="184.0" fitWidth="200.0" layoutX="696.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/base.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="robotThink" fitHeight="184.0" fitWidth="200.0" layoutX="695.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/robot-think.gif" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="robotReply" fitHeight="184.0" fitWidth="200.0" layoutX="695.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/reply.png" />
+         </image>
+      </ImageView>
       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
+      <ImageView fx:id="glitch" fitHeight="428.0" fitWidth="727.0" layoutX="139.0" layoutY="129.0" pickOnBounds="true" visible="false">
+         <image>
+            <Image url="@../images/glitch-effect-black-background.jpg" />
+         </image>
+      </ImageView>
   </children>
 </AnchorPane>

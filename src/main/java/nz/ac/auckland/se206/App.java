@@ -9,12 +9,9 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-// import javax.print.attribute.standard.Media;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 /**
@@ -24,9 +21,7 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
 public class App extends Application {
 
   public static int timerSeconds = 120;
-  private Label countdownLabel;
   private static Scene scene;
-  private StackPane mainLayout;
   public static boolean tileGameComplete = false;
   public static int passcode;
   public static Boolean timerStarted = false;
@@ -34,6 +29,7 @@ public class App extends Application {
   public static int chosenTimer;
   public static MediaPlayer mediaPlayer;
   public static String musicType = "starting";
+  public static AppUi previousRoom = AppUi.PLAYER;
 
   public static void main(final String[] args) {
     launch();
@@ -84,6 +80,7 @@ public class App extends Application {
     mediaPlayer.setVolume(0.05);
     mediaPlayer.setAutoPlay(true);
 
+    SceneManager.addScene(AppUi.HELPERCHAT, loadFxml("helperchat"));
     SceneManager.addScene(AppUi.ROOM1, loadFxml("room1"));
     SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
     SceneManager.addScene(AppUi.PLAYER, loadFxml("player"));
