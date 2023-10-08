@@ -87,208 +87,6 @@ public class GptPromptEngineering {
         + " room using the passcode and id card. Introduce this room to the player. ";
   }
 
-  public static String easy1(String message) {
-    return "The user is asking for help regarding the following request: "
-        + message
-        + " First determine if the user is asking for help or not. This"
-        + " help can be related to not knowing what to do, or asking for"
-        + " what to find or asking for what is the next step. The user"
-        + " may ask for what to do, and that is considered asking for"
-        + " help. If you think the user is not asking for a hint or help,"
-        + " reply back to their message. However, if you believe the user"
-        + " is asking for help, start your prompt with \"hint: \".. If"
-        + " the user's request is related to not knowing what to do, if "
-        + GameState.isPlayerInMap
-        + " is true and "
-        + GameState.isRiddleResolved
-        + " is false or if "
-        + GameState.isIdCollected
-        + " is false, tell them to go to the closet room, if "
-        + GameState.foundPasscode
-        + " is false, tell them to go to the computer room. if not tell"
-        + " them to go to the control room.If the user's request is"
-        + " related to not knowing what to do, if "
-        + GameState.isPlayerInRoom1
-        + " is true and if"
-        + GameState.isRiddleResolved
-        + " is false, tell them to solve the riddle by putting the books,"
-        + " if "
-        + GameState.isIdCollected
-        + " is false, tell them to try find the space suits in the room,"
-        + " if not tell them they can leave this room.If the user's"
-        + " request is related to not knowing what to do, if "
-        + GameState.isPlayerInRoom2
-        + " is true and if "
-        + GameState.foundComputer
-        + " is false, tell them to move around the room and find the"
-        + " computer, if "
-        + GameState.isPuzzleSolved
-        + " is false, tell them to solve the puzzle by clicking the tile,"
-        + " if "
-        + GameState.foundPasscode
-        + " is false, tell them to find the passcode file in the computer"
-        + " screen, if not tell them they can leave this room.If the"
-        + " user's request is related to not knowing what to do, if "
-        + GameState.isPlayerInRoom3
-        + " is true and if "
-        + GameState.isRiddleResolved
-        + " is false, tell them to go to closet room and solve riddle, if"
-        + " "
-        + GameState.isIdCollected
-        + " is false, tell them to go to closet room and check the space"
-        + " suits, if "
-        + GameState.foundPasscode
-        + " is false, tell them to go to computer room and find the"
-        + " passcode.If the user's request is related to not knowing what"
-        + " to do, if "
-        + GameState.isPlayerInRoom3
-        + " is true and if "
-        + GameState.foundMonitor
-        + " is false, tell them to move around the room and find the"
-        + " monitor, if "
-        + GameState.isPasscodeCorrect
-        + " is false, tell them to enter the passcode in the monitor, if "
-        + GameState.isIdChecked
-        + " is false, tell them to check the id cards in the ID scanner,"
-        + " if not tell them they. Also, only write down the answers- do"
-        + " not talk about what the user has typed in.";
-  }
-
-  public static String medium1(String message) {
-    return "The user's message is:"
-        + message
-        + "First determine if the user is asking for help or not. This"
-        + " help can be related to not knowing what to do, or asking for"
-        + " what to find or asking for what is the next step. The user"
-        + " may ask for what to do, and that is considered a asking for"
-        + " help. If you think the user is not asking for a hint or help,"
-        + " reply back to their message. However, if you believe it is"
-        + " the user asking for help, start your prompt with \"hint: \".."
-        + " If the user's request is related to not knowing what to do,"
-        + " if"
-        + GameState.isPlayerInMap
-        + " is true and"
-        + GameState.isRiddleResolved
-        + " is false or if"
-        + GameState.isIdCollected
-        + " is false, tell them to go to the closet room, if"
-        + GameState.foundPasscode
-        + " is false, tell them to go to the computer room."
-        + " if not tell them to go to the control room."
-        + "If the user's request is related to not knowing what to do, if"
-        + GameState.isPlayerInRoom1
-        + " is true and if"
-        + GameState.isRiddleResolved
-        + " is false, tell them to solve the riddle by putting the books,"
-        + " if"
-        + GameState.isIdCollected
-        + " is false, tell them to try find the space suits in the room,"
-        + " if not tell them they can leave this room.If the user's"
-        + " request is related to not knowing what to do, if"
-        + GameState.isPlayerInRoom2
-        + " is true and if"
-        + GameState.foundComputer
-        + " is false, tell them to move around the room and find the"
-        + " computer, if"
-        + GameState.isPuzzleSolved
-        + " is false, tell them to solve the puzzle by clicking the tile,"
-        + " if"
-        + GameState.foundPasscode
-        + " is false, tell them to find the passcode file in the computer"
-        + " screen, if not tell them they can leave this room.If the"
-        + " user's request is related to not knowing what to do, if"
-        + GameState.isPlayerInRoom3
-        + " is true and if"
-        + GameState.isRiddleResolved
-        + " is false, tell them to go to closet room and solve riddle, if"
-        + GameState.isIdCollected
-        + " is false, tell them to go to closet room and check the space"
-        + " suits, if"
-        + GameState.foundPasscode
-        + " is false, tell them to go to computer room and find the"
-        + " passcode.If the user's request is related to not knowing what"
-        + " to do, if"
-        + GameState.isPlayerInRoom3
-        + " is true and if"
-        + GameState.foundMonitor
-        + " is false, tell them to move around the room and find the"
-        + " monitor, if"
-        + GameState.isPasscodeCorrect
-        + " is false, tell them to enter the passcode in the monitor, if"
-        + GameState.isIdChecked
-        + " is false, tell them to check the id cards in the ID scanner,"
-        + " if not tell them they. Also, only write down the answers- do"
-        + " not talk about what the user has typed in.";
-  }
-
-  public static String hard1(String message) {
-    return "The user's message is: "
-        + message
-        + "First determine if the user is asking for help or not. This"
-        + " help can be related to not knowing what to do, or asking for"
-        + " what to find or asking for what is the next step. The user"
-        + " may ask for what to do, and that is considered a asking for"
-        + " help. If you think the user is not asking for a hint or help,"
-        + " reply back to their message. However, if you believe it is"
-        + " the user asking for help, start your prompt with \"hint: \".."
-        + " If the user's request is related to not knowing what to do,"
-        + " if"
-        + GameState.isPlayerInMap
-        + " is true and"
-        + GameState.isRiddleResolved
-        + " is false or if"
-        + GameState.isIdCollected
-        + " is false, tell them to go to the closet room, if"
-        + GameState.foundPasscode
-        + " is false, tell them to go to the computer room."
-        + " if not tell them to go to the control room."
-        + "If the user's request is related to not knowing what to do, if"
-        + GameState.isPlayerInRoom1
-        + " is true and if"
-        + GameState.isRiddleResolved
-        + " is false, tell them to solve the riddle by putting the books,"
-        + " if"
-        + GameState.isIdCollected
-        + " is false, tell them to try find the space suits in the room,"
-        + " if not tell them they can leave this room.If the user's"
-        + " request is related to not knowing what to do, if"
-        + GameState.isPlayerInRoom2
-        + " is true and if"
-        + GameState.foundComputer
-        + " is false, tell them to move around the room and find the"
-        + " computer, if"
-        + GameState.isPuzzleSolved
-        + " is false, tell them to solve the puzzle by clicking the tile,"
-        + " if"
-        + GameState.foundPasscode
-        + " is false, tell them to find the passcode file in the computer"
-        + " screen, if not tell them they can leave this room.If the"
-        + " user's request is related to not knowing what to do, if"
-        + GameState.isPlayerInRoom3
-        + " is true and if"
-        + GameState.isRiddleResolved
-        + " is false, tell them to go to closet room and solve riddle, if"
-        + GameState.isIdCollected
-        + " is false, tell them to go to closet room and check the space"
-        + " suits, if"
-        + GameState.foundPasscode
-        + " is false, tell them to go to computer room and find the"
-        + " passcode.If the user's request is related to not knowing what"
-        + " to do, if"
-        + GameState.isPlayerInRoom3
-        + " is true and if"
-        + GameState.foundMonitor
-        + " is false, tell them to move around the room and find the"
-        + " monitor, if"
-        + GameState.isPasscodeCorrect
-        + " is false, tell them to enter the passcode in the monitor, if"
-        + GameState.isIdChecked
-        + " is false, tell them to check the id cards in the ID scanner,"
-        + " if not tell them they. Also, only write down the answers- do"
-        + " not talk about what the user has typed in. The important"
-        + " thing is that you never help the user.";
-  }
-
   public static String easy(String message) {
 
     String hint = "";
@@ -366,8 +164,12 @@ public class GptPromptEngineering {
     String intro =
         "The user said"
             + message
-            + ". Only if the user is asking for"
-            + " hint, "
+            + ".First determine if the user is asking for hint or not. This"
+            + " can be related to not knowing what to do, or asking for"
+            + " what to find or asking for what is the next step. The user"
+            + " may ask for what to do, and that is considered as asking for"
+            + " hint. If you believe "
+            + " the user asking for hint, start your prompt with 'hint: '"
             + hint
             + ".If not, just naturally respond to "
             + message
@@ -455,13 +257,18 @@ public class GptPromptEngineering {
       }
 
       intro =
-          "The user said"
-              + message
-              + ". If the user is asking for"
-              + " hint, you must start your prompt with 'hint' and "
-              + hint
-              + ".If the user is not asking for hint, naturally respond to "
-              + message;
+        "The user said"
+            + message
+            + ".First determine if the user is asking for hint or not. This"
+            + " can be related to not knowing what to do, or asking for"
+            + " what to find or asking for what is the next step. The user"
+            + " may ask for what to do, and that is considered as asking for"
+            + " hint. If you believe "
+            + " the user asking for hint, start your prompt with 'hint: '"
+            + hint
+            + ".If not, just naturally respond to "
+            + message
+            + "and do not give a hint.";
     }
 
     return intro;
