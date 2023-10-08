@@ -425,7 +425,7 @@ public class TileGameDeskController {
         System.out.println("done");
 
         disableImages();
-
+        GameState.isPuzzleSolved = true;
         showHomeScreen();
       }
     }
@@ -500,6 +500,7 @@ public class TileGameDeskController {
     String stringPasscode = Integer.toString(currentPasscode);
     computerPasscodeLabel.setText(stringPasscode);
     passcodePane.setVisible(true);
+    GameState.foundPasscode = true;
 
     System.out.println("DONE1");
   }

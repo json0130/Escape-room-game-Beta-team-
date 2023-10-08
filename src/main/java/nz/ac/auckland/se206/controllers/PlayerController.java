@@ -243,6 +243,8 @@ public class PlayerController implements Initializable {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(272);
             player.setLayoutY(336);
+            GameState.isPlayerInMap = false;
+            GameState.isPlayerInRoom1 = true;
             App.setScene(AppUi.ROOM1);
             timer.stop();
           });
@@ -262,7 +264,8 @@ public class PlayerController implements Initializable {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(500);
             player.setLayoutY(284);
-
+            GameState.isPlayerInMap = false;
+            GameState.isPlayerInRoom2 = true;
             App.setScene(AppUi.TILEROOM);
             timer.stop();
           });
@@ -295,7 +298,8 @@ public class PlayerController implements Initializable {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(674);
             player.setLayoutY(292);
-
+            GameState.isPlayerInMap = false;
+            GameState.isPlayerInRoom3 = true;
             App.setScene(AppUi.ROOM3);
             timer.stop();
           });

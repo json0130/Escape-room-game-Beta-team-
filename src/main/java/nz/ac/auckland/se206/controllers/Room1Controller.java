@@ -273,24 +273,28 @@ public class Room1Controller implements Initializable {
   // If collect button is pressed, id is corrected and state of idcollected changes
   public void onCollect1() {
     GameState.isDoctorCollected = true;
+    GameState.isIdCollected = true;
     hideId1();
     crew1Indicator.setVisible(false);
   }
 
   public void onCollect2() {
     GameState.isCaptainCollected = true;
+    GameState.isIdCollected = true;
     hideId2();
     crew2Indicator.setVisible(false);
   }
 
   public void onCollect3() {
     GameState.isChefCollected = true;
+    GameState.isIdCollected = true;
     hideId3();
     crew3Indicator.setVisible(false);
   }
 
   public void onCollect4() {
     GameState.isEngineerCollected = true;
+    GameState.isIdCollected = true;
     hideId4();
     crew4Indicator.setVisible(false);
   }
@@ -299,6 +303,7 @@ public class Room1Controller implements Initializable {
   public void onRiddle(MouseEvent evnet) throws IOException {
     if (nextToButton) {
       soundButttonClick();
+      GameState.isRiddleGiven = true;
       App.setScene(AppUi.CHAT);
     }
   }
@@ -313,6 +318,8 @@ public class Room1Controller implements Initializable {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(433);
             player.setLayoutY(468);
+            GameState.isPlayerInMap = true;
+            GameState.isPlayerInRoom1 = false;
             App.setScene(AppUi.PLAYER);
             timer.stop();
           });
