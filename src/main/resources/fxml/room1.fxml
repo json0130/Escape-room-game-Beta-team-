@@ -16,6 +16,7 @@
             <Image url="@../images/Firefly%2020230921004116.png" />
          </image>
       </ImageView>
+      <Pane fx:id="alert" layoutX="-12.0" layoutY="-8.0" opacity="0.23" prefHeight="669.0" prefWidth="1025.0" style="-fx-background-color: red;" />
       <ImageView fx:id="gameMaster" fitHeight="165.0" fitWidth="179.0" layoutX="578.0" layoutY="152.0" onMouseClicked="#clickGameMaster" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/robotfloat.png" />
@@ -94,7 +95,7 @@
             <Image url="@../images/indicator_triangle.png" />
          </image>
       </ImageView>
-      <Rectangle fx:id="blinkingRectangle" arcHeight="70.0" arcWidth="70.0" fill="TRANSPARENT" height="96.0" layoutX="432.0" layoutY="167.0" onMouseClicked="#onRiddle" stroke="#ff6a00" strokeType="INSIDE" strokeWidth="3.0" width="96.0" />
+      <Rectangle fx:id="blinkingRectangle" arcHeight="70.0" arcWidth="70.0" fill="TRANSPARENT" height="96.0" layoutX="433.0" layoutY="167.0" onMouseClicked="#onRiddle" stroke="#ff6a00" strokeType="INSIDE" strokeWidth="3.0" width="96.0" />
       <Label fx:id="clickLabel" layoutX="441.0" layoutY="197.0" onMouseClicked="#onRiddle" prefHeight="37.0" prefWidth="85.0" text="CLICK ME">
          <font>
             <Font size="17.0" />

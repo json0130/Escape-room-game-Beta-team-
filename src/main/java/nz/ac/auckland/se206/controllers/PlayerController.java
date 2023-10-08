@@ -8,7 +8,9 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
@@ -98,6 +100,7 @@ public class PlayerController implements Initializable {
   @FXML private Rectangle wall21;
 
   @FXML private Pane scene;
+  @FXML private Pane alert;
 
   @FXML private Button reset;
   @FXML private Button btnSend;
@@ -108,10 +111,13 @@ public class PlayerController implements Initializable {
   private double previousY;
 
   @FXML private Button toggleSoundButton;
-  private boolean isSoundEnabled = true;
 
   @FXML private Label countdownLabel;
 
+  private boolean hasHappend = false;
+
+  // Add this variable to your class
+private Timeline alertBlinkTimeline;
   @FXML public Pane aiWindowController;
 
   private ChatCompletionRequest chatCompletionRequest;
@@ -166,9 +172,12 @@ public class PlayerController implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     animateRobot();
-    introTextToSpeech();
+
     playerLabel.setVisible(true);
     black.setVisible(true);
+
+    // Add an event handler to the Toggle Sound button
+    toggleSoundButton.setOnAction(event -> toggleSound());
 
     room1.setVisible(false);
     room2.setVisible(false);
@@ -178,6 +187,8 @@ public class PlayerController implements Initializable {
     computer.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
     closet.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
     control.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
+
+    alert.setVisible(false); // Initially hide the alert label
 
     shapesize = player.getFitWidth();
     movementSetup();
@@ -218,19 +229,40 @@ public class PlayerController implements Initializable {
             timer.stop();
           }
         }));
+
     // if difficulty is selected, label is updated
     detectDifficulty();
 
     Platform.runLater(
         () -> {
           Stage stage = (Stage) scene.getScene().getWindow();
-
           stage.setOnCloseRequest(
               event -> {
                 Platform.exit();
                 System.exit(0);
               });
         });
+  }
+
+  // Modify your setupAlertBlinking method as follows
+  private void setupAlertBlinking() {
+    alert.setVisible(true); // Initially show the alert label
+
+    // Set up the blinking animation for the alert label
+    alertBlinkTimeline = new Timeline(
+        new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
+        new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false))
+    );
+    alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
+    alertBlinkTimeline.play();
+  }
+
+  // Add a method to stop the alert blinking
+  private void stopAlertBlinking() {
+    if (alertBlinkTimeline != null) {
+        alertBlinkTimeline.stop();
+        alert.setVisible(false);
+    }
   }
 
   public void checkRoom1(ImageView player, Rectangle room1) {
@@ -279,7 +311,6 @@ public class PlayerController implements Initializable {
     if (player.getBoundsInParent().intersects(room3.getBoundsInParent())) {
       room3.setVisible(true);
       String musicFile;
-      System.out.println("ENTERED ROOM3");
       if (App.timerSeconds < 60 && App.musicType.equals("starting")) {
         App.musicType = "final";
         musicFile = "srcsrc/main/resources/sounds/final-BG-MUSIC.mp3";
@@ -317,6 +348,17 @@ public class PlayerController implements Initializable {
         // Exit the loop as soon as a collision is detected
       }
     }
+    // Detect if the timer is 30 seconds left and start the alert blinking
+          if (App.timerSeconds == 30) {
+            if (!hasHappend){
+              System.out.println("30 seconds left");
+              hasHappend = true;
+              setupAlertBlinking();
+            }
+          } else if (App.timerSeconds == 0) {
+            // Stop the alert blinking when the timer reaches 0
+            stopAlertBlinking();
+          }
   }
 
   // code for enabling palyer to move using wasd keys
@@ -387,33 +429,33 @@ public class PlayerController implements Initializable {
 
   @FXML
   public void onRoom3(ActionEvent event) {
-
     App.setScene(AppUi.ROOM3);
   }
 
-  // detect if there is change isn gamestate difficulty in the intro page using timer
+  // detect if there is change in gamestate difficulty in the intro page using timer
   public void detectDifficulty() {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
         new TimerTask() {
-          @Override
-          public void run() {
-            if (GameState.difficulty != null) {
-              if (GameState.difficulty == "MEDIUM") {
-                Platform.runLater(() -> updateLabels());
-                if (GameState.numOfHints == 0) {
-                  labelTimer.cancel();
+            @Override
+            public void run() {
+                if (GameState.difficulty != null) {
+                    if (GameState.difficulty.equals("MEDIUM")) {
+                        Platform.runLater(() -> updateLabels());
+                        if (GameState.numOfHints == 0) {
+                            labelTimer.cancel();
+                        }
+                    } else {
+                        Platform.runLater(() -> updateLabels());
+                        System.out.println("Difficulty detected");
+                        labelTimer.cancel();
+                    }
                 }
-              } else {
-                Platform.runLater(() -> updateLabels());
-                labelTimer.cancel();
-              }
             }
-          }
         },
         0,
         500);
-  }
+}
 
   @FXML
   public void clickGameMaster(MouseEvent event) {
@@ -423,21 +465,6 @@ public class PlayerController implements Initializable {
     //   aiWindowController = App.aiWindow;
     // }
     aiWindowController.setVisible(true);
-  }
-
-  private void introTextToSpeech() {
-    Task<Void> introTask =
-        new Task<>() {
-
-          @Override
-          protected Void call() throws Exception {
-            TextToSpeech textToSpeech = new TextToSpeech();
-            textToSpeech.speak("Welcome to STARSHIP ESCAPE 1!");
-            return null;
-          }
-        };
-    Thread introThread = new Thread(introTask);
-    introThread.start();
   }
 
   // update the header labels as the hint decreases
@@ -466,7 +493,25 @@ public class PlayerController implements Initializable {
     translate.setByX(0);
     translate.setByY(20);
     translate.setAutoReverse(true);
-
     translate.play();
+  }
+
+  @FXML
+  private void toggleSound() {
+      if (GameState.isSoundEnabled) {
+          // Disable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.0); // Mute the media player
+          }
+          toggleSoundButton.setText("Enable Sound");
+      } else {
+          // Enable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+          }
+          toggleSoundButton.setText("Disable Sound");
+      }
+  
+      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
   }
 }

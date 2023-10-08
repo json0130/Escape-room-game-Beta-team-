@@ -11,6 +11,7 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,6 +24,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import nz.ac.auckland.se206.speech.TextToSpeech;
 
 public class EndController implements Initializable {
 
@@ -189,6 +191,21 @@ public class EndController implements Initializable {
     spaceshipPathTransition.setOnFinished(
         event -> {
           youWin.setVisible(true);
+          introTextToSpeech();
         });
+  }
+  private void introTextToSpeech() {
+    Task<Void> introTask =
+        new Task<>() {
+
+          @Override
+          protected Void call() throws Exception {
+            TextToSpeech textToSpeech = new TextToSpeech();
+            textToSpeech.speak("You Win!");
+            return null;
+          }
+        };
+    Thread introThread = new Thread(introTask);
+    introThread.start();
   }
 }

@@ -11,7 +11,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
@@ -51,6 +53,7 @@ public class Room1Controller implements Initializable {
 
   @FXML private ImageView player;
   @FXML private Pane scene;
+  @FXML private Pane alert;
 
   private double previousX;
   private double previousY;
@@ -108,7 +111,11 @@ public class Room1Controller implements Initializable {
 
   @FXML private Button toggleSoundButton;
 
+    // Add this variable to your class
+    private Timeline alertBlinkTimeline;
+
   private boolean nextToButton = false;
+  private boolean hasHappend = false;
 
   // timer for collsion check between monitor and walls
   AnimationTimer collisionTimer =
@@ -150,6 +157,7 @@ public class Room1Controller implements Initializable {
     animateRobot();
     shapesize = player.getFitWidth();
     movementSetup();
+    alert.setVisible(false);
 
     collisionTimer.start();
 
@@ -337,6 +345,16 @@ public class Room1Controller implements Initializable {
         player.setLayoutY(previousY); // Restore the player's previous Y position
       }
     }
+    if (App.timerSeconds == 30) {
+      if (!hasHappend){
+        System.out.println("30 seconds left");
+        hasHappend = true;
+        setupAlertBlinking();
+      }
+    } else if (App.timerSeconds == 0) {
+      // Stop the alert blinking when the timer reaches 0
+      stopAlertBlinking();
+    }
   }
 
   // if the character collides with the mointor, button to the riddle chat scene appears
@@ -435,24 +453,44 @@ public class Room1Controller implements Initializable {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
         new TimerTask() {
-          @Override
-          public void run() {
-            // if the level is medium, hint count keeps detected
-            if (GameState.difficulty != null) {
-              if (GameState.difficulty == "MEDIUM") {
-                Platform.runLater(() -> updateLabels());
-                if (GameState.numOfHints == 0) {
-                  labelTimer.cancel();
+            @Override
+            public void run() {
+                if (GameState.difficulty != null) {
+                    if (GameState.difficulty.equals("MEDIUM")) {
+                        Platform.runLater(() -> updateLabels());
+                        if (GameState.numOfHints == 0) {
+                            labelTimer.cancel();
+                        }
+                    } else {
+                        Platform.runLater(() -> updateLabels());
+                        labelTimer.cancel();
+                    }
                 }
-              } else {
-                Platform.runLater(() -> updateLabels());
-                labelTimer.cancel();
-              }
             }
-          }
         },
         0,
         500);
+}
+
+   // Modify your setupAlertBlinking method as follows
+  private void setupAlertBlinking() {
+    alert.setVisible(true); // Initially show the alert label
+
+    // Set up the blinking animation for the alert label
+    alertBlinkTimeline = new Timeline(
+        new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
+        new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false))
+    );
+    alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
+    alertBlinkTimeline.play();
+  }
+
+  // Add a method to stop the alert blinking
+  private void stopAlertBlinking() {
+    if (alertBlinkTimeline != null) {
+        alertBlinkTimeline.stop();
+        alert.setVisible(false);
+    }
   }
 
   // update labels for difficulty and hints as the game progress

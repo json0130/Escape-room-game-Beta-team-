@@ -42,7 +42,7 @@ public class GameState {
   public static boolean isDoctorCollected = false;
   public static boolean isEngineerCollected = false;
 
-
+  public static boolean correctPassword = false;
 
   public static int numOfHints = 5;
 

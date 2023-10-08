@@ -8,6 +8,7 @@ import javafx.animation.KeyValue;
 import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,6 +26,7 @@ import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
+import nz.ac.auckland.se206.speech.TextToSpeech;
 
 public class IntroController implements Initializable {
 
@@ -65,6 +67,9 @@ public class IntroController implements Initializable {
     miniuteButtonHovered(minB2);
     miniuteButtonHovered(minB4);
     miniuteButtonHovered(minB6);
+
+    // Add an event handler to the Toggle Sound button
+    toggleSoundButton.setOnAction(event -> toggleSound());
 
     easybox.setVisible(false);
     mediumbox.setVisible(false);
@@ -159,8 +164,7 @@ public class IntroController implements Initializable {
         App.chosenTimer = 360;
         break;
       default:
-        App.timerSeconds = 120;
-        App.chosenTimer = 120;
+        break;
     }
     System.out.println(App.timerSeconds);
 
@@ -258,11 +262,27 @@ public class IntroController implements Initializable {
       if (App.timerSeconds <= 0) {
         App.timerTimeline.stop();
         App.setScene(AppUi.LOSE);
+        introTextToSpeech();
       }
     }
     else{
       App.timerTimeline.stop();
     }
+  }
+
+  private void introTextToSpeech() {
+    Task<Void> introTask =
+        new Task<>() {
+
+          @Override
+          protected Void call() throws Exception {
+            TextToSpeech textToSpeech = new TextToSpeech();
+            textToSpeech.speak("TIME OUT. GAME OVER.");
+            return null;
+          }
+        };
+    Thread introThread = new Thread(introTask);
+    introThread.start();
   }
 
   @FXML

@@ -5,8 +5,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -80,6 +85,10 @@ public class TileGameDeskController {
   @FXML private ImageView imageEight;
 
   @FXML private Button toggleSoundButton;
+  @FXML private Pane alert;
+  private boolean hasHappend = false;
+  // Add this variable to your class
+  private Timeline alertBlinkTimeline;
 
   private Tile tileOne = new Tile();
   private Tile tileTwo = new Tile();
@@ -120,6 +129,7 @@ public class TileGameDeskController {
   @FXML private ImageView powerButton;
   @FXML private ImageView gameMaster;
 
+  private Timeline animationTimeline;
   @FXML public Pane aiWindowController;
 
   /**
@@ -132,6 +142,19 @@ public class TileGameDeskController {
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnAction(event -> toggleSound());
     animateRobot();
+    alert.setVisible(false); // Initially hide the alert label
+
+    animationTimeline = new Timeline(
+                new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        // Update animation based on the current time
+                        checkCollision2();
+                    }
+                })
+        );
+        animationTimeline.setCycleCount(Timeline.INDEFINITE);
+        animationTimeline.play();
 
     // dialogueList.add("WHO DARES DISTURB MY SLUMBER!?!");
     dialogueList.add("Ahhh... Another treasure hunter who wishes to steal from me!");
@@ -154,6 +177,41 @@ public class TileGameDeskController {
     System.out.println(riddleAnswer);
 
     wordText.setText(riddleAnswer);
+  }
+
+  public void checkCollision2() {
+    // Detect if the timer is 30 seconds left and start the alert blinking
+    if (App.timerSeconds == 30) {
+      if (!hasHappend){
+        System.out.println("30 seconds left");
+        hasHappend = true;
+        setupAlertBlinking();
+      }
+    } else if (App.timerSeconds == 0) {
+      // Stop the alert blinking when the timer reaches 0
+      stopAlertBlinking();
+    }
+  }
+
+  // Modify your setupAlertBlinking method as follows
+  private void setupAlertBlinking() {
+    alert.setVisible(true); // Initially show the alert label
+
+    // Set up the blinking animation for the alert label
+    alertBlinkTimeline = new Timeline(
+        new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
+        new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false))
+    );
+    alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
+    alertBlinkTimeline.play();
+  }
+
+  // Add a method to stop the alert blinking
+  private void stopAlertBlinking() {
+    if (alertBlinkTimeline != null) {
+        alertBlinkTimeline.stop();
+        alert.setVisible(false);
+    }
   }
 
   private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
@@ -540,9 +598,9 @@ public class TileGameDeskController {
 
   @FXML
   private void onPuzzleGoBackClick() {
-    String musicFile;
+    
     App.setScene(AppUi.TILEROOM);
-
+    String musicFile;
     if (App.timerSeconds < 60) {
       musicFile = "src/main/resources/sounds/final-BG-MUSIC.mp3";
       App.musicType = "final";
