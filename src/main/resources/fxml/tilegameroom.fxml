@@ -20,6 +20,7 @@
                   <Image url="@../images/Firefly%2020230921012743.png" />
                </image>
             </ImageView>
+            <Pane fx:id="alert" opacity="0.23" prefHeight="669.0" prefWidth="1025.0" style="-fx-background-color: red;" />
             <Rectangle fx:id="startTileGame" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f00" height="50.0" layoutX="420.0" layoutY="239.0" stroke="TRANSPARENT" strokeType="INSIDE" width="125.0" />
             <ImageView fx:id="player" fitHeight="99.0" fitWidth="113.0" layoutX="436.0" layoutY="488.0" pickOnBounds="true" preserveRatio="true">
                <image>

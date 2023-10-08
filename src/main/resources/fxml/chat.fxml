@@ -50,6 +50,11 @@
          </font>
       </Label>
       <Button layoutX="799.0" layoutY="143.0" mnemonicParsing="false" onAction="#onGoBack" text="Go Back" />
+      <ImageView fx:id="glitch" fitHeight="428.0" fitWidth="727.0" layoutX="139.0" layoutY="129.0" pickOnBounds="true" visible="false">
+         <image>
+            <Image url="@../images/glitch-effect-black-background.jpg" />
+         </image>
+      </ImageView>
       <ImageView fx:id="robotBase" fitHeight="184.0" fitWidth="200.0" layoutX="799.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/base.png" />
@@ -66,10 +71,5 @@
          </image>
       </ImageView>
       <fx:include layoutX="150.0" layoutY="94.0" source="countdowntimer.fxml" />
-      <ImageView fx:id="glitch" fitHeight="428.0" fitWidth="727.0" layoutX="139.0" layoutY="129.0" pickOnBounds="true" visible="false">
-         <image>
-            <Image url="@../images/glitch-effect-black-background.jpg" />
-         </image>
-      </ImageView>
   </children>
 </AnchorPane>

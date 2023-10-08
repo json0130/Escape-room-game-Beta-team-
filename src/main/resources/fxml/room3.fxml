@@ -28,6 +28,7 @@
             <Image url="@../images/Firefly%2020230920220330.png" />
          </image>
       </ImageView>
+      <Pane fx:id="alert" layoutX="-9.0" layoutY="-7.0" opacity="0.23" prefHeight="686.0" prefWidth="1044.0" style="-fx-background-color: red;" />
       <Button fx:id="button" layoutX="6.0" layoutY="405.0" mnemonicParsing="false" onAction="#back" opacity="0.0" text="Button" />
       <ImageView fx:id="pad" fitHeight="420.0" fitWidth="387.0" layoutX="323.0" layoutY="159.0" pickOnBounds="true" preserveRatio="true">
          <image>

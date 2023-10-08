@@ -113,6 +113,8 @@ public class PlayerController implements Initializable {
 
   @FXML private Label countdownLabel;
 
+  private boolean hasHappend = false;
+
   // Add this variable to your class
 private Timeline alertBlinkTimeline;
 
@@ -165,7 +167,6 @@ private Timeline alertBlinkTimeline;
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     animateRobot();
-    introTextToSpeech();
 
     playerLabel.setVisible(true);
     black.setVisible(true);
@@ -238,8 +239,6 @@ private Timeline alertBlinkTimeline;
         });
   }
 
-
-
   // Modify your setupAlertBlinking method as follows
   private void setupAlertBlinking() {
     alert.setVisible(true); // Initially show the alert label
@@ -304,7 +303,6 @@ private Timeline alertBlinkTimeline;
     if (player.getBoundsInParent().intersects(room3.getBoundsInParent())) {
       room3.setVisible(true);
       String musicFile;
-      System.out.println("ENTERED ROOM3");
       if (App.timerSeconds < 60 && App.musicType.equals("starting")) {
         App.musicType = "final";
         musicFile = "srcsrc/main/resources/sounds/final-BG-MUSIC.mp3";
@@ -341,6 +339,17 @@ private Timeline alertBlinkTimeline;
         // Exit the loop as soon as a collision is detected
       }
     }
+    // Detect if the timer is 30 seconds left and start the alert blinking
+          if (App.timerSeconds == 30) {
+            if (!hasHappend){
+              System.out.println("30 seconds left");
+              hasHappend = true;
+              setupAlertBlinking();
+            }
+          } else if (App.timerSeconds == 0) {
+            // Stop the alert blinking when the timer reaches 0
+            stopAlertBlinking();
+          }
   }
 
   // code for enabling palyer to move using wasd keys
@@ -411,7 +420,6 @@ private Timeline alertBlinkTimeline;
 
   @FXML
   public void onRoom3(ActionEvent event) {
-
     App.setScene(AppUi.ROOM3);
   }
 
@@ -430,15 +438,9 @@ private Timeline alertBlinkTimeline;
                         }
                     } else {
                         Platform.runLater(() -> updateLabels());
+                        System.out.println("Difficulty detected");
                         labelTimer.cancel();
                     }
-                  // Detect if the timer is 30 seconds left and start the alert blinking
-                  if (App.timerSeconds == 30) {
-                    setupAlertBlinking();
-                  } else if (App.timerSeconds == 0) {
-                    // Stop the alert blinking when the timer reaches 0
-                    stopAlertBlinking();
-                  }
                 }
             }
         },
@@ -446,27 +448,10 @@ private Timeline alertBlinkTimeline;
         500);
 }
 
-
-
   @FXML
   public void clickGameMaster(MouseEvent event) {
     App.previousRoom = AppUi.PLAYER;
     App.setScene(AppUi.HELPERCHAT);
-  }
-
-  private void introTextToSpeech() {
-    Task<Void> introTask =
-        new Task<>() {
-
-          @Override
-          protected Void call() throws Exception {
-            TextToSpeech textToSpeech = new TextToSpeech();
-            textToSpeech.speak("Welcome to STARSHIP ESCAPE 1!");
-            return null;
-          }
-        };
-    Thread introThread = new Thread(introTask);
-    introThread.start();
   }
 
   // update the header labels as the hint decreases
@@ -495,7 +480,6 @@ private Timeline alertBlinkTimeline;
     translate.setByX(0);
     translate.setByY(20);
     translate.setAutoReverse(true);
-
     translate.play();
   }
 

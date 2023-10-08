@@ -116,7 +116,7 @@
       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
 
       <Rectangle fx:id="black" arcHeight="5.0" arcWidth="5.0" fill="#1f1f1fac" height="606.0" layoutX="-6.0" layoutY="46.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="1008.0" />
-      <Label fx:id="playerLabel" layoutX="268.0" layoutY="209.0" text="PLAYER" textFill="WHITE">
+      <Label fx:id="playerLabel" layoutX="268.0" layoutY="209.0" text="PLAYER" textFill="WHITE" visible="false">
          <font>
             <Font size="22.0" />
          </font>

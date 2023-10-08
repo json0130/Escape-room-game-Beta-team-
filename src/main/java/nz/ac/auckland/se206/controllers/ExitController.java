@@ -53,6 +53,7 @@ public class ExitController implements Initializable {
 
   @FXML private ImageView player;
   @FXML private Pane scene;
+  @FXML private Pane alert;
 
   private double previousX;
   private double previousY;
@@ -103,6 +104,11 @@ public class ExitController implements Initializable {
 
   @FXML private Button toggleSoundButton;
 
+  private boolean hasHappend = false;
+
+  // Add this variable to your class
+  private Timeline alertBlinkTimeline;
+
   private String password = "";
 
   private double mouseAnchorX;
@@ -147,6 +153,7 @@ public class ExitController implements Initializable {
     animateRobot();
     background.setOpacity(1);
     clickButton.setVisible(false);
+    alert.setVisible(false); // Initially hide the alert label
 
     walls.add(wall);
 
@@ -214,6 +221,38 @@ public class ExitController implements Initializable {
         player.setLayoutY(previousY); // Restore the player's previous Y position
         // Exit the loop as soon as a collision is detected
       }
+    }
+    // Detect if the timer is 30 seconds left and start the alert blinking
+    if (App.timerSeconds == 30) {
+      if (!hasHappend){
+        System.out.println("30 seconds left");
+        hasHappend = true;
+        setupAlertBlinking();
+      }
+    } else if (App.timerSeconds == 0) {
+      // Stop the alert blinking when the timer reaches 0
+      stopAlertBlinking();
+    }
+  }
+
+  // Modify your setupAlertBlinking method as follows
+  private void setupAlertBlinking() {
+    alert.setVisible(true); // Initially show the alert label
+
+    // Set up the blinking animation for the alert label
+    alertBlinkTimeline = new Timeline(
+        new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
+        new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false))
+    );
+    alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
+    alertBlinkTimeline.play();
+  }
+
+  // Add a method to stop the alert blinking
+  private void stopAlertBlinking() {
+    if (alertBlinkTimeline != null) {
+        alertBlinkTimeline.stop();
+        alert.setVisible(false);
     }
   }
 
@@ -343,10 +382,16 @@ public class ExitController implements Initializable {
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
-            // Adjust the player's position to be right in front of the room
-            nextToButton = true;
-            monitor.setFill(javafx.scene.paint.Color.WHITE);
-            clickButton.setVisible(true);
+            // Adjust the player's position to be right in front of the room)
+            if (!GameState.correctPassword){
+              nextToButton = true;
+              monitor.setFill(javafx.scene.paint.Color.WHITE);
+              clickButton.setVisible(true);
+            } else {
+              nextToButton = false;
+              clickButton.setVisible(false);
+              monitor.setFill(javafx.scene.paint.Color.TRANSPARENT);
+            }
           });
       pauseTransition.play();
     } else {
@@ -848,7 +893,7 @@ public class ExitController implements Initializable {
 
   @FXML
   public void clickGameMaster(MouseEvent event) {
-    App.previousRoom = AppUi.ROOM1;
+    App.previousRoom = AppUi.ROOM3;
     App.setScene(AppUi.HELPERCHAT);
   }
 }

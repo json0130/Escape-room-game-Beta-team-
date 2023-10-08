@@ -16,6 +16,7 @@
             <Image url="@../images/Firefly%2020230921004116.png" />
          </image>
       </ImageView>
+      <Pane fx:id="alert" layoutX="-12.0" layoutY="-8.0" opacity="0.23" prefHeight="669.0" prefWidth="1025.0" style="-fx-background-color: red;" />
       <ImageView fx:id="gameMaster" fitHeight="165.0" fitWidth="179.0" layoutX="578.0" layoutY="152.0" onMouseClicked="#clickGameMaster" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/robotfloat.png" />

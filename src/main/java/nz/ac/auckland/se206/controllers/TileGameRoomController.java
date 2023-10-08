@@ -9,7 +9,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
@@ -47,6 +49,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   @FXML private ImageView player;
   @FXML private Pane scene;
+  @FXML private Pane alert;
 
   private double previousX;
   private double previousY;
@@ -85,7 +88,12 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private Rectangle blinkingRectangle;
   private FadeTransition fadeTransition;
 
+  private boolean hasHappend = false;
+
   @FXML private Button toggleSoundButton;
+
+  // Add this variable to your class
+  private Timeline alertBlinkTimeline;
 
   private boolean nextToButton = false;
   @FXML private Button btnRoom1;
@@ -157,6 +165,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnAction(event -> toggleSound());
 
+    alert.setVisible(false); // Initially hide the alert label
+
     // if difficulty is selected, label is updated
     detectDifficulty();
 
@@ -211,6 +221,38 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
         player.setLayoutY(previousY); // Restore the player's previous Y position
         // Exit the loop as soon as a collision is detected
       }
+    }
+    // Detect if the timer is 30 seconds left and start the alert blinking
+    if (App.timerSeconds == 30) {
+      if (!hasHappend){
+        System.out.println("30 seconds left");
+        hasHappend = true;
+        setupAlertBlinking();
+      }
+    } else if (App.timerSeconds == 0) {
+      // Stop the alert blinking when the timer reaches 0
+      stopAlertBlinking();
+    }
+  }
+
+   // Modify your setupAlertBlinking method as follows
+  private void setupAlertBlinking() {
+    alert.setVisible(true); // Initially show the alert label
+
+    // Set up the blinking animation for the alert label
+    alertBlinkTimeline = new Timeline(
+        new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
+        new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false))
+    );
+    alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
+    alertBlinkTimeline.play();
+  }
+
+  // Add a method to stop the alert blinking
+  private void stopAlertBlinking() {
+    if (alertBlinkTimeline != null) {
+        alertBlinkTimeline.stop();
+        alert.setVisible(false);
     }
   }
 
