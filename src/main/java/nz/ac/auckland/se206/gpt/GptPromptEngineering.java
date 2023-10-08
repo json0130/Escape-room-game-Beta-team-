@@ -370,7 +370,8 @@ public class GptPromptEngineering {
             + " hint, "
             + hint
             + ".If not, just naturally respond to "
-            + message;
+            + message
+            + "and do not give a hint.";
 
     return intro;
   }
@@ -456,11 +457,11 @@ public class GptPromptEngineering {
       intro =
           "The user said"
               + message
-              + ".If the user is not asking for hint, naturally respond to "
-              + message
               + ". If the user is asking for"
-              + " hint, say 'hint' first and "
-              + hint;
+              + " hint, you must start your prompt with 'hint' and "
+              + hint
+              + ".If the user is not asking for hint, naturally respond to "
+              + message;
     }
 
     return intro;

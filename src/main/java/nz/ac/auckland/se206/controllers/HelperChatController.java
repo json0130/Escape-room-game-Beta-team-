@@ -94,6 +94,13 @@ public class HelperChatController {
               Choice result = chatCompletionResult.getChoices().iterator().next();
               chatCompletionRequest.addMessage(result.getChatMessage());
               appendChatMessage(result.getChatMessage());
+              Platform.runLater(
+                  () -> {
+                    if (result.getChatMessage().getRole().equals("assistant")
+                        && result.getChatMessage().getContent().startsWith("Hint")) {
+                      GameState.numOfHints--;
+                    }
+                  });
               return result.getChatMessage();
             } catch (ApiProxyException e) {
               // TODO handle exception appropriately
@@ -126,77 +133,81 @@ public class HelperChatController {
     // Store the user message for GPT response
     // lastUserMessage = message;
 
-    if ((GameState.difficulty == "MEDIUM") && (GameState.numOfHints <= 0)) {
-      // Inform the user that they have reached the hint limit
-      Platform.runLater(
-          () -> {
-            robotReply();
-            chatTextArea.setText(
-                "You've used all of hints for Medium difficulty."
-                    + "You can still ask for help, but you will not get any hints.");
+    // if ((GameState.difficulty == "MEDIUM") && (GameState.numOfHints <= 0)) {
+    //   // Inform the user that they have reached the hint limit
+    //   Platform.runLater(
+    //       () -> {
+    //         robotReply();
+    //         chatTextArea.setText(
+    //             "You've used all of hints for Medium difficulty."
+    //                 + "You can still ask for help, but you will not get any hints.");
 
-            PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
-            delay.setOnFinished(event1 -> {});
+    //         PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
+    //         delay.setOnFinished(event1 -> {});
 
-            delay.play();
-          });
-      return; // Exit the method without sending a message to GPT
+    //         delay.play();
+    //       });
+    //   return; // Exit the method without sending a message to GPT
+    // }
+
+    ChatMessage msg = new ChatMessage("user", message);
+    appendChatMessage(msg);
+
+    if (GameState.difficulty == "EASY") {
+      robotThink();
+      // Handle Easy difficulty
+      runGpt(new ChatMessage("user", GptPromptEngineering.easy(message)));
+    } else if (GameState.difficulty == "MEDIUM") {
+      robotThink();
+      // Handle Medium difficulty
+
+      runGpt(new ChatMessage("user", GptPromptEngineering.medium(message)));
+
+      // if (isHintRequest(lastMsg)) {
+      //   // Check hint limit for Medium difficulty
+      //   GameState.numOfHints--; // Decrease the hint count
+      //   // Provide hints or guidance for Medium difficulty
+      //   // Example: runGpt(new ChatMessage("user", "Can you give me a hint?"));
+      //   System.out.println(isHintRequest(lastMsg));
+      //   System.out.println(GameState.numOfHints);
+      // }
+    } else if (GameState.difficulty == "HARD") {
+      robotThink();
+      runGpt(new ChatMessage("user", GptPromptEngineering.hard(message)));
     }
 
-    // Create a background thread for running GPT
-    Thread backgroundThread =
-        new Thread(
-            () -> {
-              ChatMessage lastMsg = null;
-              try {
+    // // Create a background thread for running GPT
+    // Thread backgroundThread =
+    //     new Thread(
+    //         () -> {
+    //           ChatMessage lastMsg = null;
+    //           try {
 
-                if (GameState.difficulty == "EASY") {
-                  robotThink();
-                  // Handle Easy difficulty
-                  lastMsg = runGpt(new ChatMessage("user", GptPromptEngineering.easy(message)));
-                } else if (GameState.difficulty == "MEDIUM") {
-                  robotThink();
-                  // Handle Medium difficulty
+    //           } catch (ApiProxyException e) {
+    //             e.printStackTrace();
+    //           }
 
-                  lastMsg = runGpt(new ChatMessage("user", GptPromptEngineering.medium(message)));
-                  if (isHintRequest(lastMsg)) {
-                    // Check hint limit for Medium difficulty
-                    GameState.numOfHints--; // Decrease the hint count
-                    // Provide hints or guidance for Medium difficulty
-                    // Example: runGpt(new ChatMessage("user", "Can you give me a hint?"));
-                    System.out.println(isHintRequest(lastMsg));
-                    System.out.println(GameState.numOfHints);
-                  }
-                } else if (GameState.difficulty == "HARD") {
-                  robotThink();
-                  lastMsg = runGpt(new ChatMessage("user", GptPromptEngineering.hard(message)));
-                }
+    //           final ChatMessage finalLastMsg = lastMsg;
+    //           Platform.runLater(
+    //               () -> {
+    //                 // Update the UI with the response
+    //                 if (finalLastMsg != null) {
 
-              } catch (ApiProxyException e) {
-                e.printStackTrace();
-              }
+    //                   chatTextArea.setText(message);
+    //                 }
 
-              final ChatMessage finalLastMsg = lastMsg;
-              Platform.runLater(
-                  () -> {
-                    // Update the UI with the response
-                    if (finalLastMsg != null) {
+    //                 PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
+    //                 delay.setOnFinished(
+    //                     event1 -> {
+    //                       robotThink();
+    //                     });
 
-                      chatTextArea.setText(message);
-                    }
+    //                 delay.play();
+    //               });
+    //         });
 
-                    PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
-                    delay.setOnFinished(
-                        event1 -> {
-                          robotThink();
-                        });
-
-                    delay.play();
-                  });
-            });
-
-    // Start the background thread
-    backgroundThread.start();
+    // // Start the background thread
+    // backgroundThread.start();
   }
 
   private Boolean isHintRequest(ChatMessage lastMsg) {
