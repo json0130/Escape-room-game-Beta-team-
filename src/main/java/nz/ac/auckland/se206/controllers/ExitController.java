@@ -84,6 +84,7 @@ public class ExitController implements Initializable {
   @FXML private Label difficultyLabel;
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
+  @FXML private Label idCardList;
   @FXML private ImageView pad;
   @FXML private ImageView background;
   @FXML private ImageView background2;
@@ -434,6 +435,7 @@ public void movementSetup() {
     exit.setVisible(false);
     clickButton.setVisible(false);
     exit2.setVisible(false);
+    idCardList.setVisible(false);
   }
 
   // when the rectangle is clicked, the keypad is shown
@@ -496,6 +498,7 @@ public void movementSetup() {
     idDoctor.setVisible(false);
     idEngineer.setVisible(false);
     ids.setVisible(false);
+    idCardList.setVisible(false);
   }
 
   @FXML
@@ -642,6 +645,7 @@ public void movementSetup() {
     if (ids.isVisible() == false && !GameState.correctId) {
       ids.setVisible(true);
       exit2.setVisible(true);
+      idCardList.setVisible(true);
 
       if (GameState.isCaptainCollected) {
         idCaptain.setVisible(true);
