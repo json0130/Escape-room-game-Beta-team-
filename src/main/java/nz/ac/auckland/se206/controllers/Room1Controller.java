@@ -97,6 +97,8 @@ public class Room1Controller implements Initializable {
   @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
 
+  @FXML public Pane aiWindowController;
+
   private FadeTransition fadeTransition;
   public static String riddleAnswer;
   public boolean isCrew1Colliding = false;
@@ -514,8 +516,9 @@ public class Room1Controller implements Initializable {
 
   @FXML
   public void clickGameMaster(MouseEvent event) {
-    App.previousRoom = AppUi.ROOM1;
-    App.setScene(AppUi.HELPERCHAT);
+    // App.previousRoom = AppUi.ROOM1;
+    // App.setScene(AppUi.HELPERCHAT);
+    aiWindowController.setVisible(true);
   }
 
   @FXML

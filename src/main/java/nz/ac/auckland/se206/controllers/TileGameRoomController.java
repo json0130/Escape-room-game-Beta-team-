@@ -92,6 +92,9 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private Button button;
   @FXML ImageView eMark;
   @FXML private ImageView gameMaster;
+
+  @FXML private Pane aiWindowController;
+
   TranslateTransition translate = new TranslateTransition();
 
   AnimationTimer collisionTimer =
@@ -472,8 +475,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   @FXML
   private void onGameMasterClick() {
-    App.previousRoom = AppUi.TILEROOM;
-    App.setScene(AppUi.HELPERCHAT);
+    aiWindowController.setVisible(true);
   }
 
   // game master robot animation

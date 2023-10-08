@@ -104,5 +104,6 @@
       <Rectangle fx:id="exit" arcHeight="5.0" arcWidth="5.0" fill="#f89d00" height="50.0" layoutX="413.0" layoutY="617.0" opacity="0.65" stroke="BLACK" strokeType="INSIDE" width="161.0" />
       <Polygon fill="WHITE" layoutX="494.0" layoutY="591.0" points="-50.0, 40.0, 50.0, 40.0, -1.1348876953125, 53.3333740234375" stroke="WHITE" strokeType="INSIDE" />
       <Button fx:id="toggleSoundButton" layoutX="903.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Button" />
+   <fx:include fx:id="aiWindowController" source="aiwindow.fxml" />
    </children>
 </Pane>

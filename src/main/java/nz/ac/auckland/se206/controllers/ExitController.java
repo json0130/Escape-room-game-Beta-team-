@@ -98,6 +98,8 @@ public class ExitController implements Initializable {
   @FXML private Label clickButton;
   @FXML private ImageView gameMaster;
 
+  @FXML public Pane aiWindowController;
+
   private boolean nextToButton = false;
   private FadeTransition fadeTransition;
 
@@ -815,24 +817,32 @@ public class ExitController implements Initializable {
     mediaPlayer.setAutoPlay(true);
   }
   @FXML
-  private void toggleSound() {
-      if (GameState.isSoundEnabled) {
-          // Disable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.0); // Mute the media player
-          }
-          toggleSoundButton.setText("Enable Sound");
-      } else {
-          // Enable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-          }
-          toggleSoundButton.setText("Disable Sound");
-      }
-
-      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  private void onGameMasterClick() {
+    
+    aiWindowController.setVisible(true);
+    System.out.print("HI");
   }
-  // game master animation
+
+  private void toggleSound() {
+    if (GameState.isSoundEnabled) {
+        // Disable sound
+        if (App.mediaPlayer != null) {
+            App.mediaPlayer.setVolume(0.0); // Mute the media player
+        }
+        toggleSoundButton.setText("Enable Sound");
+    } else {
+        // Enable sound
+        if (App.mediaPlayer != null) {
+            App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+        }
+        toggleSoundButton.setText("Disable Sound");
+    }
+
+    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+}
+
+
+  // game master robot animation
   @FXML
   private void animateRobot() {
     TranslateTransition translate = new TranslateTransition();
@@ -848,7 +858,7 @@ public class ExitController implements Initializable {
 
   @FXML
   public void clickGameMaster(MouseEvent event) {
-    App.previousRoom = AppUi.ROOM1;
-    App.setScene(AppUi.HELPERCHAT);
+   aiWindowController.setVisible(true);
+    System.out.print("HI");
   }
 }
