@@ -54,4 +54,6 @@ public class GameState {
   public static int numOfHints = 5;
 
   public static String difficulty;
+
+  public static boolean isSoundEnabled = true;
 }

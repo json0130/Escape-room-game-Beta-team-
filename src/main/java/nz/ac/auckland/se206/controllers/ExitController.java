@@ -103,6 +103,8 @@ public class ExitController implements Initializable {
   private boolean nextToButton = false;
   private FadeTransition fadeTransition;
 
+  @FXML private Button toggleSoundButton;
+
   private String password = "";
 
   private double mouseAnchorX;
@@ -149,6 +151,9 @@ public class ExitController implements Initializable {
     clickButton.setVisible(false);
 
     walls.add(wall);
+
+    // Add an event handler to the Toggle Sound button
+    toggleSoundButton.setOnAction(event -> toggleSound());
 
     shapesize = player.getFitWidth();
     movementSetup();
@@ -214,7 +219,6 @@ public class ExitController implements Initializable {
     }
   }
 
-  // code for player movement using wasd keys
   @FXML
   public void movementSetup() {
     scene.setOnKeyPressed(
@@ -444,70 +448,70 @@ public class ExitController implements Initializable {
 
   @FXML
   private void onOne(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "1";
     screen.setText(password);
   }
 
   @FXML
   private void onTwo(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "2";
     screen.setText(password);
   }
 
   @FXML
   private void onThree(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "3";
     screen.setText(password);
   }
 
   @FXML
   private void onFour(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "4";
     screen.setText(password);
   }
 
   @FXML
   private void onFive(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "5";
     screen.setText(password);
   }
 
   @FXML
   private void onSix(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "6";
     screen.setText(password);
   }
 
   @FXML
   private void onSeven(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "7";
     screen.setText(password);
   }
 
   @FXML
   private void onEight(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "8";
     screen.setText(password);
   }
 
   @FXML
   private void onNine(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "9";
     screen.setText(password);
   }
 
   @FXML
   private void onZero(ActionEvent event) {
-    soundButttonClick();
+    clickSoundButtton();
     password += "0";
     screen.setText(password);
   }
@@ -629,6 +633,7 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 changeOpacity2();
+                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -645,6 +650,7 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 changeOpacity2();
+                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -661,6 +667,7 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 changeOpacity2();
+                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -677,6 +684,7 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 changeOpacity2();
+                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -778,7 +786,7 @@ public class ExitController implements Initializable {
   }
 
   @FXML
-  private void soundButttonClick() {
+  private void clickSoundButtton() {
     String soundEffect = "src/main/resources/sounds/button-click.mp3";
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
@@ -808,13 +816,31 @@ public class ExitController implements Initializable {
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
   }
-
   @FXML
   private void onGameMasterClick() {
-    // App.previousRoom = AppUi.ROOM3;
-    // App.setScene(AppUi.HELPERCHAT);
+    
     aiWindowController.setVisible(true);
+    System.out.print("HI");
   }
+
+  private void toggleSound() {
+    if (GameState.isSoundEnabled) {
+        // Disable sound
+        if (App.mediaPlayer != null) {
+            App.mediaPlayer.setVolume(0.0); // Mute the media player
+        }
+        toggleSoundButton.setText("Enable Sound");
+    } else {
+        // Enable sound
+        if (App.mediaPlayer != null) {
+            App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+        }
+        toggleSoundButton.setText("Disable Sound");
+    }
+
+    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+}
+
 
   // game master robot animation
   @FXML
@@ -828,5 +854,11 @@ public class ExitController implements Initializable {
     translate.setAutoReverse(true);
 
     translate.play();
+  }
+
+  @FXML
+  public void clickGameMaster(MouseEvent event) {
+   aiWindowController.setVisible(true);
+    System.out.print("HI");
   }
 }

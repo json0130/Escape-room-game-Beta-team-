@@ -162,6 +162,7 @@
             <Image url="@../images/power.gif" />
          </image>
       </ImageView>
+      <Button fx:id="toggleSoundButton" layoutX="913.0" layoutY="24.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Button" />
       <ImageView fx:id="gameMaster" fitHeight="418.0" fitWidth="197.0" layoutX="3.0" layoutY="46.0" onMouseClicked="#onGameMasterClick" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/robotfloat.png" />

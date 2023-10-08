@@ -5,10 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -22,6 +20,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.LetterGenerator;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.Tile;
@@ -31,7 +30,6 @@ import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
-import nz.ac.auckland.se206.speech.TextToSpeech;
 
 /**
  * Controller class for the room view. This class controls everything from dialogue, generating AI
@@ -56,13 +54,9 @@ public class TileGameDeskController {
   private int dialogueState = 0;
   private List<String> dialogueList = new ArrayList<String>();
   private TranslateTransition translate = new TranslateTransition();
-  private TextToSpeech textToSpeech = new TextToSpeech();
   private int tileClickCounter = 0;
 
-  private Duration duration = Duration.seconds(1);
-  private KeyFrame keyFrame;
   private Timeline timeline;
-  private int timerSeconds = 120;
 
   private ChatCompletionRequest chatCompletionRequest;
 
@@ -84,6 +78,8 @@ public class TileGameDeskController {
   @FXML private ImageView imageSix;
   @FXML private ImageView imageSeven;
   @FXML private ImageView imageEight;
+
+  @FXML private Button toggleSoundButton;
 
   private Tile tileOne = new Tile();
   private Tile tileTwo = new Tile();
@@ -132,8 +128,10 @@ public class TileGameDeskController {
    * @throws ApiProxyException
    */
   public void initialize() throws ApiProxyException {
+    App.timerSeconds = 120;
+    // Add an event handler to the Toggle Sound button
+    toggleSoundButton.setOnAction(event -> toggleSound());
     animateRobot();
-    timerSeconds = 120;
 
     // dialogueList.add("WHO DARES DISTURB MY SLUMBER!?!");
     dialogueList.add("Ahhh... Another treasure hunter who wishes to steal from me!");
@@ -236,7 +234,6 @@ public class TileGameDeskController {
       try {
         imagePath.close();
       } catch (IOException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
@@ -459,31 +456,6 @@ public class TileGameDeskController {
     translate.play();
   }
 
-  private String timerFormat(int seconds) {
-    int min = seconds / 60;
-    int remainingSecs = seconds % 60;
-    return String.format("%02   d:%02d", min, remainingSecs);
-  }
-
-  private void sayLine() {
-    Task<Void> sayLine =
-        new Task<Void>() {
-
-          @Override
-          protected Void call() throws Exception {
-            textToSpeech.setInterupt();
-            textToSpeech.speak(dialogueText.getText());
-            return null;
-          }
-        };
-    Thread sayLineThread = new Thread(sayLine, "say third Line");
-    sayLineThread.start();
-  }
-
-  public String getRiddleAnswer() {
-    return riddleAnswer;
-  }
-
   @FXML
   private void onPowerButtonPressed() {
 
@@ -595,6 +567,25 @@ public class TileGameDeskController {
     mediaPlayer.setAutoPlay(true);
   }
 
+  @FXML
+  private void toggleSound() {
+      if (GameState.isSoundEnabled) {
+          // Disable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.0); // Mute the media player
+          }
+          toggleSoundButton.setText("Enable Sound");
+      } else {
+          // Enable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+          }
+          toggleSoundButton.setText("Disable Sound");
+      }
+  
+      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  }
+  
   @FXML
   private void onGameMasterClick() {
     // App.previousRoom = AppUi.TILEPUZZLE;

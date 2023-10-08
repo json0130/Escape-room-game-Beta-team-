@@ -50,8 +50,6 @@ public class PlayerController implements Initializable {
   private BooleanBinding keyPressed = wPressed.or(aPressed).or(sPressed).or(dPressed);
   private int movementVariable = 5;
   private double shapesize;
-  private double progressSize = 4.0;
-  private Boolean soundPlaying = false;
 
   String soundEffect = "src/main/resources/sounds/door-open.mp3";
   Media media = new Media(new File(soundEffect).toURI().toString());
@@ -108,6 +106,9 @@ public class PlayerController implements Initializable {
   @FXML private TextField inputText;
   private double previousX;
   private double previousY;
+
+  @FXML private Button toggleSoundButton;
+  private boolean isSoundEnabled = true;
 
   @FXML private Label countdownLabel;
 

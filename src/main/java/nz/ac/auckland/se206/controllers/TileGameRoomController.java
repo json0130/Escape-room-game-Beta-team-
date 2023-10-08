@@ -85,6 +85,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private Rectangle blinkingRectangle;
   private FadeTransition fadeTransition;
 
+  @FXML private Button toggleSoundButton;
+
   private boolean nextToButton = false;
   @FXML private Button btnRoom1;
   @FXML private Button button;
@@ -154,6 +156,9 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     walls.add(wall18);
     walls.add(wall19);
     walls.add(wall20);
+
+    // Add an event handler to the Toggle Sound button
+    toggleSoundButton.setOnAction(event -> toggleSound());
 
     // if difficulty is selected, label is updated
     detectDifficulty();
@@ -446,9 +451,27 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     translate.setByX(0);
     translate.setByY(20);
     translate.setAutoReverse(true);
-
     translate.play();
   }
+
+  @FXML
+  private void toggleSound() {
+      if (GameState.isSoundEnabled) {
+          // Disable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.0); // Mute the media player
+          }
+          toggleSoundButton.setText("Enable Sound");
+      } else {
+          // Enable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+          }
+          toggleSoundButton.setText("Disable Sound");
+      }
+  
+      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+    }
 
   @FXML
   private void onGameMasterClick() {

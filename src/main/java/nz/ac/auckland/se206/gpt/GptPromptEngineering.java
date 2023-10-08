@@ -1,6 +1,8 @@
 package nz.ac.auckland.se206.gpt;
 
 import nz.ac.auckland.se206.GameState;
+import nz.ac.auckland.se206.controllers.ChatController;
+import nz.ac.auckland.se206.controllers.Room1Controller;
 
 /** Utility class for generating GPT prompt engineering strings. */
 public class GptPromptEngineering {
@@ -19,6 +21,24 @@ public class GptPromptEngineering {
         + " speech marks or a full stop or any other text in your answer.";
   }
 
+  public static String getRiddleWithGivenWord(String wordToGuess) {
+    return "You are the AI of an escape room. Provide a riddle with an answer "+wordToGuess+". "
+    + "You should not reveal the answer.";
+  }
+
+  public static String getRiddleHint(String wordToGuess) {
+    return "You provide a hint for a riddle with an undisclosed answer" + wordToGuess+ ".";
+  }
+
+  public static String getNoMoreHint() {
+    return "Tell users that 5 hints are already used up.";
+  }
+
+  public static String getAnswerChecker() {
+    return "If users exactly say "+ Room1Controller.riddleAnswer+ ", you should say 'Correct.' "
+    + "If not, say 'Incorrect' and suggest to include 'hint' in their message for a hint.";
+  }
+  
   public static String riddleAi(String answer) {
 
     if (GameState.difficulty == "EASY") {
