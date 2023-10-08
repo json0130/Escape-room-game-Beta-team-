@@ -21,42 +21,28 @@
             <Image url="@../images/robotfloat.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="crew1" fitHeight="273.0" fitWidth="151.0" layoutX="-59.0" layoutY="99.0" onMouseClicked="#clickCrew1" opacity="0.0" pickOnBounds="true" rotate="-30.0">
+      <ImageView fx:id="player" fitHeight="121.0" fitWidth="131.0" layoutX="433.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/room1/costume.png" />
+            <Image url="@../images/Firefly_spaceship_game_character_walking_48398-removebg-preview.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="crew2" fitHeight="221.0" fitWidth="96.0" layoutX="78.0" layoutY="52.0" onMouseClicked="#clickCrew2" opacity="0.0" pickOnBounds="true" rotate="-30.0">
-         <image>
-            <Image url="@../images/room1/costume.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="crew3" fitHeight="239.0" fitWidth="102.0" layoutX="796.0" layoutY="52.0" onMouseClicked="#clickCrew3" opacity="0.0" pickOnBounds="true" rotate="30.0">
-         <image>
-            <Image url="@../images/room1/costume.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="crew4" fitHeight="284.0" fitWidth="131.0" layoutX="921.0" layoutY="117.0" onMouseClicked="#clickCrew4" opacity="0.0" pickOnBounds="true" rotate="30.0">
-         <image>
-            <Image url="@../images/room1/costume.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="idCaptain" fitHeight="153.0" fitWidth="250.0" layoutX="223.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="idCaptain" fitHeight="153.0" fitWidth="250.0" layoutX="190.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/idcaptain.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="idChef" fitHeight="153.0" fitWidth="244.0" layoutX="525.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="idChef" fitHeight="153.0" fitWidth="244.0" layoutX="554.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/idchef.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="idDoctor" fitHeight="166.0" fitWidth="250.0" layoutX="135.0" layoutY="347.0" pickOnBounds="true" preserveRatio="true">
+      <Button fx:id="btnCollect3" layoutX="728.0" layoutY="176.0" mnemonicParsing="false" onAction="#onCollect3" text="Collect Id" />
+      <ImageView fx:id="idDoctor" fitHeight="166.0" fitWidth="250.0" layoutX="11.0" layoutY="171.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/iddoctor.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="idEngineer" fitHeight="153.0" fitWidth="250.0" layoutX="639.0" layoutY="347.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="idEngineer" fitHeight="153.0" fitWidth="250.0" layoutX="749.0" layoutY="187.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/idengineer.png" />
          </image>
@@ -64,11 +50,6 @@
       <Button fx:id="backButton" layoutX="37.0" layoutY="475.0" mnemonicParsing="false" onAction="#back" opacity="0.0" text="Back" />
       <Rectangle fx:id="wall1" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="31.0" layoutX="-8.0" layoutY="189.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="1019.0" />
       <Rectangle fx:id="wall2" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="53.0" layoutX="431.0" layoutY="221.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="100.0" />
-      <ImageView fx:id="player" fitHeight="121.0" fitWidth="131.0" layoutX="433.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/Firefly_spaceship_game_character_walking_48398-removebg-preview.png" />
-         </image>
-      </ImageView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
       <Label fx:id="difficultyLabel" alignment="CENTER" layoutX="190.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
          <font>
@@ -85,13 +66,12 @@
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
-      <Button fx:id="btnCollect1" layoutX="311.0" layoutY="468.0" mnemonicParsing="false" onAction="#onCollect1" text="Collect Id" />
-      <Button fx:id="btnCollect2" layoutX="392.0" layoutY="246.0" mnemonicParsing="false" onAction="#onCollect2" text="Collect Id" />
-      <Button fx:id="btnCollect3" layoutX="694.0" layoutY="246.0" mnemonicParsing="false" onAction="#onCollect3" text="Collect Id" />
-      <Button fx:id="btnCollect4" layoutX="813.0" layoutY="468.0" mnemonicParsing="false" onAction="#onCollect4" text="Collect Id" />
+      <Button fx:id="btnCollect1" layoutX="190.0" layoutY="293.0" mnemonicParsing="false" onAction="#onCollect1" text="Collect Id" />
+      <Button fx:id="btnCollect2" layoutX="363.0" layoutY="176.0" mnemonicParsing="false" onAction="#onCollect2" text="Collect Id" />
+      <Button fx:id="btnCollect4" layoutX="920.0" layoutY="304.0" mnemonicParsing="false" onAction="#onCollect4" text="Collect Id" />
       <Button fx:id="btnRiddle" layoutX="90.0" layoutY="554.0" mnemonicParsing="false" onAction="#onRiddle" prefHeight="53.0" prefWidth="72.0" text="Click Me" />
-      <Rectangle fx:id="crew1Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="80.0" layoutX="95.0" layoutY="351.0" opacity="0.0" rotate="40.0" stroke="BLACK" strokeType="INSIDE" width="44.0" />
-      <Rectangle fx:id="crew2Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="31.0" layoutX="182.0" layoutY="241.0" opacity="0.0" rotate="-50.0" stroke="BLACK" strokeType="INSIDE" width="68.0" />
+      <Rectangle fx:id="crew1Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="72.0" layoutX="59.0" layoutY="359.0" opacity="0.0" rotate="40.0" stroke="BLACK" strokeType="INSIDE" width="44.0" />
+      <Rectangle fx:id="crew2Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="31.0" layoutX="178.0" layoutY="238.0" opacity="0.0" rotate="-50.0" stroke="BLACK" strokeType="INSIDE" width="68.0" />
       <Rectangle fx:id="crew3Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="62.0" layoutX="727.0" layoutY="222.0" opacity="0.0" rotate="-40.0" stroke="BLACK" strokeType="INSIDE" width="44.0" />
       <Rectangle fx:id="crew4Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="62.0" layoutX="837.0" layoutY="386.0" opacity="0.0" rotate="-40.0" stroke="BLACK" strokeType="INSIDE" width="51.0" />
       <ImageView fx:id="crew1Indicator" fitHeight="37.0" fitWidth="51.0" layoutX="19.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true">
