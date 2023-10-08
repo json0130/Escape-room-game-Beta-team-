@@ -100,6 +100,9 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private Button button;
   @FXML ImageView eMark;
   @FXML private ImageView gameMaster;
+
+  @FXML private Pane aiWindowController;
+
   TranslateTransition translate = new TranslateTransition();
 
   AnimationTimer collisionTimer =
@@ -205,6 +208,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(436);
             player.setLayoutY(488);
+            GameState.isPlayerInMap = true;
+            GameState.isPlayerInRoom2 = false;
             App.setScene(AppUi.PLAYER);
             timer.stop();
           });
@@ -361,58 +366,10 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     System.out.println("key " + event.getCode() + " released");
   }
 
-  /**
-   * Displays a dialog box with the given title, header text, and message.
-   *
-   * @param title the title of the dialog box
-   * @param headerText the header text of the dialog box
-   * @param message the message content of the dialog box
-   */
-  private void showDialog(String title, String headerText, String message) {
-    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-    alert.setTitle(title);
-    alert.setHeaderText(headerText);
-    alert.setContentText(message);
-    alert.showAndWait();
-  }
+  
+  
 
-  /**
-   * Handles the click event on the door.
-   *
-   * @param event the mouse event
-   * @throws IOException if there is an error loading the chat view
-   */
-  @FXML
-  public void clickDoor(MouseEvent event) throws IOException {
-    System.out.println("door clicked");
-
-    if (!GameState.isRiddleResolved) {
-      showDialog("Info", "Riddle", "You need to resolve the riddle!");
-      App.setRoot("chat");
-      return;
-    }
-
-    if (!GameState.isKeyFound) {
-      showDialog(
-          "Info", "Find the key!", "You resolved the riddle, now you know where the key is.");
-    } else {
-      showDialog("Info", "You Won!", "Good Job!");
-    }
-  }
-
-  /**
-   * Handles the click event on the vase.
-   *
-   * @param event the mouse event
-   */
-  @FXML
-  public void clickVase(MouseEvent event) {
-    System.out.println("vase clicked");
-    if (GameState.isRiddleResolved && !GameState.isKeyFound) {
-      showDialog("Info", "Key Found", "You found a key under the vase!");
-      GameState.isKeyFound = true;
-    }
-  }
+  
 
   /**
    * Handles the click event on the window.
@@ -429,6 +386,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     translate.stop();
     eMark.setVisible(false);
     if (nextToButton) {
+      GameState.foundComputer = true;
       App.setScene(AppUi.TILEPUZZLE);
       System.out.println("button clicked");
     }
@@ -514,8 +472,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   @FXML
   private void onGameMasterClick() {
-    App.previousRoom = AppUi.TILEROOM;
-    App.setScene(AppUi.HELPERCHAT);
+    aiWindowController.setVisible(true);
   }
 
   // game master robot animation

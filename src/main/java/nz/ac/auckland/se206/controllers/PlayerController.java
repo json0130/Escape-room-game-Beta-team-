@@ -36,6 +36,7 @@ import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
+import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 
 public class PlayerController implements Initializable {
@@ -117,6 +118,10 @@ public class PlayerController implements Initializable {
 
   // Add this variable to your class
 private Timeline alertBlinkTimeline;
+  @FXML public Pane aiWindowController;
+
+  private ChatCompletionRequest chatCompletionRequest;
+  private String lastUserMessage = ""; // Track the last user message for GPT response
 
   @FXML
   void start(ActionEvent event) {
@@ -270,6 +275,8 @@ private Timeline alertBlinkTimeline;
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(272);
             player.setLayoutY(336);
+            GameState.isPlayerInMap = false;
+            GameState.isPlayerInRoom1 = true;
             App.setScene(AppUi.ROOM1);
             timer.stop();
           });
@@ -289,7 +296,8 @@ private Timeline alertBlinkTimeline;
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(500);
             player.setLayoutY(284);
-
+            GameState.isPlayerInMap = false;
+            GameState.isPlayerInRoom2 = true;
             App.setScene(AppUi.TILEROOM);
             timer.stop();
           });
@@ -321,7 +329,8 @@ private Timeline alertBlinkTimeline;
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(674);
             player.setLayoutY(292);
-
+            GameState.isPlayerInMap = false;
+            GameState.isPlayerInRoom3 = true;
             App.setScene(AppUi.ROOM3);
             timer.stop();
           });
@@ -450,8 +459,12 @@ private Timeline alertBlinkTimeline;
 
   @FXML
   public void clickGameMaster(MouseEvent event) {
-    App.previousRoom = AppUi.PLAYER;
-    App.setScene(AppUi.HELPERCHAT);
+    // if (App.aiWindow == null) {
+    //   App.aiWindow = aiWindowController;
+    // } else {
+    //   aiWindowController = App.aiWindow;
+    // }
+    aiWindowController.setVisible(true);
   }
 
   // update the header labels as the hint decreases

@@ -100,6 +100,8 @@ public class Room1Controller implements Initializable {
   @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
 
+  @FXML public Pane aiWindowController;
+
   private FadeTransition fadeTransition;
   public static String riddleAnswer;
   public boolean isCrew1Colliding = false;
@@ -161,8 +163,8 @@ public class Room1Controller implements Initializable {
 
     walls.add(wall1);
 
-     // Add an event handler to the Toggle Sound button
-     toggleSoundButton.setOnAction(event -> toggleSound());
+    // Add an event handler to the Toggle Sound button
+    toggleSoundButton.setOnAction(event -> toggleSound());
 
     previousX = player.getLayoutX();
     previousY = player.getLayoutY();
@@ -218,151 +220,98 @@ public class Room1Controller implements Initializable {
     // if difficulty is selected, label is updated
     detectDifficulty();
 
+    // when the riddle is resolved, indicators are visible
+    revealIndicator();
+
     crewCollisionTimer.start();
-  }
-
-  // When crew1 is clicked and the riddle was resolved, id1 is shown only for 2 seconds
-  @FXML
-  public void clickCrew1(MouseEvent event) throws IOException {
-
-    if (!GameState.isDoctorCollected && isCrew1Colliding) {
-      idDoctor.setVisible(true);
-      btnCollect1.setVisible(true);
-
-      Thread hideImageThread =
-          new Thread(
-              () -> {
-                try {
-                  Thread.sleep(5000); // Sleep for 5 seconds
-                } catch (InterruptedException e) {
-                  e.printStackTrace();
-                }
-                // id becomes invisible again
-                Platform.runLater(() -> hideId1());
-              });
-      hideImageThread.start();
-    }
   }
 
   // hide id and button and indicator at once
   private void hideId1() {
     idDoctor.setVisible(false);
     btnCollect1.setVisible(false);
-    crew1Indicator.setVisible(false);
-  }
-
-  // When crew2 is clicked and the riddle was resolved, id2 is shown only for 2 seconds
-  @FXML
-  public void clickCrew2(MouseEvent event) throws IOException {
-    if (!GameState.isCaptainCollected && isCrew2Colliding) {
-      idCaptain.setVisible(true);
-      btnCollect2.setVisible(true);
-
-      Thread hideImageThread =
-          new Thread(
-              () -> {
-                try {
-                  Thread.sleep(5000); // Sleep for 5 seconds
-                } catch (InterruptedException e) {
-                  e.printStackTrace();
-                }
-                // id becomes invisible again
-                Platform.runLater(() -> hideId2());
-              });
-      hideImageThread.start();
-    }
+    crew1Indicator.setVisible(true);
   }
 
   // hide id and button and indicator at once
   private void hideId2() {
     idCaptain.setVisible(false);
     btnCollect2.setVisible(false);
-    crew2Indicator.setVisible(false);
-  }
-
-  // When crew3 is clicked and the riddle was resolved, id3 is shown only for 2 seconds
-  @FXML
-  public void clickCrew3(MouseEvent event) throws IOException {
-    if (!GameState.isChefCollected && isCrew3Colliding) {
-      idChef.setVisible(true);
-      btnCollect3.setVisible(true);
-
-      Thread hideImageThread =
-          new Thread(
-              () -> {
-                try {
-                  Thread.sleep(5000); // Sleep for 5 seconds
-                } catch (InterruptedException e) {
-                  e.printStackTrace();
-                }
-                // id becomes invisible again
-                Platform.runLater(() -> hideId3());
-              });
-      hideImageThread.start();
-    }
+    crew2Indicator.setVisible(true);
   }
 
   // hide id and button and indicator at once
   private void hideId3() {
     idChef.setVisible(false);
     btnCollect3.setVisible(false);
-    crew3Indicator.setVisible(false);
-  }
-
-  // When crew4 is clicked and the riddle was resolved, id4 is shown only for 2 seconds
-  @FXML
-  public void clickCrew4(MouseEvent event) throws IOException {
-    if (!GameState.isEngineerCollected && isCrew4Colliding) {
-      idEngineer.setVisible(true);
-      btnCollect4.setVisible(true);
-
-      Thread hideImageThread =
-          new Thread(
-              () -> {
-                try {
-                  Thread.sleep(5000); // Sleep for 5 seconds
-                } catch (InterruptedException e) {
-                  e.printStackTrace();
-                }
-                // id becomes invisible again
-                Platform.runLater(() -> hideId4());
-              });
-      hideImageThread.start();
-    }
+    crew3Indicator.setVisible(true);
   }
 
   // hide id and button and indicator at once
   private void hideId4() {
     idEngineer.setVisible(false);
     btnCollect4.setVisible(false);
+    crew4Indicator.setVisible(true);
+  }
+
+  private void showId1() {
+    idDoctor.setVisible(true);
+    btnCollect1.setVisible(true);
+    crew1Indicator.setVisible(false);
+  }
+
+  private void showId2() {
+    idCaptain.setVisible(true);
+    btnCollect2.setVisible(true);
+    crew2Indicator.setVisible(false);
+  }
+
+  private void showId3() {
+    idChef.setVisible(true);
+    btnCollect3.setVisible(true);
+    crew3Indicator.setVisible(false);
+  }
+
+  private void showId4() {
+    idEngineer.setVisible(true);
+    btnCollect4.setVisible(true);
     crew4Indicator.setVisible(false);
   }
 
   // If collect button is pressed, id is corrected and state of idcollected changes
   public void onCollect1() {
     GameState.isDoctorCollected = true;
+    GameState.isIdCollected = true;
     hideId1();
+    crew1Indicator.setVisible(false);
   }
 
   public void onCollect2() {
     GameState.isCaptainCollected = true;
+    GameState.isIdCollected = true;
     hideId2();
+    crew2Indicator.setVisible(false);
   }
 
   public void onCollect3() {
     GameState.isChefCollected = true;
+    GameState.isIdCollected = true;
     hideId3();
+    crew3Indicator.setVisible(false);
   }
 
   public void onCollect4() {
     GameState.isEngineerCollected = true;
+    GameState.isIdCollected = true;
     hideId4();
+    crew4Indicator.setVisible(false);
   }
 
   @FXML
   public void onRiddle(MouseEvent evnet) throws IOException {
     if (nextToButton) {
       soundButttonClick();
+      GameState.isRiddleGiven = true;
       App.setScene(AppUi.CHAT);
     }
   }
@@ -377,6 +326,8 @@ public class Room1Controller implements Initializable {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(433);
             player.setLayoutY(468);
+            GameState.isPlayerInMap = true;
+            GameState.isPlayerInRoom1 = false;
             App.setScene(AppUi.PLAYER);
             timer.stop();
           });
@@ -497,8 +448,8 @@ public class Room1Controller implements Initializable {
     App.setScene(AppUi.PLAYER);
   }
 
-  // detect if there is change in gamestate difficulty in the intro page using timer
-  public void detectDifficulty() {
+  // detect change in the game state difficulty in the intro scene
+  private void detectDifficulty() {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
         new TimerTask() {
@@ -563,53 +514,56 @@ public class Room1Controller implements Initializable {
       new AnimationTimer() {
         @Override
         public void handle(long now) {
-          // if character near costume1 and not collected, show indicator otherwise hide everything
-          if (player.getBoundsInParent().intersects(crew1Collision.getBoundsInParent())) {
-            isCrew1Colliding = true;
-            if (!GameState.isDoctorCollected) {
-              Platform.runLater(() -> crew1Indicator.setVisible(true));
+          // if character near costume1 and not collected, show id card and hide indicator
+          if (GameState.isRiddleResolved) {
+            if (player.getBoundsInParent().intersects(crew1Collision.getBoundsInParent())) {
+              isCrew1Colliding = true;
+              if (!GameState.isDoctorCollected) {
+                Platform.runLater(() -> showId1());
+              }
+            } else if (!GameState.isDoctorCollected) {
+              isCrew1Colliding = false;
+              Platform.runLater(() -> hideId1());
             }
-          } else {
-            isCrew1Colliding = false;
-            Platform.runLater(() -> hideId1());
-          }
-          // if character near costume2 and not collected, show indicator
-          if (player.getBoundsInParent().intersects(crew2Collision.getBoundsInParent())) {
-            isCrew2Colliding = true;
-            if (!GameState.isCaptainCollected) {
-              Platform.runLater(() -> crew2Indicator.setVisible(true));
+            // if character near costume2 and not collected, show id and hide indicator
+            if (player.getBoundsInParent().intersects(crew2Collision.getBoundsInParent())) {
+              isCrew2Colliding = true;
+              if (!GameState.isCaptainCollected) {
+                Platform.runLater(() -> showId2());
+              }
+            } else if (!GameState.isCaptainCollected) {
+              isCrew2Colliding = false;
+              Platform.runLater(() -> hideId2());
             }
-          } else {
-            isCrew2Colliding = false;
-            Platform.runLater(() -> hideId2());
-          }
-          // if character near costume3 and not collected, show indicator
-          if (player.getBoundsInParent().intersects(crew3Collision.getBoundsInParent())) {
-            isCrew3Colliding = true;
-            if (!GameState.isChefCollected) {
-              Platform.runLater(() -> crew3Indicator.setVisible(true));
+            // if character near costume3 and not collected, show id and hide indicator
+            if (player.getBoundsInParent().intersects(crew3Collision.getBoundsInParent())) {
+              isCrew3Colliding = true;
+              if (!GameState.isChefCollected) {
+                Platform.runLater(() -> showId3());
+              }
+            } else if (!GameState.isChefCollected) {
+              isCrew3Colliding = false;
+              Platform.runLater(() -> hideId3());
             }
-          } else {
-            isCrew3Colliding = false;
-            Platform.runLater(() -> hideId3());
-          }
-          // if character near costume4 and not collected, show indicator
-          if (player.getBoundsInParent().intersects(crew4Collision.getBoundsInParent())) {
-            isCrew4Colliding = true;
-            if (!GameState.isEngineerCollected) {
-              Platform.runLater(() -> crew4Indicator.setVisible(true));
+            // if character near costume4 and not collected, show id and hide indicator
+            if (player.getBoundsInParent().intersects(crew4Collision.getBoundsInParent())) {
+              isCrew4Colliding = true;
+              if (!GameState.isEngineerCollected) {
+                Platform.runLater(() -> showId4());
+              }
+            } else if (!GameState.isEngineerCollected) {
+              isCrew4Colliding = false;
+              Platform.runLater(() -> hideId4());
             }
-          } else {
-            isCrew4Colliding = false;
-            Platform.runLater(() -> hideId4());
           }
         }
       };
 
   @FXML
   public void clickGameMaster(MouseEvent event) {
-    App.previousRoom = AppUi.ROOM1;
-    App.setScene(AppUi.HELPERCHAT);
+    // App.previousRoom = AppUi.ROOM1;
+    // App.setScene(AppUi.HELPERCHAT);
+    aiWindowController.setVisible(true);
   }
 
   @FXML
@@ -622,22 +576,23 @@ public class Room1Controller implements Initializable {
 
   @FXML
   private void toggleSound() {
-      if (GameState.isSoundEnabled) {
-          // Disable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.0); // Mute the media player
-          }
-          toggleSoundButton.setText("Enable Sound");
-      } else {
-          // Enable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-          }
-          toggleSoundButton.setText("Disable Sound");
+    if (GameState.isSoundEnabled) {
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
       }
-  
-      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+      toggleSoundButton.setText("Enable Sound");
+    } else {
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      toggleSoundButton.setText("Disable Sound");
+    }
+
+    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
   }
+
   // game master animation
   @FXML
   private void animateRobot() {
@@ -650,5 +605,32 @@ public class Room1Controller implements Initializable {
     translate.setAutoReverse(true);
 
     translate.play();
+  }
+
+  // Revel indicators after the player resolves the riddle
+  private void revealIndicator() {
+    Timer indicatorTimer = new Timer(true);
+    indicatorTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            // if the state of irRiddleResolved changed, indicators are visible 
+            if (GameState.isRiddleResolved) {
+              System.out.println("riddle is resolved");
+              Platform.runLater(() -> showIndicators());
+              indicatorTimer.cancel();
+            }
+          }
+        },
+        0,
+        100);
+  }
+
+  // show all indicators at once 
+  private void showIndicators() {
+    crew1Indicator.setVisible(true);
+    crew2Indicator.setVisible(true);
+    crew3Indicator.setVisible(true);
+    crew4Indicator.setVisible(true);
   }
 }

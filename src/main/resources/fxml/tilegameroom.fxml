@@ -9,6 +9,8 @@
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
+<?import nz.ac.auckland.se206.controllers.TileGameRoomController?>
+<?import nz.ac.auckland.se206.controllers.AIWindowController?>
 
 <AnchorPane fx:id="scene" prefHeight="538.0" prefWidth="767.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.TileGameRoomController">
    <children>
@@ -88,5 +90,6 @@
       <Rectangle fx:id="startTileGame" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f00" height="104.0" layoutX="538.0" layoutY="161.0" onMouseClicked="#onTileGameButtonClick" stroke="TRANSPARENT" strokeType="INSIDE" width="131.0" />
       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
       <Button fx:id="toggleSoundButton" layoutX="894.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Button" />
+      <fx:include fx:id="aiWindowController" source="aiwindow.fxml" />
    </children>
-</AnchorPane>
+</AnchorPane>  

@@ -130,6 +130,7 @@ public class TileGameDeskController {
   @FXML private ImageView gameMaster;
 
   private Timeline animationTimeline;
+  @FXML public Pane aiWindowController;
 
   /**
    * Initializes the room view, it is called when the room loads.
@@ -482,7 +483,7 @@ public class TileGameDeskController {
         System.out.println("done");
 
         disableImages();
-
+        GameState.isPuzzleSolved = true;
         showHomeScreen();
       }
     }
@@ -557,6 +558,7 @@ public class TileGameDeskController {
     String stringPasscode = Integer.toString(currentPasscode);
     computerPasscodeLabel.setText(stringPasscode);
     passcodePane.setVisible(true);
+    GameState.foundPasscode = true;
 
     System.out.println("DONE1");
   }
@@ -645,8 +647,9 @@ public class TileGameDeskController {
   
   @FXML
   private void onGameMasterClick() {
-    App.previousRoom = AppUi.TILEPUZZLE;
-    App.setScene(AppUi.HELPERCHAT);
+    // App.previousRoom = AppUi.TILEPUZZLE;
+    // App.setScene(AppUi.HELPERCHAT);
+    aiWindowController.setVisible(true);
   }
 
   // game master animation

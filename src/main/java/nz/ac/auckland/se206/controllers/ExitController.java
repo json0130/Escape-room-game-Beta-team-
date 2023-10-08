@@ -100,6 +100,8 @@ public class ExitController implements Initializable {
   @FXML private Label clickButton;
   @FXML private ImageView gameMaster;
 
+  @FXML public Pane aiWindowController;
+
   private boolean nextToButton = false;
   private FadeTransition fadeTransition;
 
@@ -207,6 +209,8 @@ public class ExitController implements Initializable {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(68);
             player.setLayoutY(508);
+            GameState.isPlayerInMap = true;
+            GameState.isPlayerInRoom3 = false;
             App.setScene(AppUi.PLAYER);
             timer.stop();
           });
@@ -461,6 +465,8 @@ public void movementSetup() {
       exit.setVisible(true);
       player.setVisible(false);
       clickMonitor.setVisible(false);
+
+      GameState.foundMonitor = true;
     }
   }
 
@@ -599,6 +605,7 @@ public void movementSetup() {
       screen.setText("CORRECT");
       GameState.correctPassword = true;
       keyboardControlEnabled = true; // Enable keyboard control
+      GameState.isPasscodeCorrect = true;
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
       pauseTransition.setOnFinished(
@@ -642,7 +649,7 @@ public void movementSetup() {
     player.setVisible(false);
 
     // if the ids are not shown and the correct id was not tagged yet
-    if (ids.isVisible() == false && !GameState.correctId) {
+    if (ids.isVisible() == false && !GameState.isIdChecked) {
       ids.setVisible(true);
       exit2.setVisible(true);
       idCardList.setVisible(true);
@@ -681,7 +688,7 @@ public void movementSetup() {
               if (node1 == idCaptain) {
                 light.setFill(Color.GREEN);
                 soundCorrectCard();
-                GameState.correctId = true;
+                GameState.isIdChecked = true;
                 ids.setVisible(false);
                 idCaptain.setVisible(false);
                 idChef.setVisible(false);
@@ -699,7 +706,7 @@ public void movementSetup() {
               if (node1 == idChef) {
                 light.setFill(Color.GREEN);
                 soundCorrectCard();
-                GameState.correctId = true;
+                GameState.isIdChecked = true;
                 ids.setVisible(false);
                 idCaptain.setVisible(false);
                 idChef.setVisible(false);
@@ -717,7 +724,7 @@ public void movementSetup() {
               if (node1 == idDoctor) {
                 light.setFill(Color.GREEN);
                 soundCorrectCard();
-                GameState.correctId = true;
+                GameState.isIdChecked = true;
                 ids.setVisible(false);
                 idCaptain.setVisible(false);
                 idChef.setVisible(false);
@@ -735,7 +742,7 @@ public void movementSetup() {
               if (node1 == idEngineer) {
                 light.setFill(Color.GREEN);
                 soundCorrectCard();
-                GameState.correctId = true;
+                GameState.isIdChecked = true;
                 ids.setVisible(false);
                 idCaptain.setVisible(false);
                 idChef.setVisible(false);
@@ -787,7 +794,7 @@ public void movementSetup() {
   }
 
   private void changeOpacity2() {
-    if (GameState.correctId) {
+    if (GameState.isIdChecked) {
       player.setVisible(false);
       // Create a FadeTransition for both background images
       FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(2), background2);
@@ -876,24 +883,32 @@ public void movementSetup() {
     mediaPlayer.setAutoPlay(true);
   }
   @FXML
-  private void toggleSound() {
-      if (GameState.isSoundEnabled) {
-          // Disable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.0); // Mute the media player
-          }
-          toggleSoundButton.setText("Enable Sound");
-      } else {
-          // Enable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-          }
-          toggleSoundButton.setText("Disable Sound");
-      }
-
-      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  private void onGameMasterClick() {
+    
+    aiWindowController.setVisible(true);
+    System.out.print("HI");
   }
-  // game master animation
+
+  private void toggleSound() {
+    if (GameState.isSoundEnabled) {
+        // Disable sound
+        if (App.mediaPlayer != null) {
+            App.mediaPlayer.setVolume(0.0); // Mute the media player
+        }
+        toggleSoundButton.setText("Enable Sound");
+    } else {
+        // Enable sound
+        if (App.mediaPlayer != null) {
+            App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+        }
+        toggleSoundButton.setText("Disable Sound");
+    }
+
+    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+}
+
+
+  // game master robot animation
   @FXML
   private void animateRobot() {
     TranslateTransition translate = new TranslateTransition();
@@ -911,5 +926,7 @@ public void movementSetup() {
   public void clickGameMaster(MouseEvent event) {
     App.previousRoom = AppUi.ROOM3;
     App.setScene(AppUi.HELPERCHAT);
+   aiWindowController.setVisible(true);
+    System.out.print("HI");
   }
 }
