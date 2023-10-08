@@ -105,6 +105,7 @@ public class ExitController implements Initializable {
   @FXML private Button toggleSoundButton;
 
   private boolean hasHappend = false;
+  private boolean keyboardControlEnabled = true;
 
   // Add this variable to your class
   private Timeline alertBlinkTimeline;
@@ -257,45 +258,50 @@ public class ExitController implements Initializable {
   }
 
   @FXML
-  public void movementSetup() {
+public void movementSetup() {
     scene.setOnKeyPressed(
         e -> {
-          if (e.getCode() == KeyCode.W) {
-            wPressed.set(true);
-          }
+            if (keyboardControlEnabled) {
+                if (e.getCode() == KeyCode.W) {
+                    wPressed.set(true);
+                }
 
-          if (e.getCode() == KeyCode.A) {
-            aPressed.set(true);
-          }
+                if (e.getCode() == KeyCode.A) {
+                    aPressed.set(true);
+                }
 
-          if (e.getCode() == KeyCode.S) {
-            sPressed.set(true);
-          }
+                if (e.getCode() == KeyCode.S) {
+                    sPressed.set(true);
+                }
 
-          if (e.getCode() == KeyCode.D) {
-            dPressed.set(true);
-          }
+                if (e.getCode() == KeyCode.D) {
+                    dPressed.set(true);
+                }
+            }
         });
 
     scene.setOnKeyReleased(
         e -> {
-          if (e.getCode() == KeyCode.W) {
-            wPressed.set(false);
-          }
+            if (keyboardControlEnabled) {
+                if (e.getCode() == KeyCode.W) {
+                    wPressed.set(false);
+                }
 
-          if (e.getCode() == KeyCode.A) {
-            aPressed.set(false);
-          }
+                if (e.getCode() == KeyCode.A) {
+                    aPressed.set(false);
+                }
 
-          if (e.getCode() == KeyCode.S) {
-            sPressed.set(false);
-          }
+                if (e.getCode() == KeyCode.S) {
+                    sPressed.set(false);
+                }
 
-          if (e.getCode() == KeyCode.D) {
-            dPressed.set(false);
-          }
+                if (e.getCode() == KeyCode.D) {
+                    dPressed.set(false);
+                }
+            }
         });
-  }
+}
+
 
   // prevent the player moves out of the window
   public void squareBorder() {
@@ -434,6 +440,7 @@ public class ExitController implements Initializable {
   @FXML
   private void monitorClicked(MouseEvent event) {
     if (nextToButton) {
+      keyboardControlEnabled = false; // Disable keyboard control
       screen.setVisible(true);
       one.setVisible(true);
       two.setVisible(true);
@@ -458,6 +465,7 @@ public class ExitController implements Initializable {
   // if exit is clicked, unrelated node becomes invisible
   @FXML
   private void clickExit(ActionEvent event) {
+    keyboardControlEnabled = true; // Enable keyboard control
     screen.setVisible(false);
     one.setVisible(false);
     two.setVisible(false);
@@ -480,6 +488,7 @@ public class ExitController implements Initializable {
 
   @FXML
   private void clickExit2(ActionEvent event) {
+    keyboardControlEnabled = true; // Enable keyboard control
     player.setVisible(true);
     exit2.setVisible(false);
     idCaptain.setVisible(false);
@@ -586,6 +595,7 @@ public class ExitController implements Initializable {
       soundCorrect();
       screen.setText("CORRECT");
       GameState.correctPassword = true;
+      keyboardControlEnabled = true; // Enable keyboard control
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
       pauseTransition.setOnFinished(
@@ -608,7 +618,7 @@ public class ExitController implements Initializable {
             clickButton.setVisible(false);
             monitor.setVisible(false);
             clickMonitor.setVisible(false);
-            exit2.setVisible(true);
+            player.setVisible(true);
             changeOpacity();
           });
       pauseTransition.play();
@@ -625,9 +635,13 @@ public class ExitController implements Initializable {
   // when the scanner is clicked, ids are shown depending on its state
   @FXML
   private void clickIdScanner(MouseEvent event) {
+    keyboardControlEnabled = false; // Disable keyboard control
+    player.setVisible(false);
+
     // if the ids are not shown and the correct id was not tagged yet
     if (ids.isVisible() == false && !GameState.correctId) {
       ids.setVisible(true);
+      exit2.setVisible(true);
 
       if (GameState.isCaptainCollected) {
         idCaptain.setVisible(true);
@@ -641,12 +655,6 @@ public class ExitController implements Initializable {
       if (GameState.isEngineerCollected) {
         idEngineer.setVisible(true);
       }
-    } else {
-      ids.setVisible(false);
-      idCaptain.setVisible(false);
-      idChef.setVisible(false);
-      idDoctor.setVisible(false);
-      idEngineer.setVisible(false);
     }
   }
 
@@ -675,6 +683,7 @@ public class ExitController implements Initializable {
                 idChef.setVisible(false);
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
+                exit2.setVisible(false);
                 changeOpacity2();
                 GameState.isGameFinished = true;
               } else {
@@ -692,6 +701,7 @@ public class ExitController implements Initializable {
                 idChef.setVisible(false);
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
+                exit2.setVisible(false);
                 changeOpacity2();
                 GameState.isGameFinished = true;
               } else {
@@ -709,6 +719,7 @@ public class ExitController implements Initializable {
                 idChef.setVisible(false);
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
+                exit2.setVisible(false);
                 changeOpacity2();
                 GameState.isGameFinished = true;
               } else {
@@ -726,6 +737,7 @@ public class ExitController implements Initializable {
                 idChef.setVisible(false);
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
+                exit2.setVisible(false);
                 changeOpacity2();
                 GameState.isGameFinished = true;
               } else {

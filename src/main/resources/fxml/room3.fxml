@@ -149,7 +149,7 @@
             <Image url="@../images/idphotos/idengineer.png" />
          </image>
       </ImageView>
-      <TextArea fx:id="screen" layoutX="348.0" layoutY="198.0" prefHeight="166.0" prefWidth="307.0" style="-fx-background-color: darkblue;">
+      <TextArea fx:id="screen" layoutX="348.0" layoutY="198.0" prefHeight="166.0" prefWidth="307.0" style="-fx-background-color: darkblue;" text="Enter 4 digit Passcode">
          <font>
             <Font name="Arial" size="20.0" />
          </font>
