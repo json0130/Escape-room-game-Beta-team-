@@ -66,7 +66,8 @@ public class GptPromptEngineering {
         + " them to complete tasks and to escape within the time limit. Now the player is in"
         + " the map. There are three rooms where the player can visit."
         + hintAvailability
-        + " Introduce yourself to the player and suggest to look around the rooms.";
+        + " Very briefly introduce yourself to the player and suggest to look around the rooms.Do"
+        + " not include any information that I did not tell you.";
   }
 
   public static String greetingRoom1() {
@@ -363,10 +364,13 @@ public class GptPromptEngineering {
     }
 
     String intro =
-        "Naturally repond to the user. If the user was asking for"
-            + " hint, you can "
+        "The user said"
+            + message
+            + ". Only if the user is asking for"
+            + " hint, "
             + hint
-            + ", but you must say 'hint' first. You only give a hint only when the user requested.";
+            + ".If not, just naturally respond to "
+            + message;
 
     return intro;
   }
@@ -450,17 +454,23 @@ public class GptPromptEngineering {
       }
 
       intro =
-          "Naturally repond to the user. If the user was asking for"
-              + " hint, you can "
-              + hint
-              + ", but you must say 'hint' first. You only give a hint only when the user"
-              + " requested.";
+          "The user said"
+              + message
+              + ".If the user is not asking for hint, naturally respond to "
+              + message
+              + ". If the user is asking for"
+              + " hint, say 'hint' first and "
+              + hint;
     }
 
     return intro;
   }
 
   public static String hard(String message) {
-    return null;
+    return "The user said"
+        + message
+        + ". Naturally respond to "
+        + message
+        + ". If the user is asking for hint, tell you cannot provide any hints.";
   }
 }
