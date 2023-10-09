@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -11,7 +10,6 @@
 <?import javafx.scene.text.Font?>
 <?import nz.ac.auckland.se206.controllers.TileGameRoomController?>
 <?import nz.ac.auckland.se206.controllers.AIWindowController?>
-
 <AnchorPane fx:id="scene" prefHeight="538.0" prefWidth="767.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.TileGameRoomController">
    <children>
       <Rectangle fx:id="startTileGame" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f00" height="126.0" layoutX="373.0" layoutY="71.0" onMouseClicked="#onTileGameButtonClick" stroke="TRANSPARENT" strokeType="INSIDE" width="432.0" />

@@ -13,6 +13,7 @@ import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -66,6 +67,8 @@ public class TutorialController implements Initializable {
   @FXML private ImageView soundOn;
   @FXML private ImageView soundOff;
   @FXML private Rectangle box;
+  @FXML private Rectangle gate1;
+  @FXML private Rectangle gate2; 
 
   // sound for rocket movement
   String soundEffect = "src/main/resources/sounds/rocket.mp3";
@@ -164,11 +167,38 @@ public class TutorialController implements Initializable {
       currentSentenceIndex++;
     } else {
       // All sentences are displayed, so call playRock
-      playRock();
-      box.setVisible(false);
+      animateGates();
       isInstructionDone = true;
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.0));
+          pauseTransition.setOnFinished(
+              events -> {
+                // Adjust the player's position to be right in front of the room
+                playRock();
+                box.setVisible(false);
+                gate1.setVisible(false);
+                gate2.setVisible(false);
+              });
+          pauseTransition.play();
     }
   }
+
+  private void animateGates() {
+    animateGate1UpAndDown();
+    animateGate2UpAndDown();
+  }
+
+  private void animateGate1UpAndDown() {
+    TranslateTransition upTransition = new TranslateTransition(Duration.seconds(2), gate1);
+    upTransition.setByY(-250);
+    upTransition.play();
+}
+
+private void animateGate2UpAndDown() {
+    TranslateTransition downTransition = new TranslateTransition(Duration.seconds(2), gate2);
+    downTransition.setByY(250);
+    downTransition.play();
+}
+
 
   private void setRotate(Circle c, boolean reverse, int angle, int duration) {
     RotateTransition rt = new RotateTransition(Duration.seconds(duration), c);
