@@ -100,7 +100,7 @@
       <Rectangle fx:id="header" arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
       <Label fx:id="difficultyLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="200.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
          <font>
-            <Font size="32.0" />
+            <Font name="Arial" size="32.0" />
          </font>
       </Label>
       <Label fx:id="hintLabel2" alignment="CENTER_RIGHT" layoutX="736.0" layoutY="6.0" prefHeight="37.0" prefWidth="96.0" text="HINTS" textFill="WHITE">
@@ -131,12 +131,23 @@
             <Font size="22.0" />
          </font>
       </Label>
-      <Button fx:id="toggleSoundButton" layoutX="912.0" layoutY="13.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Button" />
+      <Button fx:id="toggleSoundButton" layoutX="912.0" layoutY="13.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Button" visible="false" />
       <ImageView fx:id="gameMaster" fitHeight="96.0" fitWidth="119.0" layoutX="535.0" layoutY="347.0" onMouseClicked="#clickGameMaster" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/robotfloat.png" />
          </image>
       </ImageView>
       <fx:include fx:id="aiWindowController" source="aiwindow.fxml" />
+      <ImageView fx:id="soundOff" fitHeight="50.0" fitWidth="50.0" layoutX="915.0" layoutY="1.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly_20231010001007-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="soundOn" fitHeight="50.0" fitWidth="50.0" layoutX="915.0" layoutY="1.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../images/Firefly_sound_icon_inside_the_white_circle_with_no_fill_74516-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="toggleSoundButton" layoutX="851.0" layoutY="69.0" mnemonicParsing="false" text="SETTING" visible="false" />
    </children>
 </Pane>

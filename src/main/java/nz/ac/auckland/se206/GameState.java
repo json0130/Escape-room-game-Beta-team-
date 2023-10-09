@@ -46,6 +46,9 @@ public class GameState {
 
   public static int numOfHints = 5;
 
+  public static String clickedButton = "";
+  public static String clickedLevelButton = "";
+
   public static String difficulty;
 
   public static boolean isSoundEnabled = true;

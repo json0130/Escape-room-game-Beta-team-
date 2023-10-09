@@ -66,6 +66,8 @@ public class PlayerController implements Initializable {
   @FXML private Rectangle black;
   // @FXML private ImageView gameMasterBox;
   @FXML private ImageView gameMaster;
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
 
   @FXML private Label playerLabel;
   @FXML private Label main;
@@ -117,7 +119,7 @@ public class PlayerController implements Initializable {
   private boolean hasHappend = false;
 
   // Add this variable to your class
-private Timeline alertBlinkTimeline;
+  private Timeline alertBlinkTimeline;
   @FXML public Pane aiWindowController;
 
   private ChatCompletionRequest chatCompletionRequest;
@@ -177,7 +179,7 @@ private Timeline alertBlinkTimeline;
     black.setVisible(true);
 
     // Add an event handler to the Toggle Sound button
-    toggleSoundButton.setOnAction(event -> toggleSound());
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
 
     room1.setVisible(false);
     room2.setVisible(false);
@@ -349,16 +351,24 @@ private Timeline alertBlinkTimeline;
       }
     }
     // Detect if the timer is 30 seconds left and start the alert blinking
-          if (App.timerSeconds == 30) {
-            if (!hasHappend){
-              System.out.println("30 seconds left");
-              hasHappend = true;
-              setupAlertBlinking();
-            }
-          } else if (App.timerSeconds == 0) {
-            // Stop the alert blinking when the timer reaches 0
-            stopAlertBlinking();
-          }
+    if (App.timerSeconds == 30) {
+      if (!hasHappend){
+        System.out.println("30 seconds left");
+        hasHappend = true;
+        setupAlertBlinking();
+      }
+    } else if (App.timerSeconds == 0) {
+    // Stop the alert blinking when the timer reaches 0
+      stopAlertBlinking();
+    }
+    // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
+    }
   }
 
   // code for enabling palyer to move using wasd keys
@@ -497,19 +507,21 @@ private Timeline alertBlinkTimeline;
   }
 
   @FXML
-  private void toggleSound() {
+  private void toggleSound(MouseEvent event) {
       if (GameState.isSoundEnabled) {
           // Disable sound
           if (App.mediaPlayer != null) {
               App.mediaPlayer.setVolume(0.0); // Mute the media player
           }
-          toggleSoundButton.setText("Enable Sound");
+          soundOff.setVisible(true);
+          soundOn.setVisible(false);
       } else {
           // Enable sound
           if (App.mediaPlayer != null) {
               App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
           }
-          toggleSoundButton.setText("Disable Sound");
+          soundOn.setVisible(true);
+          soundOff.setVisible(false);
       }
   
       GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state

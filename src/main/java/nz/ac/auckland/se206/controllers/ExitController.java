@@ -60,6 +60,7 @@ public class ExitController implements Initializable {
 
   @FXML private Rectangle exit1;
   @FXML private Rectangle wall;
+  @FXML private Rectangle id;
 
   @FXML private Button one;
   @FXML private Button two;
@@ -89,6 +90,8 @@ public class ExitController implements Initializable {
   @FXML private ImageView background;
   @FXML private ImageView background2;
   @FXML private ImageView background3;
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
 
   @FXML private TextArea screen;
   @FXML private Rectangle idScanner;
@@ -98,6 +101,7 @@ public class ExitController implements Initializable {
   @FXML private Rectangle clickMonitor;
   @FXML private Label idLabel;
   @FXML private Label clickButton;
+  @FXML private Label click;
   @FXML private ImageView gameMaster;
 
   @FXML public Pane aiWindowController;
@@ -109,6 +113,7 @@ public class ExitController implements Initializable {
 
   private boolean hasHappend = false;
   private boolean keyboardControlEnabled = true;
+  private boolean idTouching = false;
 
   // Add this variable to your class
   private Timeline alertBlinkTimeline;
@@ -125,6 +130,7 @@ public class ExitController implements Initializable {
           checkCollision2(player, walls);
           checkExit(player, exit1);
           checkComputer(player, clickMonitor);
+          checkId(player, id);
         }
       };
 
@@ -161,8 +167,8 @@ public class ExitController implements Initializable {
 
     walls.add(wall);
 
-    // Add an event handler to the Toggle Sound button
-    toggleSoundButton.setOnAction(event -> toggleSound());
+     // Add an event handler to the Toggle Sound button
+     toggleSoundButton.setOnMouseClicked(this::toggleSound);
 
     shapesize = player.getFitWidth();
     movementSetup();
@@ -239,6 +245,14 @@ public class ExitController implements Initializable {
       // Stop the alert blinking when the timer reaches 0
       stopAlertBlinking();
     }
+    // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
+    }
   }
 
   // Modify your setupAlertBlinking method as follows
@@ -259,6 +273,14 @@ public class ExitController implements Initializable {
     if (alertBlinkTimeline != null) {
         alertBlinkTimeline.stop();
         alert.setVisible(false);
+    }
+  }
+
+  public void checkId(ImageView player, Rectangle id) {
+    if (player.getBoundsInParent().intersects(id.getBoundsInParent())) {
+      idTouching = true;
+    } else {
+      idTouching = false;
     }
   }
 
@@ -440,6 +462,8 @@ public void movementSetup() {
     clickButton.setVisible(false);
     exit2.setVisible(false);
     idCardList.setVisible(false);
+    id.setVisible(false);
+    click.setVisible(false);
   }
 
   // when the rectangle is clicked, the keypad is shown
@@ -629,6 +653,7 @@ public void movementSetup() {
             monitor.setVisible(false);
             clickMonitor.setVisible(false);
             player.setVisible(true);
+            id.setVisible(true);
             changeOpacity();
           });
       pauseTransition.play();
@@ -645,26 +670,31 @@ public void movementSetup() {
   // when the scanner is clicked, ids are shown depending on its state
   @FXML
   private void clickIdScanner(MouseEvent event) {
-    keyboardControlEnabled = false; // Disable keyboard control
-    player.setVisible(false);
+    if (idTouching){
+      clickSoundButtton();
+      System.out.println("clicked");
+      keyboardControlEnabled = false; // Disable keyboard control
+      player.setVisible(false);
 
-    // if the ids are not shown and the correct id was not tagged yet
-    if (ids.isVisible() == false && !GameState.isIdChecked) {
-      ids.setVisible(true);
-      exit2.setVisible(true);
-      idCardList.setVisible(true);
+      // if the ids are not shown and the correct id was not tagged yet
+      if (ids.isVisible() == false && !GameState.isIdChecked) {
+        ids.setVisible(true);
+        exit2.setVisible(true);
+        idCardList.setVisible(true);
+        click.setVisible(true);
 
-      if (GameState.isCaptainCollected) {
-        idCaptain.setVisible(true);
-      }
-      if (GameState.isChefCollected) {
-        idChef.setVisible(true);
-      }
-      if (GameState.isDoctorCollected) {
-        idDoctor.setVisible(true);
-      }
-      if (GameState.isEngineerCollected) {
-        idEngineer.setVisible(true);
+        if (GameState.isCaptainCollected) {
+          idCaptain.setVisible(true);
+        }
+        if (GameState.isChefCollected) {
+          idChef.setVisible(true);
+        }
+        if (GameState.isDoctorCollected) {
+          idDoctor.setVisible(true);
+        }
+        if (GameState.isEngineerCollected) {
+          idEngineer.setVisible(true);
+        }
       }
     }
   }
@@ -889,24 +919,26 @@ public void movementSetup() {
     System.out.print("HI");
   }
 
-  private void toggleSound() {
-    if (GameState.isSoundEnabled) {
-        // Disable sound
-        if (App.mediaPlayer != null) {
-            App.mediaPlayer.setVolume(0.0); // Mute the media player
-        }
-        toggleSoundButton.setText("Enable Sound");
-    } else {
-        // Enable sound
-        if (App.mediaPlayer != null) {
-            App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-        }
-        toggleSoundButton.setText("Disable Sound");
-    }
-
-    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
-}
-
+  @FXML
+  private void toggleSound(MouseEvent event) {
+      if (GameState.isSoundEnabled) {
+          // Disable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.0); // Mute the media player
+          }
+          soundOff.setVisible(true);
+          soundOn.setVisible(false);
+      } else {
+          // Enable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+          }
+          soundOn.setVisible(true);
+          soundOff.setVisible(false);
+      }
+  
+      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  }
 
   // game master robot animation
   @FXML
@@ -924,9 +956,6 @@ public void movementSetup() {
 
   @FXML
   public void clickGameMaster(MouseEvent event) {
-    App.previousRoom = AppUi.ROOM3;
-    App.setScene(AppUi.HELPERCHAT);
    aiWindowController.setVisible(true);
-    System.out.print("HI");
   }
 }

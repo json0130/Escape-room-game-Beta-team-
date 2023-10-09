@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
@@ -84,6 +85,9 @@ public class TileGameDeskController {
   @FXML private ImageView imageSeven;
   @FXML private ImageView imageEight;
 
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
+
   @FXML private Button toggleSoundButton;
   @FXML private Pane alert;
   private boolean hasHappend = false;
@@ -140,7 +144,7 @@ public class TileGameDeskController {
   public void initialize() throws ApiProxyException {
     App.timerSeconds = 120;
     // Add an event handler to the Toggle Sound button
-    toggleSoundButton.setOnAction(event -> toggleSound());
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
     animateRobot();
     alert.setVisible(false); // Initially hide the alert label
 
@@ -190,6 +194,14 @@ public class TileGameDeskController {
     } else if (App.timerSeconds == 0) {
       // Stop the alert blinking when the timer reaches 0
       stopAlertBlinking();
+    }
+    // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
     }
   }
 
@@ -627,19 +639,21 @@ public class TileGameDeskController {
   }
 
   @FXML
-  private void toggleSound() {
+  private void toggleSound(MouseEvent event) {
       if (GameState.isSoundEnabled) {
           // Disable sound
           if (App.mediaPlayer != null) {
               App.mediaPlayer.setVolume(0.0); // Mute the media player
           }
-          toggleSoundButton.setText("Enable Sound");
+          soundOff.setVisible(true);
+          soundOn.setVisible(false);
       } else {
           // Enable sound
           if (App.mediaPlayer != null) {
               App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
           }
-          toggleSoundButton.setText("Disable Sound");
+          soundOn.setVisible(true);
+          soundOff.setVisible(false);
       }
   
       GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state

@@ -24,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -34,6 +35,7 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class TutorialController implements Initializable {
@@ -61,12 +63,16 @@ public class TutorialController implements Initializable {
   @FXML private ImageView r2;
   @FXML private ImageView r3;
   @FXML private ImageView r4;
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
   @FXML private Rectangle box;
 
   // sound for rocket movement
   String soundEffect = "src/main/resources/sounds/rocket.mp3";
   Media media = new Media(new File(soundEffect).toURI().toString());
   MediaPlayer mediaPlayer = new MediaPlayer(media);
+
+  @FXML private Button toggleSoundButton;
 
   @FXML private ProgressBar progressBar;
   private PauseTransition collisionPause = new PauseTransition(Duration.seconds(1));
@@ -87,10 +93,10 @@ public class TutorialController implements Initializable {
       new AnimationTimer() {
         @Override
         public void handle(long now) {
-          checkCollision(player, rocks);
           checkCollision1(player, box);
           if (isInstructionDone) {
             checkFinish(player, c3);
+            checkCollision(player, rocks);
           }
         }
       };
@@ -219,6 +225,8 @@ public class TutorialController implements Initializable {
     r4.setLayoutX(950);
     r4.setLayoutY(550);
 
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
+
     String paragraph =
         "Hello, I am the Game master of this game. This is a simple tutorial"
             + " game. It will help you to get used to keyboard control. Start with 'W' to move"
@@ -307,7 +315,6 @@ public class TutorialController implements Initializable {
   }
 
   public void checkFinish(ImageView player, Circle c3) {
-
     if (player.getBoundsInParent().intersects(c3.getBoundsInParent())) {
       App.setScene(AppUi.ANIMATION);
       collisionTimer.stop();
@@ -321,6 +328,15 @@ public class TutorialController implements Initializable {
       player.setLayoutX(previousX);
       player.setLayoutY(previousY);
       }
+    }
+    
+    // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
     }
   }
 
@@ -409,4 +425,26 @@ public class TutorialController implements Initializable {
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
   }
+
+  @FXML
+private void toggleSound(MouseEvent event) {
+    if (GameState.isSoundEnabled) {
+        // Disable sound
+        if (App.mediaPlayer != null) {
+            App.mediaPlayer.setVolume(0.0); // Mute the media player
+        }
+        soundOff.setVisible(true);
+        soundOn.setVisible(false);
+    } else {
+        // Enable sound
+        if (App.mediaPlayer != null) {
+            App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+        }
+        soundOn.setVisible(true);
+        soundOff.setVisible(false);
+    }
+
+    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+}
+
 }

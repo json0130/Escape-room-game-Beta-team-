@@ -52,6 +52,8 @@ public class Room1Controller implements Initializable {
   List<Rectangle> walls = new ArrayList<>();
 
   @FXML private ImageView player;
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
   @FXML private Pane scene;
   @FXML private Pane alert;
 
@@ -111,8 +113,8 @@ public class Room1Controller implements Initializable {
 
   @FXML private Button toggleSoundButton;
 
-    // Add this variable to your class
-    private Timeline alertBlinkTimeline;
+  // Add this variable to your class
+  private Timeline alertBlinkTimeline;
 
   private boolean nextToButton = false;
   private boolean hasHappend = false;
@@ -164,7 +166,7 @@ public class Room1Controller implements Initializable {
     walls.add(wall1);
 
     // Add an event handler to the Toggle Sound button
-    toggleSoundButton.setOnAction(event -> toggleSound());
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
 
     previousX = player.getLayoutX();
     previousY = player.getLayoutY();
@@ -354,6 +356,15 @@ public class Room1Controller implements Initializable {
     } else if (App.timerSeconds == 0) {
       // Stop the alert blinking when the timer reaches 0
       stopAlertBlinking();
+    }
+
+    // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
     }
   }
 
@@ -575,22 +586,24 @@ public class Room1Controller implements Initializable {
   }
 
   @FXML
-  private void toggleSound() {
-    if (GameState.isSoundEnabled) {
-      // Disable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.0); // Mute the media player
+  private void toggleSound(MouseEvent event) {
+      if (GameState.isSoundEnabled) {
+          // Disable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.0); // Mute the media player
+          }
+          soundOff.setVisible(true);
+          soundOn.setVisible(false);
+      } else {
+          // Enable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+          }
+          soundOn.setVisible(true);
+          soundOff.setVisible(false);
       }
-      toggleSoundButton.setText("Enable Sound");
-    } else {
-      // Enable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-      }
-      toggleSoundButton.setText("Disable Sound");
-    }
-
-    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  
+      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
   }
 
   // game master animation

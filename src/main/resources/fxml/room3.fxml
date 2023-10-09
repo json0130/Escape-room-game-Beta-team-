@@ -106,6 +106,11 @@
          </children>
       </Group>
       <Rectangle fx:id="idScanner" arcHeight="5.0" arcWidth="5.0" height="74.0" layoutX="356.0" layoutY="331.0" onMouseClicked="#clickIdScanner" stroke="BLACK" strokeType="INSIDE" width="95.0" />
+      <Label fx:id="click" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="79.0" style="-fx-background-color: white;" text="Cllick it" textAlignment="CENTER">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
       <Label fx:id="idLabel" layoutX="376.0" layoutY="356.0" text="Tag ID" textFill="WHITE">
          <font>
             <Font name="Arial" size="21.0" />
@@ -164,6 +169,7 @@
             <Image url="@../images/Firefly_spaceship_game_character_walking_48398-removebg-preview.png" />
          </image>
       </ImageView>
+      <Rectangle fx:id="id" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="100.0" layoutX="323.0" layoutY="401.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="166.0" />
       <Rectangle fx:id="exit1" arcHeight="5.0" arcWidth="5.0" fill="#ff95008e" height="216.0" layoutX="-17.0" layoutY="441.0" stroke="BLACK" strokeType="INSIDE" width="63.0" />
       <Rectangle fx:id="wall" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff" height="25.0" layoutX="35.0" layoutY="431.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="955.0" />
       <Rectangle fx:id="clickMonitor" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="83.0" layoutX="434.0" layoutY="410.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="146.0" />
@@ -174,7 +180,6 @@
       </Button>
       <Polygon fill="WHITE" layoutX="85.0" layoutY="518.0" points="-80.33332061767578, 32.5714111328125, -51.0000114440918, 87.23809814453125, -51.0000114440918, -22.761932373046875" stroke="BLACK" strokeType="INSIDE" />
       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
-      <Button fx:id="toggleSoundButton" layoutX="897.0" layoutY="12.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Button" />
       <ImageView fx:id="gameMaster" fitHeight="150.0" fitWidth="200.0" layoutX="32.0" layoutY="63.0" onMouseClicked="#clickGameMaster" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/robotfloat.png" />
@@ -185,7 +190,17 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Rectangle fx:id="id" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="98.0" layoutX="323.0" layoutY="373.0" stroke="BLACK" strokeType="INSIDE" width="166.0" />
       <fx:include fx:id="aiWindowController" source="aiwindow.fxml" />
+      <ImageView fx:id="soundOff" fitHeight="50.0" fitWidth="50.0" layoutX="925.0" layoutY="1.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly_20231010001007-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="soundOn" fitHeight="50.0" fitWidth="50.0" layoutX="925.0" layoutY="1.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../images/Firefly_sound_icon_inside_the_white_circle_with_no_fill_74516-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="toggleSoundButton" layoutX="861.0" layoutY="79.0" mnemonicParsing="false" text="SETTING" visible="false" />
    </children>
 </Pane>

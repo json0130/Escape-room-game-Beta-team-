@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
@@ -26,5 +27,16 @@
             <Image url="@../images/explosion-isolated-transparent-background_777271-15717-removebg-preview.png" />
          </image>
       </ImageView>
+      <ImageView fx:id="soundOff" fitHeight="106.0" fitWidth="70.0" layoutX="910.0" layoutY="30.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly_20231010001007-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="soundOn" fitHeight="106.0" fitWidth="70.0" layoutX="910.0" layoutY="30.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly_sound_icon_inside_the_white_circle_with_no_fill_74516-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="toggleSoundButton" layoutX="841.0" layoutY="59.0" mnemonicParsing="false" text="SETTING" visible="false" />
    </children>
 </Pane>

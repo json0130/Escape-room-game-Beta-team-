@@ -8,13 +8,17 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class AnimationController implements Initializable {
@@ -24,10 +28,14 @@ public class AnimationController implements Initializable {
   @FXML private Pane scene;
   @FXML private Button b1;
   @FXML private ImageView e1;
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
+  @FXML private Button toggleSoundButton;
+
+  private Timeline animationTimeline;
 
   @FXML
   private void startAnimation() {
-
     // Create a timeline to continuously increase the scaling factor
     Timeline continuousScaling =
         new Timeline(
@@ -93,6 +101,21 @@ public class AnimationController implements Initializable {
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     e1.setVisible(false);
+    // Add an event handler to the Toggle Sound button
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
+
+    animationTimeline = new Timeline(
+                new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        // Update animation based on the current time
+                        checkCollision2();
+                    }
+                })
+        );
+        animationTimeline.setCycleCount(Timeline.INDEFINITE);
+        animationTimeline.play();
+
     scene
         .sceneProperty()
         .addListener(
@@ -102,5 +125,37 @@ public class AnimationController implements Initializable {
                 Platform.runLater(this::startAnimation);
               }
             });
+  }
+
+  public void checkCollision2() {
+        // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
+    }
+  }
+
+  @FXML
+  private void toggleSound(MouseEvent event) {
+      if (GameState.isSoundEnabled) {
+          // Disable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.0); // Mute the media player
+          }
+          soundOff.setVisible(true);
+          soundOn.setVisible(false);
+      } else {
+          // Enable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+          }
+          soundOn.setVisible(true);
+          soundOff.setVisible(false);
+      }
+  
+      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
   }
 }

@@ -104,7 +104,17 @@
       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
       <Rectangle fx:id="exit" arcHeight="5.0" arcWidth="5.0" fill="#f89d00" height="50.0" layoutX="413.0" layoutY="617.0" opacity="0.65" stroke="BLACK" strokeType="INSIDE" width="161.0" />
       <Polygon fill="WHITE" layoutX="494.0" layoutY="591.0" points="-50.0, 40.0, 50.0, 40.0, -1.1348876953125, 53.3333740234375" stroke="WHITE" strokeType="INSIDE" />
-      <Button fx:id="toggleSoundButton" layoutX="903.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Button" />
    <fx:include fx:id="aiWindowController" source="aiwindow.fxml" />
+      <ImageView fx:id="soundOff" fitHeight="50.0" fitWidth="50.0" layoutX="925.0" layoutY="1.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly_20231010001007-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="soundOn" fitHeight="50.0" fitWidth="50.0" layoutX="925.0" layoutY="1.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../images/Firefly_sound_icon_inside_the_white_circle_with_no_fill_74516-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="toggleSoundButton" layoutX="861.0" layoutY="79.0" mnemonicParsing="false" text="SETTING" visible="false" />
    </children>
 </Pane>

@@ -163,12 +163,22 @@
             <Image url="@../images/power.gif" />
          </image>
       </ImageView>
-      <Button fx:id="toggleSoundButton" layoutX="913.0" layoutY="24.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Button" />
       <ImageView fx:id="gameMaster" fitHeight="418.0" fitWidth="197.0" layoutX="3.0" layoutY="46.0" onMouseClicked="#onGameMasterClick" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/robotfloat.png" />
          </image>
       </ImageView>
       <fx:include fx:id="aiWindowController" source="aiwindow.fxml" />
+      <ImageView fx:id="soundOff" fitHeight="50.0" fitWidth="50.0" layoutX="880.0" layoutY="35.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly_20231010001007-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="soundOn" fitHeight="50.0" fitWidth="50.0" layoutX="880.0" layoutY="35.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../images/Firefly_sound_icon_inside_the_white_circle_with_no_fill_74516-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="toggleSoundButton" layoutX="861.0" layoutY="79.0" mnemonicParsing="false" text="SETTING" visible="false" />
    </children>
 </AnchorPane>

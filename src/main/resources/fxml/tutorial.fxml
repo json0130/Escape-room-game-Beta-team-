@@ -27,22 +27,22 @@
             <Image url="@../images/rocket-spaceship-cartoon-icon-illustration-science-technology-icon-concept-isolated-premium-flat-cartoon-style-vector-removebg-preview.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="r1" fitHeight="85.0" fitWidth="91.0" layoutX="917.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="r1" fitHeight="85.0" fitWidth="91.0" layoutX="999.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/png-transparent-strange-meteorite-alien-stone-meteorite-thumbnail-removebg-preview.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="r2" fitHeight="76.0" fitWidth="82.0" layoutX="923.0" layoutY="187.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="r2" fitHeight="76.0" fitWidth="82.0" layoutX="1005.0" layoutY="187.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/png-transparent-strange-meteorite-alien-stone-meteorite-thumbnail-removebg-preview.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="r3" fitHeight="76.0" fitWidth="99.0" layoutX="923.0" layoutY="329.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="r3" fitHeight="76.0" fitWidth="99.0" layoutX="1005.0" layoutY="329.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/png-transparent-strange-meteorite-alien-stone-meteorite-thumbnail-removebg-preview.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="r4" fitHeight="83.0" fitWidth="93.0" layoutX="922.0" layoutY="481.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="r4" fitHeight="83.0" fitWidth="93.0" layoutX="1004.0" layoutY="481.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/png-transparent-strange-meteorite-alien-stone-meteorite-thumbnail-removebg-preview.png" />
          </image>
@@ -67,5 +67,16 @@
             <Image url="@../images/downloadmain.png" />
          </image>
       </ImageView>
+      <ImageView fx:id="soundOff" fitHeight="106.0" fitWidth="70.0" layoutX="910.0" layoutY="20.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly_20231010001007-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="soundOn" fitHeight="106.0" fitWidth="70.0" layoutX="910.0" layoutY="20.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly_sound_icon_inside_the_white_circle_with_no_fill_74516-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="toggleSoundButton" layoutX="851.0" layoutY="69.0" mnemonicParsing="false" text="SETTING" visible="false" />
    </children>
 </Pane>
