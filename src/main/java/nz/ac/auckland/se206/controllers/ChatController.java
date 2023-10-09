@@ -193,15 +193,10 @@ public class ChatController {
     inputText.clear();
     ChatMessage msg = new ChatMessage("user", message);
     appendChatMessage(msg);
+    msg = new ChatMessage("user", GptPromptEngineering.checkRiddleAnswer(message));
 
-    ChatMessage lastMsg = runGpt(msg);
+    runGpt(msg);
     robotThink();
-    if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("Correct")) {
-      GameState.isRiddleResolved = true;
-    }
-    if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("hint")) {
-      GameState.numOfHints--;
-    }
   }
 
   /**
