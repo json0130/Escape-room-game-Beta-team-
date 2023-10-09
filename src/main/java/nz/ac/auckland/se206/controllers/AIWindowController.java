@@ -23,6 +23,7 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.gpt.ChatMessage;
+import nz.ac.auckland.se206.gpt.GptPromptEngineering;
 import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult;
@@ -41,7 +42,6 @@ public class AIWindowController {
   @FXML private ImageView closeWindow;
 
   public static ChatCompletionRequest chatCompletionRequest;
-  public static boolean isRiddleGiven = false;
 
   /**
    * Initializes the chat view, loading the riddle.
@@ -63,66 +63,44 @@ public class AIWindowController {
           }
         });
     chatTextArea.setEditable(false);
-    detectDifficulty();
-    System.out.println(Room1Controller.riddleAnswer);
 
-    aiPane
-        .visibleProperty()
-        .addListener(
-            new ChangeListener<Boolean>() {
-              @Override
-              public void changed(
-                  ObservableValue<? extends Boolean> observable,
-                  Boolean oldValue,
-                  Boolean newValue) {
-                if (newValue) {
-                  chatTextArea.setText(App.aiWindow);
-                  chatTextArea.positionCaret(chatTextArea.getText().length());
-                  System.out.println("Pane is now visible");
+    // aiPane
+    //     .visibleProperty()
+    //     .addListener(
+    //         new ChangeListener<Boolean>() {
+    //           @Override
+    //           public void changed(
+    //               ObservableValue<? extends Boolean> observable,
+    //               Boolean oldValue,
+    //               Boolean newValue) {
+    //             if (newValue) {
+    //               chatTextArea.setText(App.aiWindow);
+    //               chatTextArea.positionCaret(chatTextArea.getText().length());
+    //               System.out.println("Pane is now visible");
 
-                } else {
-                  // Pane's visibility is set to false
-                  System.out.println("Pane is now invisible");
-                }
-              }
-            });
+    //             } else {
+    //               // Pane's visibility is set to false
+    //               System.out.println("Pane is now invisible");
+    //             }
+    //           }
+    //         });
+
+      chatCompletionRequest =
+        new ChatCompletionRequest().setN(1).setTemperature(1).setTopP(1).setMaxTokens(100);
+      printGreeting();
   }
 
-  public void detectDifficulty() {
-    Timer labelTimer = new Timer(true);
-    labelTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            if (GameState.difficulty != null) {
-              if (GameState.difficulty == "MEDIUM") {
-                if (!isRiddleGiven) {
-                  chatCompletionRequest =
-                      new ChatCompletionRequest()
-                          .setN(1)
-                          .setTemperature(0.5)
-                          .setTopP(0.5)
-                          .setMaxTokens(100);
-                  isRiddleGiven = true;
-                }
-                if (GameState.numOfHints == 0) {
-                  labelTimer.cancel();
-                }
-              } else {
-                chatCompletionRequest =
-                    new ChatCompletionRequest()
-                        .setN(1)
-                        .setTemperature(0.5)
-                        .setTopP(0.5)
-                        .setMaxTokens(100);
-                labelTimer.cancel();
-              }
-            }
-          }
-        },
-        0,
-        500);
-  }
+  
+  // /**
+  //  * Appends a chat message to the chat text area.
+  //  *
+  //  * @param msg the chat message to append
+  //  */
+  // private void appendChatMessage(ChatMessage msg) {
+  //   App.aiWindow = App.aiWindow.concat((msg.getRole() + ": " + msg.getContent() + "\n\n"));
+  //   chatTextArea.setText(App.aiWindow);
+  //   chatTextArea.positionCaret(chatTextArea.getText().length());
+  // }
 
   /**
    * Appends a chat message to the chat text area.
@@ -130,11 +108,8 @@ public class AIWindowController {
    * @param msg the chat message to append
    */
   private void appendChatMessage(ChatMessage msg) {
-    App.aiWindow = App.aiWindow.concat((msg.getRole() + ": " + msg.getContent() + "\n\n"));
-    chatTextArea.setText(App.aiWindow);
-    chatTextArea.positionCaret(chatTextArea.getText().length());
+    chatTextArea.appendText(msg.getRole() + ": " + msg.getContent() + "\n\n");
   }
-
   /**
    * Runs the GPT model with a given chat message.
    *
@@ -153,13 +128,8 @@ public class AIWindowController {
               Choice result = chatCompletionResult.getChoices().iterator().next();
               chatCompletionRequest.addMessage(result.getChatMessage());
               appendChatMessage(result.getChatMessage());
-              // Check the correctness of player's answer for the riddle
               Platform.runLater(
                   () -> {
-                    if (result.getChatMessage().getRole().equals("assistant")
-                        && result.getChatMessage().getContent().startsWith("Correct")) {
-                      GameState.isRiddleResolved = true;
-                    }
                     if (result.getChatMessage().getRole().equals("assistant")
                         && result.getChatMessage().getContent().startsWith("Hint")) {
                       GameState.numOfHints--;
@@ -167,7 +137,6 @@ public class AIWindowController {
                   });
               return result.getChatMessage();
             } catch (ApiProxyException e) {
-              // TODO handle exception appropriately
               e.printStackTrace();
               return null;
             }
@@ -188,23 +157,27 @@ public class AIWindowController {
    */
   @FXML
   private void onSendMessage(ActionEvent event) throws ApiProxyException, IOException {
-    soundButttonClick();
     String message = inputText.getText();
     if (message.trim().isEmpty()) {
       return;
     }
-
     inputText.clear();
+
+
     ChatMessage msg = new ChatMessage("user", message);
     appendChatMessage(msg);
 
-    ChatMessage lastMsg = runGpt(msg);
-    robotThink();
-    if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("Correct")) {
-      GameState.isRiddleResolved = true;
-    }
-    if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("hint")) {
-      GameState.numOfHints--;
+    if (GameState.difficulty == "EASY") {
+      robotThink();
+      // Handle Easy difficulty
+      runGpt(new ChatMessage("user", GptPromptEngineering.easy(message)));
+    } else if (GameState.difficulty == "MEDIUM") {
+      robotThink();
+      // Handle Medium difficulty
+      runGpt(new ChatMessage("user", GptPromptEngineering.medium(message)));
+    } else if (GameState.difficulty == "HARD") {
+      robotThink();
+      runGpt(new ChatMessage("user", GptPromptEngineering.hard(message)));
     }
   }
 
@@ -279,17 +252,63 @@ public class AIWindowController {
 
   @FXML
   private void onCloseWindowClick() {
-    chatTextArea.setText(App.aiWindow);
+    // chatTextArea.setText(App.aiWindow);
     // chatTextArea.clear();
     // chatTextArea.appendText("AI: How can I help?" + "\n\n");
     aiPane.setVisible(false);
   }
 
-  // private ChatCompletionRequest getChatCompletionRequest() {
-  //   return this.chatCompletionRequest;
-  // }
 
-  // private void setChatCompletionRequest(ChatCompletionRequest incoming) {
-  //   this.chatCompletionRequest = incoming;
-  // }
+
+  // This method is to print required greeting messages when the player visits each room.
+  private void printGreeting() {
+    Timer greetingTimer = new Timer(true);
+    greetingTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            // If the player visits the map for the first time, game master introduces itself
+            if (GameState.isPlayerInMap && !GameState.beenToMap) {
+              try {
+                runGpt(new ChatMessage("user", GptPromptEngineering.greeting()));
+                GameState.beenToMap = true;
+              } catch (ApiProxyException e) {
+                e.printStackTrace();
+              }
+              // If the player visits the closet room for the first time, game master introduces the
+              // closet room
+            } else if (GameState.isPlayerInRoom1 && !GameState.beenToRoom1) {
+              try {
+                runGpt(new ChatMessage("user", GptPromptEngineering.greetingRoom1()));
+                GameState.beenToRoom1 = true;
+              } catch (ApiProxyException e) {
+                e.printStackTrace();
+              }
+              // If the player visits the computer room for the first time, game master introduces
+              // the computer room
+            } else if (GameState.isPlayerInRoom2 && !GameState.beenToRoom2) {
+              try {
+                runGpt(new ChatMessage("user", GptPromptEngineering.greetingRoom2()));
+                GameState.beenToRoom2 = true;
+              } catch (ApiProxyException e) {
+                e.printStackTrace();
+              }
+              // If the player visits the control room for the first time, game master introduces
+              // the control room
+            } else if (GameState.isPlayerInRoom3 && !GameState.beenToRoom3) {
+              try {
+                runGpt(new ChatMessage("user", GptPromptEngineering.greetingRoom3()));
+                GameState.beenToRoom3 = true;
+              } catch (ApiProxyException e) {
+                e.printStackTrace();
+              }
+              // if all room has been visited once, timer is no longer needed so cancel the timer
+            } else if (GameState.beenToRoom1 && GameState.beenToRoom2 && GameState.beenToRoom3) {
+              greetingTimer.cancel();
+            }
+          }
+        },
+        0,
+        100);
+  }
 }
