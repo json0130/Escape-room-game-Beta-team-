@@ -19,11 +19,11 @@
             <Image url="@../images/Firefly%20Space%20background%20with%20spaceship%20flying%20around%2053452.jpg" />
          </image>
       </ImageView>
-      <Label fx:id="title" alignment="CENTER" layoutX="175.0" layoutY="172.0" opacity="0.71" prefHeight="106.0" prefWidth="637.0" style="-fx-border-color: white; -fx-background-color: grey;" text="STARSHIP ESCAPE I" textAlignment="CENTER" textFill="WHITE" wrapText="true">
-         <font>
-            <Font name="ACaslonPro-Regular" size="53.0" />
-         </font>
-      </Label>
+      <ImageView fitHeight="334.0" fitWidth="668.0" layoutX="154.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/titleImage.png" />
+         </image>
+      </ImageView>
       <Pane fx:id="background3" layoutX="-13.0" layoutY="-15.0" opacity="0.47" prefHeight="681.0" prefWidth="1026.0" style="-fx-background-color: black;" />
       <Group layoutX="110.0" layoutY="412.0">
          <children>

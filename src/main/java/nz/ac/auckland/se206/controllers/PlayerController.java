@@ -16,7 +16,6 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,7 +36,6 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
-import nz.ac.auckland.se206.speech.TextToSpeech;
 
 public class PlayerController implements Initializable {
 
@@ -68,7 +66,6 @@ public class PlayerController implements Initializable {
   @FXML private ImageView gameMaster;
 
   @FXML private Label playerLabel;
-  @FXML private Label main;
   @FXML private Label computer;
   @FXML private Label closet;
   @FXML private Label control;
@@ -117,7 +114,7 @@ public class PlayerController implements Initializable {
   private boolean hasHappend = false;
 
   // Add this variable to your class
-private Timeline alertBlinkTimeline;
+  private Timeline alertBlinkTimeline;
   @FXML public Pane aiWindowController;
 
   private ChatCompletionRequest chatCompletionRequest;
@@ -183,7 +180,6 @@ private Timeline alertBlinkTimeline;
     room2.setVisible(false);
     room3.setVisible(false);
     // Set labels to have white text and black stroke for the text
-    main.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
     computer.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
     closet.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
     control.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
@@ -249,10 +245,10 @@ private Timeline alertBlinkTimeline;
     alert.setVisible(true); // Initially show the alert label
 
     // Set up the blinking animation for the alert label
-    alertBlinkTimeline = new Timeline(
-        new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
-        new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false))
-    );
+    alertBlinkTimeline =
+        new Timeline(
+            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
+            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
     alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
     alertBlinkTimeline.play();
   }
@@ -260,8 +256,8 @@ private Timeline alertBlinkTimeline;
   // Add a method to stop the alert blinking
   private void stopAlertBlinking() {
     if (alertBlinkTimeline != null) {
-        alertBlinkTimeline.stop();
-        alert.setVisible(false);
+      alertBlinkTimeline.stop();
+      alert.setVisible(false);
     }
   }
 
@@ -349,16 +345,16 @@ private Timeline alertBlinkTimeline;
       }
     }
     // Detect if the timer is 30 seconds left and start the alert blinking
-          if (App.timerSeconds == 30) {
-            if (!hasHappend){
-              System.out.println("30 seconds left");
-              hasHappend = true;
-              setupAlertBlinking();
-            }
-          } else if (App.timerSeconds == 0) {
-            // Stop the alert blinking when the timer reaches 0
-            stopAlertBlinking();
-          }
+    if (App.timerSeconds == 30) {
+      if (!hasHappend) {
+        System.out.println("30 seconds left");
+        hasHappend = true;
+        setupAlertBlinking();
+      }
+    } else if (App.timerSeconds == 0) {
+      // Stop the alert blinking when the timer reaches 0
+      stopAlertBlinking();
+    }
   }
 
   // code for enabling palyer to move using wasd keys
@@ -437,25 +433,25 @@ private Timeline alertBlinkTimeline;
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
         new TimerTask() {
-            @Override
-            public void run() {
-                if (GameState.difficulty != null) {
-                    if (GameState.difficulty.equals("MEDIUM")) {
-                        Platform.runLater(() -> updateLabels());
-                        if (GameState.numOfHints == 0) {
-                            labelTimer.cancel();
-                        }
-                    } else {
-                        Platform.runLater(() -> updateLabels());
-                        System.out.println("Difficulty detected");
-                        labelTimer.cancel();
-                    }
+          @Override
+          public void run() {
+            if (GameState.difficulty != null) {
+              if (GameState.difficulty.equals("MEDIUM")) {
+                Platform.runLater(() -> updateLabels());
+                if (GameState.numOfHints == 0) {
+                  labelTimer.cancel();
                 }
+              } else {
+                Platform.runLater(() -> updateLabels());
+                System.out.println("Difficulty detected");
+                labelTimer.cancel();
+              }
             }
+          }
         },
         0,
         500);
-}
+  }
 
   @FXML
   public void clickGameMaster(MouseEvent event) {
@@ -498,20 +494,20 @@ private Timeline alertBlinkTimeline;
 
   @FXML
   private void toggleSound() {
-      if (GameState.isSoundEnabled) {
-          // Disable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.0); // Mute the media player
-          }
-          toggleSoundButton.setText("Enable Sound");
-      } else {
-          // Enable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-          }
-          toggleSoundButton.setText("Disable Sound");
+    if (GameState.isSoundEnabled) {
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
       }
-  
-      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+      toggleSoundButton.setText("Enable Sound");
+    } else {
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      toggleSoundButton.setText("Disable Sound");
+    }
+
+    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
   }
 }
