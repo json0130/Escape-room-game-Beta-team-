@@ -26,9 +26,9 @@
             <Image url="@../images/Firefly%2020230913233152.png" />
          </image>
       </ImageView>
-      <Rectangle fx:id="room3" arcHeight="5.0" arcWidth="5.0" fill="#9202c765" height="223.0" layoutX="651.0" layoutY="385.0" opacity="0.0" stroke="TRANSPARENT" strokeType="INSIDE" width="184.0" />
-      <Rectangle fx:id="room2" arcHeight="5.0" arcWidth="5.0" fill="#0050a69c" height="211.0" layoutX="461.0" layoutY="57.0" opacity="0.0" stroke="TRANSPARENT" strokeType="INSIDE" width="190.0" />
-      <Rectangle fx:id="room1" arcHeight="5.0" arcWidth="5.0" fill="#ff550087" height="186.0" layoutX="239.0" layoutY="429.0" opacity="0.0" stroke="#ffffff00" strokeType="INSIDE" width="125.0" />
+      <Rectangle fx:id="room3" arcHeight="5.0" arcWidth="5.0" fill="#9202c765" height="223.0" layoutX="651.0" layoutY="385.0" stroke="TRANSPARENT" strokeType="INSIDE" width="184.0" />
+      <Rectangle fx:id="room2" arcHeight="5.0" arcWidth="5.0" fill="#0050a69c" height="211.0" layoutX="461.0" layoutY="57.0" stroke="TRANSPARENT" strokeType="INSIDE" width="190.0" />
+      <Rectangle fx:id="room1" arcHeight="5.0" arcWidth="5.0" fill="#ff550087" height="186.0" layoutX="239.0" layoutY="429.0" stroke="#ffffff00" strokeType="INSIDE" width="125.0" />
       <Rectangle fx:id="wall" arcHeight="5.0" arcWidth="5.0" fill="#0037ad75" height="38.0" layoutX="-2.0" layoutY="613.0" opacity="0.0" stroke="TRANSPARENT" strokeType="INSIDE" width="915.0" />
       <Rectangle fx:id="wall1" arcHeight="5.0" arcWidth="5.0" fill="#0037ad75" height="25.0" layoutX="32.0" layoutY="33.0" opacity="0.0" stroke="TRANSPARENT" strokeType="INSIDE" width="821.0" />
       <Rectangle fx:id="wall2" arcHeight="5.0" arcWidth="5.0" fill="#0037ad75" height="573.0" layoutX="54.0" layoutY="34.0" opacity="0.0" stroke="TRANSPARENT" strokeType="INSIDE" width="32.0" />

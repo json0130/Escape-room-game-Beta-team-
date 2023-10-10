@@ -65,7 +65,6 @@ public class PlayerController implements Initializable {
   // @FXML private ImageView gameMasterBox;
   @FXML private ImageView gameMaster;
 
-  @FXML private Label playerLabel;
   @FXML private Label computer;
   @FXML private Label closet;
   @FXML private Label control;
@@ -76,7 +75,6 @@ public class PlayerController implements Initializable {
   @FXML private Rectangle wall;
   @FXML private Rectangle wall1;
   @FXML private Rectangle wall2;
-  @FXML private Rectangle wall3;
   @FXML private Rectangle wall4;
   @FXML private Rectangle wall5;
   @FXML private Rectangle wall6;
@@ -84,7 +82,6 @@ public class PlayerController implements Initializable {
   @FXML private Rectangle wall8;
   @FXML private Rectangle wall9;
   @FXML private Rectangle wall10;
-  @FXML private Rectangle wall11;
   @FXML private Rectangle wall12;
   @FXML private Rectangle wall13;
   @FXML private Rectangle wall14;
@@ -141,7 +138,6 @@ public class PlayerController implements Initializable {
       new AnimationTimer() {
         @Override
         public void handle(long now) {
-          playerLabel.setVisible(false);
           black.setVisible(false);
 
           previousX = player.getLayoutX(); // Update previousX
@@ -170,7 +166,6 @@ public class PlayerController implements Initializable {
   public void initialize(URL url, ResourceBundle resourceBundle) {
     animateRobot();
 
-    playerLabel.setVisible(true);
     black.setVisible(true);
 
     // Add an event handler to the Toggle Sound button
@@ -192,7 +187,6 @@ public class PlayerController implements Initializable {
     walls.add(wall);
     walls.add(wall1);
     walls.add(wall2);
-    walls.add(wall3);
     walls.add(wall4);
     walls.add(wall5);
     walls.add(wall6);
@@ -200,7 +194,6 @@ public class PlayerController implements Initializable {
     walls.add(wall8);
     walls.add(wall9);
     walls.add(wall10);
-    walls.add(wall11);
     walls.add(wall12);
     walls.add(wall13);
     walls.add(wall14);

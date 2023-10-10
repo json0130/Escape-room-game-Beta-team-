@@ -48,7 +48,6 @@ public class IntroController implements Initializable {
   @FXML private Label easy;
   @FXML private Label medium;
   @FXML private Label hard;
-  @FXML private Label title;
   @FXML private Label letter;
   @FXML private Rectangle letterbox;
 
@@ -57,7 +56,7 @@ public class IntroController implements Initializable {
   @FXML private boolean isTimeSelected = false;
 
   @FXML private Button toggleSoundButton;
-  
+
   @Override
   public void initialize(URL location, ResourceBundle resources) {
 
@@ -144,7 +143,6 @@ public class IntroController implements Initializable {
         event -> {
           startButton.setVisible(true);
           background3.setVisible(true);
-          title.setVisible(false);
         });
     pauseTransition.play();
 
@@ -258,14 +256,13 @@ public class IntroController implements Initializable {
 
   private void updateTimer(ActionEvent event) {
     App.timerSeconds--;
-    if(!GameState.isGameFinished){
+    if (!GameState.isGameFinished) {
       if (App.timerSeconds <= 0) {
         App.timerTimeline.stop();
         App.setScene(AppUi.LOSE);
         introTextToSpeech();
       }
-    }
-    else{
+    } else {
       App.timerTimeline.stop();
     }
   }
@@ -355,23 +352,23 @@ public class IntroController implements Initializable {
 
   @FXML
   private void toggleSound() {
-      if (GameState.isSoundEnabled) {
-          // Disable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.0); // Mute the media player
-          }
-          toggleSoundButton.setText("Enable Sound");
-      } else {
-          // Enable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-          }
-          toggleSoundButton.setText("Disable Sound");
+    if (GameState.isSoundEnabled) {
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
       }
-  
-      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+      toggleSoundButton.setText("Enable Sound");
+    } else {
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      toggleSoundButton.setText("Disable Sound");
+    }
+
+    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
   }
-  
+
   @FXML
   private void soundButttonClick() {
     String soundEffect = "src/main/resources/sounds/button-click.mp3";
