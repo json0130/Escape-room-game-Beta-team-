@@ -55,21 +55,26 @@
             <Image url="@../images/glitch-effect-black-background.jpg" />
          </image>
       </ImageView>
-      <ImageView fx:id="robotBase" fitHeight="184.0" fitWidth="200.0" layoutX="799.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/base.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="robotThink" fitHeight="184.0" fitWidth="200.0" layoutX="799.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/robot-think.gif" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="robotReply" fitHeight="184.0" fitWidth="200.0" layoutX="799.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/reply.png" />
-         </image>
-      </ImageView>
       <fx:include layoutX="150.0" layoutY="94.0" source="countdowntimer.fxml" />
+      <ImageView fx:id="riddleCorrect" fitHeight="141.0" fitWidth="138.0" layoutX="439.0" layoutY="-13.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/riddleRobot/riddleCorrect.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="riddleHint" fitHeight="150.0" fitWidth="140.0" layoutX="436.0" layoutY="-16.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/riddleRobot/riddleHint.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="riddleWrong" fitHeight="150.0" fitWidth="200.0" layoutX="433.0" layoutY="-17.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/riddleRobot/riddleWrong.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="riddleGreeting" fitHeight="150.0" fitWidth="200.0" layoutX="432.0" layoutY="-18.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/riddleRobot/riddleGreeting.png" />
+         </image>
+      </ImageView>
   </children>
 </AnchorPane>
