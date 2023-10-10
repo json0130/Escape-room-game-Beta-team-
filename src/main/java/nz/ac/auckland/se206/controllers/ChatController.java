@@ -2,6 +2,9 @@ package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -63,6 +66,7 @@ public class ChatController {
           }
         });
     chatTextArea.setEditable(false);
+    detectDifficulty();
     chatCompletionRequest =  new ChatCompletionRequest().setN(1).setTemperature(1).setTopP(1).setMaxTokens(100);
     runGpt(new ChatMessage("user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
     System.out.println(Room1Controller.riddleAnswer);
@@ -201,4 +205,43 @@ public class ChatController {
     riddleCorrect.setVisible(false);
     riddleGreeting.setVisible(true);
   }
+
+  // detect change in the game state difficulty in the intro scene
+  private void detectDifficulty() {
+    Timer labelTimer = new Timer(true);
+    labelTimer.scheduleAtFixedRate(
+        new TimerTask() {
+            @Override
+            public void run() {
+                if (GameState.difficulty != null) {
+                    if (GameState.difficulty.equals("MEDIUM")) {
+                        Platform.runLater(() -> updateLabels());
+                        if (GameState.numOfHints == 0) {
+                            labelTimer.cancel();
+                        }
+                    } else {
+                        Platform.runLater(() -> updateLabels());
+                        labelTimer.cancel();
+                    }
+                }
+            }
+        },
+        0,
+        500);
+}
+
+// update labels for difficulty and hints as the game progress
+private void updateLabels() {
+  if (GameState.difficulty == "EASY") {
+    hintLabel.setText("UNLIMITED");
+  } else if (GameState.difficulty == "MEDIUM") {
+    hintLabel.setText(String.valueOf(GameState.numOfHints));
+    hintLabel2.setText("HINTS");
+    if (GameState.numOfHints == 1) {
+      hintLabel2.setText("HINT");
+    }
+  } else {
+    hintLabel.setText("NO");
+  }
+}
 }

@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.gpt;
 
 import nz.ac.auckland.se206.GameState;
+import nz.ac.auckland.se206.controllers.Room1Controller;
 
 /** Utility class for generating GPT prompt engineering strings. */
 public class GptPromptEngineering {
@@ -33,18 +34,17 @@ public class GptPromptEngineering {
 
     if ((GameState.difficulty == "MEDIUM" && GameState.numOfHints <= 0)
         || GameState.difficulty == "HARD") {
-      answer =
+          answer =
           "Do not give a hint. Do not include the answer in your prompt. If ths user is asking for"
               + " hints, say you cannot give hints. If the user asks for the answer, say you cannot"
-              + " reveal the answer.If the answer is correct, start your prompt with'Correct'. If"
-              + " the answer is wrong, start your prompt with 'Incorrect'.";
+              + " reveal the answer. If the answer is correct, start your prompt with 'Correct'. If"
+              + " the answer is wrong, say incorrect.";
     } else {
       answer =
           "If the user is asking for hints, start your prompt with 'Hint' and give a hint."
-              + "Otherwise, do not give a hint. If the user asks for the answer, say you cannot"
-              + " give hints. If the answer is correct, start your prompt"
-              + " with 'Correct'. If the answer is wrong, start your prompt with 'Incorrect'. Do"
-              + " not include the answer in your prompt.";
+              + " Otherwise, do not give a hint. If the user asks for the answer, say you cannot"
+              + " reveal the answer. If the answer is correct, start your prompt with 'Correct'. If"
+              + " the answer is wrong, say incorrect. Do not include the answer in your prompt.";
     }
 
     return user + answer;
