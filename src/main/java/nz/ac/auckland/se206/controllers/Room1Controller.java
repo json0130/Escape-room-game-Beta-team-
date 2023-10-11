@@ -111,8 +111,8 @@ public class Room1Controller implements Initializable {
 
   @FXML private Button toggleSoundButton;
 
-    // Add this variable to your class
-    private Timeline alertBlinkTimeline;
+  // Add this variable to your class
+  private Timeline alertBlinkTimeline;
 
   private boolean nextToButton = false;
   private boolean hasHappend = false;
@@ -224,6 +224,10 @@ public class Room1Controller implements Initializable {
     revealIndicator();
 
     crewCollisionTimer.start();
+    moveIndicator(crew1Indicator);
+    moveIndicator(crew2Indicator);
+    moveIndicator(crew3Indicator);
+    moveIndicator(crew4Indicator);
   }
 
   // hide id and button and indicator at once
@@ -346,7 +350,7 @@ public class Room1Controller implements Initializable {
       }
     }
     if (App.timerSeconds == 30) {
-      if (!hasHappend){
+      if (!hasHappend) {
         System.out.println("30 seconds left");
         hasHappend = true;
         setupAlertBlinking();
@@ -453,34 +457,34 @@ public class Room1Controller implements Initializable {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
         new TimerTask() {
-            @Override
-            public void run() {
-                if (GameState.difficulty != null) {
-                    if (GameState.difficulty.equals("MEDIUM")) {
-                        Platform.runLater(() -> updateLabels());
-                        if (GameState.numOfHints == 0) {
-                            labelTimer.cancel();
-                        }
-                    } else {
-                        Platform.runLater(() -> updateLabels());
-                        labelTimer.cancel();
-                    }
+          @Override
+          public void run() {
+            if (GameState.difficulty != null) {
+              if (GameState.difficulty.equals("MEDIUM")) {
+                Platform.runLater(() -> updateLabels());
+                if (GameState.numOfHints == 0) {
+                  labelTimer.cancel();
                 }
+              } else {
+                Platform.runLater(() -> updateLabels());
+                labelTimer.cancel();
+              }
             }
+          }
         },
         0,
         500);
-}
+  }
 
-   // Modify your setupAlertBlinking method as follows
+  // Modify your setupAlertBlinking method as follows
   private void setupAlertBlinking() {
     alert.setVisible(true); // Initially show the alert label
 
     // Set up the blinking animation for the alert label
-    alertBlinkTimeline = new Timeline(
-        new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
-        new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false))
-    );
+    alertBlinkTimeline =
+        new Timeline(
+            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
+            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
     alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
     alertBlinkTimeline.play();
   }
@@ -488,8 +492,8 @@ public class Room1Controller implements Initializable {
   // Add a method to stop the alert blinking
   private void stopAlertBlinking() {
     if (alertBlinkTimeline != null) {
-        alertBlinkTimeline.stop();
-        alert.setVisible(false);
+      alertBlinkTimeline.stop();
+      alert.setVisible(false);
     }
   }
 
@@ -614,7 +618,7 @@ public class Room1Controller implements Initializable {
         new TimerTask() {
           @Override
           public void run() {
-            // if the state of irRiddleResolved changed, indicators are visible 
+            // if the state of irRiddleResolved changed, indicators are visible
             if (GameState.isRiddleResolved) {
               System.out.println("riddle is resolved");
               Platform.runLater(() -> showIndicators());
@@ -626,11 +630,26 @@ public class Room1Controller implements Initializable {
         100);
   }
 
-  // show all indicators at once 
+  // show all indicators at once
   private void showIndicators() {
     crew1Indicator.setVisible(true);
     crew2Indicator.setVisible(true);
     crew3Indicator.setVisible(true);
     crew4Indicator.setVisible(true);
+  }
+
+  /**
+   * Move indicator up and down.
+   *
+   * @param indicator
+   */
+  private void moveIndicator(ImageView indicator) {
+    TranslateTransition translate = new TranslateTransition();
+    translate.setNode(indicator);
+    translate.setDuration(Duration.millis(1000));
+    translate.setByY(-15);
+    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setAutoReverse(true);
+    translate.play();
   }
 }
