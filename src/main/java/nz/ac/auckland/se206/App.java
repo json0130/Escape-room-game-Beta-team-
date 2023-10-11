@@ -30,11 +30,14 @@ public class App extends Application {
   public static MediaPlayer mediaPlayer;
   public static String musicType = "starting";
   public static AppUi previousRoom = AppUi.PLAYER;
-  // public static String aiWindow =
-  //     "Hello Astronaut! I'm [NAME] Your personal AI Assistant. It looks like we're in a bit of an"
-  //         + " emergency so if you have any questions on what you need to do, I'm here to help!"
-  //         + " \n\n";
-
+  public static String aiWindow =
+      "Hello Astronaut! I'm [NAME] Your personal AI Assistant. It looks like we're in a bit of an"
+          + " emergency so if you have any questions on what you need to do, I'm here to help!"
+          + " \n\n";
+  public static String greetingInMap;
+  public static String greetingInRoom1;
+  public static String greetingInRoom2;
+  public static String greetingInRoom3;
   public static void main(final String[] args) {
     launch();
   }
@@ -84,6 +87,7 @@ public class App extends Application {
     mediaPlayer.setVolume(0.05);
     mediaPlayer.setAutoPlay(true);
 
+    SceneManager.addScene(AppUi.AIWINDOW, loadFxml("aiwindow"));
     SceneManager.addScene(AppUi.HELPERCHAT, loadFxml("helperchat"));
     SceneManager.addScene(AppUi.ROOM1, loadFxml("room1"));
     SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
@@ -98,7 +102,6 @@ public class App extends Application {
     SceneManager.addScene(AppUi.TILEPUZZLE, loadFxml("tilegamedesk"));
     SceneManager.addScene(AppUi.TILEROOM, loadFxml("tilegameroom"));
     SceneManager.addScene(AppUi.ROOM3, loadFxml("room3"));
-    SceneManager.addScene(AppUi.AIWINDOW, loadFxml("aiwindow"));
     scene = new Scene(SceneManager.getScene(AppUi.INTRO), 1000, 650);
 
     stage.setOnCloseRequest(

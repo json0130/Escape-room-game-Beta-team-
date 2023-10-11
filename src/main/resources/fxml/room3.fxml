@@ -180,5 +180,16 @@
          </image>
       </ImageView>
       <fx:include fx:id="aiWindowController" source="aiwindow.fxml" />
+      <Rectangle fx:id="greetingBox" arcHeight="5.0" arcWidth="5.0" fill="#153451" height="200.0" layoutX="76.0" layoutY="91.0" stroke="BLACK" strokeType="INSIDE" width="868.0" />
+      <Label fx:id="greeting" layoutX="115.0" layoutY="103.0" prefHeight="167.0" prefWidth="808.0" textFill="WHITE">
+         <font>
+            <Font name="Arial" size="26.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="close" fitHeight="28.0" fitWidth="32.0" layoutX="85.0" layoutY="99.0" onMouseClicked="#clickClose" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/closeButton.png" />
+         </image>
+      </ImageView>
    </children>
 </Pane>

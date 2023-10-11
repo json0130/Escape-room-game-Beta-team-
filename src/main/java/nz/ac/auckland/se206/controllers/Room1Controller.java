@@ -63,6 +63,7 @@ public class Room1Controller implements Initializable {
   @FXML private Rectangle crew2Collision;
   @FXML private Rectangle crew3Collision;
   @FXML private Rectangle crew4Collision;
+  @FXML private Rectangle greetingBox;
 
   @FXML private Button btnCollect1;
   @FXML private Button btnCollect2;
@@ -84,6 +85,7 @@ public class Room1Controller implements Initializable {
   @FXML private ImageView crew2Indicator;
   @FXML private ImageView crew3Indicator;
   @FXML private ImageView crew4Indicator;
+  @FXML private ImageView close;
 
   @FXML private ImageView gameMaster;
 
@@ -91,6 +93,7 @@ public class Room1Controller implements Initializable {
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
   @FXML private Label clickLabel;
+  @FXML private Label greeting;
 
   @FXML private Button btnSend;
   @FXML private Button btnClose;
@@ -216,6 +219,9 @@ public class Room1Controller implements Initializable {
     revealIndicator();
 
     crewCollisionTimer.start();
+
+    greeting.setWrapText(true);
+    greeting.setText(App.greetingInRoom1);
   }
 
   // hide id and button and indicator at once
@@ -594,5 +600,12 @@ public class Room1Controller implements Initializable {
     crew2Indicator.setVisible(true);
     crew3Indicator.setVisible(true);
     crew4Indicator.setVisible(true);
+  }
+
+  @FXML
+  private void clickClose(MouseEvent e) {
+    greeting.setVisible(false);
+    greetingBox.setVisible(false);
+    close.setVisible(false);
   }
 }

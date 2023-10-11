@@ -59,6 +59,7 @@ public class ExitController implements Initializable {
 
   @FXML private Rectangle exit1;
   @FXML private Rectangle wall;
+  @FXML private Rectangle greetingBox;
 
   @FXML private Button one;
   @FXML private Button two;
@@ -96,7 +97,9 @@ public class ExitController implements Initializable {
   @FXML private Rectangle clickMonitor;
   @FXML private Label idLabel;
   @FXML private Label clickButton;
+  @FXML private Label greeting;
   @FXML private ImageView gameMaster;
+  @FXML private ImageView close;
 
   @FXML public Pane aiWindowController;
 
@@ -188,6 +191,9 @@ public class ExitController implements Initializable {
     collisionTimer.start();
     // if difficulty is selected, label is updated
     detectDifficulty();
+
+    greeting.setWrapText(true);
+    greeting.setText(App.greetingInRoom3);
   }
 
   // if the charcter collides rectangle for exit, scene changes back to map
@@ -864,5 +870,12 @@ public class ExitController implements Initializable {
   public void clickGameMaster(MouseEvent event) {
    aiWindowController.setVisible(true);
     System.out.print("HI");
+  }
+
+  @FXML
+  private void clickClose(MouseEvent e) {
+    greeting.setVisible(false);
+    greetingBox.setVisible(false);
+    close.setVisible(false);
   }
 }

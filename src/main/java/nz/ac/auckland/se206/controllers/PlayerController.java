@@ -73,6 +73,7 @@ public class PlayerController implements Initializable {
   @FXML private Label difficultyLabel;
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
+  @FXML private Label greeting;
 
   @FXML private Rectangle wall;
   @FXML private Rectangle wall1;
@@ -96,6 +97,8 @@ public class PlayerController implements Initializable {
   @FXML private Rectangle wall19;
   @FXML private Rectangle wall20;
   @FXML private Rectangle wall21;
+  @FXML private Rectangle greetingBox;
+  @FXML private ImageView close;
 
   @FXML private Pane scene;
 
@@ -116,6 +119,7 @@ public class PlayerController implements Initializable {
 
   private ChatCompletionRequest chatCompletionRequest;
   private String lastUserMessage = ""; // Track the last user message for GPT response
+
 
   @FXML
   void start(ActionEvent event) {
@@ -231,6 +235,8 @@ public class PlayerController implements Initializable {
                 System.exit(0);
               });
         });
+    greeting.setWrapText(true);
+    greeting.setText(App.greetingInMap);
   }
 
   public void checkRoom1(ImageView player, Rectangle room1) {
@@ -322,7 +328,7 @@ public class PlayerController implements Initializable {
   // code for enabling palyer to move using wasd keys
   @FXML
   public void movementSetup() {
-    scene.setOnKeyPressed(
+      scene.setOnKeyPressed(
         e -> {
           if (e.getCode() == KeyCode.W) {
             wPressed.set(true);
@@ -359,6 +365,7 @@ public class PlayerController implements Initializable {
             dPressed.set(false);
           }
         });
+    
   }
 
   // border that the player cannot move outof the window
@@ -468,5 +475,12 @@ public class PlayerController implements Initializable {
     translate.setAutoReverse(true);
 
     translate.play();
+  }
+
+  @FXML
+  private void clickClose(MouseEvent e) {
+    greeting.setVisible(false);
+    greetingBox.setVisible(false);
+    close.setVisible(false);
   }
 }

@@ -64,43 +64,38 @@ public class AIWindowController {
         });
     chatTextArea.setEditable(false);
 
-    // aiPane
-    //     .visibleProperty()
-    //     .addListener(
-    //         new ChangeListener<Boolean>() {
-    //           @Override
-    //           public void changed(
-    //               ObservableValue<? extends Boolean> observable,
-    //               Boolean oldValue,
-    //               Boolean newValue) {
-    //             if (newValue) {
-    //               chatTextArea.setText(App.aiWindow);
-    //               chatTextArea.positionCaret(chatTextArea.getText().length());
-    //               System.out.println("Pane is now visible");
+    aiPane
+        .visibleProperty()
+        .addListener(
+            new ChangeListener<Boolean>() {
+              @Override
+              public void changed(
+                  ObservableValue<? extends Boolean> observable,
+                  Boolean oldValue,
+                  Boolean newValue) {
+                if (newValue) {
+                  chatTextArea.setText(App.aiWindow);
+                  chatTextArea.positionCaret(chatTextArea.getText().length());
+                  System.out.println("Pane is now visible");
 
-    //             } else {
-    //               // Pane's visibility is set to false
-    //               System.out.println("Pane is now invisible");
-    //             }
-    //           }
-    //         });
+                } else {
+                  // Pane's visibility is set to false
+                  System.out.println("Pane is now invisible");
+                }
+              }
+            });
 
-      chatCompletionRequest =
+    chatCompletionRequest =
         new ChatCompletionRequest().setN(1).setTemperature(1).setTopP(1).setMaxTokens(100);
-      printGreeting();
+    App.greetingInMap =
+        runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greeting()));
+    App.greetingInRoom1 =
+        runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom1()));
+    App.greetingInRoom2 =
+        runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom2()));
+    App.greetingInRoom3 =
+        runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom3()));
   }
-
-  
-  // /**
-  //  * Appends a chat message to the chat text area.
-  //  *
-  //  * @param msg the chat message to append
-  //  */
-  // private void appendChatMessage(ChatMessage msg) {
-  //   App.aiWindow = App.aiWindow.concat((msg.getRole() + ": " + msg.getContent() + "\n\n"));
-  //   chatTextArea.setText(App.aiWindow);
-  //   chatTextArea.positionCaret(chatTextArea.getText().length());
-  // }
 
   /**
    * Appends a chat message to the chat text area.
@@ -108,8 +103,11 @@ public class AIWindowController {
    * @param msg the chat message to append
    */
   private void appendChatMessage(ChatMessage msg) {
-    chatTextArea.appendText(msg.getRole() + ": " + msg.getContent() + "\n\n");
+    App.aiWindow = App.aiWindow.concat((msg.getRole() + ": " + msg.getContent() + "\n\n"));
+    chatTextArea.setText(App.aiWindow);
+    chatTextArea.positionCaret(chatTextArea.getText().length());
   }
+
   /**
    * Runs the GPT model with a given chat message.
    *
@@ -149,6 +147,26 @@ public class AIWindowController {
   }
 
   /**
+   * Runs the GPT model with a given chat message.
+   *
+   * @param msg the chat message to process
+   * @return the response chat message
+   * @throws ApiProxyException if there is an error communicating with the API proxy
+   */
+  private String runGptWithoutPrinting(ChatMessage msg) {
+    chatCompletionRequest.addMessage(msg);
+    try {
+      ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
+      Choice result = chatCompletionResult.getChoices().iterator().next();
+      chatCompletionRequest.addMessage(result.getChatMessage());
+      return result.getChatMessage().getContent();
+    } catch (ApiProxyException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  /**
    * Sends a message to the GPT model.
    *
    * @param event the action event triggered by the send button
@@ -162,7 +180,6 @@ public class AIWindowController {
       return;
     }
     inputText.clear();
-
 
     ChatMessage msg = new ChatMessage("user", message);
     appendChatMessage(msg);
@@ -258,57 +275,4 @@ public class AIWindowController {
     aiPane.setVisible(false);
   }
 
-
-
-  // This method is to print required greeting messages when the player visits each room.
-  private void printGreeting() {
-    Timer greetingTimer = new Timer(true);
-    greetingTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            // If the player visits the map for the first time, game master introduces itself
-            if (GameState.isPlayerInMap && !GameState.beenToMap) {
-              try {
-                runGpt(new ChatMessage("user", GptPromptEngineering.greeting()));
-                GameState.beenToMap = true;
-              } catch (ApiProxyException e) {
-                e.printStackTrace();
-              }
-              // If the player visits the closet room for the first time, game master introduces the
-              // closet room
-            } else if (GameState.isPlayerInRoom1 && !GameState.beenToRoom1) {
-              try {
-                runGpt(new ChatMessage("user", GptPromptEngineering.greetingRoom1()));
-                GameState.beenToRoom1 = true;
-              } catch (ApiProxyException e) {
-                e.printStackTrace();
-              }
-              // If the player visits the computer room for the first time, game master introduces
-              // the computer room
-            } else if (GameState.isPlayerInRoom2 && !GameState.beenToRoom2) {
-              try {
-                runGpt(new ChatMessage("user", GptPromptEngineering.greetingRoom2()));
-                GameState.beenToRoom2 = true;
-              } catch (ApiProxyException e) {
-                e.printStackTrace();
-              }
-              // If the player visits the control room for the first time, game master introduces
-              // the control room
-            } else if (GameState.isPlayerInRoom3 && !GameState.beenToRoom3) {
-              try {
-                runGpt(new ChatMessage("user", GptPromptEngineering.greetingRoom3()));
-                GameState.beenToRoom3 = true;
-              } catch (ApiProxyException e) {
-                e.printStackTrace();
-              }
-              // if all room has been visited once, timer is no longer needed so cancel the timer
-            } else if (GameState.beenToRoom1 && GameState.beenToRoom2 && GameState.beenToRoom3) {
-              greetingTimer.cancel();
-            }
-          }
-        },
-        0,
-        100);
-  }
 }
