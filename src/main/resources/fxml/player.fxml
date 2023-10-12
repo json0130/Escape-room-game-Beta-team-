@@ -8,20 +8,20 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.PlayerController">
+<Pane fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.PlayerController">
    <children>
-      <ImageView fitHeight="664.0" fitWidth="1168.0" layoutX="-114.0" layoutY="-6.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="755.0" fitWidth="1321.0" layoutX="-114.0" layoutY="-6.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly%20realistic%20space%20background%20with%20stars%2024052.jpg" />
          </image>
       </ImageView>
-      <Pane fx:id="alert" layoutX="1.0" layoutY="-3.0" opacity="0.33" prefHeight="654.0" prefWidth="1002.0" style="-fx-background-color: red;" />
+      <Pane fx:id="alert" layoutX="1.0" layoutY="-3.0" opacity="0.33" prefHeight="654.0" prefWidth="1200.0" style="-fx-background-color: red;" />
       <ImageView fitHeight="647.0" fitWidth="951.0" layoutX="17.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/mainb.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="678.0" fitWidth="1262.0" layoutX="-17.0" layoutY="-9.0" pickOnBounds="true" preserveRatio="true" visible="false">
+      <ImageView fitHeight="814.0" fitWidth="1238.0" layoutX="-17.0" layoutY="-9.0" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../images/Firefly%2020230913233152.png" />
          </image>
@@ -97,25 +97,25 @@
             <Font size="26.0" />
          </font>
       </Label>
-      <Rectangle fx:id="header" arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
-      <Label fx:id="difficultyLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="200.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
-         <font>
-            <Font size="32.0" />
-         </font>
-      </Label>
-      <Label fx:id="hintLabel2" alignment="CENTER_RIGHT" layoutX="736.0" layoutY="6.0" prefHeight="37.0" prefWidth="96.0" text="HINTS" textFill="WHITE">
+      <Rectangle fx:id="header" arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1204.0" />
+      <Label fx:id="difficultyLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="109.0" layoutY="7.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
          <font>
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
-      <Label fx:id="hintLabel" alignment="CENTER_RIGHT" layoutX="496.0" layoutY="6.0" prefHeight="37.0" prefWidth="230.0" text="UNLIMITED" textFill="WHITE">
+      <Label fx:id="hintLabel2" alignment="CENTER_RIGHT" layoutX="576.0" layoutY="6.0" prefHeight="37.0" prefWidth="96.0" text="HINTS" textFill="WHITE">
+         <font>
+            <Font name="Arial" size="32.0" />
+         </font>
+      </Label>
+      <Label fx:id="hintLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="369.0" layoutY="6.0" prefHeight="37.0" prefWidth="230.0" text="UNLIMITED" textFill="WHITE">
          <font>
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
 
-      <Rectangle fx:id="black" arcHeight="5.0" arcWidth="5.0" fill="#1f1f1fac" height="606.0" layoutX="-6.0" layoutY="46.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="1008.0" />
+      <Rectangle fx:id="black" arcHeight="5.0" arcWidth="5.0" fill="#1f1f1fac" height="606.0" layoutX="-6.0" layoutY="46.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="1209.0" />
       <Label fx:id="playerLabel" layoutX="268.0" layoutY="209.0" text="PLAYER" textFill="WHITE" visible="false">
          <font>
             <Font size="22.0" />
@@ -131,12 +131,24 @@
             <Font size="22.0" />
          </font>
       </Label>
-      <Button fx:id="toggleSoundButton" layoutX="912.0" layoutY="13.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Button" />
-      <ImageView fx:id="gameMaster" fitHeight="96.0" fitWidth="119.0" layoutX="535.0" layoutY="347.0" onMouseClicked="#clickGameMaster" pickOnBounds="true" preserveRatio="true">
+      <Button fx:id="toggleSoundButton" layoutX="912.0" layoutY="13.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Button" visible="false" />
+      <ImageView fx:id="soundOff" fitHeight="50.0" fitWidth="50.0" layoutX="1140.0" layoutY="1.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly_20231010001007-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="soundOn" fitHeight="50.0" fitWidth="50.0" layoutX="1140.0" layoutY="1.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../images/Firefly_sound_icon_inside_the_white_circle_with_no_fill_74516-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="toggleSoundButton" layoutX="851.0" layoutY="69.0" mnemonicParsing="false" text="SETTING" visible="false" />
+      <ImageView fx:id="gameMaster" fitHeight="167.0" fitWidth="165.0" layoutX="978.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/robotfloat.png" />
          </image>
       </ImageView>
-      <fx:include fx:id="aiWindowController" source="aiwindow.fxml" />
+      <fx:include fx:id="aiWindowController" layoutX="850.0" layoutY="200.0" source="aiwindow.fxml" />
+      <Button fx:id="resetButton" layoutX="985.0" layoutY="14.0" mnemonicParsing="false" onAction="#reset" text="Button" />
    </children>
 </Pane>

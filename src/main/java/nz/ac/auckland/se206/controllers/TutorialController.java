@@ -13,6 +13,7 @@ import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -24,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -34,6 +36,7 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class TutorialController implements Initializable {
@@ -61,12 +64,18 @@ public class TutorialController implements Initializable {
   @FXML private ImageView r2;
   @FXML private ImageView r3;
   @FXML private ImageView r4;
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
   @FXML private Rectangle box;
+  @FXML private Rectangle gate1;
+  @FXML private Rectangle gate2; 
 
   // sound for rocket movement
   String soundEffect = "src/main/resources/sounds/rocket.mp3";
   Media media = new Media(new File(soundEffect).toURI().toString());
   MediaPlayer mediaPlayer = new MediaPlayer(media);
+
+  @FXML private Button toggleSoundButton;
 
   @FXML private ProgressBar progressBar;
   private PauseTransition collisionPause = new PauseTransition(Duration.seconds(1));
@@ -87,10 +96,10 @@ public class TutorialController implements Initializable {
       new AnimationTimer() {
         @Override
         public void handle(long now) {
-          checkCollision(player, rocks);
           checkCollision1(player, box);
           if (isInstructionDone) {
             checkFinish(player, c3);
+            checkCollision(player, rocks);
           }
         }
       };
@@ -158,11 +167,39 @@ public class TutorialController implements Initializable {
       currentSentenceIndex++;
     } else {
       // All sentences are displayed, so call playRock
-      playRock();
-      box.setVisible(false);
+      animateGates();
       isInstructionDone = true;
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.0));
+          pauseTransition.setOnFinished(
+              events -> {
+                // Adjust the player's position to be right in front of the room
+                playRock();
+                box.setVisible(false);
+                gate1.setVisible(false);
+                gate2.setVisible(false);
+                sentenceLabel.setVisible(false);
+              });
+          pauseTransition.play();
     }
   }
+
+  private void animateGates() {
+    animateGate1UpAndDown();
+    animateGate2UpAndDown();
+  }
+
+  private void animateGate1UpAndDown() {
+    TranslateTransition upTransition = new TranslateTransition(Duration.seconds(2), gate1);
+    upTransition.setByY(-250);
+    upTransition.play();
+}
+
+private void animateGate2UpAndDown() {
+    TranslateTransition downTransition = new TranslateTransition(Duration.seconds(2), gate2);
+    downTransition.setByY(250);
+    downTransition.play();
+}
+
 
   private void setRotate(Circle c, boolean reverse, int angle, int duration) {
     RotateTransition rt = new RotateTransition(Duration.seconds(duration), c);
@@ -210,14 +247,16 @@ public class TutorialController implements Initializable {
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     // Initialise the position of the images
-    r1.setLayoutX(950);
+    r1.setLayoutX(1150);
     r1.setLayoutY(100);
-    r2.setLayoutX(950);
+    r2.setLayoutX(1150);
     r2.setLayoutY(250);
-    r3.setLayoutX(950);
+    r3.setLayoutX(1150);
     r3.setLayoutY(400);
-    r4.setLayoutX(950);
+    r4.setLayoutX(1150);
     r4.setLayoutY(550);
+
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
 
     String paragraph =
         "Hello, I am the Game master of this game. This is a simple tutorial"
@@ -307,7 +346,6 @@ public class TutorialController implements Initializable {
   }
 
   public void checkFinish(ImageView player, Circle c3) {
-
     if (player.getBoundsInParent().intersects(c3.getBoundsInParent())) {
       App.setScene(AppUi.ANIMATION);
       collisionTimer.stop();
@@ -321,6 +359,15 @@ public class TutorialController implements Initializable {
       player.setLayoutX(previousX);
       player.setLayoutY(previousY);
       }
+    }
+    
+    // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
     }
   }
 
@@ -409,4 +456,26 @@ public class TutorialController implements Initializable {
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
   }
+
+  @FXML
+private void toggleSound(MouseEvent event) {
+    if (GameState.isSoundEnabled) {
+        // Disable sound
+        if (App.mediaPlayer != null) {
+            App.mediaPlayer.setVolume(0.0); // Mute the media player
+        }
+        soundOff.setVisible(true);
+        soundOn.setVisible(false);
+    } else {
+        // Enable sound
+        if (App.mediaPlayer != null) {
+            App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+        }
+        soundOn.setVisible(true);
+        soundOff.setVisible(false);
+    }
+
+    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+}
+
 }

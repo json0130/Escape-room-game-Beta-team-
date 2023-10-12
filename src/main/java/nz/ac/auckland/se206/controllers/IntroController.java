@@ -10,11 +10,13 @@ import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -38,20 +40,29 @@ public class IntroController implements Initializable {
   @FXML private Button hardButton;
   @FXML private Button startButton;
   @FXML private Button tutorial;
+  @FXML private Button close;
+
   @FXML private ImageView spaceship;
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
   @FXML private ImageView background;
   @FXML private ImageView background2;
+
   @FXML private Pane background3;
+
   @FXML private Rectangle easybox;
   @FXML private Rectangle mediumbox;
   @FXML private Rectangle hardbox;
+
   @FXML private Label easy;
   @FXML private Label medium;
   @FXML private Label hard;
   @FXML private Label title;
   @FXML private Label letter;
+
   @FXML private Rectangle letterbox;
 
+  private Timeline animationTimeline;
   private boolean animationStarted = false;
   @FXML private boolean isLevelSelected = false;
   @FXML private boolean isTimeSelected = false;
@@ -69,7 +80,7 @@ public class IntroController implements Initializable {
     miniuteButtonHovered(minB6);
 
     // Add an event handler to the Toggle Sound button
-    toggleSoundButton.setOnAction(event -> toggleSound());
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
 
     easybox.setVisible(false);
     mediumbox.setVisible(false);
@@ -78,25 +89,46 @@ public class IntroController implements Initializable {
     medium.setVisible(false);
     hard.setVisible(false);
     spaceship.setVisible(false);
-    minB2.setVisible(false);
-    minB4.setVisible(false);
-    minB6.setVisible(false);
     letter.setVisible(false);
     letterbox.setVisible(false);
     tutorial.setVisible(false);
+    close.setVisible(false);
 
     background2.setVisible(false);
     startButton.setVisible(false);
     background3.setVisible(false);
+
+    animationTimeline = new Timeline(
+                new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        // Update animation based on the current time
+                        checkCollision2();
+                    }
+                })
+        );
+        animationTimeline.setCycleCount(Timeline.INDEFINITE);
+        animationTimeline.play();
+  }
+
+  public void checkCollision2() {
+        // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
+    }
   }
 
   @FXML
-  private void levelButtonClicked(ActionEvent event) {
+  private void levelButtonClicked(ActionEvent events) {
     soundButttonClick();
 
-    easyButton.setOnMouseEntered(null); // Disable hover effect
-    mediumButton.setOnMouseEntered(null); // Disable hover effect
-    hardButton.setOnMouseEntered(null); // Disable hover effect
+    // easyButton.setOnMouseEntered(null); // Disable hover effect
+    // mediumButton.setOnMouseEntered(null); // Disable hover effect
+    // hardButton.setOnMouseEntered(null); // Disable hover effect
 
     easybox.setVisible(false);
     mediumbox.setVisible(false);
@@ -108,26 +140,40 @@ public class IntroController implements Initializable {
     minB4.setVisible(true);
     minB6.setVisible(true);
 
-    Button clickedButton = (Button) event.getSource();
+    Button clickedButton = (Button) events.getSource();
 
-    // Change the style of the clicked button
-    if (!isLevelSelected) {
-      // Reset the style of all buttons to their original state
-      easyButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black;");
-      mediumButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black;");
-      hardButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black;");
-      clickedButton.setStyle(
+    // Reset the style of all buttons to their original state
+    easyButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
+    mediumButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
+    hardButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
+    clickedButton.setStyle(
           "-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: dark blue;");
-    }
     isLevelSelected = true;
 
     // set the difficulty
-    if (event.getSource() == easyButton) {
+    if (events.getSource() == easyButton) {
       GameState.difficulty = "EASY";
-    } else if (event.getSource() == mediumButton) {
+      GameState.clickedLevelButton = "easyButton";
+      System.out.println(GameState.difficulty);
+    } else if (events.getSource() == mediumButton) {
       GameState.difficulty = "MEDIUM";
-    } else if (event.getSource() == hardButton) {
+      GameState.clickedLevelButton = "mediumButton";
+      System.out.println(GameState.difficulty);
+    } else if (events.getSource() == hardButton) {
       GameState.difficulty = "HARD";
+      GameState.clickedLevelButton = "hardButton";
+      System.out.println(GameState.difficulty);
+    }
+
+    if(isLevelSelected && isTimeSelected){
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.2));
+      pauseTransition.setOnFinished(
+          event -> {
+            startButton.setVisible(true);
+            background3.setVisible(true);
+            title.setVisible(false);
+          });
+      pauseTransition.play();
     }
   }
 
@@ -135,48 +181,49 @@ public class IntroController implements Initializable {
   private void minBClicked(ActionEvent events) {
     soundButttonClick();
 
-    minB2.setOnMouseEntered(null); // Disable hover effect
-    minB4.setOnMouseEntered(null); // Disable hover effect
-    minB6.setOnMouseEntered(null); // Disable hover effect
-
-    PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.2));
-    pauseTransition.setOnFinished(
-        event -> {
-          startButton.setVisible(true);
-          background3.setVisible(true);
-          title.setVisible(false);
-        });
-    pauseTransition.play();
-
+    // minB2.setOnMouseEntered(null); // Disable hover effect
+    // minB4.setOnMouseEntered(null); // Disable hover effect
+    // minB6.setOnMouseEntered(null); // Disable hover effect
+    
     Button cButton = (Button) events.getSource();
 
     switch (cButton.getId()) {
       case "minB2":
         App.timerSeconds = 120;
         App.chosenTimer = 120;
+        GameState.clickedButton = "minB2";
         break;
       case "minB4":
         App.timerSeconds = 240;
         App.chosenTimer = 240;
+        GameState.clickedButton = "minB4";
         break;
       case "minB6":
         App.timerSeconds = 360;
         App.chosenTimer = 360;
+        GameState.clickedButton = "minB6";
         break;
       default:
         break;
     }
     System.out.println(App.timerSeconds);
-
-    // Check if a time is already selected, if so, return
-    if (!isTimeSelected) {
       // Reset the style of all buttons to their original state
-      minB2.setStyle("-fx-background-color: transparent; -fx-text-fill: black;");
-      minB4.setStyle("-fx-background-color: transparent; -fx-text-fill: black;");
-      minB6.setStyle("-fx-background-color: transparent; -fx-text-fill: black;");
+      minB2.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
+      minB4.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
+      minB6.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
       cButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: dark blue;");
+      isTimeSelected = true;
+
+    if(isLevelSelected && isTimeSelected){
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.2));
+      pauseTransition.setOnFinished(
+          event -> {
+            startButton.setVisible(true);
+            background3.setVisible(true);
+            title.setVisible(false);
+          });
+      pauseTransition.play();
     }
-    isTimeSelected = true;
   }
 
   @FXML
@@ -188,10 +235,11 @@ public class IntroController implements Initializable {
       letter.setVisible(true);
       letterbox.setVisible(true);
       tutorial.setVisible(true);
+      close.setVisible(true);
 
-      minB2.setDisable(false);
-      minB4.setDisable(false);
-      minB6.setDisable(false);
+      minB2.setDisable(true);
+      minB4.setDisable(true);
+      minB6.setDisable(true);
       minB2.setVisible(false);
       minB4.setVisible(false);
       minB6.setVisible(false);
@@ -202,7 +250,28 @@ public class IntroController implements Initializable {
   }
 
   @FXML
+  private void closeClicked(){
+    startButton.setDisable(false);
+    startButton.setVisible(true);
+    letter.setVisible(false);
+    letterbox.setVisible(false);
+    tutorial.setVisible(false);
+    close.setVisible(false);
+
+    minB2.setDisable(false);
+    minB4.setDisable(false);
+    minB6.setDisable(false);
+    minB2.setVisible(true);
+    minB4.setVisible(true);
+    minB6.setVisible(true);
+    easyButton.setVisible(true);
+    mediumButton.setVisible(true);
+    hardButton.setVisible(true);
+  }
+
+  @FXML
   private void startAnimation(ActionEvent events) {
+    GameState.isGameStarted = true;
     soundButttonClick();
     if (!animationStarted) {
       spaceship.setVisible(true);
@@ -211,6 +280,7 @@ public class IntroController implements Initializable {
       letter.setVisible(false);
       letterbox.setVisible(false);
       tutorial.setVisible(false);
+      close.setVisible(false);
 
       // Create a timeline to continuously increase the scaling factor
       Timeline continuousScaling =
@@ -292,16 +362,6 @@ public class IntroController implements Initializable {
           // Change the style of the button for 0.2 seconds only and back to original style
           button.setStyle(
               "-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: dark blue;");
-          PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
-          pauseTransition.setOnFinished(
-              event -> {
-                button.setStyle(
-                    "-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: white;"
-                        + " -fx-border-color: white; -fx-border-width: 2px; -fx-border-radius:"
-                        + " 5px");
-              });
-          pauseTransition.play();
-
           // Make label and box visible
           label.setVisible(true);
           box.setVisible(true);
@@ -309,16 +369,23 @@ public class IntroController implements Initializable {
 
     button.setOnMouseExited(
         e -> {
-
-          // Delay the hiding of elements by 3 seconds
-          PauseTransition pauseTransition = new PauseTransition(Duration.seconds(1.5));
-          pauseTransition.setOnFinished(
-              event -> {
-                // Hide label and box
-                label.setVisible(false);
-                box.setVisible(false);
-              });
-          pauseTransition.play();
+          if(!isLevelSelected && !isTimeSelected){
+            button.setStyle(
+                    "-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: white;"
+                        + " -fx-border-color: white; -fx-border-width: 2px; -fx-border-radius:"
+                        + " 5px");
+          } else {
+            if (button.getId().equals(GameState.clickedLevelButton)) {
+              button.setStyle(
+                    "-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: white;"
+                        + " -fx-border-color: white; -fx-border-width: 2px; -fx-border-radius:"
+                        + " 5px");
+            } else {
+              button.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
+            }
+          }
+          label.setVisible(false);
+          box.setVisible(false);
         });
   }
 
@@ -329,44 +396,45 @@ public class IntroController implements Initializable {
           // Change the style of the button for 0.2 seconds only and back to original style
           button.setStyle(
               "-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: dark blue;");
-          PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
-          pauseTransition.setOnFinished(
-              event -> {
-                button.setStyle(
-                    "-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: white;"
-                        + " -fx-border-color: white; -fx-border-width: 2px; -fx-border-radius:"
-                        + " 5px");
-              });
-          pauseTransition.play();
         });
 
     button.setOnMouseExited(
         e -> {
-          // Delay the hiding of elements by 3 seconds
-          PauseTransition pauseTransition = new PauseTransition(Duration.seconds(1.5));
-          pauseTransition.setOnFinished(
-              event -> {
-                // Return the button to its original position
-                button.setTranslateY(0);
-              });
-          pauseTransition.play();
+          if(!isLevelSelected && !isTimeSelected){
+            button.setStyle(
+                    "-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: white;"
+                        + " -fx-border-color: white; -fx-border-width: 2px; -fx-border-radius:"
+                        + " 5px");
+          } else {
+            if (button.getId().equals(GameState.clickedButton)) {
+              button.setStyle(
+                    "-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: white;"
+                        + " -fx-border-color: white; -fx-border-width: 2px; -fx-border-radius:"
+                        + " 5px");
+            } else {
+              button.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
+            }
+          }
+          button.setTranslateY(0);
         });
   }
 
   @FXML
-  private void toggleSound() {
+  private void toggleSound(MouseEvent event) {
       if (GameState.isSoundEnabled) {
           // Disable sound
           if (App.mediaPlayer != null) {
               App.mediaPlayer.setVolume(0.0); // Mute the media player
           }
-          toggleSoundButton.setText("Enable Sound");
+          soundOff.setVisible(true);
+          soundOn.setVisible(false);
       } else {
           // Enable sound
           if (App.mediaPlayer != null) {
               App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
           }
-          toggleSoundButton.setText("Disable Sound");
+          soundOn.setVisible(true);
+          soundOff.setVisible(false);
       }
   
       GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state

@@ -5,49 +5,46 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="aiPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" visible="false" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.AIWindowController">
+<Pane fx:id="aiPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="350.0" visible="false" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.AIWindowController">
    <children>
-      <ImageView fitHeight="457.0" fitWidth="759.0" layoutX="119.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true">
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+      <ImageView fitHeight="507.0" fitWidth="622.0" layoutX="256.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../images/aiBorder.png" />
          </image>
       </ImageView>
-      <TextField fx:id="inputText" layoutX="137.0" layoutY="453.0" prefHeight="56.0" prefWidth="618.0">
+      <TextArea fx:id="chatTextArea" layoutX="30.0" layoutY="105.0" prefHeight="300.0" prefWidth="320.0" style="-fx-background-color: grey;" wrapText="true">
          <font>
-            <Font name="Arial" size="20.0" />
-         </font>
-      </TextField>
-      <TextArea fx:id="chatTextArea" layoutX="137.0" layoutY="122.0" prefHeight="337.0" prefWidth="719.0" wrapText="true">
-         <font>
-            <Font name="Arial" size="20.0" />
+            <Font name="Arial Italic" size="17.0" />
          </font>
       </TextArea>
-      <Button fx:id="sendButton" layoutX="755.0" layoutY="458.0" mnemonicParsing="false" onAction="#onSendMessage" prefHeight="47.0" prefWidth="109.0" style="-fx-background-color: black;" text="SEND" textFill="WHITE">
+      <TextField fx:id="inputText" layoutX="30.0" layoutY="410.0" prefHeight="35.0" prefWidth="220.0">
+         <font>
+            <Font name="Arial Italic" size="17.0" />
+         </font>
+      </TextField>
+      <Button fx:id="sendButton" layoutX="240.0" layoutY="410.0" mnemonicParsing="false" onAction="#onSendMessage" prefHeight="35.0" prefWidth="110.0" style="-fx-background-color: black;" text="SEND" textFill="WHITE">
          <font>
             <Font name="Arial" size="25.0" />
          </font>
       </Button>
-      <ImageView fx:id="robotBase" fitHeight="184.0" fitWidth="200.0" layoutX="401.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="robotBase" fitHeight="184.0" fitWidth="200.0" layoutX="70.0" layoutY="-60.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/base.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="robotThink" fitHeight="184.0" fitWidth="200.0" layoutX="400.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="robotThink" fitHeight="184.0" fitWidth="200.0" layoutX="70.0" layoutY="-60.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/robot-think.gif" />
          </image>
       </ImageView>
-      <ImageView fx:id="robotReply" fitHeight="184.0" fitWidth="200.0" layoutX="400.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="robotReply" fitHeight="184.0" fitWidth="200.0" layoutX="70.0" layoutY="-60.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/reply.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="closeWindow" fitHeight="76.0" fitWidth="109.0" layoutX="99.0" layoutY="42.0" onMouseClicked="#onCloseWindowClick" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/closeButton.png" />
          </image>
       </ImageView>
    </children>

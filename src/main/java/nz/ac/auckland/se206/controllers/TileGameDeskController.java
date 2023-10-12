@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
@@ -84,6 +85,9 @@ public class TileGameDeskController {
   @FXML private ImageView imageSeven;
   @FXML private ImageView imageEight;
 
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
+
   @FXML private Button toggleSoundButton;
   @FXML private Pane alert;
   private boolean hasHappend = false;
@@ -140,9 +144,10 @@ public class TileGameDeskController {
   public void initialize() throws ApiProxyException {
     App.timerSeconds = 120;
     // Add an event handler to the Toggle Sound button
-    toggleSoundButton.setOnAction(event -> toggleSound());
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
     animateRobot();
     alert.setVisible(false); // Initially hide the alert label
+    aiWindowController.setVisible(true);
 
     animationTimeline = new Timeline(
                 new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
@@ -190,6 +195,14 @@ public class TileGameDeskController {
     } else if (App.timerSeconds == 0) {
       // Stop the alert blinking when the timer reaches 0
       stopAlertBlinking();
+    }
+    // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
     }
   }
 
@@ -598,23 +611,23 @@ public class TileGameDeskController {
 
   @FXML
   private void onPuzzleGoBackClick() {
-    
     App.setScene(AppUi.TILEROOM);
-    String musicFile;
-    if (App.timerSeconds < 60) {
-      musicFile = "src/main/resources/sounds/final-BG-MUSIC.mp3";
-      App.musicType = "final";
-    } else {
-      musicFile = "src/main/resources/sounds/Background-Music.mp3";
-    }
-    Media media = new Media(new File(musicFile).toURI().toString());
+    //GameState.hasHappend = false;
+    // String musicFile;
+    // if (App.timerSeconds < 60) {
+    //   musicFile = "src/main/resources/sounds/final-BG-MUSIC.mp3";
+    //   App.musicType = "final";
+    // } else {
+    //   musicFile = "src/main/resources/sounds/Background-Music.mp3";
+    // }
+    // Media media = new Media(new File(musicFile).toURI().toString());
 
-    App.mediaPlayer.stop();
-    App.mediaPlayer = new MediaPlayer(media);
-    App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-    App.mediaPlayer.setVolume(0.1);
-    App.mediaPlayer.setAutoPlay(true);
-    System.out.println("click");
+    // App.mediaPlayer.stop();
+    // App.mediaPlayer = new MediaPlayer(media);
+    // App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    // App.mediaPlayer.setVolume(0.1);
+    // App.mediaPlayer.setAutoPlay(true);
+    // System.out.println("click");
   }
 
   // sound for tile game
@@ -627,29 +640,24 @@ public class TileGameDeskController {
   }
 
   @FXML
-  private void toggleSound() {
+  private void toggleSound(MouseEvent event) {
       if (GameState.isSoundEnabled) {
           // Disable sound
           if (App.mediaPlayer != null) {
               App.mediaPlayer.setVolume(0.0); // Mute the media player
           }
-          toggleSoundButton.setText("Enable Sound");
+          soundOff.setVisible(true);
+          soundOn.setVisible(false);
       } else {
           // Enable sound
           if (App.mediaPlayer != null) {
               App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
           }
-          toggleSoundButton.setText("Disable Sound");
+          soundOn.setVisible(true);
+          soundOff.setVisible(false);
       }
   
       GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
-  }
-  
-  @FXML
-  private void onGameMasterClick() {
-    // App.previousRoom = AppUi.TILEPUZZLE;
-    // App.setScene(AppUi.HELPERCHAT);
-    aiWindowController.setVisible(true);
   }
 
   // game master animation

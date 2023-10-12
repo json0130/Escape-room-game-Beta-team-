@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
+import nz.ac.auckland.se206.chatHistory;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
 import nz.ac.auckland.se206.speech.TextToSpeech;
@@ -66,6 +68,8 @@ public class PlayerController implements Initializable {
   @FXML private Rectangle black;
   // @FXML private ImageView gameMasterBox;
   @FXML private ImageView gameMaster;
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
 
   @FXML private Label playerLabel;
   @FXML private Label main;
@@ -105,8 +109,11 @@ public class PlayerController implements Initializable {
   @FXML private Button reset;
   @FXML private Button btnSend;
   @FXML private Button btnClose;
+  @FXML private Button resetButton;
+
   @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
+
   private double previousX;
   private double previousY;
 
@@ -117,7 +124,7 @@ public class PlayerController implements Initializable {
   private boolean hasHappend = false;
 
   // Add this variable to your class
-private Timeline alertBlinkTimeline;
+  private Timeline alertBlinkTimeline;
   @FXML public Pane aiWindowController;
 
   private ChatCompletionRequest chatCompletionRequest;
@@ -137,6 +144,8 @@ private Timeline alertBlinkTimeline;
           checkRoom1(player, room1);
           checkRoom2(player, room2);
           checkRoom3(player, room3);
+                // if difficulty is selected, label is updated
+          detectDifficulty();
         }
       };
 
@@ -146,9 +155,6 @@ private Timeline alertBlinkTimeline;
         public void handle(long now) {
           playerLabel.setVisible(false);
           black.setVisible(false);
-
-          previousX = player.getLayoutX(); // Update previousX
-          previousY = player.getLayoutY(); // Update previousY
 
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
@@ -177,7 +183,9 @@ private Timeline alertBlinkTimeline;
     black.setVisible(true);
 
     // Add an event handler to the Toggle Sound button
-    toggleSoundButton.setOnAction(event -> toggleSound());
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
+
+    aiWindowController.setVisible(true);
 
     room1.setVisible(false);
     room2.setVisible(false);
@@ -229,19 +237,6 @@ private Timeline alertBlinkTimeline;
             timer.stop();
           }
         }));
-
-    // if difficulty is selected, label is updated
-    detectDifficulty();
-
-    Platform.runLater(
-        () -> {
-          Stage stage = (Stage) scene.getScene().getWindow();
-          stage.setOnCloseRequest(
-              event -> {
-                Platform.exit();
-                System.exit(0);
-              });
-        });
   }
 
   // Modify your setupAlertBlinking method as follows
@@ -268,6 +263,7 @@ private Timeline alertBlinkTimeline;
   public void checkRoom1(ImageView player, Rectangle room1) {
     if (player.getBoundsInParent().intersects(room1.getBoundsInParent())) {
       room1.setVisible(true);
+      timer.stop();
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
@@ -277,8 +273,8 @@ private Timeline alertBlinkTimeline;
             player.setLayoutY(336);
             GameState.isPlayerInMap = false;
             GameState.isPlayerInRoom1 = true;
+            //GameState.hasHappend = false;
             App.setScene(AppUi.ROOM1);
-            timer.stop();
           });
       pauseTransition.play();
     } else {
@@ -289,6 +285,7 @@ private Timeline alertBlinkTimeline;
   public void checkRoom2(ImageView player, Rectangle room2) {
     if (player.getBoundsInParent().intersects(room2.getBoundsInParent())) {
       room2.setVisible(true);
+      timer.stop();
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
@@ -299,7 +296,7 @@ private Timeline alertBlinkTimeline;
             GameState.isPlayerInMap = false;
             GameState.isPlayerInRoom2 = true;
             App.setScene(AppUi.TILEROOM);
-            timer.stop();
+
           });
       pauseTransition.play();
     } else {
@@ -310,6 +307,8 @@ private Timeline alertBlinkTimeline;
   public void checkRoom3(ImageView player, Rectangle room3) {
     if (player.getBoundsInParent().intersects(room3.getBoundsInParent())) {
       room3.setVisible(true);
+      timer.stop();
+
       String musicFile;
       if (App.timerSeconds < 60 && App.musicType.equals("starting")) {
         App.musicType = "final";
@@ -332,7 +331,6 @@ private Timeline alertBlinkTimeline;
             GameState.isPlayerInMap = false;
             GameState.isPlayerInRoom3 = true;
             App.setScene(AppUi.ROOM3);
-            timer.stop();
           });
       pauseTransition.play();
     } else {
@@ -349,16 +347,24 @@ private Timeline alertBlinkTimeline;
       }
     }
     // Detect if the timer is 30 seconds left and start the alert blinking
-          if (App.timerSeconds == 30) {
-            if (!hasHappend){
-              System.out.println("30 seconds left");
-              hasHappend = true;
-              setupAlertBlinking();
-            }
-          } else if (App.timerSeconds == 0) {
-            // Stop the alert blinking when the timer reaches 0
-            stopAlertBlinking();
-          }
+    if (App.timerSeconds == 30) {
+      if (!hasHappend){
+        System.out.println("30 seconds left");
+        hasHappend = true;
+        setupAlertBlinking();
+      }
+    } else if (App.timerSeconds == 0) {
+    // Stop the alert blinking when the timer reaches 0
+      stopAlertBlinking();
+    }
+    // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
+    }
   }
 
   // code for enabling palyer to move using wasd keys
@@ -447,7 +453,6 @@ private Timeline alertBlinkTimeline;
                         }
                     } else {
                         Platform.runLater(() -> updateLabels());
-                        System.out.println("Difficulty detected");
                         labelTimer.cancel();
                     }
                 }
@@ -456,16 +461,6 @@ private Timeline alertBlinkTimeline;
         0,
         500);
 }
-
-  @FXML
-  public void clickGameMaster(MouseEvent event) {
-    // if (App.aiWindow == null) {
-    //   App.aiWindow = aiWindowController;
-    // } else {
-    //   aiWindowController = App.aiWindow;
-    // }
-    aiWindowController.setVisible(true);
-  }
 
   // update the header labels as the hint decreases
   private void updateLabels() {
@@ -497,21 +492,32 @@ private Timeline alertBlinkTimeline;
   }
 
   @FXML
-  private void toggleSound() {
+  private void toggleSound(MouseEvent event) {
       if (GameState.isSoundEnabled) {
           // Disable sound
           if (App.mediaPlayer != null) {
               App.mediaPlayer.setVolume(0.0); // Mute the media player
           }
-          toggleSoundButton.setText("Enable Sound");
+          soundOff.setVisible(true);
+          soundOn.setVisible(false);
       } else {
           // Enable sound
           if (App.mediaPlayer != null) {
               App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
           }
-          toggleSoundButton.setText("Disable Sound");
+          soundOn.setVisible(true);
+          soundOff.setVisible(false);
       }
   
       GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  }
+
+  @FXML
+  private void reset(ActionEvent event) throws IOException{
+    try {
+      GameState.resetGames();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
   }
 }

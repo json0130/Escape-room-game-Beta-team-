@@ -52,6 +52,8 @@ public class Room1Controller implements Initializable {
   List<Rectangle> walls = new ArrayList<>();
 
   @FXML private ImageView player;
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
   @FXML private Pane scene;
   @FXML private Pane alert;
 
@@ -61,6 +63,7 @@ public class Room1Controller implements Initializable {
   @FXML private Rectangle exit;
   @FXML private Rectangle wall1;
   @FXML private Rectangle wall2;
+  @FXML private Rectangle wall3;
   @FXML private Rectangle blinkingRectangle;
   @FXML private Rectangle crew1Collision;
   @FXML private Rectangle crew2Collision;
@@ -111,8 +114,8 @@ public class Room1Controller implements Initializable {
 
   @FXML private Button toggleSoundButton;
 
-    // Add this variable to your class
-    private Timeline alertBlinkTimeline;
+  // Add this variable to your class
+  private Timeline alertBlinkTimeline;
 
   private boolean nextToButton = false;
   private boolean hasHappend = false;
@@ -139,15 +142,19 @@ public class Room1Controller implements Initializable {
 
           if (wPressed.get()) {
             player.setLayoutY(player.getLayoutY() - movementVariable);
+            System.out.println("w");
           }
           if (aPressed.get()) {
             player.setLayoutX(player.getLayoutX() - movementVariable);
+            System.out.println("a");
           }
           if (sPressed.get()) {
             player.setLayoutY(player.getLayoutY() + movementVariable);
+            System.out.println("s");
           }
           if (dPressed.get()) {
             player.setLayoutX(player.getLayoutX() + movementVariable);
+            System.out.println("d");
           }
           squareBorder();
         }
@@ -159,12 +166,15 @@ public class Room1Controller implements Initializable {
     movementSetup();
     alert.setVisible(false);
 
+    aiWindowController.setVisible(true);
+
     collisionTimer.start();
 
     walls.add(wall1);
+    walls.add(wall3);
 
     // Add an event handler to the Toggle Sound button
-    toggleSoundButton.setOnAction(event -> toggleSound());
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
 
     previousX = player.getLayoutX();
     previousY = player.getLayoutY();
@@ -284,6 +294,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId1();
     crew1Indicator.setVisible(false);
+    scene.requestFocus();  // Add this line
   }
 
   public void onCollect2() {
@@ -291,6 +302,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId2();
     crew2Indicator.setVisible(false);
+    scene.requestFocus();  // Add this line
   }
 
   public void onCollect3() {
@@ -298,6 +310,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId3();
     crew3Indicator.setVisible(false);
+    scene.requestFocus();  // Add this line
   }
 
   public void onCollect4() {
@@ -305,6 +318,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId4();
     crew4Indicator.setVisible(false);
+    scene.requestFocus();  // Add this line
   }
 
   @FXML
@@ -320,6 +334,8 @@ public class Room1Controller implements Initializable {
   public void checkExit(ImageView player, Rectangle exit) {
     if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
       exit.setOpacity(1);
+      timer.stop();
+
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
@@ -328,8 +344,8 @@ public class Room1Controller implements Initializable {
             player.setLayoutY(468);
             GameState.isPlayerInMap = true;
             GameState.isPlayerInRoom1 = false;
+            //GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
-            timer.stop();
           });
       pauseTransition.play();
     } else {
@@ -354,6 +370,15 @@ public class Room1Controller implements Initializable {
     } else if (App.timerSeconds == 0) {
       // Stop the alert blinking when the timer reaches 0
       stopAlertBlinking();
+    }
+
+    // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
     }
   }
 
@@ -384,18 +409,22 @@ public class Room1Controller implements Initializable {
         e -> {
           if (e.getCode() == KeyCode.W) {
             wPressed.set(true);
+            System.out.println("up");
           }
 
           if (e.getCode() == KeyCode.A) {
             aPressed.set(true);
+            System.out.println("left");  
           }
 
           if (e.getCode() == KeyCode.S) {
             sPressed.set(true);
+            System.out.println("down");
           }
 
           if (e.getCode() == KeyCode.D) {
             dPressed.set(true);
+            System.out.println("right");
           }
         });
 
@@ -560,13 +589,6 @@ public class Room1Controller implements Initializable {
       };
 
   @FXML
-  public void clickGameMaster(MouseEvent event) {
-    // App.previousRoom = AppUi.ROOM1;
-    // App.setScene(AppUi.HELPERCHAT);
-    aiWindowController.setVisible(true);
-  }
-
-  @FXML
   private void soundButttonClick() {
     String soundEffect = "src/main/resources/sounds/button-click.mp3";
     Media media = new Media(new File(soundEffect).toURI().toString());
@@ -575,22 +597,24 @@ public class Room1Controller implements Initializable {
   }
 
   @FXML
-  private void toggleSound() {
-    if (GameState.isSoundEnabled) {
-      // Disable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.0); // Mute the media player
+  private void toggleSound(MouseEvent event) {
+      if (GameState.isSoundEnabled) {
+          // Disable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.0); // Mute the media player
+          }
+          soundOff.setVisible(true);
+          soundOn.setVisible(false);
+      } else {
+          // Enable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+          }
+          soundOn.setVisible(true);
+          soundOff.setVisible(false);
       }
-      toggleSoundButton.setText("Enable Sound");
-    } else {
-      // Enable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-      }
-      toggleSoundButton.setText("Disable Sound");
-    }
-
-    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  
+      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
   }
 
   // game master animation
@@ -603,7 +627,6 @@ public class Room1Controller implements Initializable {
     translate.setByX(0);
     translate.setByY(20);
     translate.setAutoReverse(true);
-
     translate.play();
   }
 
