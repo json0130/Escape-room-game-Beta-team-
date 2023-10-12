@@ -83,6 +83,9 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private Rectangle wall19;
   @FXML private Rectangle wall20;
   @FXML private Rectangle blinkingRectangle;
+  @FXML private Rectangle greetingBox;
+  @FXML private ImageView close;
+  @FXML private Label greeting;
   private FadeTransition fadeTransition;
 
   @FXML private Button toggleSoundButton;
@@ -187,6 +190,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     fadeTransition.setAutoReverse(true); // Reverse the animation
     // Start the animation
     fadeTransition.play();
+    greeting.setWrapText(true);
+    greeting.setText(App.greetingInRoom2);
   }
 
   public void checkExit(ImageView player, Rectangle exit) {
@@ -445,5 +450,12 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     translate.setAutoReverse(true);
 
     translate.play();
+  }
+
+  @FXML
+  private void clickClose(MouseEvent e) {
+    greeting.setVisible(false);
+    greetingBox.setVisible(false);
+    close.setVisible(false);
   }
 }

@@ -9,8 +9,9 @@
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
-<?import nz.ac.auckland.se206.controllers.TileGameRoomController?>
-<?import nz.ac.auckland.se206.controllers.AIWindowController?>
+
+<!-- <?import nz.ac.auckland.se206.controllers.TileGameRoomController?>
+<?import nz.ac.auckland.se206.controllers.AIWindowController?> -->
 
 <AnchorPane fx:id="scene" prefHeight="538.0" prefWidth="767.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.TileGameRoomController">
    <children>
@@ -90,5 +91,16 @@
       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
       <Button fx:id="toggleSoundButton" layoutX="894.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Button" />
       <fx:include fx:id="aiWindowController" source="aiwindow.fxml" />
+      <Rectangle fx:id="greetingBox" arcHeight="5.0" arcWidth="5.0" fill="#153451" height="200.0" layoutX="76.0" layoutY="91.0" stroke="BLACK" strokeType="INSIDE" width="868.0" />
+      <Label fx:id="greeting" layoutX="114.0" layoutY="103.0" prefHeight="167.0" prefWidth="809.0" textFill="WHITE">
+         <font>
+            <Font name="Arial" size="26.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="close" fitHeight="28.0" fitWidth="32.0" layoutX="82.0" layoutY="98.0" onMouseClicked="#clickClose" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/closeButton.png" />
+         </image>
+      </ImageView>
    </children>
-</AnchorPane>  
+</AnchorPane>
