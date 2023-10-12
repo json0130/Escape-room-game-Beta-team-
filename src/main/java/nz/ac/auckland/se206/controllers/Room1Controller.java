@@ -64,6 +64,7 @@ public class Room1Controller implements Initializable {
   @FXML private Rectangle crew3Collision;
   @FXML private Rectangle crew4Collision;
   @FXML private Rectangle greetingBox;
+  @FXML private Rectangle black;
 
   @FXML private Button btnCollect1;
   @FXML private Button btnCollect2;
@@ -612,6 +613,7 @@ public class Room1Controller implements Initializable {
     greetingBox.setVisible(false);
     close.setVisible(false);
     isGreetingShown = false;
+    black.setVisible(false);
   }
 
   /** After the player close the greeting, the character can move. */

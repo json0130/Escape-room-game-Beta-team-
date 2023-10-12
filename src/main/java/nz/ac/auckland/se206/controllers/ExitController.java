@@ -95,6 +95,7 @@ public class ExitController implements Initializable {
   @FXML private Rectangle light;
   @FXML private Rectangle monitor;
   @FXML private Rectangle clickMonitor;
+  @FXML private Rectangle black;
   @FXML private Label idLabel;
   @FXML private Label clickButton;
   @FXML private Label greeting;
@@ -881,6 +882,7 @@ public class ExitController implements Initializable {
     greetingBox.setVisible(false);
     close.setVisible(false);
     isGreetingShown = false;
+    black.setVisible(false);
   }
 
   /** After the player close the greeting, the character can move. */

@@ -83,6 +83,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private Rectangle wall20;
   @FXML private Rectangle blinkingRectangle;
   @FXML private Rectangle greetingBox;
+  @FXML private Rectangle black;
   @FXML private ImageView close;
   @FXML private Label greeting;
   private FadeTransition fadeTransition;
@@ -455,6 +456,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     greetingBox.setVisible(false);
     close.setVisible(false);
     isGreetingShown = false;
+    black.setVisible(false);
   }
 
   /** After the player close the greeting, the character can move. */

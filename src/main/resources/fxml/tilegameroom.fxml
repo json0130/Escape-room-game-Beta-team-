@@ -91,6 +91,7 @@
       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
       <Button fx:id="toggleSoundButton" layoutX="894.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Button" />
       <fx:include fx:id="aiWindowController" source="aiwindow.fxml" />
+      <Rectangle fx:id="black" arcHeight="5.0" arcWidth="5.0" fill="#1f1f1f" height="650.0" layoutY="48.0" opacity="0.7" stroke="BLACK" strokeType="INSIDE" width="1015.0" />
       <Rectangle fx:id="greetingBox" arcHeight="5.0" arcWidth="5.0" fill="#153451" height="200.0" layoutX="76.0" layoutY="91.0" stroke="BLACK" strokeType="INSIDE" width="868.0" />
       <Label fx:id="greeting" layoutX="114.0" layoutY="103.0" prefHeight="167.0" prefWidth="809.0" textFill="WHITE">
          <font>
