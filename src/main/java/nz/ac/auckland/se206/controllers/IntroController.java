@@ -40,6 +40,7 @@ public class IntroController implements Initializable {
   @FXML private Button hardButton;
   @FXML private Button startButton;
   @FXML private Button tutorial;
+  @FXML private Button close;
 
   @FXML private ImageView spaceship;
   @FXML private ImageView soundOn;
@@ -91,6 +92,7 @@ public class IntroController implements Initializable {
     letter.setVisible(false);
     letterbox.setVisible(false);
     tutorial.setVisible(false);
+    close.setVisible(false);
 
     background2.setVisible(false);
     startButton.setVisible(false);
@@ -121,7 +123,7 @@ public class IntroController implements Initializable {
   }
 
   @FXML
-  private void levelButtonClicked(ActionEvent event) {
+  private void levelButtonClicked(ActionEvent events) {
     soundButttonClick();
 
     // easyButton.setOnMouseEntered(null); // Disable hover effect
@@ -138,26 +140,40 @@ public class IntroController implements Initializable {
     minB4.setVisible(true);
     minB6.setVisible(true);
 
-    Button clickedButton = (Button) event.getSource();
+    Button clickedButton = (Button) events.getSource();
 
-      // Reset the style of all buttons to their original state
-      easyButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
-      mediumButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
-      hardButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
-      clickedButton.setStyle(
+    // Reset the style of all buttons to their original state
+    easyButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
+    mediumButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
+    hardButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
+    clickedButton.setStyle(
           "-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: dark blue;");
     isLevelSelected = true;
 
     // set the difficulty
-    if (event.getSource() == easyButton) {
+    if (events.getSource() == easyButton) {
       GameState.difficulty = "EASY";
       GameState.clickedLevelButton = "easyButton";
-    } else if (event.getSource() == mediumButton) {
+      System.out.println(GameState.difficulty);
+    } else if (events.getSource() == mediumButton) {
       GameState.difficulty = "MEDIUM";
       GameState.clickedLevelButton = "mediumButton";
-    } else if (event.getSource() == hardButton) {
+      System.out.println(GameState.difficulty);
+    } else if (events.getSource() == hardButton) {
       GameState.difficulty = "HARD";
       GameState.clickedLevelButton = "hardButton";
+      System.out.println(GameState.difficulty);
+    }
+
+    if(isLevelSelected && isTimeSelected){
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.2));
+      pauseTransition.setOnFinished(
+          event -> {
+            startButton.setVisible(true);
+            background3.setVisible(true);
+            title.setVisible(false);
+          });
+      pauseTransition.play();
     }
   }
 
@@ -168,16 +184,7 @@ public class IntroController implements Initializable {
     // minB2.setOnMouseEntered(null); // Disable hover effect
     // minB4.setOnMouseEntered(null); // Disable hover effect
     // minB6.setOnMouseEntered(null); // Disable hover effect
-
-    PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.2));
-    pauseTransition.setOnFinished(
-        event -> {
-          startButton.setVisible(true);
-          background3.setVisible(true);
-          title.setVisible(false);
-        });
-    pauseTransition.play();
-
+    
     Button cButton = (Button) events.getSource();
 
     switch (cButton.getId()) {
@@ -205,7 +212,18 @@ public class IntroController implements Initializable {
       minB4.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
       minB6.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
       cButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: dark blue;");
-    isTimeSelected = true;
+      isTimeSelected = true;
+
+    if(isLevelSelected && isTimeSelected){
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.2));
+      pauseTransition.setOnFinished(
+          event -> {
+            startButton.setVisible(true);
+            background3.setVisible(true);
+            title.setVisible(false);
+          });
+      pauseTransition.play();
+    }
   }
 
   @FXML
@@ -217,10 +235,11 @@ public class IntroController implements Initializable {
       letter.setVisible(true);
       letterbox.setVisible(true);
       tutorial.setVisible(true);
+      close.setVisible(true);
 
-      minB2.setDisable(false);
-      minB4.setDisable(false);
-      minB6.setDisable(false);
+      minB2.setDisable(true);
+      minB4.setDisable(true);
+      minB6.setDisable(true);
       minB2.setVisible(false);
       minB4.setVisible(false);
       minB6.setVisible(false);
@@ -231,7 +250,28 @@ public class IntroController implements Initializable {
   }
 
   @FXML
+  private void closeClicked(){
+    startButton.setDisable(false);
+    startButton.setVisible(true);
+    letter.setVisible(false);
+    letterbox.setVisible(false);
+    tutorial.setVisible(false);
+    close.setVisible(false);
+
+    minB2.setDisable(false);
+    minB4.setDisable(false);
+    minB6.setDisable(false);
+    minB2.setVisible(true);
+    minB4.setVisible(true);
+    minB6.setVisible(true);
+    easyButton.setVisible(true);
+    mediumButton.setVisible(true);
+    hardButton.setVisible(true);
+  }
+
+  @FXML
   private void startAnimation(ActionEvent events) {
+    GameState.isGameStarted = true;
     soundButttonClick();
     if (!animationStarted) {
       spaceship.setVisible(true);
@@ -240,6 +280,7 @@ public class IntroController implements Initializable {
       letter.setVisible(false);
       letterbox.setVisible(false);
       tutorial.setVisible(false);
+      close.setVisible(false);
 
       // Create a timeline to continuously increase the scaling factor
       Timeline continuousScaling =

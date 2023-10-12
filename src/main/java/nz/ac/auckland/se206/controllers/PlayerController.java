@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
+import nz.ac.auckland.se206.chatHistory;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
 import nz.ac.auckland.se206.speech.TextToSpeech;
@@ -107,8 +109,11 @@ public class PlayerController implements Initializable {
   @FXML private Button reset;
   @FXML private Button btnSend;
   @FXML private Button btnClose;
+  @FXML private Button resetButton;
+
   @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
+
   private double previousX;
   private double previousY;
 
@@ -139,6 +144,8 @@ public class PlayerController implements Initializable {
           checkRoom1(player, room1);
           checkRoom2(player, room2);
           checkRoom3(player, room3);
+                // if difficulty is selected, label is updated
+          detectDifficulty();
         }
       };
 
@@ -148,9 +155,6 @@ public class PlayerController implements Initializable {
         public void handle(long now) {
           playerLabel.setVisible(false);
           black.setVisible(false);
-
-          previousX = player.getLayoutX(); // Update previousX
-          previousY = player.getLayoutY(); // Update previousY
 
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
@@ -180,6 +184,8 @@ public class PlayerController implements Initializable {
 
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
+
+    aiWindowController.setVisible(true);
 
     room1.setVisible(false);
     room2.setVisible(false);
@@ -231,19 +237,6 @@ public class PlayerController implements Initializable {
             timer.stop();
           }
         }));
-
-    // if difficulty is selected, label is updated
-    detectDifficulty();
-
-    Platform.runLater(
-        () -> {
-          Stage stage = (Stage) scene.getScene().getWindow();
-          stage.setOnCloseRequest(
-              event -> {
-                Platform.exit();
-                System.exit(0);
-              });
-        });
   }
 
   // Modify your setupAlertBlinking method as follows
@@ -270,6 +263,7 @@ public class PlayerController implements Initializable {
   public void checkRoom1(ImageView player, Rectangle room1) {
     if (player.getBoundsInParent().intersects(room1.getBoundsInParent())) {
       room1.setVisible(true);
+      timer.stop();
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
@@ -279,8 +273,8 @@ public class PlayerController implements Initializable {
             player.setLayoutY(336);
             GameState.isPlayerInMap = false;
             GameState.isPlayerInRoom1 = true;
+            //GameState.hasHappend = false;
             App.setScene(AppUi.ROOM1);
-            timer.stop();
           });
       pauseTransition.play();
     } else {
@@ -291,6 +285,7 @@ public class PlayerController implements Initializable {
   public void checkRoom2(ImageView player, Rectangle room2) {
     if (player.getBoundsInParent().intersects(room2.getBoundsInParent())) {
       room2.setVisible(true);
+      timer.stop();
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
@@ -301,7 +296,7 @@ public class PlayerController implements Initializable {
             GameState.isPlayerInMap = false;
             GameState.isPlayerInRoom2 = true;
             App.setScene(AppUi.TILEROOM);
-            timer.stop();
+
           });
       pauseTransition.play();
     } else {
@@ -312,6 +307,8 @@ public class PlayerController implements Initializable {
   public void checkRoom3(ImageView player, Rectangle room3) {
     if (player.getBoundsInParent().intersects(room3.getBoundsInParent())) {
       room3.setVisible(true);
+      timer.stop();
+
       String musicFile;
       if (App.timerSeconds < 60 && App.musicType.equals("starting")) {
         App.musicType = "final";
@@ -334,7 +331,6 @@ public class PlayerController implements Initializable {
             GameState.isPlayerInMap = false;
             GameState.isPlayerInRoom3 = true;
             App.setScene(AppUi.ROOM3);
-            timer.stop();
           });
       pauseTransition.play();
     } else {
@@ -457,7 +453,6 @@ public class PlayerController implements Initializable {
                         }
                     } else {
                         Platform.runLater(() -> updateLabels());
-                        System.out.println("Difficulty detected");
                         labelTimer.cancel();
                     }
                 }
@@ -466,16 +461,6 @@ public class PlayerController implements Initializable {
         0,
         500);
 }
-
-  @FXML
-  public void clickGameMaster(MouseEvent event) {
-    // if (App.aiWindow == null) {
-    //   App.aiWindow = aiWindowController;
-    // } else {
-    //   aiWindowController = App.aiWindow;
-    // }
-    aiWindowController.setVisible(true);
-  }
 
   // update the header labels as the hint decreases
   private void updateLabels() {
@@ -525,5 +510,14 @@ public class PlayerController implements Initializable {
       }
   
       GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  }
+
+  @FXML
+  private void reset(ActionEvent event) throws IOException{
+    try {
+      GameState.resetGames();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
   }
 }

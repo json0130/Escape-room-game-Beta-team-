@@ -60,6 +60,7 @@ public class ExitController implements Initializable {
 
   @FXML private Rectangle exit1;
   @FXML private Rectangle wall;
+  @FXML private Rectangle wall1;
   @FXML private Rectangle id;
 
   @FXML private Button one;
@@ -164,8 +165,10 @@ public class ExitController implements Initializable {
     background.setOpacity(1);
     clickButton.setVisible(false);
     alert.setVisible(false); // Initially hide the alert label
+    aiWindowController.setVisible(true);
 
     walls.add(wall);
+    walls.add(wall1);
 
      // Add an event handler to the Toggle Sound button
      toggleSoundButton.setOnMouseClicked(this::toggleSound);
@@ -209,6 +212,8 @@ public class ExitController implements Initializable {
   public void checkExit(ImageView player, Rectangle exit1) {
     if (player.getBoundsInParent().intersects(exit1.getBoundsInParent())) {
       exit1.setOpacity(1);
+      timer.stop();
+
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
@@ -217,8 +222,8 @@ public class ExitController implements Initializable {
             player.setLayoutY(508);
             GameState.isPlayerInMap = true;
             GameState.isPlayerInRoom3 = false;
+            //GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
-            timer.stop();
           });
       pauseTransition.play();
     } else {
@@ -952,10 +957,5 @@ public void movementSetup() {
     translate.setAutoReverse(true);
 
     translate.play();
-  }
-
-  @FXML
-  public void clickGameMaster(MouseEvent event) {
-   aiWindowController.setVisible(true);
   }
 }

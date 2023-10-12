@@ -177,6 +177,7 @@ public class TutorialController implements Initializable {
                 box.setVisible(false);
                 gate1.setVisible(false);
                 gate2.setVisible(false);
+                sentenceLabel.setVisible(false);
               });
           pauseTransition.play();
     }
@@ -246,13 +247,13 @@ private void animateGate2UpAndDown() {
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     // Initialise the position of the images
-    r1.setLayoutX(950);
+    r1.setLayoutX(1150);
     r1.setLayoutY(100);
-    r2.setLayoutX(950);
+    r2.setLayoutX(1150);
     r2.setLayoutY(250);
-    r3.setLayoutX(950);
+    r3.setLayoutX(1150);
     r3.setLayoutY(400);
-    r4.setLayoutX(950);
+    r4.setLayoutX(1150);
     r4.setLayoutY(550);
 
     toggleSoundButton.setOnMouseClicked(this::toggleSound);

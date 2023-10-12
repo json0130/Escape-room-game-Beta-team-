@@ -63,6 +63,7 @@ public class Room1Controller implements Initializable {
   @FXML private Rectangle exit;
   @FXML private Rectangle wall1;
   @FXML private Rectangle wall2;
+  @FXML private Rectangle wall3;
   @FXML private Rectangle blinkingRectangle;
   @FXML private Rectangle crew1Collision;
   @FXML private Rectangle crew2Collision;
@@ -141,15 +142,19 @@ public class Room1Controller implements Initializable {
 
           if (wPressed.get()) {
             player.setLayoutY(player.getLayoutY() - movementVariable);
+            System.out.println("w");
           }
           if (aPressed.get()) {
             player.setLayoutX(player.getLayoutX() - movementVariable);
+            System.out.println("a");
           }
           if (sPressed.get()) {
             player.setLayoutY(player.getLayoutY() + movementVariable);
+            System.out.println("s");
           }
           if (dPressed.get()) {
             player.setLayoutX(player.getLayoutX() + movementVariable);
+            System.out.println("d");
           }
           squareBorder();
         }
@@ -161,9 +166,12 @@ public class Room1Controller implements Initializable {
     movementSetup();
     alert.setVisible(false);
 
+    aiWindowController.setVisible(true);
+
     collisionTimer.start();
 
     walls.add(wall1);
+    walls.add(wall3);
 
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
@@ -286,6 +294,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId1();
     crew1Indicator.setVisible(false);
+    scene.requestFocus();  // Add this line
   }
 
   public void onCollect2() {
@@ -293,6 +302,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId2();
     crew2Indicator.setVisible(false);
+    scene.requestFocus();  // Add this line
   }
 
   public void onCollect3() {
@@ -300,6 +310,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId3();
     crew3Indicator.setVisible(false);
+    scene.requestFocus();  // Add this line
   }
 
   public void onCollect4() {
@@ -307,6 +318,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId4();
     crew4Indicator.setVisible(false);
+    scene.requestFocus();  // Add this line
   }
 
   @FXML
@@ -322,6 +334,8 @@ public class Room1Controller implements Initializable {
   public void checkExit(ImageView player, Rectangle exit) {
     if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
       exit.setOpacity(1);
+      timer.stop();
+
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
@@ -330,8 +344,8 @@ public class Room1Controller implements Initializable {
             player.setLayoutY(468);
             GameState.isPlayerInMap = true;
             GameState.isPlayerInRoom1 = false;
+            //GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
-            timer.stop();
           });
       pauseTransition.play();
     } else {
@@ -395,18 +409,22 @@ public class Room1Controller implements Initializable {
         e -> {
           if (e.getCode() == KeyCode.W) {
             wPressed.set(true);
+            System.out.println("up");
           }
 
           if (e.getCode() == KeyCode.A) {
             aPressed.set(true);
+            System.out.println("left");  
           }
 
           if (e.getCode() == KeyCode.S) {
             sPressed.set(true);
+            System.out.println("down");
           }
 
           if (e.getCode() == KeyCode.D) {
             dPressed.set(true);
+            System.out.println("right");
           }
         });
 
@@ -569,13 +587,6 @@ public class Room1Controller implements Initializable {
           }
         }
       };
-
-  @FXML
-  public void clickGameMaster(MouseEvent event) {
-    // App.previousRoom = AppUi.ROOM1;
-    // App.setScene(AppUi.HELPERCHAT);
-    aiWindowController.setVisible(true);
-  }
 
   @FXML
   private void soundButttonClick() {
