@@ -4,19 +4,24 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.text.Font;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
@@ -42,6 +47,8 @@ public class ChatController {
   @FXML private ImageView riddleCorrect;
   @FXML private ImageView riddleWrong;
   @FXML private ImageView riddleGreeting;
+  @FXML private ScrollPane chatPane;
+  @FXML private VBox chatContainer;
 
   private ChatCompletionRequest chatCompletionRequest;
   public static boolean isRiddleGiven = false;
@@ -67,19 +74,38 @@ public class ChatController {
         });
     chatTextArea.setEditable(false);
     detectDifficulty();
-    chatCompletionRequest =  new ChatCompletionRequest().setN(1).setTemperature(1).setTopP(1).setMaxTokens(100);
+    chatCompletionRequest =
+        new ChatCompletionRequest().setN(1).setTemperature(1).setTopP(1).setMaxTokens(100);
     runGpt(new ChatMessage("user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
     System.out.println(Room1Controller.riddleAnswer);
   }
 
-  
   /**
    * Appends a chat message to the chat text area.
    *
    * @param msg the chat message to append
    */
   private void appendChatMessage(ChatMessage msg) {
-    chatTextArea.appendText(msg.getRole() + ": " + msg.getContent() + "\n\n");
+    String messageToSend = msg.getContent();
+    Label message = new Label(messageToSend);
+    message.setWrapText(true);
+    message.setFont(Font.font("Arial", 20));
+    HBox hBox = new HBox();
+    if (msg.getRole().equals("user")) {
+      hBox.setAlignment(Pos.CENTER_RIGHT);
+      hBox.setPadding(new Insets(5, 10, 5, 200));
+      message.setStyle(
+          "-fx-background-color: lightblue; -fx-background-radius: 10;-fx-padding: 10,20,20,10;");
+    } else {
+      hBox.setAlignment(Pos.CENTER_LEFT);
+      hBox.setPadding(new Insets(5, 200, 5, 10));
+      message.setStyle(
+          "-fx-background-color: lightyellow; -fx-background-radius: 10;-fx-padding: 10,20,20,10;");
+    }
+    hBox.getChildren().addAll(message);
+    chatContainer.getChildren().addAll(hBox);
+    chatContainer.setAlignment(Pos.TOP_CENTER);
+    chatPane.setVvalue(1.0);
   }
 
   /**
@@ -100,7 +126,10 @@ public class ChatController {
               ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
               Choice result = chatCompletionResult.getChoices().iterator().next();
               chatCompletionRequest.addMessage(result.getChatMessage());
-              appendChatMessage(result.getChatMessage());
+              Platform.runLater(
+                  () -> {
+                    appendChatMessage(result.getChatMessage());
+                  });
               // Check the correctness of player's answer for the riddle
               Platform.runLater(
                   () -> {
@@ -114,7 +143,7 @@ public class ChatController {
                       riddleHint();
                     } else if (result.getChatMessage().getRole().equals("assistant")
                         && result.getChatMessage().getContent().startsWith("Incorrect")) {
-                          riddleWrong();
+                      riddleWrong();
                     } else {
                       riddleGreeting();
                     }
@@ -211,37 +240,37 @@ public class ChatController {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
         new TimerTask() {
-            @Override
-            public void run() {
-                if (GameState.difficulty != null) {
-                    if (GameState.difficulty.equals("MEDIUM")) {
-                        Platform.runLater(() -> updateLabels());
-                        if (GameState.numOfHints == 0) {
-                            labelTimer.cancel();
-                        }
-                    } else {
-                        Platform.runLater(() -> updateLabels());
-                        labelTimer.cancel();
-                    }
+          @Override
+          public void run() {
+            if (GameState.difficulty != null) {
+              if (GameState.difficulty.equals("MEDIUM")) {
+                Platform.runLater(() -> updateLabels());
+                if (GameState.numOfHints == 0) {
+                  labelTimer.cancel();
                 }
+              } else {
+                Platform.runLater(() -> updateLabels());
+                labelTimer.cancel();
+              }
             }
+          }
         },
         0,
         500);
-}
-
-// update labels for difficulty and hints as the game progress
-private void updateLabels() {
-  if (GameState.difficulty == "EASY") {
-    hintLabel.setText("UNLIMITED");
-  } else if (GameState.difficulty == "MEDIUM") {
-    hintLabel.setText(String.valueOf(GameState.numOfHints));
-    hintLabel2.setText("HINTS");
-    if (GameState.numOfHints == 1) {
-      hintLabel2.setText("HINT");
-    }
-  } else {
-    hintLabel.setText("NO");
   }
-}
+
+  // update labels for difficulty and hints as the game progress
+  private void updateLabels() {
+    if (GameState.difficulty == "EASY") {
+      hintLabel.setText("UNLIMITED");
+    } else if (GameState.difficulty == "MEDIUM") {
+      hintLabel.setText(String.valueOf(GameState.numOfHints));
+      hintLabel2.setText("HINTS");
+      if (GameState.numOfHints == 1) {
+        hintLabel2.setText("HINT");
+      }
+    } else {
+      hintLabel.setText("NO");
+    }
+  }
 }

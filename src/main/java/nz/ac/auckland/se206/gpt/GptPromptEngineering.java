@@ -38,8 +38,8 @@ public class GptPromptEngineering {
               + " asking for hint or asking for answer or quessing the answer or just want to talk"
               + " to you.If ths user is asking for hints, say you cannot give hints. If the user"
               + " asks for the answer, say you cannot reveal the answer. If the answer is same with"
-              + " the answer, start your prompt with 'Correct'. If the answer is wrong, say"
-              + " incorrect. Otherwise, naturally respond to "
+              + " the answer, start your prompt with 'Correct'. If the answer is wrong, start"
+              + " your prompt with 'Incorrect'. Otherwise, naturally respond to "
               + message;
     } else {
       answer =
@@ -47,8 +47,9 @@ public class GptPromptEngineering {
               + " just want to talk to you. If the user is asking for hints, start your prompt with"
               + " 'Hint' and give a hint. Otherwise, do not give a hint. If the user asks for the"
               + " answer, say you cannot reveal the answer. If the answer is same with the answer,"
-              + " start your prompt with 'Correct'. If the answer is wrong, say incorrect. Do not"
-              + " include the answer in your prompt. Otherwise, naturally respond to "
+              + " start your prompt with 'Correct'. If the answer is wrong, start your prompt with"
+              + " 'Incorrect'. Do not include the answer in your prompt. Otherwise, naturally"
+              + " respond to "
               + message;
     }
 
