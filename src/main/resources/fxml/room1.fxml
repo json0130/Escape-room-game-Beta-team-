@@ -22,9 +22,9 @@
             <Image url="@../images/robotfloat.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="player" fitHeight="121.0" fitWidth="131.0" layoutX="433.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="player" fitHeight="178.0" fitWidth="171.0" layoutX="398.0" layoutY="431.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/Firefly_spaceship_game_character_walking_48398-removebg-preview.png" />
+            <Image url="@../images/gameCharacterArtRight.png" />
          </image>
       </ImageView>
       <ImageView fx:id="idCaptain" fitHeight="153.0" fitWidth="250.0" layoutX="190.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true">

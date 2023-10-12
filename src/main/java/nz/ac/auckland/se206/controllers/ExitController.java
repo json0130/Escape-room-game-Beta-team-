@@ -25,6 +25,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -117,6 +118,53 @@ public class ExitController implements Initializable {
 
   private double mouseAnchorX;
   private double mouseAnchorY;
+
+  @FXML
+  Image rightCharacterAnimation =
+      new Image(
+          new File("src/main/resources/images/walkingRight.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image leftCharacterAnimation =
+      new Image(
+          new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image leftCharacterIdle =
+      new Image(
+          new File("src/main/resources/images/gameCharacterArtLeft.png").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image rightCharacterIdle =
+      new Image(
+          new File("src/main/resources/images/gameCharacterArtRight.png").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image lastPlayedWalk =
+      new Image(
+          new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  Boolean walkAnimationPlaying = false;
 
   AnimationTimer collisionTimers =
       new AnimationTimer() {
@@ -230,7 +278,7 @@ public class ExitController implements Initializable {
     }
     // Detect if the timer is 30 seconds left and start the alert blinking
     if (App.timerSeconds == 30) {
-      if (!hasHappend){
+      if (!hasHappend) {
         System.out.println("30 seconds left");
         hasHappend = true;
         setupAlertBlinking();
@@ -246,10 +294,10 @@ public class ExitController implements Initializable {
     alert.setVisible(true); // Initially show the alert label
 
     // Set up the blinking animation for the alert label
-    alertBlinkTimeline = new Timeline(
-        new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
-        new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false))
-    );
+    alertBlinkTimeline =
+        new Timeline(
+            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
+            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
     alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
     alertBlinkTimeline.play();
   }
@@ -257,56 +305,110 @@ public class ExitController implements Initializable {
   // Add a method to stop the alert blinking
   private void stopAlertBlinking() {
     if (alertBlinkTimeline != null) {
-        alertBlinkTimeline.stop();
-        alert.setVisible(false);
+      alertBlinkTimeline.stop();
+      alert.setVisible(false);
     }
   }
 
   @FXML
-public void movementSetup() {
+  public void movementSetup() {
+
     scene.setOnKeyPressed(
         e -> {
-            if (keyboardControlEnabled) {
-                if (e.getCode() == KeyCode.W) {
-                    wPressed.set(true);
-                }
-
-                if (e.getCode() == KeyCode.A) {
-                    aPressed.set(true);
-                }
-
-                if (e.getCode() == KeyCode.S) {
-                    sPressed.set(true);
-                }
-
-                if (e.getCode() == KeyCode.D) {
-                    dPressed.set(true);
-                }
+          if (e.getCode() == KeyCode.W) {
+            if (walkAnimationPlaying == false) {
+              player.setImage(lastPlayedWalk);
+              walkAnimationPlaying = true;
             }
+            wPressed.set(true);
+          }
+
+          if (e.getCode() == KeyCode.A) {
+            if (player.getImage() != leftCharacterAnimation) {
+              player.setImage(leftCharacterAnimation);
+              walkAnimationPlaying = true;
+              lastPlayedWalk = player.getImage();
+            }
+            aPressed.set(true);
+          }
+
+          if (e.getCode() == KeyCode.S) {
+            if (walkAnimationPlaying == false) {
+              player.setImage(lastPlayedWalk);
+              walkAnimationPlaying = true;
+            }
+            sPressed.set(true);
+          }
+
+          if (e.getCode() == KeyCode.D) {
+            if (player.getImage() != rightCharacterAnimation) {
+              player.setImage(rightCharacterAnimation);
+              walkAnimationPlaying = true;
+              lastPlayedWalk = player.getImage();
+            }
+            dPressed.set(true);
+          }
         });
 
     scene.setOnKeyReleased(
         e -> {
-            if (keyboardControlEnabled) {
-                if (e.getCode() == KeyCode.W) {
-                    wPressed.set(false);
-                }
-
-                if (e.getCode() == KeyCode.A) {
-                    aPressed.set(false);
-                }
-
-                if (e.getCode() == KeyCode.S) {
-                    sPressed.set(false);
-                }
-
-                if (e.getCode() == KeyCode.D) {
-                    dPressed.set(false);
-                }
+          if (e.getCode() == KeyCode.W) {
+            if (player.getImage() == leftCharacterAnimation
+                && sPressed.get() == false
+                && aPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (sPressed.get() == true) {
+              player.setImage(lastPlayedWalk);
+            } else if (aPressed.get() == false
+                && dPressed.get() == false
+                && sPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
             }
-        });
-}
+            wPressed.set(false);
+          }
 
+          if (e.getCode() == KeyCode.A) {
+            if (dPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (dPressed.get() == true) {
+              player.setImage(rightCharacterAnimation);
+            }
+
+            aPressed.set(false);
+          }
+
+          if (e.getCode() == KeyCode.S) {
+            if (player.getImage() == leftCharacterAnimation
+                && wPressed.get() == false
+                && aPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (wPressed.get() == true) {
+              player.setImage(lastPlayedWalk);
+            } else if (aPressed.get() == false
+                && dPressed.get() == false
+                && wPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            }
+            sPressed.set(false);
+          }
+
+          if (e.getCode() == KeyCode.D) {
+            if (aPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (aPressed.get() == true) {
+              player.setImage(leftCharacterAnimation);
+            }
+
+            dPressed.set(false);
+          }
+        });
+  }
 
   // prevent the player moves out of the window
   public void squareBorder() {
@@ -394,7 +496,7 @@ public void movementSetup() {
       pauseTransition.setOnFinished(
           event -> {
             // Adjust the player's position to be right in front of the room)
-            if (!GameState.correctPassword){
+            if (!GameState.correctPassword) {
               nextToButton = true;
               monitor.setFill(javafx.scene.paint.Color.WHITE);
               clickButton.setVisible(true);
@@ -882,31 +984,31 @@ public void movementSetup() {
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
   }
+
   @FXML
   private void onGameMasterClick() {
-    
+
     aiWindowController.setVisible(true);
     System.out.print("HI");
   }
 
   private void toggleSound() {
     if (GameState.isSoundEnabled) {
-        // Disable sound
-        if (App.mediaPlayer != null) {
-            App.mediaPlayer.setVolume(0.0); // Mute the media player
-        }
-        toggleSoundButton.setText("Enable Sound");
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
+      }
+      toggleSoundButton.setText("Enable Sound");
     } else {
-        // Enable sound
-        if (App.mediaPlayer != null) {
-            App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-        }
-        toggleSoundButton.setText("Disable Sound");
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      toggleSoundButton.setText("Disable Sound");
     }
 
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
-}
-
+  }
 
   // game master robot animation
   @FXML
@@ -926,7 +1028,7 @@ public void movementSetup() {
   public void clickGameMaster(MouseEvent event) {
     App.previousRoom = AppUi.ROOM3;
     App.setScene(AppUi.HELPERCHAT);
-   aiWindowController.setVisible(true);
+    aiWindowController.setVisible(true);
     System.out.print("HI");
   }
 }

@@ -26,6 +26,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -102,6 +103,53 @@ public class Room1Controller implements Initializable {
 
   @FXML public Pane aiWindowController;
 
+  @FXML
+  Image rightCharacterAnimation =
+      new Image(
+          new File("src/main/resources/images/walkingRight.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image leftCharacterAnimation =
+      new Image(
+          new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image leftCharacterIdle =
+      new Image(
+          new File("src/main/resources/images/gameCharacterArtLeft.png").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image rightCharacterIdle =
+      new Image(
+          new File("src/main/resources/images/gameCharacterArtRight.png").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image lastPlayedWalk =
+      new Image(
+          new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  Boolean walkAnimationPlaying = false;
+
   private FadeTransition fadeTransition;
   public static String riddleAnswer;
   public boolean isCrew1Colliding = false;
@@ -111,8 +159,8 @@ public class Room1Controller implements Initializable {
 
   @FXML private Button toggleSoundButton;
 
-    // Add this variable to your class
-    private Timeline alertBlinkTimeline;
+  // Add this variable to your class
+  private Timeline alertBlinkTimeline;
 
   private boolean nextToButton = false;
   private boolean hasHappend = false;
@@ -324,8 +372,8 @@ public class Room1Controller implements Initializable {
       pauseTransition.setOnFinished(
           event -> {
             // Adjust the player's position to be right in front of the room
-            player.setLayoutX(433);
-            player.setLayoutY(468);
+            player.setLayoutX(398);
+            player.setLayoutY(431);
             GameState.isPlayerInMap = true;
             GameState.isPlayerInRoom1 = false;
             App.setScene(AppUi.PLAYER);
@@ -346,7 +394,7 @@ public class Room1Controller implements Initializable {
       }
     }
     if (App.timerSeconds == 30) {
-      if (!hasHappend){
+      if (!hasHappend) {
         System.out.println("30 seconds left");
         hasHappend = true;
         setupAlertBlinking();
@@ -380,21 +428,40 @@ public class Room1Controller implements Initializable {
   // code for player movement using wasd keys
   @FXML
   public void movementSetup() {
+
     scene.setOnKeyPressed(
         e -> {
           if (e.getCode() == KeyCode.W) {
+            if (walkAnimationPlaying == false) {
+              player.setImage(lastPlayedWalk);
+              walkAnimationPlaying = true;
+            }
             wPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.A) {
+            if (player.getImage() != leftCharacterAnimation) {
+              player.setImage(leftCharacterAnimation);
+              walkAnimationPlaying = true;
+              lastPlayedWalk = player.getImage();
+            }
             aPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.S) {
+            if (walkAnimationPlaying == false) {
+              player.setImage(lastPlayedWalk);
+              walkAnimationPlaying = true;
+            }
             sPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.D) {
+            if (player.getImage() != rightCharacterAnimation) {
+              player.setImage(rightCharacterAnimation);
+              walkAnimationPlaying = true;
+              lastPlayedWalk = player.getImage();
+            }
             dPressed.set(true);
           }
         });
@@ -402,18 +469,58 @@ public class Room1Controller implements Initializable {
     scene.setOnKeyReleased(
         e -> {
           if (e.getCode() == KeyCode.W) {
+            if (player.getImage() == leftCharacterAnimation
+                && sPressed.get() == false
+                && aPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (sPressed.get() == true) {
+              player.setImage(lastPlayedWalk);
+            } else if (aPressed.get() == false
+                && dPressed.get() == false
+                && sPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            }
             wPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.A) {
+            if (dPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (dPressed.get() == true) {
+              player.setImage(rightCharacterAnimation);
+            }
+
             aPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.S) {
+            if (player.getImage() == leftCharacterAnimation
+                && wPressed.get() == false
+                && aPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (wPressed.get() == true) {
+              player.setImage(lastPlayedWalk);
+            } else if (aPressed.get() == false
+                && dPressed.get() == false
+                && wPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            }
             sPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.D) {
+            if (aPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (aPressed.get() == true) {
+              player.setImage(leftCharacterAnimation);
+            }
+
             dPressed.set(false);
           }
         });
@@ -453,34 +560,34 @@ public class Room1Controller implements Initializable {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
         new TimerTask() {
-            @Override
-            public void run() {
-                if (GameState.difficulty != null) {
-                    if (GameState.difficulty.equals("MEDIUM")) {
-                        Platform.runLater(() -> updateLabels());
-                        if (GameState.numOfHints == 0) {
-                            labelTimer.cancel();
-                        }
-                    } else {
-                        Platform.runLater(() -> updateLabels());
-                        labelTimer.cancel();
-                    }
+          @Override
+          public void run() {
+            if (GameState.difficulty != null) {
+              if (GameState.difficulty.equals("MEDIUM")) {
+                Platform.runLater(() -> updateLabels());
+                if (GameState.numOfHints == 0) {
+                  labelTimer.cancel();
                 }
+              } else {
+                Platform.runLater(() -> updateLabels());
+                labelTimer.cancel();
+              }
             }
+          }
         },
         0,
         500);
-}
+  }
 
-   // Modify your setupAlertBlinking method as follows
+  // Modify your setupAlertBlinking method as follows
   private void setupAlertBlinking() {
     alert.setVisible(true); // Initially show the alert label
 
     // Set up the blinking animation for the alert label
-    alertBlinkTimeline = new Timeline(
-        new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
-        new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false))
-    );
+    alertBlinkTimeline =
+        new Timeline(
+            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
+            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
     alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
     alertBlinkTimeline.play();
   }
@@ -488,8 +595,8 @@ public class Room1Controller implements Initializable {
   // Add a method to stop the alert blinking
   private void stopAlertBlinking() {
     if (alertBlinkTimeline != null) {
-        alertBlinkTimeline.stop();
-        alert.setVisible(false);
+      alertBlinkTimeline.stop();
+      alert.setVisible(false);
     }
   }
 
@@ -614,7 +721,7 @@ public class Room1Controller implements Initializable {
         new TimerTask() {
           @Override
           public void run() {
-            // if the state of irRiddleResolved changed, indicators are visible 
+            // if the state of irRiddleResolved changed, indicators are visible
             if (GameState.isRiddleResolved) {
               System.out.println("riddle is resolved");
               Platform.runLater(() -> showIndicators());
@@ -626,7 +733,7 @@ public class Room1Controller implements Initializable {
         100);
   }
 
-  // show all indicators at once 
+  // show all indicators at once
   private void showIndicators() {
     crew1Indicator.setVisible(true);
     crew2Indicator.setVisible(true);

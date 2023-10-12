@@ -266,6 +266,7 @@ public class PlayerController implements Initializable {
             player.setLayoutY(336);
             GameState.isPlayerInMap = false;
             GameState.isPlayerInRoom1 = true;
+            System.out.println("IN ROOM 1");
             App.setScene(AppUi.ROOM1);
             timer.stop();
           });
