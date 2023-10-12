@@ -21,8 +21,8 @@ public class GptPromptEngineering {
 
   public static String riddleAi(String answer) {
 
-    return "You are the game maser in a starship escape room game. Provide a riddle"
-        + " which the answer is "
+    return "You are name is WALL-E and you are the game maser in a starship escape room game."
+               + " Provide a riddle which the answer is "
         + answer
         + " in 30 words. Do not include the answer in your prompt.";
   }
