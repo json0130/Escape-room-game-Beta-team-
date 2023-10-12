@@ -627,7 +627,6 @@ public class Room1Controller implements Initializable {
     translate.setByX(0);
     translate.setByY(20);
     translate.setAutoReverse(true);
-
     translate.play();
   }
 

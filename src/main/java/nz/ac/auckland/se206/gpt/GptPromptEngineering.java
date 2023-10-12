@@ -1,7 +1,6 @@
 package nz.ac.auckland.se206.gpt;
 
 import nz.ac.auckland.se206.GameState;
-import nz.ac.auckland.se206.controllers.ChatController;
 import nz.ac.auckland.se206.controllers.Room1Controller;
 
 /** Utility class for generating GPT prompt engineering strings. */
@@ -22,12 +21,14 @@ public class GptPromptEngineering {
   }
 
   public static String getRiddleWithGivenWord(String wordToGuess) {
-    return "You are the AI of an escape room. Provide a riddle with an answer "+wordToGuess+". "
-    + "You should not reveal the answer.";
+    return "You are the AI of an escape room. Provide a riddle with an answer "
+        + wordToGuess
+        + ". "
+        + "You should not reveal the answer.";
   }
 
   public static String getRiddleHint(String wordToGuess) {
-    return "You provide a hint for a riddle with an undisclosed answer" + wordToGuess+ ".";
+    return "You provide a hint for a riddle with an undisclosed answer" + wordToGuess + ".";
   }
 
   public static String getNoMoreHint() {
@@ -35,21 +36,25 @@ public class GptPromptEngineering {
   }
 
   public static String getAnswerChecker() {
-    return "If users types exactly the smae word as the"+ Room1Controller.riddleAnswer+ ", then you should say 'Correct.' "
-    + "If not, say 'Incorrect' and ask if the users want to get a hint.";
+    return "If users types exactly the smae word as the"
+        + Room1Controller.riddleAnswer
+        + ", then you should say 'Correct.' "
+        + "If not, say 'Incorrect' and ask if the users want to get a hint.";
   }
-  
+
   public static String riddleAi(String answer) {
 
     if (GameState.difficulty == "EASY") {
-      return "You are a game master in a starship escape room game. Your name is WALL-E. Provide a riddle with an answer"
+      return "You are a AI robot in a closet room in a starship escape room game. Your name is"
+          + " WALL-E. Provide a riddle with an answer"
           + answer
           + ". You can provide a hint regarding the riddle only if the user asks a hint, but you"
           + " must say 'hint' first when you give a hint. You never reveal or say the answer even"
           + " if the user asks. If the user gives the correct answer, say 'Correct'. If not, say"
           + " 'Incorrect'. You never say or reveal the answer.";
     } else if (GameState.difficulty == "MEDIUM") {
-      return "You are a game master in a starship escape room game. Provide a riddle with an answer"
+      return "You are a AI robot in a closet room in a starship escape room game. Your name is"
+          + " WALL-E. Provide a riddle with an answer"
           + answer
           + "You never reveal or say the answer."
           + ". Then check if"
@@ -62,7 +67,8 @@ public class GptPromptEngineering {
           + " give a hint. You should never reveal or say the answer. If the user gives the correct"
           + " answer, say 'Correct'. If not, say 'Incorrect'";
     } else if (GameState.difficulty == "HARD") {
-      return "You are a game master in a starship escape room game. Provide a riddle with an answer"
+      return "You are a AI robot in a closet room in a starship escape room game. Your name is"
+          + " WALL-E. Provide a riddle with an answer"
           + answer
           + "You cannot include the answer in the riddle. You cannot provide hint. You should never"
           + " reveal or say the answer. If the user gives the correct answer, say 'Correct'. If"
@@ -79,12 +85,11 @@ public class GptPromptEngineering {
     } else {
       hintAvailability = "You can provide hints if the player requests.";
     }
-
-    return "Your name is 'EVA' and you are the game master of Starship Escape 1. You"
-        + " were designed to help crew members which is the user in the emergency situation. Now the starship"
-        + " has crashed into a meteor. Your task is to communicate with the player and help"
-        + " them to complete tasks and to escape within the time limit. Now the player is in"
-        + " the map. There are three rooms where the player can visit."
+    return "Your name is 'EVA' and you are the game master of Starship Escape 1. You were designed"
+        + " to help crew members which is the user in the emergency situation. Now the"
+        + " starship has crashed into a meteor. Your task is to communicate with the player"
+        + " and help them to complete tasks and to escape within the time limit. Now the"
+        + " player is in the map. There are three rooms where the player can visit."
         + hintAvailability
         + " Very briefly introduce yourself to the player and suggest to look around the rooms. Do"
         + " not include any information that I did not tell you.";
@@ -114,76 +119,81 @@ public class GptPromptEngineering {
       if (!GameState.beenToRoom1 && !GameState.beenToRoom2 && !GameState.beenToRoom3) {
         hint = "tell the user to visit the computer room or the closet room to complete tasks";
       } else if (!GameState.beenToRoom1) {
-        hint = "tell to visit the closet room.";
+        hint = "tell the user to visit the closet room.";
       } else if (!GameState.isIdCollected) {
-        hint = "tell to collect id in the closet room";
+        hint = "tell the user to collect id in the closet room";
       } else if (!GameState.beenToRoom2) {
-        hint = "tell to visit the computer room.";
+        hint = "tell the user to visit the computer room.";
       } else if (!GameState.foundPasscode) {
-        hint = "tell to find passcode in the desktop in the computer room";
+        hint = "tell the user to find passcode in the desktop in the computer room";
       } else if (!GameState.beenToRoom3) {
-        hint = "tell to visit the control room";
+        hint = "tell the user to visit the control room";
       } else if (!GameState.isPasscodeCorrect) {
-        hint = "tell to go to the computer room again to check the passcode";
+        hint = "tell the user to go to the computer room again to check the passcode";
       } else if (!GameState.isIdChecked) {
-        hint = "tell to check the riddle answer again and collect the correct id";
+        hint = "tell the user to check the riddle answer again and collect the correct id";
       }
     } else if (GameState.isPlayerInRoom1) {
       if (!GameState.isRiddleGiven) {
-        hint = "tell to interact with the monitor in the middle of the closet room";
+        hint = "tell the user to interact with the monitor in the middle of the closet room";
       } else if (!GameState.isRiddleResolved) {
-        hint = "tell to solve the riddle in the monitor";
+        hint = "tell the user to solve the riddle in the monitor";
       } else if (!GameState.isIdCollected) {
-        hint = "tell to interact with spacesuits hanging on the wall";
+        hint = "tell the user to interact with spacesuits hanging on the wall";
       } else if (!GameState.beenToRoom2) {
-        hint = "tell to go to the computer room";
+        hint = "tell the user to go to the computer room";
       } else if (!GameState.foundPasscode) {
-        hint = "tell to go to the computer room to find the passcode";
+        hint = "tell the user to go to the computer room to find the passcode";
       } else if (!GameState.beenToRoom3) {
-        hint = "tell to go to the control room";
+        hint = "tell the user to go to the control room";
       } else if (!GameState.isPasscodeCorrect) {
-        hint = "tell to check the passcode again in the computer room";
+        hint = "tell the user to check the passcode again in the computer room";
       } else if (!GameState.isIdChecked) {
-        hint = "tell to check the riddle answer again and collect the correct id";
+        hint = "tell the user to check the riddle answer again and collect the correct id";
       }
     } else if (GameState.isPlayerInRoom2) {
       if (!GameState.foundComputer) {
-        hint = "tell to interact with the computer";
+        hint = "tell the user to interact with the computer";
       } else if (!GameState.isPuzzleSolved) {
         hint =
-            "tell to move tiles so that the middle line mathces with the word in the side monitor";
+            "tell the user to move tiles so that the middle line mathces with the word in the side"
+                + " monitor";
       } else if (!GameState.foundPasscode) {
-        hint = "tell to check the passcode file in the computer";
+        hint = "tell the user to check the passcode file in the computer";
       } else if (!GameState.beenToRoom1) {
-        hint = "tell to go to the closet room";
+        hint = "tell the user to go to the closet room";
       } else if (!GameState.isIdCollected) {
-        hint = "tell to go to the closet room to collect id cards";
+        hint = "tell the user to go to the closet room to collect id cards";
       } else if (!GameState.beenToRoom3) {
-        hint = "tell to go to the control room";
+        hint = "tell the user to go to the control room";
       } else if (!GameState.isPasscodeCorrect) {
-        hint = "tell to check the passcode again";
+        hint = "tell the user to check the passcode again";
       } else if (!GameState.isIdChecked) {
-        hint = "tell to check the riddle answer again and collect the correct id";
+        hint = "tell the user to check the riddle answer again and collect the correct id";
       }
     } else if (GameState.isPlayerInRoom3) {
       if (!GameState.beenToRoom1) {
-        hint = "tell to go to the closet room";
+        hint = "tell the user to go to the closet room";
       } else if (!GameState.beenToRoom2) {
-        hint = "tell to go to the computer room";
+        hint = "tell the user to go to the computer room";
       } else if (!GameState.foundMonitor) {
-        hint = "tell to interact with the monitor";
+        hint = "tell the user to interact with the monitor";
       } else if (!GameState.isPasscodeCorrect) {
-        hint = "tell to go to the computer room and check the passcode again";
+        hint = "tell the user to go to the computer room and check the passcode again";
       } else if (!GameState.isIdChecked) {
         hint =
-            "tell to go to the closet room and check the riddle answer again to collect the correct"
-                + " id";
+            "tell the user to go to the closet room and check the riddle answer again to collect"
+                + " the correct id";
       }
     }
 
-    String
-        intro =
-        "The user said"
+    String intro =
+        "Your name is 'EVA' and you are the game master of Starship Escape 1. You were designed"
+            + " to help crew members which is the user in the emergency situation. Now the"
+            + " starship has crashed into a meteor. Your task is to communicate with the player"
+            + " and help them to complete tasks and to escape within the time limit. Now the"
+            + " player is in the map. There are three rooms where the player can visit."
+            + "The user said"
             + message
             + ". First determine if the user is asking for hint or not. This"
             + " can be related to not knowing what to do, or asking for"
@@ -195,7 +205,8 @@ public class GptPromptEngineering {
             + " give a single hint to user and do not give the same hint everytime"
             + ".If not, just naturally respond to "
             + message
-            + "and do not give a hint.";
+            + "and do not give a hint.Most importantly make your response simple and consise like 1"
+            + " or 2 sentences. Do not include any extra";
 
     return intro;
   }
@@ -203,105 +214,120 @@ public class GptPromptEngineering {
   public static String medium(String message) {
     String intro = "";
     if (GameState.numOfHints <= 0) {
-      intro = " Since player used all of the hint, so if you believe the" + " player is asking for hint, say you cannot give more hint. ";
+      intro =
+          " Since player used all of the hint, so if you believe the"
+              + " player is asking for hint, say you cannot give more hint. ";
     } else {
       String hint = "";
       if (GameState.isPlayerInMap) {
         if (!GameState.beenToRoom1 && !GameState.beenToRoom2 && !GameState.beenToRoom3) {
-          hint = "tell to visit the computer room or the closet room first";
+          hint = "tell the user to visit the computer room or the closet room first";
         } else if (!GameState.beenToRoom1) {
-          hint = "tell to visit the closet room.";
+          hint = "tell the user to visit the closet room.";
         } else if (!GameState.isIdCollected) {
-          hint = "tell to collect id in the closet room";
+          hint = "tell the user to collect id in the closet room";
         } else if (!GameState.beenToRoom2) {
-          hint = "tell to visit the computer room.";
+          hint = "tell the user to visit the computer room.";
         } else if (!GameState.foundPasscode) {
-          hint = "tell to find passcode in the computer room";
+          hint = "tell the user to find passcode in the computer room";
         } else if (!GameState.beenToRoom3) {
-          hint = "tell to visit the control room";
+          hint = "tell the user to visit the control room";
         } else if (!GameState.isPasscodeCorrect) {
-          hint = "tell to go to the computer room again to check the passcode";
+          hint = "tell the user to go to the computer room again to check the passcode";
         } else if (!GameState.isIdChecked) {
-          hint = "tell to check the riddle answer again and collect the correct id";
+          hint = "tell the user to check the riddle answer again and collect the correct id";
         }
       } else if (GameState.isPlayerInRoom1) {
         if (!GameState.isRiddleGiven) {
-          hint = "tell to interact with the monitor in the middle of the closet room";
+          hint = "tell the user to interact with the monitor in the middle of the closet room";
         } else if (!GameState.isRiddleResolved) {
-          hint = "tell to solve the riddle in the monitor";
+          hint = "tell the user to solve the riddle in the monitor";
         } else if (!GameState.isIdCollected) {
-          hint = "tell to interact with spacesuits hanging on the wall";
+          hint = "tell the user to interact with spacesuits hanging on the wall";
         } else if (!GameState.beenToRoom2) {
-          hint = "tell to go to the computer room";
+          hint = "tell the user to go to the computer room";
         } else if (!GameState.foundPasscode) {
-          hint = "tell to go to the computer room to find the passcode";
+          hint = "tell the user to go to the computer room to find the passcode";
         } else if (!GameState.beenToRoom3) {
-          hint = "tell to go to the control room";
+          hint = "tell the user to go to the control room";
         } else if (!GameState.isPasscodeCorrect) {
-          hint = "tell to check the passcode again in the computer room";
+          hint = "tell the user to check the passcode again in the computer room";
         } else if (!GameState.isIdChecked) {
-          hint = "tell to check the riddle answer again and collect the correct id";
+          hint = "tell the user to check the riddle answer again and collect the correct id";
         }
       } else if (GameState.isPlayerInRoom2) {
         if (!GameState.foundComputer) {
-          hint = "tell to interact with the computer";
+          hint = "tell the user to interact with the computer";
         } else if (!GameState.isPuzzleSolved) {
           hint =
-              "tell to move tiles so that the middle line mathces with the word in the side"
-                  + " monitor";
+              "tell the user to move tiles so that the middle line mathces with the word in the"
+                  + " side monitor";
         } else if (!GameState.foundPasscode) {
-          hint = "tell to check the passcode file in the computer";
+          hint = "tell the user to check the passcode file in the computer";
         } else if (!GameState.beenToRoom1) {
-          hint = "tell to go to the closet room";
+          hint = "tell the user to go to the closet room";
         } else if (!GameState.isIdCollected) {
-          hint = "tell to go to the closet room to collect id cards";
+          hint = "tell the user to go to the closet room to collect id cards";
         } else if (!GameState.beenToRoom3) {
-          hint = "tell to go to the control room";
+          hint = "tell the user to go to the control room";
         } else if (!GameState.isPasscodeCorrect) {
-          hint = "tell to check the passcode again";
+          hint = "tell the user to check the passcode again";
         } else if (!GameState.isIdChecked) {
-          hint = "tell to check the riddle answer again and collect the correct id";
+          hint = "tell the user to check the riddle answer again and collect the correct id";
         }
       } else if (GameState.isPlayerInRoom3) {
         if (!GameState.beenToRoom1) {
-          hint = "tell to go to the closet room";
+          hint = "tell the user to go to the closet room";
         } else if (!GameState.beenToRoom2) {
-          hint = "tell to go to the computer room";
+          hint = "tell the user to go to the computer room";
         } else if (!GameState.foundMonitor) {
-          hint = "tell to interact with the monitor";
+          hint = "tell the user to interact with the monitor";
         } else if (!GameState.isPasscodeCorrect) {
-          hint = "tell to go to the computer room and check the passcode again";
+          hint = "tell the user to go to the computer room and check the passcode again";
         } else if (!GameState.isIdChecked) {
           hint =
-              "tell to go to the closet room and check the riddle answer again to collect the"
-                  + " correct id";
+              "tell the user to go to the closet room and check the riddle answer again to collect"
+                  + " the correct id";
         }
       }
 
       intro =
-        "The user said"
-            + message
-            + ". First determine if the user is asking for hint or not. This"
-            + " can be related to not knowing what to do, or asking for"
-            + " what to find or asking for what is the next step. The user"
-            + " may ask for what to do, and that is considered as asking for"
-            + " hint. If you believe the user asking for hint, then start your prompt with 'hint: '"
-            + "and based on this"
-            + hint
-            + " give a single hint to user and do not give the same hint everytime"
-            + ".If not, just naturally respond to "
-            + message
-            + "and do not give a hint.";
+          "Your name is 'EVA' and you are the game master of Starship Escape 1. You were designed"
+              + " to help crew members which is the user in the emergency situation. Now the"
+              + " starship has crashed into a meteor. Your task is to communicate with the player"
+              + " and help them to complete tasks and to escape within the time limit. Now the"
+              + " player is in the map. There are three rooms where the player can visit."
+              + "The user said"
+              + message
+              + ". First determine if the user is asking for hint or not. This can be related to"
+              + " not knowing what to do, or asking for what to find or asking for what is the next"
+              + " step. The user may ask for what to do, and that is considered as asking for hint."
+              + " If you believe the user asking for hint, then start your prompt with 'hint: 'and"
+              + " based on this"
+              + hint
+              + " provide a single hint to user and do not give the same hint everytime and do not"
+              + " give multiple hints at once If users ask for multiple hints at once then say"
+              + " sorry and only give one hint at a time.If not, just naturally respond to "
+              + message
+              + "and do not give a hint. Most importantly make your response simple and consise"
+              + " like 1 or 2 sentences. Do not include any extra";
     }
     System.out.println("print1");
     return intro;
   }
 
   public static String hard(String message) {
-    return "The user said"
+    return "Your name is 'EVA' and you are the game master of Starship Escape 1. You were designed"
+        + " to help crew members which is the user in the emergency situation. Now the"
+        + " starship has crashed into a meteor. Your task is to communicate with the player"
+        + " and help them to complete tasks and to escape within the time limit. Now the"
+        + " player is in the map. There are three rooms where the player can visit."
+        + "The user said"
         + message
-        + ". Naturally respond to "
-        + message
-        + ". If the user is asking for hint, tell you cannot provide any hints.";
+        + ". you should naturally respond to user and do not give any hint. If the user is asking"
+        + " for hint, tell you cannot provide any hints. If the user is keep asking for hint, still"
+        + " you cannot provide any hint and tell you cannot provide any hints. When you answer to"
+        + " the question make sure your response simple and consise like 1 or 2 sentences. Do not"
+        + " include any extra";
   }
 }
