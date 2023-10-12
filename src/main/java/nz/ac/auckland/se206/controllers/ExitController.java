@@ -113,6 +113,8 @@ public class ExitController implements Initializable {
   private double mouseAnchorX;
   private double mouseAnchorY;
 
+  private boolean isGreetingShown = true;
+
   AnimationTimer collisionTimers =
       new AnimationTimer() {
         @Override
@@ -159,7 +161,7 @@ public class ExitController implements Initializable {
     toggleSoundButton.setOnAction(event -> toggleSound());
 
     shapesize = player.getFitWidth();
-    movementSetup();
+    enablePlayerMovement();
 
     collisionTimers.start();
     previousX = player.getLayoutX();
@@ -826,31 +828,31 @@ public class ExitController implements Initializable {
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
   }
+
   @FXML
   private void onGameMasterClick() {
-    
+
     aiWindowController.setVisible(true);
     System.out.print("HI");
   }
 
   private void toggleSound() {
     if (GameState.isSoundEnabled) {
-        // Disable sound
-        if (App.mediaPlayer != null) {
-            App.mediaPlayer.setVolume(0.0); // Mute the media player
-        }
-        toggleSoundButton.setText("Enable Sound");
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
+      }
+      toggleSoundButton.setText("Enable Sound");
     } else {
-        // Enable sound
-        if (App.mediaPlayer != null) {
-            App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-        }
-        toggleSoundButton.setText("Disable Sound");
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      toggleSoundButton.setText("Disable Sound");
     }
 
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
-}
-
+  }
 
   // game master robot animation
   @FXML
@@ -868,14 +870,33 @@ public class ExitController implements Initializable {
 
   @FXML
   public void clickGameMaster(MouseEvent event) {
-   aiWindowController.setVisible(true);
+    aiWindowController.setVisible(true);
     System.out.print("HI");
   }
 
+  /** When the close image is clicked, greeting disappears. */
   @FXML
   private void clickClose(MouseEvent e) {
     greeting.setVisible(false);
     greetingBox.setVisible(false);
     close.setVisible(false);
+    isGreetingShown = false;
+  }
+
+  /** After the player close the greeting, the character can move. */
+  private void enablePlayerMovement() {
+    Timer greetingTimer = new Timer(true);
+    greetingTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (!isGreetingShown) {
+              movementSetup();
+              greetingTimer.cancel();
+            }
+          }
+        },
+        0,
+        100);
   }
 }

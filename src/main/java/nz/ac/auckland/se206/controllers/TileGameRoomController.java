@@ -17,7 +17,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -100,6 +99,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   TranslateTransition translate = new TranslateTransition();
 
+  private boolean isGreetingShown = true;
+
   AnimationTimer collisionTimer =
       new AnimationTimer() {
         @Override
@@ -167,7 +168,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     detectDifficulty();
 
     shapesize = player.getFitWidth();
-    movementSetup();
+    enablePlayerMovement();
 
     collisionTimer.start();
 
@@ -329,11 +330,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     System.out.println("key " + event.getCode() + " released");
   }
 
-  
-  
-
-  
-
   /**
    * Handles the click event on the window.
    *
@@ -416,22 +412,22 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   @FXML
   private void toggleSound() {
-      if (GameState.isSoundEnabled) {
-          // Disable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.0); // Mute the media player
-          }
-          toggleSoundButton.setText("Enable Sound");
-      } else {
-          // Enable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-          }
-          toggleSoundButton.setText("Disable Sound");
+    if (GameState.isSoundEnabled) {
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
       }
-  
-      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+      toggleSoundButton.setText("Enable Sound");
+    } else {
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      toggleSoundButton.setText("Disable Sound");
     }
+
+    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  }
 
   @FXML
   private void onGameMasterClick() {
@@ -452,10 +448,29 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     translate.play();
   }
 
+  /** When the close image is clicked, greeting disappears. */
   @FXML
   private void clickClose(MouseEvent e) {
     greeting.setVisible(false);
     greetingBox.setVisible(false);
     close.setVisible(false);
+    isGreetingShown = false;
+  }
+
+  /** After the player close the greeting, the character can move. */
+  private void enablePlayerMovement() {
+    Timer greetingTimer = new Timer(true);
+    greetingTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (!isGreetingShown) {
+              movementSetup();
+              greetingTimer.cancel();
+            }
+          }
+        },
+        0,
+        100);
   }
 }

@@ -113,6 +113,8 @@ public class Room1Controller implements Initializable {
 
   private boolean nextToButton = false;
 
+  private boolean isGreetingShown = true;
+
   // timer for collsion check between monitor and walls
   AnimationTimer collisionTimer =
       new AnimationTimer() {
@@ -152,7 +154,6 @@ public class Room1Controller implements Initializable {
   public void initialize(URL url, ResourceBundle resource) {
     animateRobot();
     shapesize = player.getFitWidth();
-    movementSetup();
 
     collisionTimer.start();
 
@@ -222,6 +223,8 @@ public class Room1Controller implements Initializable {
 
     greeting.setWrapText(true);
     greeting.setText(App.greetingInRoom1);
+
+    enablePlayerMovement();
   }
 
   // hide id and button and indicator at once
@@ -582,7 +585,7 @@ public class Room1Controller implements Initializable {
         new TimerTask() {
           @Override
           public void run() {
-            // if the state of irRiddleResolved changed, indicators are visible 
+            // if the state of irRiddleResolved changed, indicators are visible
             if (GameState.isRiddleResolved) {
               System.out.println("riddle is resolved");
               Platform.runLater(() -> showIndicators());
@@ -594,7 +597,7 @@ public class Room1Controller implements Initializable {
         100);
   }
 
-  // show all indicators at once 
+  // show all indicators at once
   private void showIndicators() {
     crew1Indicator.setVisible(true);
     crew2Indicator.setVisible(true);
@@ -602,10 +605,29 @@ public class Room1Controller implements Initializable {
     crew4Indicator.setVisible(true);
   }
 
+  /** When the close image is clicked, greeting disappears. */
   @FXML
   private void clickClose(MouseEvent e) {
     greeting.setVisible(false);
     greetingBox.setVisible(false);
     close.setVisible(false);
+    isGreetingShown = false;
+  }
+
+  /** After the player close the greeting, the character can move. */
+  private void enablePlayerMovement() {
+    Timer greetingTimer = new Timer(true);
+    greetingTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (!isGreetingShown) {
+              movementSetup();
+              greetingTimer.cancel();
+            }
+          }
+        },
+        0,
+        100);
   }
 }

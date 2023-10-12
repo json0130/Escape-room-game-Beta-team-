@@ -110,6 +110,8 @@ public class PlayerController implements Initializable {
   private double previousX;
   private double previousY;
 
+  private boolean isGreetingShown = true;
+
   @FXML private Button toggleSoundButton;
   private boolean isSoundEnabled = true;
 
@@ -119,7 +121,6 @@ public class PlayerController implements Initializable {
 
   private ChatCompletionRequest chatCompletionRequest;
   private String lastUserMessage = ""; // Track the last user message for GPT response
-
 
   @FXML
   void start(ActionEvent event) {
@@ -184,7 +185,7 @@ public class PlayerController implements Initializable {
     control.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
 
     shapesize = player.getFitWidth();
-    movementSetup();
+    enablePlayerMovement();
 
     walls.add(wall);
     walls.add(wall1);
@@ -328,7 +329,7 @@ public class PlayerController implements Initializable {
   // code for enabling palyer to move using wasd keys
   @FXML
   public void movementSetup() {
-      scene.setOnKeyPressed(
+    scene.setOnKeyPressed(
         e -> {
           if (e.getCode() == KeyCode.W) {
             wPressed.set(true);
@@ -365,7 +366,6 @@ public class PlayerController implements Initializable {
             dPressed.set(false);
           }
         });
-    
   }
 
   // border that the player cannot move outof the window
@@ -477,10 +477,29 @@ public class PlayerController implements Initializable {
     translate.play();
   }
 
+  /** When the close image is clicked, greeting disappears. */
   @FXML
   private void clickClose(MouseEvent e) {
     greeting.setVisible(false);
     greetingBox.setVisible(false);
     close.setVisible(false);
+    isGreetingShown = false;
+  }
+
+  /** After the player close the greeting, the character can move. */
+  private void enablePlayerMovement() {
+    Timer greetingTimer = new Timer(true);
+    greetingTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (!isGreetingShown) {
+              movementSetup();
+              greetingTimer.cancel();
+            }
+          }
+        },
+        0,
+        100);
   }
 }
