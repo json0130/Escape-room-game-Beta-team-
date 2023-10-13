@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -15,7 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -23,6 +23,7 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.gpt.ChatMessage;
+import nz.ac.auckland.se206.gpt.GptPromptEngineering;
 import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult;
@@ -40,8 +41,13 @@ public class AIWindowController {
   @FXML private Pane aiPane;
   @FXML private ImageView closeWindow;
 
+  private nz.ac.auckland.se206.chatHistory chatHistory;
+  private String currentRoomName;
+
   public static ChatCompletionRequest chatCompletionRequest;
   public static boolean isRiddleGiven = false;
+
+  private AnimationTimer timer;
 
   /**
    * Initializes the chat view, loading the riddle.
@@ -50,22 +56,10 @@ public class AIWindowController {
    */
   @FXML
   public void initialize() throws ApiProxyException {
-    // when the enter key is pressed, message is sent
-    inputText.setOnKeyPressed(
-        event -> {
-          if (event.getCode() == KeyCode.ENTER) {
-            try {
-              onSendMessage(new ActionEvent());
-            } catch (ApiProxyException | IOException e) {
-              // TODO Auto-generated catch block
-              e.printStackTrace();
-            }
-          }
-        });
+
     chatTextArea.setEditable(false);
     detectDifficulty();
     System.out.println(Room1Controller.riddleAnswer);
-
     aiPane
         .visibleProperty()
         .addListener(
@@ -86,6 +80,17 @@ public class AIWindowController {
                 }
               }
             });
+
+    timer =
+        new AnimationTimer() {
+          @Override
+          public void handle(long now) {
+            chatTextArea.setText(App.aiWindow);
+            chatTextArea.setScrollTop(Double.MAX_VALUE);
+          }
+        };
+
+    timer.start();
   }
 
   public void detectDifficulty() {
@@ -129,10 +134,29 @@ public class AIWindowController {
    *
    * @param msg the chat message to append
    */
+  // private void appendChatMessage(ChatMessage msg) {
+  //   App.aiWindow = App.aiWindow.concat((msg.getRole() + ": " + msg.getContent() + "\n\n"));
+  //   chatTextArea.setText(App.aiWindow);
+  //   Platform.runLater(() -> {
+  //     //chatTextArea.positionCaret(chatTextArea.getText().length());
+  //     chatTextArea.setScrollTop(Double.MAX_VALUE); // this will scroll to the bottom
+  //     System.out.println(App.aiWindow);
+  //     GameState.hasHappend = false;
+  //   });
+  // }
+
+  /**
+   * Appends a chat message to the chat text area.
+   *
+   * @param msg the chat message to append
+   */
   private void appendChatMessage(ChatMessage msg) {
-    App.aiWindow = App.aiWindow.concat((msg.getRole() + ": " + msg.getContent() + "\n\n"));
-    chatTextArea.setText(App.aiWindow);
-    chatTextArea.positionCaret(chatTextArea.getText().length());
+    App.aiWindow = App.aiWindow.concat(msg.getRole() + ": " + msg.getContent() + "\n\n");
+    Platform.runLater(
+        () -> {
+          chatTextArea.setText(App.aiWindow);
+          chatTextArea.setScrollTop(Double.MAX_VALUE); // this will scroll to the bottom
+        });
   }
 
   /**
@@ -198,14 +222,26 @@ public class AIWindowController {
     ChatMessage msg = new ChatMessage("user", message);
     appendChatMessage(msg);
 
-    ChatMessage lastMsg = runGpt(msg);
-    robotThink();
-    if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("Correct")) {
-      GameState.isRiddleResolved = true;
+    // ChatMessage lastMsg = runGpt(msg);
+    if (GameState.difficulty == "EASY") {
+      robotThink();
+      // Handle Easy difficulty
+      runGpt(new ChatMessage("user", GptPromptEngineering.easy(message)));
+    } else if (GameState.difficulty == "MEDIUM") {
+      robotThink();
+      // Handle Medium difficulty
+      runGpt(new ChatMessage("user", GptPromptEngineering.medium(message)));
+    } else if (GameState.difficulty == "HARD") {
+      robotThink();
+      runGpt(new ChatMessage("user", GptPromptEngineering.hard(message)));
     }
-    if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("hint")) {
-      GameState.numOfHints--;
-    }
+    // if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("Correct")) {
+    //   GameState.isRiddleResolved = true;
+    // }
+    // if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("hint")) {
+    //   GameState.numOfHints--;
+    // }
+    aiPane.requestFocus(); // Add this line
   }
 
   /**
@@ -268,6 +304,7 @@ public class AIWindowController {
     robotBase.setVisible(true);
     robotReply.setVisible(false);
     robotThink.setVisible(false);
+    chatTextArea.setText(App.aiWindow);
   }
 
   @FXML
@@ -275,14 +312,6 @@ public class AIWindowController {
     if (aiPane.isVisible() == false) {
       aiPane.setVisible(true);
     }
-  }
-
-  @FXML
-  private void onCloseWindowClick() {
-    chatTextArea.setText(App.aiWindow);
-    // chatTextArea.clear();
-    // chatTextArea.appendText("AI: How can I help?" + "\n\n");
-    aiPane.setVisible(false);
   }
 
   // private ChatCompletionRequest getChatCompletionRequest() {

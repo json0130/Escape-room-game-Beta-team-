@@ -9,25 +9,25 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.Room1Controller">
+<Pane fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.Room1Controller">
    <children>
-      <ImageView fitHeight="716.0" fitWidth="1002.0" layoutX="-1.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="748.0" fitWidth="1227.0" layoutX="-1.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/Firefly%2020230921004116.png" />
+            <Image url="@../images/Firefly%2020231012230823.png" />
          </image>
       </ImageView>
-      <Pane fx:id="alert" layoutX="-12.0" layoutY="-8.0" opacity="0.23" prefHeight="669.0" prefWidth="1025.0" style="-fx-background-color: red;" />
-      <ImageView fx:id="gameMaster" fitHeight="165.0" fitWidth="179.0" layoutX="578.0" layoutY="152.0" onMouseClicked="#clickGameMaster" pickOnBounds="true" preserveRatio="true">
+      <Pane fx:id="alert" layoutX="-12.0" layoutY="-8.0" opacity="0.23" prefHeight="671.0" prefWidth="1227.0" style="-fx-background-color: red;" />
+      <ImageView fx:id="gameMaster" fitHeight="165.0" fitWidth="179.0" layoutX="1022.0" layoutY="138.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/robotfloat.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="player" fitHeight="121.0" fitWidth="131.0" layoutX="433.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="player" fitHeight="178.0" fitWidth="171.0" layoutX="398.0" layoutY="431.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/Firefly_spaceship_game_character_walking_48398-removebg-preview.png" />
+            <Image url="@../images/gameCharacterArtRight.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="idCaptain" fitHeight="153.0" fitWidth="250.0" layoutX="190.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="idCaptain" fitHeight="153.0" fitWidth="250.0" layoutX="166.0" layoutY="58.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/idcaptain.png" />
          </image>
@@ -37,39 +37,39 @@
             <Image url="@../images/idphotos/idchef.png" />
          </image>
       </ImageView>
-      <Button fx:id="btnCollect3" layoutX="728.0" layoutY="176.0" mnemonicParsing="false" onAction="#onCollect3" text="Collect Id" />
-      <ImageView fx:id="idDoctor" fitHeight="166.0" fitWidth="250.0" layoutX="11.0" layoutY="171.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="idDoctor" fitHeight="166.0" fitWidth="250.0" layoutX="11.0" layoutY="192.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/iddoctor.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="idEngineer" fitHeight="153.0" fitWidth="250.0" layoutX="749.0" layoutY="187.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="idEngineer" fitHeight="153.0" fitWidth="250.0" layoutX="602.0" layoutY="202.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/idphotos/idengineer.png" />
          </image>
       </ImageView>
       <Button fx:id="backButton" layoutX="37.0" layoutY="475.0" mnemonicParsing="false" onAction="#back" opacity="0.0" text="Back" />
       <Rectangle fx:id="wall1" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="31.0" layoutX="-8.0" layoutY="189.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="1019.0" />
-      <Rectangle fx:id="wall2" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="53.0" layoutX="431.0" layoutY="221.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="100.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1000.0" />
-      <Label fx:id="difficultyLabel" alignment="CENTER" layoutX="190.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
+      <Rectangle fx:id="wall2" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="53.0" layoutX="431.0" layoutY="221.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="83.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1200.0" />
+      <Label fx:id="difficultyLabel" alignment="CENTER" layoutX="109.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
          <font>
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
-      <Label fx:id="hintLabel" alignment="CENTER_RIGHT" layoutX="488.0" layoutY="6.0" prefHeight="37.0" prefWidth="230.0" text="UNLIMITED" textFill="WHITE">
+      <Label fx:id="hintLabel" alignment="CENTER_RIGHT" layoutX="336.0" layoutY="6.0" prefHeight="37.0" prefWidth="230.0" text="UNLIMITED" textFill="WHITE">
          <font>
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
-      <Label fx:id="hintLabel2" layoutX="728.0" layoutY="6.0" prefHeight="37.0" prefWidth="96.0" text="HINTS" textFill="WHITE">
+      <Label fx:id="hintLabel2" layoutX="576.0" layoutY="6.0" prefHeight="37.0" prefWidth="96.0" text="HINTS" textFill="WHITE">
          <font>
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
-      <Button fx:id="btnCollect1" layoutX="190.0" layoutY="293.0" mnemonicParsing="false" onAction="#onCollect1" text="Collect Id" />
-      <Button fx:id="btnCollect2" layoutX="363.0" layoutY="176.0" mnemonicParsing="false" onAction="#onCollect2" text="Collect Id" />
-      <Button fx:id="btnCollect4" layoutX="920.0" layoutY="304.0" mnemonicParsing="false" onAction="#onCollect4" text="Collect Id" />
+      <Button fx:id="btnCollect1" layoutX="190.0" layoutY="314.0" mnemonicParsing="false" onAction="#onCollect1" text="Collect Id" />
+      <Button fx:id="btnCollect2" layoutX="339.0" layoutY="181.0" mnemonicParsing="false" onAction="#onCollect2" text="Collect Id" />
+      <Button fx:id="btnCollect4" layoutX="773.0" layoutY="319.0" mnemonicParsing="false" onAction="#onCollect4" text="Collect Id" />
+      <Button fx:id="btnCollect3" layoutX="718.0" layoutY="176.0" mnemonicParsing="false" onAction="#onCollect3" text="Collect Id" />
       <Button fx:id="btnRiddle" layoutX="90.0" layoutY="554.0" mnemonicParsing="false" onAction="#onRiddle" prefHeight="53.0" prefWidth="72.0" text="Click Me" />
       <Rectangle fx:id="crew1Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="72.0" layoutX="59.0" layoutY="359.0" opacity="0.0" rotate="40.0" stroke="BLACK" strokeType="INSIDE" width="44.0" />
       <Rectangle fx:id="crew2Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="31.0" layoutX="178.0" layoutY="238.0" opacity="0.0" rotate="-50.0" stroke="BLACK" strokeType="INSIDE" width="68.0" />
@@ -80,12 +80,12 @@
             <Image url="@../images/indicator_triangle.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="crew4Indicator" fitHeight="37.0" fitWidth="51.0" layoutX="951.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="crew4Indicator" fitHeight="37.0" fitWidth="51.0" layoutX="951.0" layoutY="131.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/indicator_triangle.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="crew3Indicator" fitHeight="37.0" fitWidth="51.0" layoutX="847.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="crew3Indicator" fitHeight="37.0" fitWidth="51.0" layoutX="808.0" layoutY="64.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/indicator_triangle.png" />
          </image>
@@ -95,8 +95,8 @@
             <Image url="@../images/indicator_triangle.png" />
          </image>
       </ImageView>
-      <Rectangle fx:id="blinkingRectangle" arcHeight="70.0" arcWidth="70.0" fill="TRANSPARENT" height="96.0" layoutX="433.0" layoutY="167.0" onMouseClicked="#onRiddle" stroke="#ff6a00" strokeType="INSIDE" strokeWidth="3.0" width="96.0" />
-      <Label fx:id="clickLabel" layoutX="441.0" layoutY="197.0" onMouseClicked="#onRiddle" prefHeight="37.0" prefWidth="85.0" text="CLICK ME">
+      <Rectangle fx:id="blinkingRectangle" arcHeight="70.0" arcWidth="70.0" fill="TRANSPARENT" height="96.0" layoutX="413.0" layoutY="185.0" onMouseClicked="#onRiddle" stroke="#ff6a00" strokeType="INSIDE" strokeWidth="3.0" width="96.0" />
+      <Label fx:id="clickLabel" layoutX="421.0" layoutY="215.0" onMouseClicked="#onRiddle" prefHeight="37.0" prefWidth="85.0" text="CLICK ME">
          <font>
             <Font size="17.0" />
          </font>
@@ -104,7 +104,18 @@
       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
       <Rectangle fx:id="exit" arcHeight="5.0" arcWidth="5.0" fill="#f89d00" height="50.0" layoutX="413.0" layoutY="617.0" opacity="0.65" stroke="BLACK" strokeType="INSIDE" width="161.0" />
       <Polygon fill="WHITE" layoutX="494.0" layoutY="591.0" points="-50.0, 40.0, 50.0, 40.0, -1.1348876953125, 53.3333740234375" stroke="WHITE" strokeType="INSIDE" />
-      <Button fx:id="toggleSoundButton" layoutX="903.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Button" />
-   <fx:include fx:id="aiWindowController" source="aiwindow.fxml" />
+   <fx:include fx:id="aiWindowController" layoutX="850.0" layoutY="200.0" source="aiwindow.fxml" />
+      <ImageView fx:id="soundOff" fitHeight="50.0" fitWidth="50.0" layoutX="1140.0" layoutY="1.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly_20231010001007-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="soundOn" fitHeight="50.0" fitWidth="50.0" layoutX="1140.0" layoutY="1.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../images/Firefly_sound_icon_inside_the_white_circle_with_no_fill_74516-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="toggleSoundButton" layoutX="861.0" layoutY="79.0" mnemonicParsing="false" text="SETTING" visible="false" />
+      <Rectangle fx:id="wall3" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="454.0" layoutX="870.0" layoutY="199.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="25.0" />
    </children>
 </Pane>

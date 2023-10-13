@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,8 +67,9 @@ public class PlayerController implements Initializable {
   @FXML private Rectangle black;
   // @FXML private ImageView gameMasterBox;
   @FXML private ImageView gameMaster;
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
 
-  @FXML private Label playerLabel;
   @FXML private Label main;
   @FXML private Label computer;
   @FXML private Label closet;
@@ -79,7 +81,6 @@ public class PlayerController implements Initializable {
   @FXML private Rectangle wall;
   @FXML private Rectangle wall1;
   @FXML private Rectangle wall2;
-  @FXML private Rectangle wall3;
   @FXML private Rectangle wall4;
   @FXML private Rectangle wall5;
   @FXML private Rectangle wall6;
@@ -87,7 +88,6 @@ public class PlayerController implements Initializable {
   @FXML private Rectangle wall8;
   @FXML private Rectangle wall9;
   @FXML private Rectangle wall10;
-  @FXML private Rectangle wall11;
   @FXML private Rectangle wall12;
   @FXML private Rectangle wall13;
   @FXML private Rectangle wall14;
@@ -105,19 +105,22 @@ public class PlayerController implements Initializable {
   @FXML private Button reset;
   @FXML private Button btnSend;
   @FXML private Button btnClose;
+  @FXML private Button resetButton;
+
   @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
+
   private double previousX;
   private double previousY;
 
   @FXML private Button toggleSoundButton;
+  private boolean isSoundEnabled = true;
 
   @FXML private Label countdownLabel;
 
-  private boolean hasHappend = false;
+  private boolean hasHappened = false;
 
-  // Add this variable to your class
-private Timeline alertBlinkTimeline;
+  private Timeline alertBlinkTimeline;
   @FXML public Pane aiWindowController;
 
   private ChatCompletionRequest chatCompletionRequest;
@@ -137,6 +140,8 @@ private Timeline alertBlinkTimeline;
           checkRoom1(player, room1);
           checkRoom2(player, room2);
           checkRoom3(player, room3);
+          // if difficulty is selected, label is updated
+          detectDifficulty();
         }
       };
 
@@ -144,11 +149,7 @@ private Timeline alertBlinkTimeline;
       new AnimationTimer() {
         @Override
         public void handle(long now) {
-          playerLabel.setVisible(false);
           black.setVisible(false);
-
-          previousX = player.getLayoutX(); // Update previousX
-          previousY = player.getLayoutY(); // Update previousY
 
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
@@ -172,23 +173,22 @@ private Timeline alertBlinkTimeline;
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     animateRobot();
-
-    playerLabel.setVisible(true);
+    introTextToSpeech();
     black.setVisible(true);
 
-    // Add an event handler to the Toggle Sound button
-    toggleSoundButton.setOnAction(event -> toggleSound());
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
+    aiWindowController.setVisible(true);
 
     room1.setVisible(false);
     room2.setVisible(false);
     room3.setVisible(false);
     // Set labels to have white text and black stroke for the text
-    main.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
+    // main.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
     computer.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
     closet.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
     control.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
 
-    alert.setVisible(false); // Initially hide the alert label
+    alert.setVisible(false);
 
     shapesize = player.getFitWidth();
     movementSetup();
@@ -196,7 +196,6 @@ private Timeline alertBlinkTimeline;
     walls.add(wall);
     walls.add(wall1);
     walls.add(wall2);
-    walls.add(wall3);
     walls.add(wall4);
     walls.add(wall5);
     walls.add(wall6);
@@ -204,7 +203,6 @@ private Timeline alertBlinkTimeline;
     walls.add(wall8);
     walls.add(wall9);
     walls.add(wall10);
-    walls.add(wall11);
     walls.add(wall12);
     walls.add(wall13);
     walls.add(wall14);
@@ -249,10 +247,10 @@ private Timeline alertBlinkTimeline;
     alert.setVisible(true); // Initially show the alert label
 
     // Set up the blinking animation for the alert label
-    alertBlinkTimeline = new Timeline(
-        new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
-        new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false))
-    );
+    alertBlinkTimeline =
+        new Timeline(
+            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
+            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
     alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
     alertBlinkTimeline.play();
   }
@@ -260,14 +258,15 @@ private Timeline alertBlinkTimeline;
   // Add a method to stop the alert blinking
   private void stopAlertBlinking() {
     if (alertBlinkTimeline != null) {
-        alertBlinkTimeline.stop();
-        alert.setVisible(false);
+      alertBlinkTimeline.stop();
+      alert.setVisible(false);
     }
   }
 
   public void checkRoom1(ImageView player, Rectangle room1) {
     if (player.getBoundsInParent().intersects(room1.getBoundsInParent())) {
       room1.setVisible(true);
+      timer.stop();
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
@@ -275,10 +274,7 @@ private Timeline alertBlinkTimeline;
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(272);
             player.setLayoutY(336);
-            GameState.isPlayerInMap = false;
-            GameState.isPlayerInRoom1 = true;
             App.setScene(AppUi.ROOM1);
-            timer.stop();
           });
       pauseTransition.play();
     } else {
@@ -289,6 +285,7 @@ private Timeline alertBlinkTimeline;
   public void checkRoom2(ImageView player, Rectangle room2) {
     if (player.getBoundsInParent().intersects(room2.getBoundsInParent())) {
       room2.setVisible(true);
+      timer.stop();
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
@@ -296,10 +293,8 @@ private Timeline alertBlinkTimeline;
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(500);
             player.setLayoutY(284);
-            GameState.isPlayerInMap = false;
-            GameState.isPlayerInRoom2 = true;
+
             App.setScene(AppUi.TILEROOM);
-            timer.stop();
           });
       pauseTransition.play();
     } else {
@@ -310,7 +305,10 @@ private Timeline alertBlinkTimeline;
   public void checkRoom3(ImageView player, Rectangle room3) {
     if (player.getBoundsInParent().intersects(room3.getBoundsInParent())) {
       room3.setVisible(true);
+      timer.stop();
+
       String musicFile;
+      System.out.println("ENTERED ROOM3");
       if (App.timerSeconds < 60 && App.musicType.equals("starting")) {
         App.musicType = "final";
         musicFile = "srcsrc/main/resources/sounds/final-BG-MUSIC.mp3";
@@ -329,10 +327,8 @@ private Timeline alertBlinkTimeline;
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(674);
             player.setLayoutY(292);
-            GameState.isPlayerInMap = false;
-            GameState.isPlayerInRoom3 = true;
+
             App.setScene(AppUi.ROOM3);
-            timer.stop();
           });
       pauseTransition.play();
     } else {
@@ -348,17 +344,25 @@ private Timeline alertBlinkTimeline;
         // Exit the loop as soon as a collision is detected
       }
     }
-    // Detect if the timer is 30 seconds left and start the alert blinking
-          if (App.timerSeconds == 30) {
-            if (!hasHappend){
-              System.out.println("30 seconds left");
-              hasHappend = true;
-              setupAlertBlinking();
-            }
-          } else if (App.timerSeconds == 0) {
-            // Stop the alert blinking when the timer reaches 0
-            stopAlertBlinking();
-          }
+    if (App.timerSeconds == 30) {
+      if (!hasHappened) {
+        System.out.println("30 seconds left");
+        hasHappened = true;
+        setupAlertBlinking();
+      }
+    } else if (App.timerSeconds == 0) {
+      // Stop the alert blinking when the timer reaches 0
+      stopAlertBlinking();
+    }
+
+    // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
+    }
   }
 
   // code for enabling palyer to move using wasd keys
@@ -429,33 +433,33 @@ private Timeline alertBlinkTimeline;
 
   @FXML
   public void onRoom3(ActionEvent event) {
+
     App.setScene(AppUi.ROOM3);
   }
 
-  // detect if there is change in gamestate difficulty in the intro page using timer
+  // detect if there is change isn gamestate difficulty in the intro page using timer
   public void detectDifficulty() {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
         new TimerTask() {
-            @Override
-            public void run() {
-                if (GameState.difficulty != null) {
-                    if (GameState.difficulty.equals("MEDIUM")) {
-                        Platform.runLater(() -> updateLabels());
-                        if (GameState.numOfHints == 0) {
-                            labelTimer.cancel();
-                        }
-                    } else {
-                        Platform.runLater(() -> updateLabels());
-                        System.out.println("Difficulty detected");
-                        labelTimer.cancel();
-                    }
+          @Override
+          public void run() {
+            if (GameState.difficulty != null) {
+              if (GameState.difficulty == "MEDIUM") {
+                Platform.runLater(() -> updateLabels());
+                if (GameState.numOfHints == 0) {
+                  labelTimer.cancel();
                 }
+              } else {
+                Platform.runLater(() -> updateLabels());
+                labelTimer.cancel();
+              }
             }
+          }
         },
         0,
         500);
-}
+  }
 
   @FXML
   public void clickGameMaster(MouseEvent event) {
@@ -465,6 +469,21 @@ private Timeline alertBlinkTimeline;
     //   aiWindowController = App.aiWindow;
     // }
     aiWindowController.setVisible(true);
+  }
+
+  private void introTextToSpeech() {
+    Task<Void> introTask =
+        new Task<>() {
+
+          @Override
+          protected Void call() throws Exception {
+            TextToSpeech textToSpeech = new TextToSpeech();
+            textToSpeech.speak("Welcome to STARSHIP ESCAPE 1!");
+            return null;
+          }
+        };
+    Thread introThread = new Thread(introTask);
+    introThread.start();
   }
 
   // update the header labels as the hint decreases
@@ -493,25 +512,37 @@ private Timeline alertBlinkTimeline;
     translate.setByX(0);
     translate.setByY(20);
     translate.setAutoReverse(true);
+
     translate.play();
   }
 
   @FXML
-  private void toggleSound() {
-      if (GameState.isSoundEnabled) {
-          // Disable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.0); // Mute the media player
-          }
-          toggleSoundButton.setText("Enable Sound");
-      } else {
-          // Enable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-          }
-          toggleSoundButton.setText("Disable Sound");
+  private void toggleSound(MouseEvent event) {
+    if (GameState.isSoundEnabled) {
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
       }
-  
-      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+      soundOff.setVisible(true);
+      soundOn.setVisible(false);
+    } else {
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      soundOff.setVisible(false);
+      soundOn.setVisible(true);
+    }
+
+    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  }
+
+  @FXML
+  private void reset(ActionEvent event) throws IOException {
+    try {
+      GameState.resetGames();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
   }
 }
