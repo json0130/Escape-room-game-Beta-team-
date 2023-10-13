@@ -282,6 +282,10 @@ public class Room1Controller implements Initializable {
     revealIndicator();
 
     crewCollisionTimer.start();
+    moveIndicator(crew1Indicator);
+    moveIndicator(crew2Indicator);
+    moveIndicator(crew3Indicator);
+    moveIndicator(crew4Indicator);
   }
 
   // hide id and button and indicator at once
@@ -762,5 +766,20 @@ public class Room1Controller implements Initializable {
     crew2Indicator.setVisible(true);
     crew3Indicator.setVisible(true);
     crew4Indicator.setVisible(true);
+  }
+
+  /**
+   * Move indicator up and down.
+   *
+   * @param indicator
+   */
+  private void moveIndicator(ImageView indicator) {
+    TranslateTransition translate = new TranslateTransition();
+    translate.setNode(indicator);
+    translate.setDuration(Duration.millis(1000));
+    translate.setByY(-15);
+    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setAutoReverse(true);
+    translate.play();
   }
 }
