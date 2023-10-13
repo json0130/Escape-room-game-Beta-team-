@@ -107,6 +107,12 @@ public class PlayerController implements Initializable {
   @FXML private Button btnClose;
   @FXML private Button resetButton;
 
+  @FXML private Rectangle black2;
+  @FXML private Rectangle resetBox;
+  @FXML private Label resetLabel;
+  @FXML private Button resetYes;
+  @FXML private Button resetCancel;
+
   @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
 
@@ -179,6 +185,12 @@ public class PlayerController implements Initializable {
 
     playerLabel.setVisible(true);
     black.setVisible(true);
+
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
 
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
@@ -554,6 +566,24 @@ public class PlayerController implements Initializable {
     }
 
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  }
+
+  @FXML
+  private void restartClicked(ActionEvent event) throws IOException {
+    black2.setVisible(true);
+    resetBox.setVisible(true);
+    resetLabel.setVisible(true);
+    resetYes.setVisible(true);
+    resetCancel.setVisible(true);
+  }
+
+  @FXML
+  private void restartCanceled(ActionEvent event) throws IOException {
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
   }
 
   @FXML

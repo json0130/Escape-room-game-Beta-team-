@@ -149,6 +149,18 @@
          </image>
       </ImageView>
       <fx:include fx:id="aiWindowController" layoutX="850.0" layoutY="200.0" source="aiwindow.fxml" />
-      <Button fx:id="resetButton" layoutX="985.0" layoutY="14.0" mnemonicParsing="false" onAction="#reset" text="Button" />
+      <Button fx:id="resetButton" layoutX="1015.0" layoutY="9.0" mnemonicParsing="false" onAction="#restartClicked" style="-fx-background-color: transparent;" text="RESTART" textFill="WHITE">
+         <font>
+            <Font name="Arial Bold Italic" size="20.0" />
+         </font></Button>
+      <Rectangle fx:id="black2" arcHeight="5.0" arcWidth="5.0" fill="#00000081" height="619.0" layoutX="-5.0" layoutY="46.0" stroke="BLACK" strokeType="INSIDE" width="1213.0" />
+      <Rectangle fx:id="resetBox" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="279.0" layoutX="332.0" layoutY="147.0" stroke="BLACK" strokeType="INSIDE" width="519.0" />
+      <Label fx:id="resetLabel" alignment="TOP_CENTER" layoutX="358.0" layoutY="211.0" prefHeight="99.0" prefWidth="464.0" text="DO YOU REALLY WANT TO &#10;RESTART THE GAME?">
+         <font>
+            <Font size="27.0" />
+         </font>
+      </Label>
+      <Button fx:id="resetYes" layoutX="715.0" layoutY="359.0" mnemonicParsing="false" onAction="#reset" text="YES" />
+      <Button fx:id="resetCancel" layoutX="431.0" layoutY="359.0" mnemonicParsing="false" onAction="#restartCanceled" text="CANCEL" />
    </children>
 </Pane>
