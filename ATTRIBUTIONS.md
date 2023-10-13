@@ -15,3 +15,4 @@
 
 <a href="https://www.freepik.com/free-vector/monitor_3425242.htm#query=monitor&position=0&from_view=search&track=sph">Image by rawpixel.com</a> on Freepik
 
+<a href="https://www.freepik.com/free-vector/chatbot-head-set_9174414.htm#page=7&query=question%20mark%20robot&position=6&from_view=search&track=ais">Image by pch.vector</a> on Freepik
