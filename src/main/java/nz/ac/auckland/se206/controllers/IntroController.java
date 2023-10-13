@@ -68,7 +68,7 @@ public class IntroController implements Initializable {
   @FXML private boolean isTimeSelected = false;
 
   @FXML private Button toggleSoundButton;
-  
+
   @Override
   public void initialize(URL location, ResourceBundle resources) {
 
@@ -98,21 +98,23 @@ public class IntroController implements Initializable {
     startButton.setVisible(false);
     background3.setVisible(false);
 
-    animationTimeline = new Timeline(
-                new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        // Update animation based on the current time
-                        checkCollision2();
-                    }
-                })
-        );
-        animationTimeline.setCycleCount(Timeline.INDEFINITE);
-        animationTimeline.play();
+    animationTimeline =
+        new Timeline(
+            new KeyFrame(
+                Duration.millis(100),
+                new EventHandler<ActionEvent>() {
+                  @Override
+                  public void handle(ActionEvent event) {
+                    // Update animation based on the current time
+                    checkCollision2();
+                  }
+                }));
+    animationTimeline.setCycleCount(Timeline.INDEFINITE);
+    animationTimeline.play();
   }
 
   public void checkCollision2() {
-        // Initialize sound images based on the initial isSoundEnabled state
+    // Initialize sound images based on the initial isSoundEnabled state
     if (GameState.isSoundEnabled) {
       soundOn.setVisible(true);
       soundOff.setVisible(false);
@@ -147,7 +149,7 @@ public class IntroController implements Initializable {
     mediumButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
     hardButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
     clickedButton.setStyle(
-          "-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: dark blue;");
+        "-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: dark blue;");
     isLevelSelected = true;
 
     // set the difficulty
@@ -165,7 +167,7 @@ public class IntroController implements Initializable {
       System.out.println(GameState.difficulty);
     }
 
-    if(isLevelSelected && isTimeSelected){
+    if (isLevelSelected && isTimeSelected) {
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.2));
       pauseTransition.setOnFinished(
           event -> {
@@ -184,7 +186,7 @@ public class IntroController implements Initializable {
     // minB2.setOnMouseEntered(null); // Disable hover effect
     // minB4.setOnMouseEntered(null); // Disable hover effect
     // minB6.setOnMouseEntered(null); // Disable hover effect
-    
+
     Button cButton = (Button) events.getSource();
 
     switch (cButton.getId()) {
@@ -207,14 +209,14 @@ public class IntroController implements Initializable {
         break;
     }
     System.out.println(App.timerSeconds);
-      // Reset the style of all buttons to their original state
-      minB2.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
-      minB4.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
-      minB6.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
-      cButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: dark blue;");
-      isTimeSelected = true;
+    // Reset the style of all buttons to their original state
+    minB2.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
+    minB4.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
+    minB6.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
+    cButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: dark blue;");
+    isTimeSelected = true;
 
-    if(isLevelSelected && isTimeSelected){
+    if (isLevelSelected && isTimeSelected) {
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.2));
       pauseTransition.setOnFinished(
           event -> {
@@ -250,7 +252,7 @@ public class IntroController implements Initializable {
   }
 
   @FXML
-  private void closeClicked(){
+  private void closeClicked() {
     startButton.setDisable(false);
     startButton.setVisible(true);
     letter.setVisible(false);
@@ -282,6 +284,7 @@ public class IntroController implements Initializable {
       tutorial.setVisible(false);
       close.setVisible(false);
 
+      spaceshipSound();
       // Create a timeline to continuously increase the scaling factor
       Timeline continuousScaling =
           new Timeline(
@@ -316,7 +319,6 @@ public class IntroController implements Initializable {
           event -> {
             startButton.setDisable(false);
             App.setScene(AppUi.TUTORIAL);
-
             App.timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), this::updateTimer));
             App.timerTimeline.setCycleCount(App.timerSeconds);
             // App.timerTimeline.play();
@@ -326,16 +328,24 @@ public class IntroController implements Initializable {
     }
   }
 
+  @FXML
+  private void spaceshipSound() {
+    String soundEffect = "src/main/resources/sounds/spaceship.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setVolume(0.2);
+    mediaPlayer.setAutoPlay(true);
+  }
+
   private void updateTimer(ActionEvent event) {
     App.timerSeconds--;
-    if(!GameState.isGameFinished){
+    if (!GameState.isGameFinished) {
       if (App.timerSeconds <= 0) {
         App.timerTimeline.stop();
         App.setScene(AppUi.LOSE);
         introTextToSpeech();
       }
-    }
-    else{
+    } else {
       App.timerTimeline.stop();
     }
   }
@@ -369,17 +379,17 @@ public class IntroController implements Initializable {
 
     button.setOnMouseExited(
         e -> {
-          if(!isLevelSelected && !isTimeSelected){
+          if (!isLevelSelected && !isTimeSelected) {
             button.setStyle(
-                    "-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: white;"
-                        + " -fx-border-color: white; -fx-border-width: 2px; -fx-border-radius:"
-                        + " 5px");
+                "-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: white;"
+                    + " -fx-border-color: white; -fx-border-width: 2px; -fx-border-radius:"
+                    + " 5px");
           } else {
             if (button.getId().equals(GameState.clickedLevelButton)) {
               button.setStyle(
-                    "-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: white;"
-                        + " -fx-border-color: white; -fx-border-width: 2px; -fx-border-radius:"
-                        + " 5px");
+                  "-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: white;"
+                      + " -fx-border-color: white; -fx-border-width: 2px; -fx-border-radius:"
+                      + " 5px");
             } else {
               button.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
             }
@@ -400,17 +410,17 @@ public class IntroController implements Initializable {
 
     button.setOnMouseExited(
         e -> {
-          if(!isLevelSelected && !isTimeSelected){
+          if (!isLevelSelected && !isTimeSelected) {
             button.setStyle(
-                    "-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: white;"
-                        + " -fx-border-color: white; -fx-border-width: 2px; -fx-border-radius:"
-                        + " 5px");
+                "-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: white;"
+                    + " -fx-border-color: white; -fx-border-width: 2px; -fx-border-radius:"
+                    + " 5px");
           } else {
             if (button.getId().equals(GameState.clickedButton)) {
               button.setStyle(
-                    "-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: white;"
-                        + " -fx-border-color: white; -fx-border-width: 2px; -fx-border-radius:"
-                        + " 5px");
+                  "-fx-background-color: rgba(255, 255, 255, 0.0); -fx-text-fill: white;"
+                      + " -fx-border-color: white; -fx-border-width: 2px; -fx-border-radius:"
+                      + " 5px");
             } else {
               button.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
             }
@@ -421,25 +431,25 @@ public class IntroController implements Initializable {
 
   @FXML
   private void toggleSound(MouseEvent event) {
-      if (GameState.isSoundEnabled) {
-          // Disable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.0); // Mute the media player
-          }
-          soundOff.setVisible(true);
-          soundOn.setVisible(false);
-      } else {
-          // Enable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-          }
-          soundOn.setVisible(true);
-          soundOff.setVisible(false);
+    if (GameState.isSoundEnabled) {
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
       }
-  
-      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+      soundOff.setVisible(true);
+      soundOn.setVisible(false);
+    } else {
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    }
+
+    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
   }
-  
+
   @FXML
   private void soundButttonClick() {
     String soundEffect = "src/main/resources/sounds/button-click.mp3";

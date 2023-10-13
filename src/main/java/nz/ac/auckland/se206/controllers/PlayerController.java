@@ -17,7 +17,6 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -32,14 +31,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
-import nz.ac.auckland.se206.chatHistory;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
-import nz.ac.auckland.se206.speech.TextToSpeech;
 
 public class PlayerController implements Initializable {
 
@@ -127,6 +123,8 @@ public class PlayerController implements Initializable {
   private Timeline alertBlinkTimeline;
   @FXML public Pane aiWindowController;
 
+  private MediaPlayer walkingMediaPlayer;
+
   private ChatCompletionRequest chatCompletionRequest;
   private String lastUserMessage = ""; // Track the last user message for GPT response
 
@@ -144,7 +142,7 @@ public class PlayerController implements Initializable {
           checkRoom1(player, room1);
           checkRoom2(player, room2);
           checkRoom3(player, room3);
-                // if difficulty is selected, label is updated
+          // if difficulty is selected, label is updated
           detectDifficulty();
         }
       };
@@ -224,6 +222,11 @@ public class PlayerController implements Initializable {
     walls.add(wall20);
     walls.add(wall21);
 
+    String walkSoundEffect = "src/main/resources/sounds/walking.mp3";
+    Media walkMedia = new Media(new File(walkSoundEffect).toURI().toString());
+    walkingMediaPlayer = new MediaPlayer(walkMedia);
+    walkingMediaPlayer.setVolume(4.0);
+
     collisionTimer.start();
 
     previousX = player.getLayoutX();
@@ -244,10 +247,10 @@ public class PlayerController implements Initializable {
     alert.setVisible(true); // Initially show the alert label
 
     // Set up the blinking animation for the alert label
-    alertBlinkTimeline = new Timeline(
-        new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
-        new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false))
-    );
+    alertBlinkTimeline =
+        new Timeline(
+            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
+            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
     alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
     alertBlinkTimeline.play();
   }
@@ -255,8 +258,8 @@ public class PlayerController implements Initializable {
   // Add a method to stop the alert blinking
   private void stopAlertBlinking() {
     if (alertBlinkTimeline != null) {
-        alertBlinkTimeline.stop();
-        alert.setVisible(false);
+      alertBlinkTimeline.stop();
+      alert.setVisible(false);
     }
   }
 
@@ -264,6 +267,8 @@ public class PlayerController implements Initializable {
     if (player.getBoundsInParent().intersects(room1.getBoundsInParent())) {
       room1.setVisible(true);
       timer.stop();
+
+      enterRoom();
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
@@ -273,7 +278,7 @@ public class PlayerController implements Initializable {
             player.setLayoutY(336);
             GameState.isPlayerInMap = false;
             GameState.isPlayerInRoom1 = true;
-            //GameState.hasHappend = false;
+            // GameState.hasHappend = false;
             App.setScene(AppUi.ROOM1);
           });
       pauseTransition.play();
@@ -287,6 +292,8 @@ public class PlayerController implements Initializable {
       room2.setVisible(true);
       timer.stop();
 
+      enterRoom();
+
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
@@ -296,7 +303,6 @@ public class PlayerController implements Initializable {
             GameState.isPlayerInMap = false;
             GameState.isPlayerInRoom2 = true;
             App.setScene(AppUi.TILEROOM);
-
           });
       pauseTransition.play();
     } else {
@@ -314,13 +320,14 @@ public class PlayerController implements Initializable {
         App.musicType = "final";
         musicFile = "srcsrc/main/resources/sounds/final-BG-MUSIC.mp3";
         Media media = new Media(new File(musicFile).toURI().toString());
-
         App.mediaPlayer.stop();
         App.mediaPlayer = new MediaPlayer(media);
         App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         App.mediaPlayer.setVolume(0.1);
         App.mediaPlayer.setAutoPlay(true);
       }
+
+      enterRoom();
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
@@ -348,13 +355,13 @@ public class PlayerController implements Initializable {
     }
     // Detect if the timer is 30 seconds left and start the alert blinking
     if (App.timerSeconds == 30) {
-      if (!hasHappend){
+      if (!hasHappend) {
         System.out.println("30 seconds left");
         hasHappend = true;
         setupAlertBlinking();
       }
     } else if (App.timerSeconds == 0) {
-    // Stop the alert blinking when the timer reaches 0
+      // Stop the alert blinking when the timer reaches 0
       stopAlertBlinking();
     }
     // Initialize sound images based on the initial isSoundEnabled state
@@ -372,6 +379,8 @@ public class PlayerController implements Initializable {
   public void movementSetup() {
     scene.setOnKeyPressed(
         e -> {
+          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
           if (e.getCode() == KeyCode.W) {
             wPressed.set(true);
           }
@@ -387,10 +396,19 @@ public class PlayerController implements Initializable {
           if (e.getCode() == KeyCode.D) {
             dPressed.set(true);
           }
+
+          boolean isMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+          // If we started moving and weren't before, start the sound.
+          if (isMoving && !wasMoving) {
+            walkingMediaPlayer.play();
+          }
         });
 
     scene.setOnKeyReleased(
         e -> {
+          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
           if (e.getCode() == KeyCode.W) {
             wPressed.set(false);
           }
@@ -405,6 +423,24 @@ public class PlayerController implements Initializable {
 
           if (e.getCode() == KeyCode.D) {
             dPressed.set(false);
+          }
+
+          boolean isMovinng = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+          // If we stopped moving and were before, stop the sound.
+          if (!isMovinng && wasMoving) {
+            PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+            pause.setOnFinished(
+                event -> {
+                  walkingMediaPlayer.stop();
+                  try {
+                    // This line will reset audio clip from start when stopped
+                    walkingMediaPlayer.seek(Duration.ZERO);
+                  } catch (Exception ex) {
+                    System.out.println("Error resetting audio: " + ex.getMessage());
+                  }
+                });
+            pause.play();
           }
         });
   }
@@ -443,24 +479,24 @@ public class PlayerController implements Initializable {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
         new TimerTask() {
-            @Override
-            public void run() {
-                if (GameState.difficulty != null) {
-                    if (GameState.difficulty.equals("MEDIUM")) {
-                        Platform.runLater(() -> updateLabels());
-                        if (GameState.numOfHints == 0) {
-                            labelTimer.cancel();
-                        }
-                    } else {
-                        Platform.runLater(() -> updateLabels());
-                        labelTimer.cancel();
-                    }
+          @Override
+          public void run() {
+            if (GameState.difficulty != null) {
+              if (GameState.difficulty.equals("MEDIUM")) {
+                Platform.runLater(() -> updateLabels());
+                if (GameState.numOfHints == 0) {
+                  labelTimer.cancel();
                 }
+              } else {
+                Platform.runLater(() -> updateLabels());
+                labelTimer.cancel();
+              }
             }
+          }
         },
         0,
         500);
-}
+  }
 
   // update the header labels as the hint decreases
   private void updateLabels() {
@@ -492,28 +528,36 @@ public class PlayerController implements Initializable {
   }
 
   @FXML
-  private void toggleSound(MouseEvent event) {
-      if (GameState.isSoundEnabled) {
-          // Disable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.0); // Mute the media player
-          }
-          soundOff.setVisible(true);
-          soundOn.setVisible(false);
-      } else {
-          // Enable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-          }
-          soundOn.setVisible(true);
-          soundOff.setVisible(false);
-      }
-  
-      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  private void enterRoom() {
+    String soundEffect = "src/main/resources/sounds/enterReal.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
   }
 
   @FXML
-  private void reset(ActionEvent event) throws IOException{
+  private void toggleSound(MouseEvent event) {
+    if (GameState.isSoundEnabled) {
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
+      }
+      soundOff.setVisible(true);
+      soundOn.setVisible(false);
+    } else {
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    }
+
+    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  }
+
+  @FXML
+  private void reset(ActionEvent event) throws IOException {
     try {
       GameState.resetGames();
     } catch (Exception e) {

@@ -111,6 +111,7 @@ public class ExitController implements Initializable {
   private FadeTransition fadeTransition;
 
   @FXML private Button toggleSoundButton;
+  private MediaPlayer walkingMediaPlayer;
 
   private boolean hasHappend = false;
   private boolean keyboardControlEnabled = true;
@@ -173,6 +174,11 @@ public class ExitController implements Initializable {
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
 
+    String walkSoundEffect = "src/main/resources/sounds/walking.mp3";
+    Media walkMedia = new Media(new File(walkSoundEffect).toURI().toString());
+    walkingMediaPlayer = new MediaPlayer(walkMedia);
+    walkingMediaPlayer.setVolume(2.0);
+
     shapesize = player.getFitWidth();
     movementSetup();
 
@@ -224,6 +230,7 @@ public class ExitController implements Initializable {
             GameState.isPlayerInRoom3 = false;
             // GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
+            enterRoom();
           });
       pauseTransition.play();
     } else {
@@ -293,43 +300,68 @@ public class ExitController implements Initializable {
   public void movementSetup() {
     scene.setOnKeyPressed(
         e -> {
-          if (keyboardControlEnabled) {
-            if (e.getCode() == KeyCode.W) {
-              wPressed.set(true);
-            }
+          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
 
-            if (e.getCode() == KeyCode.A) {
-              aPressed.set(true);
-            }
+          if (e.getCode() == KeyCode.W) {
+            wPressed.set(true);
+          }
 
-            if (e.getCode() == KeyCode.S) {
-              sPressed.set(true);
-            }
+          if (e.getCode() == KeyCode.A) {
+            aPressed.set(true);
+          }
 
-            if (e.getCode() == KeyCode.D) {
-              dPressed.set(true);
-            }
+          if (e.getCode() == KeyCode.S) {
+            sPressed.set(true);
+          }
+
+          if (e.getCode() == KeyCode.D) {
+            dPressed.set(true);
+          }
+
+          boolean isMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+          // If we started moving and weren't before, start the sound.
+          if (isMoving && !wasMoving) {
+            walkingMediaPlayer.play();
           }
         });
 
     scene.setOnKeyReleased(
         e -> {
-          if (keyboardControlEnabled) {
-            if (e.getCode() == KeyCode.W) {
-              wPressed.set(false);
-            }
+          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
 
-            if (e.getCode() == KeyCode.A) {
-              aPressed.set(false);
-            }
+          if (e.getCode() == KeyCode.W) {
+            wPressed.set(false);
+          }
 
-            if (e.getCode() == KeyCode.S) {
-              sPressed.set(false);
-            }
+          if (e.getCode() == KeyCode.A) {
+            aPressed.set(false);
+          }
 
-            if (e.getCode() == KeyCode.D) {
-              dPressed.set(false);
-            }
+          if (e.getCode() == KeyCode.S) {
+            sPressed.set(false);
+          }
+
+          if (e.getCode() == KeyCode.D) {
+            dPressed.set(false);
+          }
+
+          boolean isMovinng = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+          // If we stopped moving and were before, stop the sound.
+          if (!isMovinng && wasMoving) {
+            PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+            pause.setOnFinished(
+                event -> {
+                  walkingMediaPlayer.stop();
+                  try {
+                    // This line will reset audio clip from start when stopped
+                    walkingMediaPlayer.seek(Duration.ZERO);
+                  } catch (Exception ex) {
+                    System.out.println("Error resetting audio: " + ex.getMessage());
+                  }
+                });
+            pause.play();
           }
         });
   }
@@ -915,6 +947,14 @@ public class ExitController implements Initializable {
   @FXML
   private void soundCorrectCard() {
     String soundEffect = "src/main/resources/sounds/correct-card.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
+  }
+
+  @FXML
+  private void enterRoom() {
+    String soundEffect = "src/main/resources/sounds/enterReal.mp3";
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);

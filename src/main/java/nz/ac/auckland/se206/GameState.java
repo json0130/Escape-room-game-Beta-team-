@@ -11,6 +11,8 @@ public class GameState {
 
   public static boolean isGameStarted = false;
 
+  public static boolean isTutorialFinished = false;
+
   public static boolean isPlayerInMap = true;
   public static boolean beenToMap = false;
 
