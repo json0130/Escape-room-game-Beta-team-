@@ -31,7 +31,7 @@ public class App extends Application {
   public static String musicType = "starting";
   public static AppUi previousRoom = AppUi.PLAYER;
   public static String aiWindow =
-      "Hello Astronaut! I'm [NAME] Your personal AI Assistant. It looks like we're in a bit of an"
+      "Hello! I'm EVA. Your personal AI Assistant. We're in a bit of an"
           + " emergency so if you have any questions on what you need to do, I'm here to help!"
           + " \n\n";
 
@@ -57,6 +57,44 @@ public class App extends Application {
    */
   public static Parent loadFxml(final String fxml) throws IOException {
     return new FXMLLoader(App.class.getResource("/fxml/" + fxml + ".fxml")).load();
+  }
+
+  public static void resetRooms() throws IOException{
+    //re initilaze all the rooms.
+    try{
+      Random r = new Random();
+      passcode = r.nextInt((9999 - 1000) + 1) + 1000;
+      GameState.password = String.valueOf(passcode);
+
+      // String musicFile =
+      //     "src/main/resources/sounds/Background-Music.mp3"; // Replace with the actual path to
+      // // your audio file
+      // Media media = new Media(new File(musicFile).toURI().toString());
+      // mediaPlayer = new MediaPlayer(media);
+
+      // // Set the cycle count to loop indefinitely
+      // mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+
+      // mediaPlayer.setVolume(0.05);
+      // mediaPlayer.setAutoPlay(true);
+
+      SceneManager.addScene(AppUi.HELPERCHAT, loadFxml("helperchat"));
+      SceneManager.addScene(AppUi.ROOM1, loadFxml("room1"));
+      SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
+      SceneManager.addScene(AppUi.PLAYER, loadFxml("player"));
+      SceneManager.addScene(AppUi.END, loadFxml("end"));
+      SceneManager.addScene(AppUi.WIN, loadFxml("win"));
+      SceneManager.addScene(AppUi.LOSE, loadFxml("lose"));
+      SceneManager.addScene(AppUi.TUTORIAL, loadFxml("tutorial"));
+      SceneManager.addScene(AppUi.ANIMATION, loadFxml("animation"));
+      SceneManager.addScene(AppUi.INTRO, loadFxml("start"));
+      SceneManager.addScene(AppUi.TILEPUZZLE, loadFxml("tilegamedesk"));
+      SceneManager.addScene(AppUi.TILEROOM, loadFxml("tilegameroom"));
+      SceneManager.addScene(AppUi.ROOM3, loadFxml("room3"));
+      SceneManager.addScene(AppUi.AIWINDOW, loadFxml("aiwindow"));
+    } catch (IOException e){
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -99,7 +137,7 @@ public class App extends Application {
     SceneManager.addScene(AppUi.TILEROOM, loadFxml("tilegameroom"));
     SceneManager.addScene(AppUi.ROOM3, loadFxml("room3"));
     SceneManager.addScene(AppUi.AIWINDOW, loadFxml("aiwindow"));
-    scene = new Scene(SceneManager.getScene(AppUi.INTRO), 1000, 650);
+    scene = new Scene(SceneManager.getScene(AppUi.INTRO), 1200, 650);
 
     stage.setOnCloseRequest(
         event -> {
@@ -113,7 +151,6 @@ public class App extends Application {
   }
 
   private void handleCloseRequest(Stage primaryStage) {
-
     primaryStage.close();
     Platform.exit();
     System.exit(0);

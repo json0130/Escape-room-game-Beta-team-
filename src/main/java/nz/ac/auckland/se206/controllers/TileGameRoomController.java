@@ -88,6 +88,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private Rectangle wall20;
   @FXML private Rectangle blinkingRectangle;
   private FadeTransition fadeTransition;
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
 
   private boolean hasHappend = false;
 
@@ -214,10 +216,10 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     walls.add(wall20);
 
     // Add an event handler to the Toggle Sound button
-    toggleSoundButton.setOnAction(event -> toggleSound());
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
 
     alert.setVisible(false); // Initially hide the alert label
-
+    aiWindowController.setVisible(true);
     // if difficulty is selected, label is updated
     detectDifficulty();
 
@@ -250,6 +252,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   public void checkExit(ImageView player, Rectangle exit) {
     if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
       exit.setOpacity(1);
+      timer.stop();
+
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
@@ -258,9 +262,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             player.setLayoutY(410);
             GameState.isPlayerInMap = true;
             GameState.isPlayerInRoom2 = false;
-            System.out.println("IN ROOM 2");
+            GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
-            timer.stop();
           });
       pauseTransition.play();
     } else {
@@ -487,11 +490,10 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML
   public void onTileGameButtonClick() throws IOException {
     translate.stop();
-    eMark.setVisible(false);
     if (nextToButton) {
       GameState.foundComputer = true;
+      eMark.setVisible(false);
       App.setScene(AppUi.TILEPUZZLE);
-      System.out.println("button clicked");
     }
   }
 
@@ -555,27 +557,24 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   }
 
   @FXML
-  private void toggleSound() {
+  private void toggleSound(MouseEvent event) {
     if (GameState.isSoundEnabled) {
       // Disable sound
       if (App.mediaPlayer != null) {
         App.mediaPlayer.setVolume(0.0); // Mute the media player
       }
-      toggleSoundButton.setText("Enable Sound");
+      soundOff.setVisible(true);
+      soundOn.setVisible(false);
     } else {
       // Enable sound
       if (App.mediaPlayer != null) {
         App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
       }
-      toggleSoundButton.setText("Disable Sound");
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
     }
 
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
-  }
-
-  @FXML
-  private void onGameMasterClick() {
-    aiWindowController.setVisible(true);
   }
 
   // game master robot animation

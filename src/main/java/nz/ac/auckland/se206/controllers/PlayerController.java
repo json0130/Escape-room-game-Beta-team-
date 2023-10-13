@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -36,6 +38,7 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
+import nz.ac.auckland.se206.speech.TextToSpeech;
 
 public class PlayerController implements Initializable {
 
@@ -64,7 +67,10 @@ public class PlayerController implements Initializable {
   @FXML private Rectangle black;
   // @FXML private ImageView gameMasterBox;
   @FXML private ImageView gameMaster;
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
 
+  @FXML private Label main;
   @FXML private Label computer;
   @FXML private Label closet;
   @FXML private Label control;
@@ -99,18 +105,21 @@ public class PlayerController implements Initializable {
   @FXML private Button reset;
   @FXML private Button btnSend;
   @FXML private Button btnClose;
+  @FXML private Button resetButton;
+
   @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
+
   private double previousX;
   private double previousY;
 
   @FXML private Button toggleSoundButton;
+  private boolean isSoundEnabled = true;
 
   @FXML private Label countdownLabel;
 
-  private boolean hasHappend = false;
+  private boolean hasHappened = false;
 
-  // Add this variable to your class
   private Timeline alertBlinkTimeline;
   @FXML public Pane aiWindowController;
 
@@ -131,6 +140,8 @@ public class PlayerController implements Initializable {
           checkRoom1(player, room1);
           checkRoom2(player, room2);
           checkRoom3(player, room3);
+          // if difficulty is selected, label is updated
+          detectDifficulty();
         }
       };
 
@@ -139,9 +150,6 @@ public class PlayerController implements Initializable {
         @Override
         public void handle(long now) {
           black.setVisible(false);
-
-          previousX = player.getLayoutX(); // Update previousX
-          previousY = player.getLayoutY(); // Update previousY
 
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
@@ -165,21 +173,22 @@ public class PlayerController implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     animateRobot();
-
+    introTextToSpeech();
     black.setVisible(true);
 
-    // Add an event handler to the Toggle Sound button
-    toggleSoundButton.setOnAction(event -> toggleSound());
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
+    aiWindowController.setVisible(true);
 
     room1.setVisible(false);
     room2.setVisible(false);
     room3.setVisible(false);
     // Set labels to have white text and black stroke for the text
+    // main.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
     computer.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
     closet.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
     control.setStyle("-fx-text-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
 
-    alert.setVisible(false); // Initially hide the alert label
+    alert.setVisible(false);
 
     shapesize = player.getFitWidth();
     movementSetup();
@@ -257,6 +266,7 @@ public class PlayerController implements Initializable {
   public void checkRoom1(ImageView player, Rectangle room1) {
     if (player.getBoundsInParent().intersects(room1.getBoundsInParent())) {
       room1.setVisible(true);
+      timer.stop();
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
@@ -264,11 +274,7 @@ public class PlayerController implements Initializable {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(272);
             player.setLayoutY(336);
-            GameState.isPlayerInMap = false;
-            GameState.isPlayerInRoom1 = true;
-            System.out.println("IN ROOM 1");
             App.setScene(AppUi.ROOM1);
-            timer.stop();
           });
       pauseTransition.play();
     } else {
@@ -279,6 +285,7 @@ public class PlayerController implements Initializable {
   public void checkRoom2(ImageView player, Rectangle room2) {
     if (player.getBoundsInParent().intersects(room2.getBoundsInParent())) {
       room2.setVisible(true);
+      timer.stop();
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
@@ -286,10 +293,8 @@ public class PlayerController implements Initializable {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(500);
             player.setLayoutY(284);
-            GameState.isPlayerInMap = false;
-            GameState.isPlayerInRoom2 = true;
+
             App.setScene(AppUi.TILEROOM);
-            timer.stop();
           });
       pauseTransition.play();
     } else {
@@ -300,7 +305,10 @@ public class PlayerController implements Initializable {
   public void checkRoom3(ImageView player, Rectangle room3) {
     if (player.getBoundsInParent().intersects(room3.getBoundsInParent())) {
       room3.setVisible(true);
+      timer.stop();
+
       String musicFile;
+      System.out.println("ENTERED ROOM3");
       if (App.timerSeconds < 60 && App.musicType.equals("starting")) {
         App.musicType = "final";
         musicFile = "srcsrc/main/resources/sounds/final-BG-MUSIC.mp3";
@@ -319,10 +327,8 @@ public class PlayerController implements Initializable {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(674);
             player.setLayoutY(292);
-            GameState.isPlayerInMap = false;
-            GameState.isPlayerInRoom3 = true;
+
             App.setScene(AppUi.ROOM3);
-            timer.stop();
           });
       pauseTransition.play();
     } else {
@@ -338,16 +344,24 @@ public class PlayerController implements Initializable {
         // Exit the loop as soon as a collision is detected
       }
     }
-    // Detect if the timer is 30 seconds left and start the alert blinking
     if (App.timerSeconds == 30) {
-      if (!hasHappend) {
+      if (!hasHappened) {
         System.out.println("30 seconds left");
-        hasHappend = true;
+        hasHappened = true;
         setupAlertBlinking();
       }
     } else if (App.timerSeconds == 0) {
       // Stop the alert blinking when the timer reaches 0
       stopAlertBlinking();
+    }
+
+    // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
     }
   }
 
@@ -419,10 +433,11 @@ public class PlayerController implements Initializable {
 
   @FXML
   public void onRoom3(ActionEvent event) {
+
     App.setScene(AppUi.ROOM3);
   }
 
-  // detect if there is change in gamestate difficulty in the intro page using timer
+  // detect if there is change isn gamestate difficulty in the intro page using timer
   public void detectDifficulty() {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
@@ -430,14 +445,13 @@ public class PlayerController implements Initializable {
           @Override
           public void run() {
             if (GameState.difficulty != null) {
-              if (GameState.difficulty.equals("MEDIUM")) {
+              if (GameState.difficulty == "MEDIUM") {
                 Platform.runLater(() -> updateLabels());
                 if (GameState.numOfHints == 0) {
                   labelTimer.cancel();
                 }
               } else {
                 Platform.runLater(() -> updateLabels());
-                System.out.println("Difficulty detected");
                 labelTimer.cancel();
               }
             }
@@ -455,6 +469,21 @@ public class PlayerController implements Initializable {
     //   aiWindowController = App.aiWindow;
     // }
     aiWindowController.setVisible(true);
+  }
+
+  private void introTextToSpeech() {
+    Task<Void> introTask =
+        new Task<>() {
+
+          @Override
+          protected Void call() throws Exception {
+            TextToSpeech textToSpeech = new TextToSpeech();
+            textToSpeech.speak("Welcome to STARSHIP ESCAPE 1!");
+            return null;
+          }
+        };
+    Thread introThread = new Thread(introTask);
+    introThread.start();
   }
 
   // update the header labels as the hint decreases
@@ -483,25 +512,37 @@ public class PlayerController implements Initializable {
     translate.setByX(0);
     translate.setByY(20);
     translate.setAutoReverse(true);
+
     translate.play();
   }
 
   @FXML
-  private void toggleSound() {
+  private void toggleSound(MouseEvent event) {
     if (GameState.isSoundEnabled) {
       // Disable sound
       if (App.mediaPlayer != null) {
         App.mediaPlayer.setVolume(0.0); // Mute the media player
       }
-      toggleSoundButton.setText("Enable Sound");
+      soundOff.setVisible(true);
+      soundOn.setVisible(false);
     } else {
       // Enable sound
       if (App.mediaPlayer != null) {
         App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
       }
-      toggleSoundButton.setText("Disable Sound");
+      soundOff.setVisible(false);
+      soundOn.setVisible(true);
     }
 
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  }
+
+  @FXML
+  private void reset(ActionEvent event) throws IOException {
+    try {
+      GameState.resetGames();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
   }
 }

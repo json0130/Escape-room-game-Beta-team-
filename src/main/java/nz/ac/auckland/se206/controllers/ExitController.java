@@ -61,6 +61,8 @@ public class ExitController implements Initializable {
 
   @FXML private Rectangle exit1;
   @FXML private Rectangle wall;
+  @FXML private Rectangle wall1;
+  @FXML private Rectangle id;
 
   @FXML private Button one;
   @FXML private Button two;
@@ -90,6 +92,8 @@ public class ExitController implements Initializable {
   @FXML private ImageView background;
   @FXML private ImageView background2;
   @FXML private ImageView background3;
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
 
   @FXML private TextArea screen;
   @FXML private Rectangle idScanner;
@@ -99,6 +103,7 @@ public class ExitController implements Initializable {
   @FXML private Rectangle clickMonitor;
   @FXML private Label idLabel;
   @FXML private Label clickButton;
+  @FXML private Label click;
   @FXML private ImageView gameMaster;
 
   @FXML public Pane aiWindowController;
@@ -110,6 +115,7 @@ public class ExitController implements Initializable {
 
   private boolean hasHappend = false;
   private boolean keyboardControlEnabled = true;
+  private boolean idTouching = false;
 
   // Add this variable to your class
   private Timeline alertBlinkTimeline;
@@ -173,6 +179,7 @@ public class ExitController implements Initializable {
           checkCollision2(player, walls);
           checkExit(player, exit1);
           checkComputer(player, clickMonitor);
+          checkId(player, id);
         }
       };
 
@@ -206,11 +213,13 @@ public class ExitController implements Initializable {
     background.setOpacity(1);
     clickButton.setVisible(false);
     alert.setVisible(false); // Initially hide the alert label
+    aiWindowController.setVisible(true);
 
     walls.add(wall);
+    walls.add(wall1);
 
     // Add an event handler to the Toggle Sound button
-    toggleSoundButton.setOnAction(event -> toggleSound());
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
 
     shapesize = player.getFitWidth();
     movementSetup();
@@ -251,6 +260,8 @@ public class ExitController implements Initializable {
   public void checkExit(ImageView player, Rectangle exit1) {
     if (player.getBoundsInParent().intersects(exit1.getBoundsInParent())) {
       exit1.setOpacity(1);
+      timer.stop();
+
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
@@ -259,8 +270,8 @@ public class ExitController implements Initializable {
             player.setLayoutY(508);
             GameState.isPlayerInMap = true;
             GameState.isPlayerInRoom3 = false;
+            // GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
-            timer.stop();
           });
       pauseTransition.play();
     } else {
@@ -287,6 +298,14 @@ public class ExitController implements Initializable {
       // Stop the alert blinking when the timer reaches 0
       stopAlertBlinking();
     }
+    // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
+    }
   }
 
   // Modify your setupAlertBlinking method as follows
@@ -310,102 +329,114 @@ public class ExitController implements Initializable {
     }
   }
 
+  public void checkId(ImageView player, Rectangle id) {
+    if (player.getBoundsInParent().intersects(id.getBoundsInParent())) {
+      idTouching = true;
+    } else {
+      idTouching = false;
+    }
+  }
+
   @FXML
   public void movementSetup() {
 
     scene.setOnKeyPressed(
         e -> {
-          if (e.getCode() == KeyCode.W) {
-            if (walkAnimationPlaying == false) {
-              player.setImage(lastPlayedWalk);
-              walkAnimationPlaying = true;
+          if (keyboardControlEnabled) {
+            if (e.getCode() == KeyCode.W) {
+              if (walkAnimationPlaying == false) {
+                player.setImage(lastPlayedWalk);
+                walkAnimationPlaying = true;
+              }
+              wPressed.set(true);
             }
-            wPressed.set(true);
-          }
 
-          if (e.getCode() == KeyCode.A) {
-            if (player.getImage() != leftCharacterAnimation) {
-              player.setImage(leftCharacterAnimation);
-              walkAnimationPlaying = true;
-              lastPlayedWalk = player.getImage();
+            if (e.getCode() == KeyCode.A) {
+              if (player.getImage() != leftCharacterAnimation) {
+                player.setImage(leftCharacterAnimation);
+                walkAnimationPlaying = true;
+                lastPlayedWalk = player.getImage();
+              }
+              aPressed.set(true);
             }
-            aPressed.set(true);
-          }
 
-          if (e.getCode() == KeyCode.S) {
-            if (walkAnimationPlaying == false) {
-              player.setImage(lastPlayedWalk);
-              walkAnimationPlaying = true;
+            if (e.getCode() == KeyCode.S) {
+              if (walkAnimationPlaying == false) {
+                player.setImage(lastPlayedWalk);
+                walkAnimationPlaying = true;
+              }
+              sPressed.set(true);
             }
-            sPressed.set(true);
-          }
 
-          if (e.getCode() == KeyCode.D) {
-            if (player.getImage() != rightCharacterAnimation) {
-              player.setImage(rightCharacterAnimation);
-              walkAnimationPlaying = true;
-              lastPlayedWalk = player.getImage();
+            if (e.getCode() == KeyCode.D) {
+              if (player.getImage() != rightCharacterAnimation) {
+                player.setImage(rightCharacterAnimation);
+                walkAnimationPlaying = true;
+                lastPlayedWalk = player.getImage();
+              }
+              dPressed.set(true);
             }
-            dPressed.set(true);
           }
         });
 
     scene.setOnKeyReleased(
         e -> {
-          if (e.getCode() == KeyCode.W) {
-            if (player.getImage() == leftCharacterAnimation
-                && sPressed.get() == false
-                && aPressed.get() == false) {
-              player.setImage(leftCharacterIdle);
-              walkAnimationPlaying = false;
-            } else if (sPressed.get() == true) {
-              player.setImage(lastPlayedWalk);
-            } else if (aPressed.get() == false
-                && dPressed.get() == false
-                && sPressed.get() == false) {
-              player.setImage(rightCharacterIdle);
-              walkAnimationPlaying = false;
-            }
-            wPressed.set(false);
-          }
-
-          if (e.getCode() == KeyCode.A) {
-            if (dPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
-              player.setImage(leftCharacterIdle);
-              walkAnimationPlaying = false;
-            } else if (dPressed.get() == true) {
-              player.setImage(rightCharacterAnimation);
+          if (keyboardControlEnabled) {
+            if (e.getCode() == KeyCode.W) {
+              if (player.getImage() == leftCharacterAnimation
+                  && sPressed.get() == false
+                  && aPressed.get() == false) {
+                player.setImage(leftCharacterIdle);
+                walkAnimationPlaying = false;
+              } else if (sPressed.get() == true) {
+                player.setImage(lastPlayedWalk);
+              } else if (aPressed.get() == false
+                  && dPressed.get() == false
+                  && sPressed.get() == false) {
+                player.setImage(rightCharacterIdle);
+                walkAnimationPlaying = false;
+              }
+              wPressed.set(false);
             }
 
-            aPressed.set(false);
-          }
+            if (e.getCode() == KeyCode.A) {
+              if (dPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+                player.setImage(leftCharacterIdle);
+                walkAnimationPlaying = false;
+              } else if (dPressed.get() == true) {
+                player.setImage(rightCharacterAnimation);
+              }
 
-          if (e.getCode() == KeyCode.S) {
-            if (player.getImage() == leftCharacterAnimation
-                && wPressed.get() == false
-                && aPressed.get() == false) {
-              player.setImage(leftCharacterIdle);
-              walkAnimationPlaying = false;
-            } else if (wPressed.get() == true) {
-              player.setImage(lastPlayedWalk);
-            } else if (aPressed.get() == false
-                && dPressed.get() == false
-                && wPressed.get() == false) {
-              player.setImage(rightCharacterIdle);
-              walkAnimationPlaying = false;
-            }
-            sPressed.set(false);
-          }
-
-          if (e.getCode() == KeyCode.D) {
-            if (aPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
-              player.setImage(rightCharacterIdle);
-              walkAnimationPlaying = false;
-            } else if (aPressed.get() == true) {
-              player.setImage(leftCharacterAnimation);
+              aPressed.set(false);
             }
 
-            dPressed.set(false);
+            if (e.getCode() == KeyCode.S) {
+              if (player.getImage() == leftCharacterAnimation
+                  && wPressed.get() == false
+                  && aPressed.get() == false) {
+                player.setImage(leftCharacterIdle);
+                walkAnimationPlaying = false;
+              } else if (wPressed.get() == true) {
+                player.setImage(lastPlayedWalk);
+              } else if (aPressed.get() == false
+                  && dPressed.get() == false
+                  && wPressed.get() == false) {
+                player.setImage(rightCharacterIdle);
+                walkAnimationPlaying = false;
+              }
+              sPressed.set(false);
+            }
+
+            if (e.getCode() == KeyCode.D) {
+              if (aPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+                player.setImage(rightCharacterIdle);
+                walkAnimationPlaying = false;
+              } else if (aPressed.get() == true) {
+                player.setImage(leftCharacterAnimation);
+              }
+
+              dPressed.set(false);
+            }
           }
         });
   }
@@ -542,6 +573,8 @@ public class ExitController implements Initializable {
     clickButton.setVisible(false);
     exit2.setVisible(false);
     idCardList.setVisible(false);
+    id.setVisible(false);
+    click.setVisible(false);
   }
 
   // when the rectangle is clicked, the keypad is shown
@@ -567,7 +600,7 @@ public class ExitController implements Initializable {
       exit.setVisible(true);
       player.setVisible(false);
       clickMonitor.setVisible(false);
-
+      scene.requestFocus(); // Add this line to request focus on the scene
       GameState.foundMonitor = true;
     }
   }
@@ -594,6 +627,7 @@ public class ExitController implements Initializable {
     monitor.setVisible(true);
     player.setVisible(true);
     clickMonitor.setVisible(true);
+    scene.requestFocus(); // Add this line
   }
 
   @FXML
@@ -607,6 +641,7 @@ public class ExitController implements Initializable {
     idEngineer.setVisible(false);
     ids.setVisible(false);
     idCardList.setVisible(false);
+    scene.requestFocus(); // Add this line
   }
 
   @FXML
@@ -705,9 +740,10 @@ public class ExitController implements Initializable {
     } else {
       soundCorrect();
       screen.setText("CORRECT");
-      GameState.correctPassword = true;
       keyboardControlEnabled = true; // Enable keyboard control
       GameState.isPasscodeCorrect = true;
+      GameState.correctPassword = true;
+      scene.requestFocus(); // Add this line
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
       pauseTransition.setOnFinished(
@@ -731,6 +767,7 @@ public class ExitController implements Initializable {
             monitor.setVisible(false);
             clickMonitor.setVisible(false);
             player.setVisible(true);
+            id.setVisible(true);
             changeOpacity();
           });
       pauseTransition.play();
@@ -747,26 +784,31 @@ public class ExitController implements Initializable {
   // when the scanner is clicked, ids are shown depending on its state
   @FXML
   private void clickIdScanner(MouseEvent event) {
-    keyboardControlEnabled = false; // Disable keyboard control
-    player.setVisible(false);
+    if (idTouching) {
+      clickSoundButtton();
+      System.out.println("clicked");
+      keyboardControlEnabled = false; // Disable keyboard control
+      player.setVisible(false);
 
-    // if the ids are not shown and the correct id was not tagged yet
-    if (ids.isVisible() == false && !GameState.isIdChecked) {
-      ids.setVisible(true);
-      exit2.setVisible(true);
-      idCardList.setVisible(true);
+      // if the ids are not shown and the correct id was not tagged yet
+      if (ids.isVisible() == false && !GameState.isIdChecked) {
+        ids.setVisible(true);
+        exit2.setVisible(true);
+        idCardList.setVisible(true);
+        click.setVisible(true);
 
-      if (GameState.isCaptainCollected) {
-        idCaptain.setVisible(true);
-      }
-      if (GameState.isChefCollected) {
-        idChef.setVisible(true);
-      }
-      if (GameState.isDoctorCollected) {
-        idDoctor.setVisible(true);
-      }
-      if (GameState.isEngineerCollected) {
-        idEngineer.setVisible(true);
+        if (GameState.isCaptainCollected) {
+          idCaptain.setVisible(true);
+        }
+        if (GameState.isChefCollected) {
+          idChef.setVisible(true);
+        }
+        if (GameState.isDoctorCollected) {
+          idDoctor.setVisible(true);
+        }
+        if (GameState.isEngineerCollected) {
+          idEngineer.setVisible(true);
+        }
       }
     }
   }
@@ -992,19 +1034,22 @@ public class ExitController implements Initializable {
     System.out.print("HI");
   }
 
-  private void toggleSound() {
+  @FXML
+  private void toggleSound(MouseEvent event) {
     if (GameState.isSoundEnabled) {
       // Disable sound
       if (App.mediaPlayer != null) {
         App.mediaPlayer.setVolume(0.0); // Mute the media player
       }
-      toggleSoundButton.setText("Enable Sound");
+      soundOff.setVisible(true);
+      soundOn.setVisible(false);
     } else {
       // Enable sound
       if (App.mediaPlayer != null) {
         App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
       }
-      toggleSoundButton.setText("Disable Sound");
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
     }
 
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
@@ -1022,13 +1067,5 @@ public class ExitController implements Initializable {
     translate.setAutoReverse(true);
 
     translate.play();
-  }
-
-  @FXML
-  public void clickGameMaster(MouseEvent event) {
-    App.previousRoom = AppUi.ROOM3;
-    App.setScene(AppUi.HELPERCHAT);
-    aiWindowController.setVisible(true);
-    System.out.print("HI");
   }
 }
