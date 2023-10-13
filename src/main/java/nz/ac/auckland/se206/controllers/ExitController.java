@@ -25,6 +25,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -53,12 +54,15 @@ public class ExitController implements Initializable {
 
   @FXML private ImageView player;
   @FXML private Pane scene;
+  @FXML private Pane alert;
 
   private double previousX;
   private double previousY;
 
   @FXML private Rectangle exit1;
   @FXML private Rectangle wall;
+  @FXML private Rectangle wall1;
+  @FXML private Rectangle id;
   @FXML private Rectangle greetingBox;
 
   @FXML private Button one;
@@ -84,10 +88,13 @@ public class ExitController implements Initializable {
   @FXML private Label difficultyLabel;
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
+  @FXML private Label idCardList;
   @FXML private ImageView pad;
   @FXML private ImageView background;
   @FXML private ImageView background2;
   @FXML private ImageView background3;
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
 
   @FXML private TextArea screen;
   @FXML private Rectangle idScanner;
@@ -98,6 +105,7 @@ public class ExitController implements Initializable {
   @FXML private Rectangle black;
   @FXML private Label idLabel;
   @FXML private Label clickButton;
+  @FXML private Label click;
   @FXML private Label greeting;
   @FXML private ImageView gameMaster;
   @FXML private ImageView close;
@@ -109,10 +117,64 @@ public class ExitController implements Initializable {
 
   @FXML private Button toggleSoundButton;
 
+  private boolean hasHappend = false;
+  private boolean keyboardControlEnabled = true;
+  private boolean idTouching = false;
+
+  // Add this variable to your class
+  private Timeline alertBlinkTimeline;
+
   private String password = "";
 
   private double mouseAnchorX;
   private double mouseAnchorY;
+
+  @FXML
+  Image rightCharacterAnimation =
+      new Image(
+          new File("src/main/resources/images/walkingRight.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image leftCharacterAnimation =
+      new Image(
+          new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image leftCharacterIdle =
+      new Image(
+          new File("src/main/resources/images/gameCharacterArtLeft.png").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image rightCharacterIdle =
+      new Image(
+          new File("src/main/resources/images/gameCharacterArtRight.png").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image lastPlayedWalk =
+      new Image(
+          new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  Boolean walkAnimationPlaying = false;
 
   private boolean isGreetingShown = true;
 
@@ -123,6 +185,7 @@ public class ExitController implements Initializable {
           checkCollision2(player, walls);
           checkExit(player, exit1);
           checkComputer(player, clickMonitor);
+          checkId(player, id);
         }
       };
 
@@ -155,11 +218,14 @@ public class ExitController implements Initializable {
     animateRobot();
     background.setOpacity(1);
     clickButton.setVisible(false);
+    alert.setVisible(false); // Initially hide the alert label
+    aiWindowController.setVisible(true);
 
     walls.add(wall);
+    walls.add(wall1);
 
     // Add an event handler to the Toggle Sound button
-    toggleSoundButton.setOnAction(event -> toggleSound());
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
 
     shapesize = player.getFitWidth();
     enablePlayerMovement();
@@ -203,6 +269,8 @@ public class ExitController implements Initializable {
   public void checkExit(ImageView player, Rectangle exit1) {
     if (player.getBoundsInParent().intersects(exit1.getBoundsInParent())) {
       exit1.setOpacity(1);
+      timer.stop();
+
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
@@ -211,8 +279,8 @@ public class ExitController implements Initializable {
             player.setLayoutY(508);
             GameState.isPlayerInMap = true;
             GameState.isPlayerInRoom3 = false;
+            // GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
-            timer.stop();
           });
       pauseTransition.play();
     } else {
@@ -228,45 +296,156 @@ public class ExitController implements Initializable {
         // Exit the loop as soon as a collision is detected
       }
     }
+    // Detect if the timer is 30 seconds left and start the alert blinking
+    if (App.timerSeconds == 30) {
+      if (!hasHappend) {
+        System.out.println("30 seconds left");
+        hasHappend = true;
+        setupAlertBlinking();
+      }
+    } else if (App.timerSeconds == 0) {
+      // Stop the alert blinking when the timer reaches 0
+      stopAlertBlinking();
+    }
+    // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
+    }
+  }
+
+  // Modify your setupAlertBlinking method as follows
+  private void setupAlertBlinking() {
+    alert.setVisible(true); // Initially show the alert label
+
+    // Set up the blinking animation for the alert label
+    alertBlinkTimeline =
+        new Timeline(
+            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
+            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
+    alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
+    alertBlinkTimeline.play();
+  }
+
+  // Add a method to stop the alert blinking
+  private void stopAlertBlinking() {
+    if (alertBlinkTimeline != null) {
+      alertBlinkTimeline.stop();
+      alert.setVisible(false);
+    }
+  }
+
+  public void checkId(ImageView player, Rectangle id) {
+    if (player.getBoundsInParent().intersects(id.getBoundsInParent())) {
+      idTouching = true;
+    } else {
+      idTouching = false;
+    }
   }
 
   @FXML
   public void movementSetup() {
+
     scene.setOnKeyPressed(
         e -> {
-          if (e.getCode() == KeyCode.W) {
-            wPressed.set(true);
-          }
+          if (keyboardControlEnabled) {
+            if (e.getCode() == KeyCode.W) {
+              if (walkAnimationPlaying == false) {
+                player.setImage(lastPlayedWalk);
+                walkAnimationPlaying = true;
+              }
+              wPressed.set(true);
+            }
 
-          if (e.getCode() == KeyCode.A) {
-            aPressed.set(true);
-          }
+            if (e.getCode() == KeyCode.A) {
+              if (player.getImage() != leftCharacterAnimation) {
+                player.setImage(leftCharacterAnimation);
+                walkAnimationPlaying = true;
+                lastPlayedWalk = player.getImage();
+              }
+              aPressed.set(true);
+            }
 
-          if (e.getCode() == KeyCode.S) {
-            sPressed.set(true);
-          }
+            if (e.getCode() == KeyCode.S) {
+              if (walkAnimationPlaying == false) {
+                player.setImage(lastPlayedWalk);
+                walkAnimationPlaying = true;
+              }
+              sPressed.set(true);
+            }
 
-          if (e.getCode() == KeyCode.D) {
-            dPressed.set(true);
+            if (e.getCode() == KeyCode.D) {
+              if (player.getImage() != rightCharacterAnimation) {
+                player.setImage(rightCharacterAnimation);
+                walkAnimationPlaying = true;
+                lastPlayedWalk = player.getImage();
+              }
+              dPressed.set(true);
+            }
           }
         });
 
     scene.setOnKeyReleased(
         e -> {
-          if (e.getCode() == KeyCode.W) {
-            wPressed.set(false);
-          }
+          if (keyboardControlEnabled) {
+            if (e.getCode() == KeyCode.W) {
+              if (player.getImage() == leftCharacterAnimation
+                  && sPressed.get() == false
+                  && aPressed.get() == false) {
+                player.setImage(leftCharacterIdle);
+                walkAnimationPlaying = false;
+              } else if (sPressed.get() == true) {
+                player.setImage(lastPlayedWalk);
+              } else if (aPressed.get() == false
+                  && dPressed.get() == false
+                  && sPressed.get() == false) {
+                player.setImage(rightCharacterIdle);
+                walkAnimationPlaying = false;
+              }
+              wPressed.set(false);
+            }
 
-          if (e.getCode() == KeyCode.A) {
-            aPressed.set(false);
-          }
+            if (e.getCode() == KeyCode.A) {
+              if (dPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+                player.setImage(leftCharacterIdle);
+                walkAnimationPlaying = false;
+              } else if (dPressed.get() == true) {
+                player.setImage(rightCharacterAnimation);
+              }
 
-          if (e.getCode() == KeyCode.S) {
-            sPressed.set(false);
-          }
+              aPressed.set(false);
+            }
 
-          if (e.getCode() == KeyCode.D) {
-            dPressed.set(false);
+            if (e.getCode() == KeyCode.S) {
+              if (player.getImage() == leftCharacterAnimation
+                  && wPressed.get() == false
+                  && aPressed.get() == false) {
+                player.setImage(leftCharacterIdle);
+                walkAnimationPlaying = false;
+              } else if (wPressed.get() == true) {
+                player.setImage(lastPlayedWalk);
+              } else if (aPressed.get() == false
+                  && dPressed.get() == false
+                  && wPressed.get() == false) {
+                player.setImage(rightCharacterIdle);
+                walkAnimationPlaying = false;
+              }
+              sPressed.set(false);
+            }
+
+            if (e.getCode() == KeyCode.D) {
+              if (aPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+                player.setImage(rightCharacterIdle);
+                walkAnimationPlaying = false;
+              } else if (aPressed.get() == true) {
+                player.setImage(leftCharacterAnimation);
+              }
+
+              dPressed.set(false);
+            }
           }
         });
   }
@@ -356,10 +535,16 @@ public class ExitController implements Initializable {
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
-            // Adjust the player's position to be right in front of the room
-            nextToButton = true;
-            monitor.setFill(javafx.scene.paint.Color.WHITE);
-            clickButton.setVisible(true);
+            // Adjust the player's position to be right in front of the room)
+            if (!GameState.correctPassword) {
+              nextToButton = true;
+              monitor.setFill(javafx.scene.paint.Color.WHITE);
+              clickButton.setVisible(true);
+            } else {
+              nextToButton = false;
+              clickButton.setVisible(false);
+              monitor.setFill(javafx.scene.paint.Color.TRANSPARENT);
+            }
           });
       pauseTransition.play();
     } else {
@@ -396,12 +581,16 @@ public class ExitController implements Initializable {
     exit.setVisible(false);
     clickButton.setVisible(false);
     exit2.setVisible(false);
+    idCardList.setVisible(false);
+    id.setVisible(false);
+    click.setVisible(false);
   }
 
   // when the rectangle is clicked, the keypad is shown
   @FXML
   private void monitorClicked(MouseEvent event) {
     if (nextToButton) {
+      keyboardControlEnabled = false; // Disable keyboard control
       screen.setVisible(true);
       one.setVisible(true);
       two.setVisible(true);
@@ -420,7 +609,7 @@ public class ExitController implements Initializable {
       exit.setVisible(true);
       player.setVisible(false);
       clickMonitor.setVisible(false);
-
+      scene.requestFocus(); // Add this line to request focus on the scene
       GameState.foundMonitor = true;
     }
   }
@@ -428,6 +617,7 @@ public class ExitController implements Initializable {
   // if exit is clicked, unrelated node becomes invisible
   @FXML
   private void clickExit(ActionEvent event) {
+    keyboardControlEnabled = true; // Enable keyboard control
     screen.setVisible(false);
     one.setVisible(false);
     two.setVisible(false);
@@ -446,10 +636,12 @@ public class ExitController implements Initializable {
     monitor.setVisible(true);
     player.setVisible(true);
     clickMonitor.setVisible(true);
+    scene.requestFocus(); // Add this line
   }
 
   @FXML
   private void clickExit2(ActionEvent event) {
+    keyboardControlEnabled = true; // Enable keyboard control
     player.setVisible(true);
     exit2.setVisible(false);
     idCaptain.setVisible(false);
@@ -457,6 +649,8 @@ public class ExitController implements Initializable {
     idDoctor.setVisible(false);
     idEngineer.setVisible(false);
     ids.setVisible(false);
+    idCardList.setVisible(false);
+    scene.requestFocus(); // Add this line
   }
 
   @FXML
@@ -555,7 +749,10 @@ public class ExitController implements Initializable {
     } else {
       soundCorrect();
       screen.setText("CORRECT");
+      keyboardControlEnabled = true; // Enable keyboard control
       GameState.isPasscodeCorrect = true;
+      GameState.correctPassword = true;
+      scene.requestFocus(); // Add this line
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
       pauseTransition.setOnFinished(
@@ -578,7 +775,8 @@ public class ExitController implements Initializable {
             clickButton.setVisible(false);
             monitor.setVisible(false);
             clickMonitor.setVisible(false);
-            exit2.setVisible(true);
+            player.setVisible(true);
+            id.setVisible(true);
             changeOpacity();
           });
       pauseTransition.play();
@@ -595,28 +793,32 @@ public class ExitController implements Initializable {
   // when the scanner is clicked, ids are shown depending on its state
   @FXML
   private void clickIdScanner(MouseEvent event) {
-    // if the ids are not shown and the correct id was not tagged yet
-    if (ids.isVisible() == false && !GameState.isIdChecked) {
-      ids.setVisible(true);
+    if (idTouching) {
+      clickSoundButtton();
+      System.out.println("clicked");
+      keyboardControlEnabled = false; // Disable keyboard control
+      player.setVisible(false);
 
-      if (GameState.isCaptainCollected) {
-        idCaptain.setVisible(true);
+      // if the ids are not shown and the correct id was not tagged yet
+      if (ids.isVisible() == false && !GameState.isIdChecked) {
+        ids.setVisible(true);
+        exit2.setVisible(true);
+        idCardList.setVisible(true);
+        click.setVisible(true);
+
+        if (GameState.isCaptainCollected) {
+          idCaptain.setVisible(true);
+        }
+        if (GameState.isChefCollected) {
+          idChef.setVisible(true);
+        }
+        if (GameState.isDoctorCollected) {
+          idDoctor.setVisible(true);
+        }
+        if (GameState.isEngineerCollected) {
+          idEngineer.setVisible(true);
+        }
       }
-      if (GameState.isChefCollected) {
-        idChef.setVisible(true);
-      }
-      if (GameState.isDoctorCollected) {
-        idDoctor.setVisible(true);
-      }
-      if (GameState.isEngineerCollected) {
-        idEngineer.setVisible(true);
-      }
-    } else {
-      ids.setVisible(false);
-      idCaptain.setVisible(false);
-      idChef.setVisible(false);
-      idDoctor.setVisible(false);
-      idEngineer.setVisible(false);
     }
   }
 
@@ -645,6 +847,7 @@ public class ExitController implements Initializable {
                 idChef.setVisible(false);
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
+                exit2.setVisible(false);
                 changeOpacity2();
                 GameState.isGameFinished = true;
               } else {
@@ -662,6 +865,7 @@ public class ExitController implements Initializable {
                 idChef.setVisible(false);
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
+                exit2.setVisible(false);
                 changeOpacity2();
                 GameState.isGameFinished = true;
               } else {
@@ -679,6 +883,7 @@ public class ExitController implements Initializable {
                 idChef.setVisible(false);
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
+                exit2.setVisible(false);
                 changeOpacity2();
                 GameState.isGameFinished = true;
               } else {
@@ -696,6 +901,7 @@ public class ExitController implements Initializable {
                 idChef.setVisible(false);
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
+                exit2.setVisible(false);
                 changeOpacity2();
                 GameState.isGameFinished = true;
               } else {
@@ -837,19 +1043,20 @@ public class ExitController implements Initializable {
     System.out.print("HI");
   }
 
-  private void toggleSound() {
+  @FXML
+  private void toggleSound(MouseEvent event) {
     if (GameState.isSoundEnabled) {
-      // Disable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.0); // Mute the media player
-      }
-      toggleSoundButton.setText("Enable Sound");
+        // Disable sound
+        if (App.mediaPlayer != null) {
+            App.mediaPlayer.setVolume(0.0); // Mute the media player
+        }
+        toggleSoundButton.setText("Enable Sound");
     } else {
-      // Enable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-      }
-      toggleSoundButton.setText("Disable Sound");
+        // Enable sound
+        if (App.mediaPlayer != null) {
+            App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+        }
+        toggleSoundButton.setText("Disable Sound");
     }
 
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state

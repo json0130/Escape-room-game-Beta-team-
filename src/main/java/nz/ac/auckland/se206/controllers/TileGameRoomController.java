@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -9,7 +10,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
@@ -19,6 +22,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -46,6 +50,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   @FXML private ImageView player;
   @FXML private Pane scene;
+  @FXML private Pane alert;
 
   private double previousX;
   private double previousY;
@@ -87,8 +92,62 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private ImageView close;
   @FXML private Label greeting;
   private FadeTransition fadeTransition;
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
+
+  private boolean hasHappend = false;
 
   @FXML private Button toggleSoundButton;
+
+  @FXML
+  Image rightCharacterAnimation =
+      new Image(
+          new File("src/main/resources/images/walkingRight.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image leftCharacterAnimation =
+      new Image(
+          new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image leftCharacterIdle =
+      new Image(
+          new File("src/main/resources/images/gameCharacterArtLeft.png").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image rightCharacterIdle =
+      new Image(
+          new File("src/main/resources/images/gameCharacterArtRight.png").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image lastPlayedWalk =
+      new Image(
+          new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  Boolean walkAnimationPlaying = false;
+
+  // Add this variable to your class
+  private Timeline alertBlinkTimeline;
 
   private boolean nextToButton = false;
   @FXML private Button btnRoom1;
@@ -163,8 +222,10 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     walls.add(wall20);
 
     // Add an event handler to the Toggle Sound button
-    toggleSoundButton.setOnAction(event -> toggleSound());
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
 
+    alert.setVisible(false); // Initially hide the alert label
+    aiWindowController.setVisible(true);
     // if difficulty is selected, label is updated
     detectDifficulty();
 
@@ -199,16 +260,18 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   public void checkExit(ImageView player, Rectangle exit) {
     if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
       exit.setOpacity(1);
+      timer.stop();
+
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
             // Adjust the player's position to be right in front of the room
-            player.setLayoutX(436);
-            player.setLayoutY(488);
+            player.setLayoutX(404);
+            player.setLayoutY(410);
             GameState.isPlayerInMap = true;
             GameState.isPlayerInRoom2 = false;
+            GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
-            timer.stop();
           });
       pauseTransition.play();
     } else {
@@ -223,6 +286,38 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
         player.setLayoutY(previousY); // Restore the player's previous Y position
         // Exit the loop as soon as a collision is detected
       }
+    }
+    // Detect if the timer is 30 seconds left and start the alert blinking
+    if (App.timerSeconds == 30) {
+      if (!hasHappend) {
+        System.out.println("30 seconds left");
+        hasHappend = true;
+        setupAlertBlinking();
+      }
+    } else if (App.timerSeconds == 0) {
+      // Stop the alert blinking when the timer reaches 0
+      stopAlertBlinking();
+    }
+  }
+
+  // Modify your setupAlertBlinking method as follows
+  private void setupAlertBlinking() {
+    alert.setVisible(true); // Initially show the alert label
+
+    // Set up the blinking animation for the alert label
+    alertBlinkTimeline =
+        new Timeline(
+            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
+            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
+    alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
+    alertBlinkTimeline.play();
+  }
+
+  // Add a method to stop the alert blinking
+  private void stopAlertBlinking() {
+    if (alertBlinkTimeline != null) {
+      alertBlinkTimeline.stop();
+      alert.setVisible(false);
     }
   }
 
@@ -248,21 +343,40 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   // code for player movement using wasd keys
   @FXML
   public void movementSetup() {
+
     scene.setOnKeyPressed(
         e -> {
           if (e.getCode() == KeyCode.W) {
+            if (walkAnimationPlaying == false) {
+              player.setImage(lastPlayedWalk);
+              walkAnimationPlaying = true;
+            }
             wPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.A) {
+            if (player.getImage() != leftCharacterAnimation) {
+              player.setImage(leftCharacterAnimation);
+              walkAnimationPlaying = true;
+              lastPlayedWalk = player.getImage();
+            }
             aPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.S) {
+            if (walkAnimationPlaying == false) {
+              player.setImage(lastPlayedWalk);
+              walkAnimationPlaying = true;
+            }
             sPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.D) {
+            if (player.getImage() != rightCharacterAnimation) {
+              player.setImage(rightCharacterAnimation);
+              walkAnimationPlaying = true;
+              lastPlayedWalk = player.getImage();
+            }
             dPressed.set(true);
           }
         });
@@ -270,18 +384,58 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     scene.setOnKeyReleased(
         e -> {
           if (e.getCode() == KeyCode.W) {
+            if (player.getImage() == leftCharacterAnimation
+                && sPressed.get() == false
+                && aPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (sPressed.get() == true) {
+              player.setImage(lastPlayedWalk);
+            } else if (aPressed.get() == false
+                && dPressed.get() == false
+                && sPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            }
             wPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.A) {
+            if (dPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (dPressed.get() == true) {
+              player.setImage(rightCharacterAnimation);
+            }
+
             aPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.S) {
+            if (player.getImage() == leftCharacterAnimation
+                && wPressed.get() == false
+                && aPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (wPressed.get() == true) {
+              player.setImage(lastPlayedWalk);
+            } else if (aPressed.get() == false
+                && dPressed.get() == false
+                && wPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            }
             sPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.D) {
+            if (aPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (aPressed.get() == true) {
+              player.setImage(leftCharacterAnimation);
+            }
+
             dPressed.set(false);
           }
         });
@@ -344,11 +498,10 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML
   public void onTileGameButtonClick() throws IOException {
     translate.stop();
-    eMark.setVisible(false);
     if (nextToButton) {
       GameState.foundComputer = true;
+      eMark.setVisible(false);
       App.setScene(AppUi.TILEPUZZLE);
-      System.out.println("button clicked");
     }
   }
 
@@ -412,27 +565,25 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   }
 
   @FXML
-  private void toggleSound() {
+  private void toggleSound(MouseEvent event) {
     if (GameState.isSoundEnabled) {
       // Disable sound
       if (App.mediaPlayer != null) {
         App.mediaPlayer.setVolume(0.0); // Mute the media player
       }
       toggleSoundButton.setText("Enable Sound");
+      soundOff.setVisible(true);
+      soundOn.setVisible(false);
     } else {
       // Enable sound
       if (App.mediaPlayer != null) {
         App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
       }
-      toggleSoundButton.setText("Disable Sound");
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
     }
 
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
-  }
-
-  @FXML
-  private void onGameMasterClick() {
-    aiWindowController.setVisible(true);
   }
 
   // game master robot animation

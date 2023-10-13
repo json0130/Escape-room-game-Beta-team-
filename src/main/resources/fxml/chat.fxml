@@ -2,17 +2,19 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.ChatController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.ChatController">
   <children>
-      <ImageView fitHeight="650.0" fitWidth="1000.0" pickOnBounds="true">
+      <ImageView fitHeight="750.0" fitWidth="1204.0" pickOnBounds="true">
          <image>
             <Image url="@../images/Firefly%20realistic%20space%20background%20with%20stars%2024052.jpg" />
          </image>
@@ -26,7 +28,7 @@
          <font>
             <Font name="Arial" size="20.0" />
          </font></TextField>
-    <Button layoutX="807.0" layoutY="597.0" mnemonicParsing="false" onAction="#onGoBack" style="-fx-background-color: white;" text="Back to room">
+    <Button layoutX="847.0" layoutY="672.0" mnemonicParsing="false" onAction="#onGoBack" style="-fx-background-color: white;" text="Back to room" visible="false">
          <font>
             <Font name="Arial" size="23.0" />
          </font></Button>
@@ -39,39 +41,47 @@
             <Font name="Arial" size="25.0" />
          </font></Button>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="52.0" layoutX="140.0" layoutY="128.0" stroke="#062643" strokeType="INSIDE" width="725.0" />
-      <Label fx:id="hintLabel" alignment="CENTER_RIGHT" layoutX="615.0" layoutY="144.0" prefHeight="34.0" prefWidth="152.0" text="UNLIMITED" textFill="WHITE">
+      <Label fx:id="hintLabel" alignment="CENTER_RIGHT" layoutX="506.0" layoutY="132.0" prefHeight="34.0" prefWidth="152.0" text="UNLIMITED" textFill="WHITE">
          <font>
             <Font size="28.0" />
          </font>
       </Label>
-      <Label fx:id="hintLabel2" alignment="CENTER_RIGHT" layoutX="774.0" layoutY="144.0" prefHeight="34.0" prefWidth="85.0" text="HINTS" textFill="WHITE">
+      <Label fx:id="hintLabel2" alignment="CENTER_RIGHT" layoutX="665.0" layoutY="132.0" prefHeight="34.0" prefWidth="85.0" text="HINTS" textFill="WHITE">
          <font>
             <Font size="28.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="425.0" layoutY="48.0" text="RIDDLE" textFill="WHITE">
+      <Button layoutX="771.0" layoutY="137.0" mnemonicParsing="false" onAction="#onGoBack" prefHeight="34.0" prefWidth="85.0" style="-fx-background-color: lightgrey; -fx-background-radius: 15;" text="Go Back">
          <font>
-            <Font name="Arial" size="50.0" />
-         </font>
-      </Label>
-      <Button layoutX="914.0" layoutY="26.0" mnemonicParsing="false" onAction="#onGoBack" text="Go Back" />
-      <ImageView fx:id="robotBase" fitHeight="184.0" fitWidth="200.0" layoutX="696.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true">
+            <Font name="Arial" size="16.0" />
+         </font></Button>
+      <ScrollPane fx:id="chatPane" hbarPolicy="NEVER" layoutX="139.0" layoutY="180.0" maxWidth="719.0" minWidth="719.0" prefHeight="324.0" prefWidth="719.0">
+         <content>
+            <VBox fx:id="chatContainer" maxWidth="690.0" minWidth="690.0" prefWidth="690.0" />
+         </content>
+      </ScrollPane>
+      <fx:include layoutX="150.0" layoutY="94.0" source="countdowntimer.fxml" />
+      <ImageView fx:id="riddleCorrect" fitHeight="141.0" fitWidth="138.0" layoutX="439.0" layoutY="-13.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/base.png" />
+            <Image url="@../images/riddleRobot/riddleCorrect.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="robotThink" fitHeight="184.0" fitWidth="200.0" layoutX="695.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="riddleHint" fitHeight="150.0" fitWidth="140.0" layoutX="436.0" layoutY="-16.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/robot-think.gif" />
+            <Image url="@../images/riddleRobot/riddleHint.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="robotReply" fitHeight="184.0" fitWidth="200.0" layoutX="695.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="riddleWrong" fitHeight="150.0" fitWidth="200.0" layoutX="433.0" layoutY="-17.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/reply.png" />
+            <Image url="@../images/riddleRobot/riddleWrong.png" />
          </image>
       </ImageView>
-      <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
-      <ImageView fx:id="glitch" fitHeight="428.0" fitWidth="727.0" layoutX="139.0" layoutY="129.0" pickOnBounds="true" visible="false">
+      <ImageView fx:id="riddleGreeting" fitHeight="150.0" fitWidth="200.0" layoutX="432.0" layoutY="-18.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/riddleRobot/riddleGreeting.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="glitch" fitHeight="377.0" fitWidth="727.0" layoutX="139.0" layoutY="180.0" pickOnBounds="true" visible="false">
          <image>
             <Image url="@../images/glitch-effect-black-background.jpg" />
          </image>

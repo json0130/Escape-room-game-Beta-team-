@@ -5,13 +5,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
@@ -79,7 +85,14 @@ public class TileGameDeskController {
   @FXML private ImageView imageSeven;
   @FXML private ImageView imageEight;
 
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
+
   @FXML private Button toggleSoundButton;
+  @FXML private Pane alert;
+  private boolean hasHappend = false;
+  // Add this variable to your class
+  private Timeline alertBlinkTimeline;
 
   private Tile tileOne = new Tile();
   private Tile tileTwo = new Tile();
@@ -120,6 +133,7 @@ public class TileGameDeskController {
   @FXML private ImageView powerButton;
   @FXML private ImageView gameMaster;
 
+  private Timeline animationTimeline;
   @FXML public Pane aiWindowController;
 
   /**
@@ -130,8 +144,22 @@ public class TileGameDeskController {
   public void initialize() throws ApiProxyException {
     App.timerSeconds = 120;
     // Add an event handler to the Toggle Sound button
-    toggleSoundButton.setOnAction(event -> toggleSound());
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
     animateRobot();
+    alert.setVisible(false); // Initially hide the alert label
+    aiWindowController.setVisible(true);
+
+    animationTimeline = new Timeline(
+                new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        // Update animation based on the current time
+                        checkCollision2();
+                    }
+                })
+        );
+        animationTimeline.setCycleCount(Timeline.INDEFINITE);
+        animationTimeline.play();
 
     // dialogueList.add("WHO DARES DISTURB MY SLUMBER!?!");
     dialogueList.add("Ahhh... Another treasure hunter who wishes to steal from me!");
@@ -154,6 +182,49 @@ public class TileGameDeskController {
     System.out.println(riddleAnswer);
 
     wordText.setText(riddleAnswer);
+  }
+
+  public void checkCollision2() {
+    // Detect if the timer is 30 seconds left and start the alert blinking
+    if (App.timerSeconds == 30) {
+      if (!hasHappend){
+        System.out.println("30 seconds left");
+        hasHappend = true;
+        setupAlertBlinking();
+      }
+    } else if (App.timerSeconds == 0) {
+      // Stop the alert blinking when the timer reaches 0
+      stopAlertBlinking();
+    }
+    // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
+    }
+  }
+
+  // Modify your setupAlertBlinking method as follows
+  private void setupAlertBlinking() {
+    alert.setVisible(true); // Initially show the alert label
+
+    // Set up the blinking animation for the alert label
+    alertBlinkTimeline = new Timeline(
+        new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
+        new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false))
+    );
+    alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
+    alertBlinkTimeline.play();
+  }
+
+  // Add a method to stop the alert blinking
+  private void stopAlertBlinking() {
+    if (alertBlinkTimeline != null) {
+        alertBlinkTimeline.stop();
+        alert.setVisible(false);
+    }
   }
 
   private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
@@ -540,23 +611,23 @@ public class TileGameDeskController {
 
   @FXML
   private void onPuzzleGoBackClick() {
-    String musicFile;
     App.setScene(AppUi.TILEROOM);
+    //GameState.hasHappend = false;
+    // String musicFile;
+    // if (App.timerSeconds < 60) {
+    //   musicFile = "src/main/resources/sounds/final-BG-MUSIC.mp3";
+    //   App.musicType = "final";
+    // } else {
+    //   musicFile = "src/main/resources/sounds/Background-Music.mp3";
+    // }
+    // Media media = new Media(new File(musicFile).toURI().toString());
 
-    if (App.timerSeconds < 60) {
-      musicFile = "src/main/resources/sounds/final-BG-MUSIC.mp3";
-      App.musicType = "final";
-    } else {
-      musicFile = "src/main/resources/sounds/Background-Music.mp3";
-    }
-    Media media = new Media(new File(musicFile).toURI().toString());
-
-    App.mediaPlayer.stop();
-    App.mediaPlayer = new MediaPlayer(media);
-    App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-    App.mediaPlayer.setVolume(0.1);
-    App.mediaPlayer.setAutoPlay(true);
-    System.out.println("click");
+    // App.mediaPlayer.stop();
+    // App.mediaPlayer = new MediaPlayer(media);
+    // App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    // App.mediaPlayer.setVolume(0.1);
+    // App.mediaPlayer.setAutoPlay(true);
+    // System.out.println("click");
   }
 
   // sound for tile game
@@ -569,29 +640,24 @@ public class TileGameDeskController {
   }
 
   @FXML
-  private void toggleSound() {
+  private void toggleSound(MouseEvent event) {
       if (GameState.isSoundEnabled) {
           // Disable sound
           if (App.mediaPlayer != null) {
               App.mediaPlayer.setVolume(0.0); // Mute the media player
           }
-          toggleSoundButton.setText("Enable Sound");
+          soundOff.setVisible(true);
+          soundOn.setVisible(false);
       } else {
           // Enable sound
           if (App.mediaPlayer != null) {
               App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
           }
-          toggleSoundButton.setText("Disable Sound");
+          soundOn.setVisible(true);
+          soundOff.setVisible(false);
       }
   
       GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
-  }
-  
-  @FXML
-  private void onGameMasterClick() {
-    // App.previousRoom = AppUi.TILEPUZZLE;
-    // App.setScene(AppUi.HELPERCHAT);
-    aiWindowController.setVisible(true);
   }
 
   // game master animation

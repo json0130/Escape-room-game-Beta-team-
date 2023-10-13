@@ -4,19 +4,24 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.text.Font;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
@@ -38,6 +43,12 @@ public class ChatController {
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
   @FXML private ImageView glitch;
+  @FXML private ImageView riddleHint;
+  @FXML private ImageView riddleCorrect;
+  @FXML private ImageView riddleWrong;
+  @FXML private ImageView riddleGreeting;
+  @FXML private ScrollPane chatPane;
+  @FXML private VBox chatContainer;
 
   private ChatCompletionRequest chatCompletionRequest;
   public static boolean isRiddleGiven = false;
@@ -56,68 +67,17 @@ public class ChatController {
             try {
               onSendMessage(new ActionEvent());
             } catch (ApiProxyException | IOException e) {
-            
+
               e.printStackTrace();
             }
           }
         });
     chatTextArea.setEditable(false);
     detectDifficulty();
+    chatCompletionRequest =
+        new ChatCompletionRequest().setN(1).setTemperature(1).setTopP(1).setMaxTokens(100);
+    runGpt(new ChatMessage("user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
     System.out.println(Room1Controller.riddleAnswer);
-  }
-
-  public void detectDifficulty() {
-    Timer labelTimer = new Timer(true);
-    labelTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            if (GameState.difficulty != null) {
-              if (GameState.difficulty == "MEDIUM") {
-                Platform.runLater(() -> updateLabels());
-                if (!isRiddleGiven) {
-                  chatCompletionRequest =
-                      new ChatCompletionRequest()
-                          .setN(1)
-                          .setTemperature(0.5)
-                          .setTopP(0.5)
-                          .setMaxTokens(100);
-                  try {
-                    runGpt(
-                        new ChatMessage(
-                            "user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
-                  } catch (ApiProxyException e) {
-                  
-                    e.printStackTrace();
-                  }
-                  isRiddleGiven = true;
-                }
-                if (GameState.numOfHints == 0) {
-                  labelTimer.cancel();
-                }
-              } else {
-                Platform.runLater(() -> updateLabels());
-                chatCompletionRequest =
-                    new ChatCompletionRequest()
-                        .setN(1)
-                        .setTemperature(0.5)
-                        .setTopP(0.5)
-                        .setMaxTokens(100);
-                try {
-                  runGpt(
-                      new ChatMessage(
-                          "user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
-                } catch (ApiProxyException e) {
-                  
-                  e.printStackTrace();
-                }
-                labelTimer.cancel();
-              }
-            }
-          }
-        },
-        0,
-        500);
   }
 
   /**
@@ -126,7 +86,26 @@ public class ChatController {
    * @param msg the chat message to append
    */
   private void appendChatMessage(ChatMessage msg) {
-    chatTextArea.appendText(msg.getRole() + ": " + msg.getContent() + "\n\n");
+    String messageToSend = msg.getContent();
+    Label message = new Label(messageToSend);
+    message.setWrapText(true);
+    message.setFont(Font.font("Arial", 20));
+    HBox hBox = new HBox();
+    if (msg.getRole().equals("user")) {
+      hBox.setAlignment(Pos.CENTER_RIGHT);
+      hBox.setPadding(new Insets(5, 10, 5, 200));
+      message.setStyle(
+          "-fx-background-color: lightblue; -fx-background-radius: 10;-fx-padding: 10,20,20,10;");
+    } else {
+      hBox.setAlignment(Pos.CENTER_LEFT);
+      hBox.setPadding(new Insets(5, 200, 5, 10));
+      message.setStyle(
+          "-fx-background-color: lightyellow; -fx-background-radius: 10;-fx-padding: 10,20,20,10;");
+    }
+    hBox.getChildren().addAll(message);
+    chatContainer.getChildren().addAll(hBox);
+    chatContainer.setAlignment(Pos.TOP_CENTER);
+    chatPane.setVvalue(1.0);
   }
 
   /**
@@ -147,23 +126,32 @@ public class ChatController {
               ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
               Choice result = chatCompletionResult.getChoices().iterator().next();
               chatCompletionRequest.addMessage(result.getChatMessage());
-              appendChatMessage(result.getChatMessage());
+              Platform.runLater(
+                  () -> {
+                    appendChatMessage(result.getChatMessage());
+                  });
               // Check the correctness of player's answer for the riddle
               Platform.runLater(
                   () -> {
                     if (result.getChatMessage().getRole().equals("assistant")
                         && result.getChatMessage().getContent().startsWith("Correct")) {
                       GameState.isRiddleResolved = true;
-                    }
-                    if (result.getChatMessage().getRole().equals("assistant")
+                      riddleCorrect();
+                    } else if (result.getChatMessage().getRole().equals("assistant")
                         && result.getChatMessage().getContent().startsWith("Hint")) {
                       GameState.numOfHints--;
+                      riddleHint();
+                    } else if (result.getChatMessage().getRole().equals("assistant")
+                        && result.getChatMessage().getContent().startsWith("Incorrect")) {
+                      riddleWrong();
+                    } else {
+                      riddleGreeting();
                     }
                     glitch.setVisible(false);
                   });
               return result.getChatMessage();
             } catch (ApiProxyException e) {
-            
+
               e.printStackTrace();
               return null;
             }
@@ -193,15 +181,9 @@ public class ChatController {
     inputText.clear();
     ChatMessage msg = new ChatMessage("user", message);
     appendChatMessage(msg);
+    msg = new ChatMessage("user", GptPromptEngineering.checkRiddleAnswer(message));
 
-    ChatMessage lastMsg = runGpt(msg);
-    robotThink();
-    if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("Correct")) {
-      GameState.isRiddleResolved = true;
-    }
-    if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("hint")) {
-      GameState.numOfHints--;
-    }
+    runGpt(msg);
   }
 
   /**
@@ -225,6 +207,59 @@ public class ChatController {
     mediaPlayer.setAutoPlay(true);
   }
 
+  private void riddleCorrect() {
+    riddleHint.setVisible(false);
+    riddleWrong.setVisible(false);
+    riddleCorrect.setVisible(true);
+    riddleGreeting.setVisible(false);
+  }
+
+  private void riddleHint() {
+    riddleHint.setVisible(true);
+    riddleWrong.setVisible(false);
+    riddleCorrect.setVisible(false);
+    riddleGreeting.setVisible(false);
+  }
+
+  private void riddleWrong() {
+    riddleHint.setVisible(false);
+    riddleWrong.setVisible(true);
+    riddleCorrect.setVisible(false);
+    riddleGreeting.setVisible(false);
+  }
+
+  private void riddleGreeting() {
+    riddleHint.setVisible(false);
+    riddleWrong.setVisible(false);
+    riddleCorrect.setVisible(false);
+    riddleGreeting.setVisible(true);
+  }
+
+  // detect change in the game state difficulty in the intro scene
+  private void detectDifficulty() {
+    Timer labelTimer = new Timer(true);
+    labelTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (GameState.difficulty != null) {
+              if (GameState.difficulty.equals("MEDIUM")) {
+                Platform.runLater(() -> updateLabels());
+                if (GameState.numOfHints == 0) {
+                  labelTimer.cancel();
+                }
+              } else {
+                Platform.runLater(() -> updateLabels());
+                labelTimer.cancel();
+              }
+            }
+          }
+        },
+        0,
+        500);
+  }
+
+  // update labels for difficulty and hints as the game progress
   private void updateLabels() {
     if (GameState.difficulty == "EASY") {
       hintLabel.setText("UNLIMITED");
@@ -237,46 +272,5 @@ public class ChatController {
     } else {
       hintLabel.setText("NO");
     }
-  }
-
-  @FXML
-  private void robotThink() {
-    robotBase.setVisible(false);
-    robotReply.setVisible(false);
-    robotThink.setVisible(true);
-
-    Platform.runLater(
-        () -> {
-          PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
-          delay.setOnFinished(
-              event1 -> {
-                robotReply();
-              });
-          delay.play();
-        });
-  }
-
-  @FXML
-  private void robotReply() {
-    robotBase.setVisible(false);
-    robotReply.setVisible(true);
-    robotThink.setVisible(false);
-
-    Platform.runLater(
-        () -> {
-          PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
-          delay.setOnFinished(
-              event1 -> {
-                robotIdle();
-              });
-          delay.play();
-        });
-  }
-
-  @FXML
-  private void robotIdle() {
-    robotBase.setVisible(true);
-    robotReply.setVisible(false);
-    robotThink.setVisible(false);
   }
 }

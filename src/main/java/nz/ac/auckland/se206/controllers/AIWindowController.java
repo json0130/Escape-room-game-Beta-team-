@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -15,7 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -41,7 +41,12 @@ public class AIWindowController {
   @FXML private Pane aiPane;
   @FXML private ImageView closeWindow;
 
+  private nz.ac.auckland.se206.chatHistory chatHistory;
+  private String currentRoomName;
+
   public static ChatCompletionRequest chatCompletionRequest;
+
+  private AnimationTimer timer;
 
   /**
    * Initializes the chat view, loading the riddle.
@@ -50,20 +55,8 @@ public class AIWindowController {
    */
   @FXML
   public void initialize() throws ApiProxyException {
-    // when the enter key is pressed, message is sent
-    inputText.setOnKeyPressed(
-        event -> {
-          if (event.getCode() == KeyCode.ENTER) {
-            try {
-              onSendMessage(new ActionEvent());
-            } catch (ApiProxyException | IOException e) {
-              // TODO Auto-generated catch block
-              e.printStackTrace();
-            }
-          }
-        });
-    chatTextArea.setEditable(false);
 
+    chatTextArea.setEditable(false);
     aiPane
         .visibleProperty()
         .addListener(
@@ -85,6 +78,18 @@ public class AIWindowController {
               }
             });
 
+    timer =
+        new AnimationTimer() {
+          @Override
+          public void handle(long now) {
+            chatTextArea.setText(App.aiWindow);
+            chatTextArea.setScrollTop(Double.MAX_VALUE);
+          }
+        };
+
+    timer.start();
+  
+
     chatCompletionRequest =
         new ChatCompletionRequest().setN(1).setTemperature(1).setTopP(1).setMaxTokens(100);
     App.greetingInMap =
@@ -102,10 +107,29 @@ public class AIWindowController {
    *
    * @param msg the chat message to append
    */
+  // private void appendChatMessage(ChatMessage msg) {
+  //   App.aiWindow = App.aiWindow.concat((msg.getRole() + ": " + msg.getContent() + "\n\n"));
+  //   chatTextArea.setText(App.aiWindow);
+  //   Platform.runLater(() -> {
+  //     //chatTextArea.positionCaret(chatTextArea.getText().length());
+  //     chatTextArea.setScrollTop(Double.MAX_VALUE); // this will scroll to the bottom
+  //     System.out.println(App.aiWindow);
+  //     GameState.hasHappend = false;
+  //   });
+  // }
+
+  /**
+   * Appends a chat message to the chat text area.
+   *
+   * @param msg the chat message to append
+   */
   private void appendChatMessage(ChatMessage msg) {
-    App.aiWindow = App.aiWindow.concat((msg.getRole() + ": " + msg.getContent() + "\n\n"));
-    chatTextArea.setText(App.aiWindow);
-    chatTextArea.positionCaret(chatTextArea.getText().length());
+    App.aiWindow = App.aiWindow.concat(msg.getRole() + ": " + msg.getContent() + "\n\n");
+    Platform.runLater(
+        () -> {
+          chatTextArea.setText(App.aiWindow);
+          chatTextArea.setScrollTop(Double.MAX_VALUE); // this will scroll to the bottom
+        });
   }
 
   /**
@@ -196,6 +220,13 @@ public class AIWindowController {
       robotThink();
       runGpt(new ChatMessage("user", GptPromptEngineering.hard(message)));
     }
+    // if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("Correct")) {
+    //   GameState.isRiddleResolved = true;
+    // }
+    // if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("hint")) {
+    //   GameState.numOfHints--;
+    // }
+    aiPane.requestFocus(); // Add this line
   }
 
   /**
@@ -258,6 +289,7 @@ public class AIWindowController {
     robotBase.setVisible(true);
     robotReply.setVisible(false);
     robotThink.setVisible(false);
+    chatTextArea.setText(App.aiWindow);
   }
 
   @FXML
@@ -267,12 +299,11 @@ public class AIWindowController {
     }
   }
 
-  @FXML
-  private void onCloseWindowClick() {
-    // chatTextArea.setText(App.aiWindow);
-    // chatTextArea.clear();
-    // chatTextArea.appendText("AI: How can I help?" + "\n\n");
-    aiPane.setVisible(false);
-  }
+  // private ChatCompletionRequest getChatCompletionRequest() {
+  //   return this.chatCompletionRequest;
+  // }
 
+  // private void setChatCompletionRequest(ChatCompletionRequest incoming) {
+  //   this.chatCompletionRequest = incoming;
+  // }
 }

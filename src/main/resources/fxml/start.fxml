@@ -12,104 +12,79 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.IntroController">
+<Pane fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.IntroController">
    <children>
-      <ImageView fx:id="background" fitHeight="707.0" fitWidth="1021.0" layoutX="-7.0" layoutY="-47.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="background" fitHeight="674.0" fitWidth="1331.0" layoutX="-10.0" layoutY="-16.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/Firefly%20Space%20background%20with%20spaceship%20flying%20around%2053452.jpg" />
+            <Image url="@../images/Firefly%2020231012224339.png" />
          </image>
       </ImageView>
-      <Label fx:id="title" alignment="CENTER" layoutX="175.0" layoutY="172.0" prefHeight="106.0" prefWidth="637.0" style="-fx-border-color: white;" styleClass="stroked-label" stylesheets="@../css/stroked-label.css" text="STARSHIP ESCAPE I" textAlignment="CENTER" textFill="WHITE" wrapText="true">
-         <font>
-            <Font name="ACaslonPro-Regular" size="53.0" />
-         </font>
-      </Label>
-      <Pane fx:id="background3" layoutX="-13.0" layoutY="-15.0" opacity="0.47" prefHeight="681.0" prefWidth="1026.0" style="-fx-background-color: black;">
+      <ImageView fx:id="title" fitHeight="262.0" fitWidth="738.0" layoutX="127.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/titleImage.png" />
+         </image>
+      </ImageView>
+      <Pane fx:id="background3" layoutX="-13.0" layoutY="-15.0" opacity="0.47" prefHeight="681.0" prefWidth="1215.0" style="-fx-background-color: black;">
          <children>
-            <Button fx:id="toggleSoundButton" layoutX="945.0" layoutY="37.0" mnemonicParsing="false" text="SETTING" />
+            <Button fx:id="toggleSoundButton" layoutX="831.0" layoutY="49.0" mnemonicParsing="false" text="SETTING" visible="false" />
          </children></Pane>
-      <Group layoutX="110.0" layoutY="412.0">
+      <Group layoutX="216.0" layoutY="412.0">
          <children>
-            <Rectangle fx:id="easybox" arcHeight="5.0" arcWidth="10.0" fill="#0000008b" height="97.0" layoutY="40.0" stroke="WHITE" strokeLineCap="ROUND" strokeWidth="2.0" width="202.0" />
-            <Label fx:id="easy" alignment="TOP_LEFT" layoutX="22.0" layoutY="54.0" prefHeight="132.0" prefWidth="162.0" text="EASY :  &#10;Hint: UNLIMITED&#10;" textAlignment="CENTER" textFill="WHITE">
+            <Rectangle fx:id="easybox" arcHeight="5.0" arcWidth="10.0" fill="#0000008b" height="39.0" layoutY="25.0" stroke="#00c6ff" strokeLineCap="ROUND" strokeWidth="2.0" width="202.0" />
+            <Label fx:id="easy" alignment="TOP_LEFT" layoutX="18.0" layoutY="30.0" prefHeight="40.0" prefWidth="169.0" text="HINT: UNLIMITED&#10;" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="System Bold Italic" size="20.0" />
                </font>
             </Label>
          </children>
       </Group>
-      <Group layoutX="399.0" layoutY="412.0">
+      <Group layoutX="504.0" layoutY="412.0">
          <children>
-            <Rectangle fx:id="mediumbox" arcHeight="5.0" arcWidth="10.0" fill="#0000008b" height="98.0" layoutY="39.0" stroke="WHITE" strokeLineCap="ROUND" strokeWidth="2.0" width="202.0" />
-            <Label fx:id="medium" alignment="TOP_LEFT" layoutX="37.0" layoutY="49.0" prefHeight="132.0" prefWidth="162.0" text="MEDIUM :  &#10;Hint: 5 TIMES&#10;" textAlignment="CENTER" textFill="WHITE">
+            <Rectangle fx:id="mediumbox" arcHeight="5.0" arcWidth="10.0" fill="#0000008b" height="39.0" layoutY="23.0" stroke="#00c6ff" strokeLineCap="ROUND" strokeWidth="2.0" width="202.0" />
+            <Label fx:id="medium" alignment="TOP_LEFT" layoutX="32.0" layoutY="28.0" prefHeight="39.0" prefWidth="148.0" text="HINT: 5 TIMES&#10;" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="System Bold Italic" size="20.0" />
                </font>
             </Label>
          </children>
       </Group>
-      <Group layoutX="690.0" layoutY="411.0">
+      <Group layoutX="795.0" layoutY="411.0">
          <children>
-            <Rectangle fx:id="hardbox" arcHeight="5.0" arcWidth="10.0" fill="#0000008b" height="99.0" layoutY="39.0" stroke="WHITE" strokeLineCap="ROUND" strokeWidth="2.0" width="204.0" />
-            <Label fx:id="hard" alignment="TOP_LEFT" layoutX="27.0" layoutY="49.0" prefHeight="132.0" prefWidth="162.0" text="HARD :  &#10;Hint: NO HINTS&#10;" textAlignment="CENTER" textFill="WHITE">
+            <Rectangle fx:id="hardbox" arcHeight="5.0" arcWidth="10.0" fill="#0000008b" height="39.0" layoutY="23.0" stroke="#00c6ff" strokeLineCap="ROUND" strokeWidth="2.0" width="202.0" />
+            <Label fx:id="hard" alignment="TOP_LEFT" layoutX="25.0" layoutY="28.0" prefHeight="36.0" prefWidth="162.0" text="HINT: NO HINTS&#10;" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="System Bold Italic" size="20.0" />
                </font>
             </Label>
          </children>
       </Group>
-      <Button fx:id="easyButton" layoutX="111.0" layoutY="382.0" mnemonicParsing="false" onAction="#levelButtonClicked" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" styleClass="ba" text="EASY" textAlignment="CENTER">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000085" height="60.0" layoutX="505.0" layoutY="360.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000085" height="60.0" layoutX="216.0" layoutY="363.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000085" height="60.0" layoutX="797.0" layoutY="363.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+      <Button fx:id="easyButton" layoutX="216.0" layoutY="363.0" mnemonicParsing="false" onAction="#levelButtonClicked" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" styleClass="ba" text="EASY" textAlignment="CENTER" textFill="WHITE">
          <font>
-            <Font name="System Bold Italic" size="27.0" />
-         </font>
-         <textFill>
-            <LinearGradient endX="1.0" endY="1.0">
-               <stops>
-                  <Stop>
-                     <color>
-                        <Color red="1.0" green="1.0" blue="1.0" />
-                     </color>
-                  </Stop>
-                  <Stop offset="0.3498526763791127">
-                     <color>
-                        <Color red="0.6140350699424744" green="0.6140350699424744" blue="0.6140350699424744" />
-                     </color>
-                  </Stop>
-                  <Stop offset="0.5279642058165548">
-                     <color>
-                        <Color red="0.4385964870452881" green="0.4385964870452881" blue="0.4385964870452881" />
-                     </color>
-                  </Stop>
-                  <Stop offset="0.6892699296120475">
-                     <color>
-                        <Color red="0.6140350699424744" green="0.6140350699424744" blue="0.6140350699424744" />
-                     </color>
-                  </Stop>
-                  <Stop offset="1.0">
-                     <color>
-                        <Color red="1.0" green="1.0" blue="1.0" />
-                     </color>
-                  </Stop>
-               </stops>
-            </LinearGradient>
-         </textFill>
-      </Button>
-      <Button fx:id="minB2" layoutX="109.0" layoutY="504.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="45.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" stylesheets="@../css/styles.css" text="2 MINUTES" textAlignment="CENTER" textFill="WHITE">
-         <font>
-            <Font size="18.0" />
+            <Font name="System Bold Italic" size="25.0" />
          </font>
       </Button>
-      <Button fx:id="minB4" layoutX="398.0" layoutY="504.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="45.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" text="4 MINUTES" textAlignment="CENTER" textFill="WHITE">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000085" height="60.0" layoutX="215.0" layoutY="504.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000085" height="60.0" layoutX="504.0" layoutY="504.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000085" height="60.0" layoutX="795.0" layoutY="503.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+      <Button fx:id="minB2" layoutX="215.0" layoutY="504.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="55.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" stylesheets="@../css/styles.css" text="2 MINUTES" textAlignment="CENTER" textFill="WHITE">
          <font>
-            <Font size="18.0" />
+            <Font name="System Bold Italic" size="21.0" />
          </font>
       </Button>
-      <Button fx:id="minB6" layoutX="689.0" layoutY="503.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="45.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" text="6 MINUTES" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="minB4" layoutX="504.0" layoutY="504.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="55.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" stylesheets="@../css/styles.css" text="4 MINUTES" textAlignment="CENTER" textFill="WHITE">
          <font>
-            <Font size="18.0" />
+            <Font name="System Bold Italic" size="21.0" />
          </font>
       </Button>
-      <Button fx:id="startButton" alignment="CENTER" contentDisplay="TOP" graphicTextGap="10.0" layoutX="300.0" layoutY="208.0" mnemonicParsing="false" onAction="#startButtonClicked" prefHeight="99.0" prefWidth="376.0" text="START" textAlignment="CENTER">
+      <Button fx:id="minB6" layoutX="795.0" layoutY="503.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="55.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" text="6 MINUTES" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="21.0" />
+         </font>
+      </Button>
+      <Button fx:id="startButton" alignment="CENTER" contentDisplay="TOP" graphicTextGap="10.0" layoutX="421.0" layoutY="197.0" mnemonicParsing="false" onAction="#startButtonClicked" prefHeight="99.0" prefWidth="376.0" text="START" textAlignment="CENTER">
          <font>
             <Font name="System Bold Italic" size="47.0" />
          </font>
@@ -145,81 +120,19 @@
             </LinearGradient>
          </textFill>
       </Button>
-      <Button fx:id="mediumButton" layoutX="400.0" layoutY="381.0" mnemonicParsing="false" onAction="#levelButtonClicked" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" styleClass="ba" text="MEDIUM" textAlignment="CENTER">
+      <Button fx:id="mediumButton" layoutX="505.0" layoutY="360.0" mnemonicParsing="false" onAction="#levelButtonClicked" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" styleClass="ba" text="MEDIUM" textAlignment="CENTER" textFill="WHITE">
          <font>
-            <Font name="System Bold Italic" size="27.0" />
+            <Font name="System Bold Italic" size="25.0" />
          </font>
-         <textFill>
-            <LinearGradient endX="1.0" endY="1.0">
-               <stops>
-                  <Stop>
-                     <color>
-                        <Color red="1.0" green="1.0" blue="1.0" />
-                     </color>
-                  </Stop>
-                  <Stop offset="0.4259153162001418">
-                     <color>
-                        <Color red="0.6140350699424744" green="0.6140350699424744" blue="0.6140350699424744" />
-                     </color>
-                  </Stop>
-                  <Stop offset="0.5279642058165548">
-                     <color>
-                        <Color red="0.4385964870452881" green="0.4385964870452881" blue="0.4385964870452881" />
-                     </color>
-                  </Stop>
-                  <Stop offset="0.7407240683145084">
-                     <color>
-                        <Color red="0.6140350699424744" green="0.6140350699424744" blue="0.6140350699424744" />
-                     </color>
-                  </Stop>
-                  <Stop offset="1.0">
-                     <color>
-                        <Color red="1.0" green="1.0" blue="1.0" />
-                     </color>
-                  </Stop>
-               </stops>
-            </LinearGradient>
-         </textFill>
       </Button>
-      <Button fx:id="hardButton" layoutX="692.0" layoutY="381.0" mnemonicParsing="false" onAction="#levelButtonClicked" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" styleClass="ba" text="HARD" textAlignment="CENTER">
+      <Button fx:id="hardButton" layoutX="797.0" layoutY="363.0" mnemonicParsing="false" onAction="#levelButtonClicked" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" styleClass="ba" text="HARD" textAlignment="CENTER" textFill="WHITE">
          <font>
-            <Font name="System Bold Italic" size="27.0" />
+            <Font name="System Bold Italic" size="25.0" />
          </font>
-         <textFill>
-            <LinearGradient endX="1.0" endY="1.0">
-               <stops>
-                  <Stop>
-                     <color>
-                        <Color red="1.0" green="1.0" blue="1.0" />
-                     </color>
-                  </Stop>
-                  <Stop offset="0.4259153162001418">
-                     <color>
-                        <Color red="0.6140350699424744" green="0.6140350699424744" blue="0.6140350699424744" />
-                     </color>
-                  </Stop>
-                  <Stop offset="0.5279642058165548">
-                     <color>
-                        <Color red="0.4385964870452881" green="0.4385964870452881" blue="0.4385964870452881" />
-                     </color>
-                  </Stop>
-                  <Stop offset="0.7407240683145084">
-                     <color>
-                        <Color red="0.6140350699424744" green="0.6140350699424744" blue="0.6140350699424744" />
-                     </color>
-                  </Stop>
-                  <Stop offset="1.0">
-                     <color>
-                        <Color red="1.0" green="1.0" blue="1.0" />
-                     </color>
-                  </Stop>
-               </stops>
-            </LinearGradient>
-         </textFill>
       </Button>
-      <ImageView fx:id="background2" fitHeight="729.0" fitWidth="1208.0" layoutX="-172.0" layoutY="-72.0" pickOnBounds="true" preserveRatio="true" visible="false">
+      <ImageView fx:id="background2" fitHeight="729.0" fitWidth="1599.0" layoutX="-172.0" layoutY="-72.0" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
-            <Image url="@../images/Firefly%20space%20game%20background%209772.jpg" />
+            <Image url="@../images/Firefly%2020231012224851.png" />
          </image>
       </ImageView>
       <ImageView fx:id="spaceship" fitHeight="153.0" fitWidth="169.0" layoutX="15.0" layoutY="476.0" pickOnBounds="true" preserveRatio="true">
@@ -227,15 +140,26 @@
             <Image url="@../images/Firefly_3D_spaceship_more_sharp_edges__going_80_degree_upward__bright_colour_spaceship_47271-removebg-preview.png" />
          </image>
       </ImageView>
-      <Rectangle fx:id="letterbox" arcHeight="20.0" arcWidth="20.0" fill="#0b0b0bd9" height="530.0" layoutX="227.0" layoutY="84.0" stroke="#ffffff95" strokeType="INSIDE" strokeWidth="3.0" width="542.0" />
-      <Label fx:id="letter" alignment="CENTER" layoutX="190.0" layoutY="45.0" prefHeight="556.0" prefWidth="620.0" text="STARSHIP ESCAPE I&#10;&#10;Welcome aboard, intrepid space explorer! 🚀🌌 &#10;Prepare to embark on a thrilling cosmic adventure &#10;like no other as you step into the world of our &#10;spaceship escape room game. Get ready to test &#10;your wits and problem-solving skills through the &#10;mission. Solve mind-bending puzzles and &#10;ultimately find your way to escape this &#10;spaceship before time runs out. &#10;&#10;Before we start the game, let me introduce &#10;you to some key controls it will help you.&#10;&#10; Let the adventure begin! 🌠🌏🔐" textAlignment="CENTER" textFill="WHITE">
+      <ImageView fx:id="soundOff" fitHeight="106.0" fitWidth="70.0" layoutX="1100.0" layoutY="20.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly_20231010001007-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="soundOn" fitHeight="106.0" fitWidth="70.0" layoutX="1100.0" layoutY="20.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly_sound_icon_inside_the_white_circle_with_no_fill_74516-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <Rectangle fx:id="letterbox" arcHeight="20.0" arcWidth="20.0" fill="#0b0b0bd9" height="530.0" layoutX="321.0" layoutY="84.0" stroke="#ffffff95" strokeType="INSIDE" strokeWidth="3.0" visible="false" width="542.0" />
+      <Label fx:id="letter" alignment="CENTER" layoutX="283.0" layoutY="45.0" prefHeight="556.0" prefWidth="620.0" text="STARSHIP ESCAPE I&#10;&#10;Welcome aboard, intrepid space explorer! 🚀🌌 &#10;Prepare to embark on a thrilling cosmic adventure &#10;like no other as you step into the world of our &#10;spaceship escape room game. Get ready to test &#10;your wits and problem-solving skills through the &#10;mission. Solve mind-bending puzzles and &#10;ultimately find your way to escape this &#10;spaceship before time runs out. &#10;&#10;Before we start the game, let me introduce &#10;you to some key controls it will help you.&#10;&#10; Let the adventure begin! 🌠🌏🔐" textAlignment="CENTER" textFill="WHITE" visible="false">
          <font>
             <Font name="Arial Bold" size="20.0" />
          </font>
       </Label>
-      <Button fx:id="tutorial" layoutX="402.0" layoutY="527.0" mnemonicParsing="false" onAction="#startAnimation" prefHeight="66.0" prefWidth="189.0" text="LET'S GO">
+      <Button fx:id="tutorial" layoutX="495.0" layoutY="527.0" mnemonicParsing="false" onAction="#startAnimation" prefHeight="66.0" prefWidth="189.0" text="LET'S GO" visible="false">
          <font>
             <Font name="Arial Bold Italic" size="18.0" />
          </font></Button>
+      <Button fx:id="close" layoutX="823.0" layoutY="98.0" mnemonicParsing="false" onAction="#closeClicked" text="X" visible="false" />
    </children>
 </Pane>

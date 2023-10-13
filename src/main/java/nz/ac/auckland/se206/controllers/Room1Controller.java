@@ -11,12 +11,15 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,6 +27,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -50,7 +54,10 @@ public class Room1Controller implements Initializable {
   List<Rectangle> walls = new ArrayList<>();
 
   @FXML private ImageView player;
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
   @FXML private Pane scene;
+  @FXML private Pane alert;
 
   private double previousX;
   private double previousY;
@@ -58,6 +65,7 @@ public class Room1Controller implements Initializable {
   @FXML private Rectangle exit;
   @FXML private Rectangle wall1;
   @FXML private Rectangle wall2;
+  @FXML private Rectangle wall3;
   @FXML private Rectangle blinkingRectangle;
   @FXML private Rectangle crew1Collision;
   @FXML private Rectangle crew2Collision;
@@ -103,6 +111,53 @@ public class Room1Controller implements Initializable {
 
   @FXML public Pane aiWindowController;
 
+  @FXML
+  Image rightCharacterAnimation =
+      new Image(
+          new File("src/main/resources/images/walkingRight.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image leftCharacterAnimation =
+      new Image(
+          new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image leftCharacterIdle =
+      new Image(
+          new File("src/main/resources/images/gameCharacterArtLeft.png").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image rightCharacterIdle =
+      new Image(
+          new File("src/main/resources/images/gameCharacterArtRight.png").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image lastPlayedWalk =
+      new Image(
+          new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  Boolean walkAnimationPlaying = false;
+
   private FadeTransition fadeTransition;
   public static String riddleAnswer;
   public boolean isCrew1Colliding = false;
@@ -112,7 +167,11 @@ public class Room1Controller implements Initializable {
 
   @FXML private Button toggleSoundButton;
 
+  // Add this variable to your class
+  private Timeline alertBlinkTimeline;
+
   private boolean nextToButton = false;
+  private boolean hasHappend = false;
 
   private boolean isGreetingShown = true;
 
@@ -138,15 +197,19 @@ public class Room1Controller implements Initializable {
 
           if (wPressed.get()) {
             player.setLayoutY(player.getLayoutY() - movementVariable);
+            System.out.println("w");
           }
           if (aPressed.get()) {
             player.setLayoutX(player.getLayoutX() - movementVariable);
+            System.out.println("a");
           }
           if (sPressed.get()) {
             player.setLayoutY(player.getLayoutY() + movementVariable);
+            System.out.println("s");
           }
           if (dPressed.get()) {
             player.setLayoutX(player.getLayoutX() + movementVariable);
+            System.out.println("d");
           }
           squareBorder();
         }
@@ -155,13 +218,17 @@ public class Room1Controller implements Initializable {
   public void initialize(URL url, ResourceBundle resource) {
     animateRobot();
     shapesize = player.getFitWidth();
+    alert.setVisible(false);
+
+    aiWindowController.setVisible(true);
 
     collisionTimer.start();
 
     walls.add(wall1);
+    walls.add(wall3);
 
     // Add an event handler to the Toggle Sound button
-    toggleSoundButton.setOnAction(event -> toggleSound());
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
 
     previousX = player.getLayoutX();
     previousY = player.getLayoutY();
@@ -226,6 +293,19 @@ public class Room1Controller implements Initializable {
     greeting.setText(App.greetingInRoom1);
 
     enablePlayerMovement();
+    Task<Void> indicatorTask = new Task<Void>() {
+            @Override
+            protected Void call() {
+                moveIndicator(crew1Indicator);
+                moveIndicator(crew2Indicator);
+                moveIndicator(crew3Indicator);
+                moveIndicator(crew4Indicator);
+                return null;
+            }
+        };
+        Thread thread = new Thread(indicatorTask);
+        thread.setDaemon(true); 
+        thread.start();
   }
 
   // hide id and button and indicator at once
@@ -286,6 +366,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId1();
     crew1Indicator.setVisible(false);
+    scene.requestFocus();  // Add this line
   }
 
   public void onCollect2() {
@@ -293,6 +374,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId2();
     crew2Indicator.setVisible(false);
+    scene.requestFocus();  // Add this line
   }
 
   public void onCollect3() {
@@ -300,6 +382,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId3();
     crew3Indicator.setVisible(false);
+    scene.requestFocus();  // Add this line
   }
 
   public void onCollect4() {
@@ -307,6 +390,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId4();
     crew4Indicator.setVisible(false);
+    scene.requestFocus();  // Add this line
   }
 
   @FXML
@@ -322,16 +406,18 @@ public class Room1Controller implements Initializable {
   public void checkExit(ImageView player, Rectangle exit) {
     if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
       exit.setOpacity(1);
+      timer.stop();
+
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
             // Adjust the player's position to be right in front of the room
-            player.setLayoutX(433);
-            player.setLayoutY(468);
+            player.setLayoutX(398);
+            player.setLayoutY(431);
             GameState.isPlayerInMap = true;
             GameState.isPlayerInRoom1 = false;
+            //GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
-            timer.stop();
           });
       pauseTransition.play();
     } else {
@@ -346,6 +432,25 @@ public class Room1Controller implements Initializable {
         player.setLayoutX(previousX); // Restore the player's previous X position
         player.setLayoutY(previousY); // Restore the player's previous Y position
       }
+    }
+    if (App.timerSeconds == 30) {
+      if (!hasHappend) {
+        System.out.println("30 seconds left");
+        hasHappend = true;
+        setupAlertBlinking();
+      }
+    } else if (App.timerSeconds == 0) {
+      // Stop the alert blinking when the timer reaches 0
+      stopAlertBlinking();
+    }
+
+    // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
     }
   }
 
@@ -372,40 +477,103 @@ public class Room1Controller implements Initializable {
   // code for player movement using wasd keys
   @FXML
   public void movementSetup() {
+
     scene.setOnKeyPressed(
         e -> {
           if (e.getCode() == KeyCode.W) {
+            if (walkAnimationPlaying == false) {
+              player.setImage(lastPlayedWalk);
+              walkAnimationPlaying = true;
+            }
             wPressed.set(true);
+            System.out.println("up");
           }
 
           if (e.getCode() == KeyCode.A) {
+            if (player.getImage() != leftCharacterAnimation) {
+              player.setImage(leftCharacterAnimation);
+              walkAnimationPlaying = true;
+              lastPlayedWalk = player.getImage();
+            }
             aPressed.set(true);
+            System.out.println("left");  
           }
 
           if (e.getCode() == KeyCode.S) {
+            if (walkAnimationPlaying == false) {
+              player.setImage(lastPlayedWalk);
+              walkAnimationPlaying = true;
+            }
             sPressed.set(true);
+            System.out.println("down");
           }
 
           if (e.getCode() == KeyCode.D) {
+            if (player.getImage() != rightCharacterAnimation) {
+              player.setImage(rightCharacterAnimation);
+              walkAnimationPlaying = true;
+              lastPlayedWalk = player.getImage();
+            }
             dPressed.set(true);
+            System.out.println("right");
           }
         });
 
     scene.setOnKeyReleased(
         e -> {
           if (e.getCode() == KeyCode.W) {
+            if (player.getImage() == leftCharacterAnimation
+                && sPressed.get() == false
+                && aPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (sPressed.get() == true) {
+              player.setImage(lastPlayedWalk);
+            } else if (aPressed.get() == false
+                && dPressed.get() == false
+                && sPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            }
             wPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.A) {
+            if (dPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (dPressed.get() == true) {
+              player.setImage(rightCharacterAnimation);
+            }
+
             aPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.S) {
+            if (player.getImage() == leftCharacterAnimation
+                && wPressed.get() == false
+                && aPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (wPressed.get() == true) {
+              player.setImage(lastPlayedWalk);
+            } else if (aPressed.get() == false
+                && dPressed.get() == false
+                && wPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            }
             sPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.D) {
+            if (aPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (aPressed.get() == true) {
+              player.setImage(leftCharacterAnimation);
+            }
+
             dPressed.set(false);
           }
         });
@@ -447,9 +615,8 @@ public class Room1Controller implements Initializable {
         new TimerTask() {
           @Override
           public void run() {
-            // if the level is medium, hint count keeps detected
             if (GameState.difficulty != null) {
-              if (GameState.difficulty == "MEDIUM") {
+              if (GameState.difficulty.equals("MEDIUM")) {
                 Platform.runLater(() -> updateLabels());
                 if (GameState.numOfHints == 0) {
                   labelTimer.cancel();
@@ -463,6 +630,27 @@ public class Room1Controller implements Initializable {
         },
         0,
         500);
+  }
+
+  // Modify your setupAlertBlinking method as follows
+  private void setupAlertBlinking() {
+    alert.setVisible(true); // Initially show the alert label
+
+    // Set up the blinking animation for the alert label
+    alertBlinkTimeline =
+        new Timeline(
+            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
+            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
+    alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
+    alertBlinkTimeline.play();
+  }
+
+  // Add a method to stop the alert blinking
+  private void stopAlertBlinking() {
+    if (alertBlinkTimeline != null) {
+      alertBlinkTimeline.stop();
+      alert.setVisible(false);
+    }
   }
 
   // update labels for difficulty and hints as the game progress
@@ -532,13 +720,6 @@ public class Room1Controller implements Initializable {
       };
 
   @FXML
-  public void clickGameMaster(MouseEvent event) {
-    // App.previousRoom = AppUi.ROOM1;
-    // App.setScene(AppUi.HELPERCHAT);
-    aiWindowController.setVisible(true);
-  }
-
-  @FXML
   private void soundButttonClick() {
     String soundEffect = "src/main/resources/sounds/button-click.mp3";
     Media media = new Media(new File(soundEffect).toURI().toString());
@@ -547,22 +728,24 @@ public class Room1Controller implements Initializable {
   }
 
   @FXML
-  private void toggleSound() {
-    if (GameState.isSoundEnabled) {
-      // Disable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.0); // Mute the media player
+  private void toggleSound(MouseEvent event) {
+      if (GameState.isSoundEnabled) {
+          // Disable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.0); // Mute the media player
+          }
+          soundOff.setVisible(true);
+          soundOn.setVisible(false);
+      } else {
+          // Enable sound
+          if (App.mediaPlayer != null) {
+              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+          }
+          soundOn.setVisible(true);
+          soundOff.setVisible(false);
       }
-      toggleSoundButton.setText("Enable Sound");
-    } else {
-      // Enable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-      }
-      toggleSoundButton.setText("Disable Sound");
-    }
-
-    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  
+      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
   }
 
   // game master animation
@@ -575,7 +758,6 @@ public class Room1Controller implements Initializable {
     translate.setByX(0);
     translate.setByY(20);
     translate.setAutoReverse(true);
-
     translate.play();
   }
 
@@ -586,6 +768,7 @@ public class Room1Controller implements Initializable {
         new TimerTask() {
           @Override
           public void run() {
+            // if the state of irRiddleResolved changed, indicators are visible
             // if the state of irRiddleResolved changed, indicators are visible
             if (GameState.isRiddleResolved) {
               System.out.println("riddle is resolved");
@@ -631,5 +814,19 @@ public class Room1Controller implements Initializable {
         },
         0,
         100);
+  }
+  /**
+   * Move indicator up and down.
+   *
+   * @param indicator
+   */
+  private void moveIndicator(ImageView indicator) {
+    TranslateTransition translate = new TranslateTransition();
+    translate.setNode(indicator);
+    translate.setDuration(Duration.millis(1000));
+    translate.setByY(-15);
+    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setAutoReverse(true);
+    translate.play();
   }
 }
