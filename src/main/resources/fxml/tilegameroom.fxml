@@ -25,9 +25,9 @@
             </ImageView>
             <Pane fx:id="alert" opacity="0.23" prefHeight="669.0" prefWidth="1219.0" style="-fx-background-color: red;" />
             <Rectangle fx:id="startTileGame" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f00" height="50.0" layoutX="420.0" layoutY="239.0" stroke="TRANSPARENT" strokeType="INSIDE" width="125.0" />
-            <ImageView fx:id="player" fitHeight="99.0" fitWidth="113.0" layoutX="436.0" layoutY="488.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="player" fitHeight="177.0" fitWidth="171.0" layoutX="404.0" layoutY="410.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../images/Firefly_spaceship_game_character_walking_48398-removebg-preview.png" />
+                  <Image url="@../images/gameCharacterArtRight.png" />
                </image>
             </ImageView>
             <Rectangle fx:id="exit" arcHeight="5.0" arcWidth="5.0" fill="#ff9f1f" height="42.0" layoutX="412.0" layoutY="617.0" opacity="0.69" stroke="BLACK" strokeType="INSIDE" width="142.0" />

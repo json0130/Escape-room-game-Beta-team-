@@ -33,14 +33,12 @@
       <Rectangle fx:id="wall1" arcHeight="5.0" arcWidth="5.0" fill="#0037ad75" height="25.0" layoutX="32.0" layoutY="33.0" opacity="0.0" stroke="TRANSPARENT" strokeType="INSIDE" width="821.0" />
       <Rectangle fx:id="wall2" arcHeight="5.0" arcWidth="5.0" fill="#0037ad75" height="573.0" layoutX="54.0" layoutY="34.0" opacity="0.0" stroke="TRANSPARENT" strokeType="INSIDE" width="32.0" />
       <Rectangle fx:id="wall6" arcHeight="5.0" arcWidth="5.0" fill="#0037ad75" height="573.0" layoutX="838.0" layoutY="40.0" opacity="0.0" stroke="TRANSPARENT" strokeType="INSIDE" width="38.0" />
-      <Rectangle fx:id="wall3" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="246.0" layoutX="356.0" layoutY="50.0" stroke="TRANSPARENT" strokeType="INSIDE" width="9.0" />
       <Rectangle fx:id="wall4" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="212.0" layoutX="649.0" layoutY="54.0" stroke="TRANSPARENT" strokeType="INSIDE" width="7.0" />
       <Rectangle fx:id="wall5" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="211.0" layoutX="451.0" layoutY="56.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
       <Rectangle fx:id="wall7" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="227.0" layoutX="641.0" layoutY="383.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
       <Rectangle fx:id="wall8" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="190.0" layoutX="361.0" layoutY="425.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
       <Rectangle fx:id="wall9" arcHeight="5.0" arcWidth="5.0" height="172.0" layoutX="173.0" layoutY="434.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
       <Rectangle fx:id="wall10" arcHeight="5.0" arcWidth="5.0" height="432.0" layoutX="84.0" layoutY="126.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
-      <Rectangle fx:id="wall11" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="9.0" layoutX="95.0" layoutY="293.0" stroke="TRANSPARENT" strokeType="INSIDE" width="86.0" />
       <Rectangle fx:id="wall12" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="9.0" layoutX="589.0" layoutY="265.0" stroke="TRANSPARENT" strokeType="INSIDE" width="67.0" />
       <Rectangle fx:id="wall13" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="9.0" layoutX="760.0" layoutY="377.0" stroke="TRANSPARENT" strokeType="INSIDE" width="76.0" />
       <Rectangle fx:id="wall14" arcHeight="5.0" arcWidth="5.0" height="9.0" layoutX="460.0" layoutY="458.0" stroke="TRANSPARENT" strokeType="INSIDE" width="134.0" />
@@ -54,11 +52,6 @@
       <ImageView fitHeight="490.0" fitWidth="492.0" layoutX="741.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly_20230920003425-removebg-preview.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="197.0" fitWidth="204.0" layoutX="130.0" layoutY="82.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/Firefly_spaceship_simple_round_table_with_chairs__top_view_40479-removebg-preview.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="170.0" fitWidth="167.0" layoutX="472.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
@@ -77,11 +70,6 @@
          </image>
       </ImageView>
       <Rectangle fx:id="wall21" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="190.0" layoutX="231.0" layoutY="425.0" stroke="TRANSPARENT" strokeType="INSIDE" width="11.0" />
-      <Label fx:id="main" layoutX="151.0" layoutY="137.0" prefHeight="77.0" prefWidth="165.0" text="MAIN ROOM" textAlignment="CENTER" textFill="WHITE">
-         <font>
-            <Font size="26.0" />
-         </font>
-      </Label>
       <Label fx:id="computer" layoutX="483.0" layoutY="122.0" prefHeight="77.0" prefWidth="165.0" text="COMPUTER" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="26.0" />
@@ -103,12 +91,12 @@
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
-      <Label fx:id="hintLabel2" alignment="CENTER_RIGHT" layoutX="576.0" layoutY="6.0" prefHeight="37.0" prefWidth="96.0" text="HINTS" textFill="WHITE">
+      <Label fx:id="hintLabel2" alignment="CENTER_RIGHT" layoutX="617.0" layoutY="6.0" prefHeight="37.0" prefWidth="96.0" text="HINTS" textFill="WHITE">
          <font>
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
-      <Label fx:id="hintLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="369.0" layoutY="6.0" prefHeight="37.0" prefWidth="230.0" text="UNLIMITED" textFill="WHITE">
+      <Label fx:id="hintLabel" alignment="TOP_RIGHT" contentDisplay="CENTER" layoutX="369.0" layoutY="6.0" prefHeight="37.0" prefWidth="230.0" text="UNLIMITED" textFill="WHITE">
          <font>
             <Font name="Arial" size="32.0" />
          </font>
@@ -126,11 +114,6 @@
             <Image url="@../images/images-removebg-preview.png" />
          </image>
       </ImageView>
-      <Label fx:id="playerLabel" layoutX="268.0" layoutY="209.0" text="PLAYER" textFill="WHITE">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Label>
       <Button fx:id="toggleSoundButton" layoutX="912.0" layoutY="13.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Button" visible="false" />
       <ImageView fx:id="soundOff" fitHeight="50.0" fitWidth="50.0" layoutX="1140.0" layoutY="1.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
          <image>
