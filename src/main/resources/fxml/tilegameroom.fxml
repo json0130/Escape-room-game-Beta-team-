@@ -85,6 +85,18 @@
       </Label>
       <Rectangle fx:id="startTileGame" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f00" height="104.0" layoutX="538.0" layoutY="161.0" onMouseClicked="#onTileGameButtonClick" stroke="TRANSPARENT" strokeType="INSIDE" width="131.0" />
       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
+      <Rectangle fx:id="black" arcHeight="5.0" arcWidth="5.0" fill="#1f1f1f" height="650.0" layoutY="48.0" opacity="0.7" stroke="BLACK" strokeType="INSIDE" width="1015.0" />
+      <Rectangle fx:id="greetingBox" arcHeight="5.0" arcWidth="5.0" fill="#153451" height="200.0" layoutX="76.0" layoutY="91.0" stroke="BLACK" strokeType="INSIDE" width="868.0" />
+      <Label fx:id="greeting" layoutX="114.0" layoutY="103.0" prefHeight="167.0" prefWidth="809.0" textFill="WHITE">
+         <font>
+            <Font name="Arial" size="26.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="close" fitHeight="28.0" fitWidth="32.0" layoutX="82.0" layoutY="98.0" onMouseClicked="#clickClose" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/closeButton.png" />
+         </image>
+      </ImageView>
       <fx:include fx:id="aiWindowController" layoutX="850.0" layoutY="200.0" source="aiwindow.fxml" />
       <ImageView fx:id="soundOff" fitHeight="50.0" fitWidth="50.0" layoutX="1150.0" layoutY="1.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
          <image>

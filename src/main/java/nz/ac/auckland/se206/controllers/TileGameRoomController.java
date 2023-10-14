@@ -87,6 +87,10 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private Rectangle wall19;
   @FXML private Rectangle wall20;
   @FXML private Rectangle blinkingRectangle;
+  @FXML private Rectangle greetingBox;
+  @FXML private Rectangle black;
+  @FXML private ImageView close;
+  @FXML private Label greeting;
   private FadeTransition fadeTransition;
   @FXML private ImageView soundOn;
   @FXML private ImageView soundOff;
@@ -154,6 +158,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private Pane aiWindowController;
 
   TranslateTransition translate = new TranslateTransition();
+
+  private boolean isGreetingShown = true;
 
   AnimationTimer collisionTimer =
       new AnimationTimer() {
@@ -224,7 +230,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     detectDifficulty();
 
     shapesize = player.getFitWidth();
-    movementSetup();
+    enablePlayerMovement();
 
     collisionTimer.start();
 
@@ -247,6 +253,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     fadeTransition.setAutoReverse(true); // Reverse the animation
     // Start the animation
     fadeTransition.play();
+    greeting.setWrapText(true);
+    greeting.setText(App.greetingInRoom2);
   }
 
   public void checkExit(ImageView player, Rectangle exit) {
@@ -563,6 +571,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
       if (App.mediaPlayer != null) {
         App.mediaPlayer.setVolume(0.0); // Mute the media player
       }
+      toggleSoundButton.setText("Enable Sound");
       soundOff.setVisible(true);
       soundOn.setVisible(false);
     } else {
@@ -589,5 +598,32 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     translate.setAutoReverse(true);
 
     translate.play();
+  }
+
+  /** When the close image is clicked, greeting disappears. */
+  @FXML
+  private void clickClose(MouseEvent e) {
+    greeting.setVisible(false);
+    greetingBox.setVisible(false);
+    close.setVisible(false);
+    isGreetingShown = false;
+    black.setVisible(false);
+  }
+
+  /** After the player close the greeting, the character can move. */
+  private void enablePlayerMovement() {
+    Timer greetingTimer = new Timer(true);
+    greetingTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (!isGreetingShown) {
+              movementSetup();
+              greetingTimer.cancel();
+            }
+          }
+        },
+        0,
+        100);
   }
 }

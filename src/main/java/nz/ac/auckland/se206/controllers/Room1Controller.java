@@ -19,6 +19,7 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -70,6 +71,8 @@ public class Room1Controller implements Initializable {
   @FXML private Rectangle crew2Collision;
   @FXML private Rectangle crew3Collision;
   @FXML private Rectangle crew4Collision;
+  @FXML private Rectangle greetingBox;
+  @FXML private Rectangle black;
 
   @FXML private Button btnCollect1;
   @FXML private Button btnCollect2;
@@ -91,6 +94,7 @@ public class Room1Controller implements Initializable {
   @FXML private ImageView crew2Indicator;
   @FXML private ImageView crew3Indicator;
   @FXML private ImageView crew4Indicator;
+  @FXML private ImageView close;
 
   @FXML private ImageView gameMaster;
 
@@ -98,6 +102,7 @@ public class Room1Controller implements Initializable {
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
   @FXML private Label clickLabel;
+  @FXML private Label greeting;
 
   @FXML private Button btnSend;
   @FXML private Button btnClose;
@@ -168,6 +173,8 @@ public class Room1Controller implements Initializable {
   private boolean nextToButton = false;
   private boolean hasHappend = false;
 
+  private boolean isGreetingShown = true;
+
   // timer for collsion check between monitor and walls
   AnimationTimer collisionTimer =
       new AnimationTimer() {
@@ -211,7 +218,6 @@ public class Room1Controller implements Initializable {
   public void initialize(URL url, ResourceBundle resource) {
     animateRobot();
     shapesize = player.getFitWidth();
-    movementSetup();
     alert.setVisible(false);
 
     aiWindowController.setVisible(true);
@@ -282,10 +288,24 @@ public class Room1Controller implements Initializable {
     revealIndicator();
 
     crewCollisionTimer.start();
-    moveIndicator(crew1Indicator);
-    moveIndicator(crew2Indicator);
-    moveIndicator(crew3Indicator);
-    moveIndicator(crew4Indicator);
+
+    greeting.setWrapText(true);
+    greeting.setText(App.greetingInRoom1);
+
+    enablePlayerMovement();
+    Task<Void> indicatorTask = new Task<Void>() {
+            @Override
+            protected Void call() {
+                moveIndicator(crew1Indicator);
+                moveIndicator(crew2Indicator);
+                moveIndicator(crew3Indicator);
+                moveIndicator(crew4Indicator);
+                return null;
+            }
+        };
+        Thread thread = new Thread(indicatorTask);
+        thread.setDaemon(true); 
+        thread.start();
   }
 
   // hide id and button and indicator at once
@@ -749,6 +769,7 @@ public class Room1Controller implements Initializable {
           @Override
           public void run() {
             // if the state of irRiddleResolved changed, indicators are visible
+            // if the state of irRiddleResolved changed, indicators are visible
             if (GameState.isRiddleResolved) {
               System.out.println("riddle is resolved");
               Platform.runLater(() -> showIndicators());
@@ -768,6 +789,32 @@ public class Room1Controller implements Initializable {
     crew4Indicator.setVisible(true);
   }
 
+  /** When the close image is clicked, greeting disappears. */
+  @FXML
+  private void clickClose(MouseEvent e) {
+    greeting.setVisible(false);
+    greetingBox.setVisible(false);
+    close.setVisible(false);
+    isGreetingShown = false;
+    black.setVisible(false);
+  }
+
+  /** After the player close the greeting, the character can move. */
+  private void enablePlayerMovement() {
+    Timer greetingTimer = new Timer(true);
+    greetingTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (!isGreetingShown) {
+              movementSetup();
+              greetingTimer.cancel();
+            }
+          }
+        },
+        0,
+        100);
+  }
   /**
    * Move indicator up and down.
    *
