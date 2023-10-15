@@ -58,18 +58,12 @@ public class GptPromptEngineering {
   }
 
   public static String greeting() {
-    String hintAvailability;
-    if (GameState.difficulty == "HARD") {
-      hintAvailability = "However you cannot provide any direct hints to the player.";
-    } else {
-      hintAvailability = "You can provide hints if the player requests.";
-    }
+    
     return "Your name is 'EVA' and you are the game master of Starship Escape 1. You were designed"
         + " to help crew members which is the user in the emergency situation. Now the"
         + " starship has crashed into a meteor. Your task is to communicate with the player"
         + " and help them to complete tasks and to escape within the time limit. Now the"
         + " player is in the map. There are three rooms where the player can visit."
-        + hintAvailability
         + " Introduce yourself to the player and suggest to look around the rooms in less than 50 words.";
   }
 

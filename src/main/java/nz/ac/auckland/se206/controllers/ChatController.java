@@ -101,43 +101,11 @@ public class ChatController {
             if (GameState.difficulty != null) {
               if (GameState.difficulty == "MEDIUM") {
                 Platform.runLater(() -> updateLabels());
-                if (!isRiddleGiven) {
-                  chatCompletionRequest =
-                      new ChatCompletionRequest()
-                          .setN(1)
-                          .setTemperature(0.5)
-                          .setTopP(0.5)
-                          .setMaxTokens(100);
-                  try {
-                    runGpt(
-                        new ChatMessage(
-                            "user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
-                  } catch (ApiProxyException e) {
-
-                    e.printStackTrace();
-                  }
-                  isRiddleGiven = true;
-                }
                 if (GameState.numOfHints == 0) {
                   labelTimer.cancel();
                 }
               } else {
                 Platform.runLater(() -> updateLabels());
-                chatCompletionRequest =
-                    new ChatCompletionRequest()
-                        .setN(1)
-                        .setTemperature(0.5)
-                        .setTopP(0.5)
-                        .setMaxTokens(100);
-                try {
-                  runGpt(
-                      new ChatMessage(
-                          "user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
-                } catch (ApiProxyException e) {
-
-                  e.printStackTrace();
-                }
-                labelTimer.cancel();
               }
             }
           }
