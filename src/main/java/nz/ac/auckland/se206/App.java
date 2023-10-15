@@ -38,6 +38,7 @@ public class App extends Application {
   public static String greetingInRoom1;
   public static String greetingInRoom2;
   public static String greetingInRoom3;
+
   public static void main(final String[] args) {
     launch();
   }
@@ -62,9 +63,9 @@ public class App extends Application {
     return new FXMLLoader(App.class.getResource("/fxml/" + fxml + ".fxml")).load();
   }
 
-  public static void resetRooms() throws IOException{
-    //re initilaze all the rooms.
-    try{
+  public static void resetRooms() throws IOException {
+    // re initilaze all the rooms.
+    try {
       Random r = new Random();
       passcode = r.nextInt((9999 - 1000) + 1) + 1000;
       GameState.password = String.valueOf(passcode);
@@ -95,7 +96,7 @@ public class App extends Application {
       SceneManager.addScene(AppUi.TILEROOM, loadFxml("tilegameroom"));
       SceneManager.addScene(AppUi.ROOM3, loadFxml("room3"));
       SceneManager.addScene(AppUi.AIWINDOW, loadFxml("aiwindow"));
-    } catch (IOException e){
+    } catch (IOException e) {
       e.printStackTrace();
     }
   }

@@ -2,8 +2,6 @@ package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -88,18 +86,18 @@ public class AIWindowController {
         };
 
     timer.start();
-  
 
     chatCompletionRequest =
         new ChatCompletionRequest().setN(1).setTemperature(1).setTopP(1).setMaxTokens(100);
     App.greetingInMap =
         runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greeting()));
-    App.greetingInRoom1 =
-        runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom1()));
-    App.greetingInRoom2 =
-        runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom2()));
-    App.greetingInRoom3 =
-        runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom3()));
+    App.aiWindow = App.aiWindow.concat("EVA: " + App.greetingInMap + "\n\n");
+    // App.greetingInRoom1 =
+    //     runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom1()));
+    // App.greetingInRoom2 =
+    //     runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom2()));
+    // App.greetingInRoom3 =
+    //     runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom3()));
   }
 
   /**

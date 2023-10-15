@@ -103,19 +103,7 @@
       </Label>
       <Rectangle fx:id="exit" arcHeight="5.0" arcWidth="5.0" fill="#f89d00" height="50.0" layoutX="413.0" layoutY="617.0" opacity="0.65" stroke="BLACK" strokeType="INSIDE" width="161.0" />
       <Polygon fill="WHITE" layoutX="494.0" layoutY="591.0" points="-50.0, 40.0, 50.0, 40.0, -1.1348876953125, 53.3333740234375" stroke="WHITE" strokeType="INSIDE" />
-      <Rectangle fx:id="black" arcHeight="5.0" arcWidth="5.0" fill="#1f1f1f" height="621.0" layoutX="-4.0" layoutY="48.0" opacity="0.7" stroke="BLACK" strokeType="INSIDE" width="1009.0" />
       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
-      <Rectangle fx:id="greetingBox" arcHeight="5.0" arcWidth="5.0" fill="#153451" height="200.0" layoutX="76.0" layoutY="91.0" stroke="BLACK" strokeType="INSIDE" width="868.0" />
-      <Label fx:id="greeting" layoutX="118.0" layoutY="103.0" prefHeight="167.0" prefWidth="805.0" textFill="WHITE">
-         <font>
-            <Font name="Arial" size="26.0" />
-         </font>
-      </Label>
-      <ImageView fx:id="close" fitHeight="28.0" fitWidth="32.0" layoutX="82.0" layoutY="98.0" onMouseClicked="#clickClose" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/closeButton.png" />
-         </image>
-      </ImageView>
    <fx:include fx:id="aiWindowController" layoutX="850.0" layoutY="200.0" source="aiwindow.fxml" />
       <ImageView fx:id="soundOff" fitHeight="50.0" fitWidth="50.0" layoutX="1140.0" layoutY="1.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
          <image>

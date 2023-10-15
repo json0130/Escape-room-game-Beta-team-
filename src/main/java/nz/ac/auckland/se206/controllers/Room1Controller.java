@@ -71,8 +71,6 @@ public class Room1Controller implements Initializable {
   @FXML private Rectangle crew2Collision;
   @FXML private Rectangle crew3Collision;
   @FXML private Rectangle crew4Collision;
-  @FXML private Rectangle greetingBox;
-  @FXML private Rectangle black;
 
   @FXML private Button btnCollect1;
   @FXML private Button btnCollect2;
@@ -102,7 +100,6 @@ public class Room1Controller implements Initializable {
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
   @FXML private Label clickLabel;
-  @FXML private Label greeting;
 
   @FXML private Button btnSend;
   @FXML private Button btnClose;
@@ -289,23 +286,21 @@ public class Room1Controller implements Initializable {
 
     crewCollisionTimer.start();
 
-    greeting.setWrapText(true);
-    greeting.setText(App.greetingInRoom1);
-
-    enablePlayerMovement();
-    Task<Void> indicatorTask = new Task<Void>() {
-            @Override
-            protected Void call() {
-                moveIndicator(crew1Indicator);
-                moveIndicator(crew2Indicator);
-                moveIndicator(crew3Indicator);
-                moveIndicator(crew4Indicator);
-                return null;
-            }
+    movementSetup();
+    Task<Void> indicatorTask =
+        new Task<Void>() {
+          @Override
+          protected Void call() {
+            moveIndicator(crew1Indicator);
+            moveIndicator(crew2Indicator);
+            moveIndicator(crew3Indicator);
+            moveIndicator(crew4Indicator);
+            return null;
+          }
         };
-        Thread thread = new Thread(indicatorTask);
-        thread.setDaemon(true); 
-        thread.start();
+    Thread thread = new Thread(indicatorTask);
+    thread.setDaemon(true);
+    thread.start();
   }
 
   // hide id and button and indicator at once
@@ -366,7 +361,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId1();
     crew1Indicator.setVisible(false);
-    scene.requestFocus();  // Add this line
+    scene.requestFocus(); // Add this line
   }
 
   public void onCollect2() {
@@ -374,7 +369,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId2();
     crew2Indicator.setVisible(false);
-    scene.requestFocus();  // Add this line
+    scene.requestFocus(); // Add this line
   }
 
   public void onCollect3() {
@@ -382,7 +377,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId3();
     crew3Indicator.setVisible(false);
-    scene.requestFocus();  // Add this line
+    scene.requestFocus(); // Add this line
   }
 
   public void onCollect4() {
@@ -390,7 +385,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId4();
     crew4Indicator.setVisible(false);
-    scene.requestFocus();  // Add this line
+    scene.requestFocus(); // Add this line
   }
 
   @FXML
@@ -416,7 +411,7 @@ public class Room1Controller implements Initializable {
             player.setLayoutY(431);
             GameState.isPlayerInMap = true;
             GameState.isPlayerInRoom1 = false;
-            //GameState.hasHappend = false;
+            // GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
           });
       pauseTransition.play();
@@ -496,7 +491,7 @@ public class Room1Controller implements Initializable {
               lastPlayedWalk = player.getImage();
             }
             aPressed.set(true);
-            System.out.println("left");  
+            System.out.println("left");
           }
 
           if (e.getCode() == KeyCode.S) {
@@ -729,23 +724,23 @@ public class Room1Controller implements Initializable {
 
   @FXML
   private void toggleSound(MouseEvent event) {
-      if (GameState.isSoundEnabled) {
-          // Disable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.0); // Mute the media player
-          }
-          soundOff.setVisible(true);
-          soundOn.setVisible(false);
-      } else {
-          // Enable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-          }
-          soundOn.setVisible(true);
-          soundOff.setVisible(false);
+    if (GameState.isSoundEnabled) {
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
       }
-  
-      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+      soundOff.setVisible(true);
+      soundOn.setVisible(false);
+    } else {
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    }
+
+    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
   }
 
   // game master animation
@@ -789,32 +784,6 @@ public class Room1Controller implements Initializable {
     crew4Indicator.setVisible(true);
   }
 
-  /** When the close image is clicked, greeting disappears. */
-  @FXML
-  private void clickClose(MouseEvent e) {
-    greeting.setVisible(false);
-    greetingBox.setVisible(false);
-    close.setVisible(false);
-    isGreetingShown = false;
-    black.setVisible(false);
-  }
-
-  /** After the player close the greeting, the character can move. */
-  private void enablePlayerMovement() {
-    Timer greetingTimer = new Timer(true);
-    greetingTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            if (!isGreetingShown) {
-              movementSetup();
-              greetingTimer.cancel();
-            }
-          }
-        },
-        0,
-        100);
-  }
   /**
    * Move indicator up and down.
    *

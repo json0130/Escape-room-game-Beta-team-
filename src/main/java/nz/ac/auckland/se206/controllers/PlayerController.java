@@ -32,7 +32,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
@@ -77,7 +76,6 @@ public class PlayerController implements Initializable {
   @FXML private Label difficultyLabel;
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
-  @FXML private Label greeting;
 
   @FXML private Rectangle wall;
   @FXML private Rectangle wall1;
@@ -99,7 +97,6 @@ public class PlayerController implements Initializable {
   @FXML private Rectangle wall19;
   @FXML private Rectangle wall20;
   @FXML private Rectangle wall21;
-  @FXML private Rectangle greetingBox;
   @FXML private ImageView close;
 
   @FXML private Pane scene;
@@ -196,7 +193,6 @@ public class PlayerController implements Initializable {
     alert.setVisible(false);
 
     shapesize = player.getFitWidth();
-    enablePlayerMovement();
 
     walls.add(wall);
     walls.add(wall1);
@@ -235,18 +231,7 @@ public class PlayerController implements Initializable {
 
     // if difficulty is selected, label is updated
     detectDifficulty();
-
-    Platform.runLater(
-        () -> {
-          Stage stage = (Stage) scene.getScene().getWindow();
-          stage.setOnCloseRequest(
-              event -> {
-                Platform.exit();
-                System.exit(0);
-              });
-        });
-    greeting.setWrapText(true);
-    greeting.setText(App.greetingInMap);
+    movementSetup();
   }
 
   // Modify your setupAlertBlinking method as follows
@@ -523,31 +508,6 @@ public class PlayerController implements Initializable {
     translate.play();
   }
 
-  /** When the close image is clicked, greeting disappears. */
-  @FXML
-  private void clickClose(MouseEvent e) {
-    greeting.setVisible(false);
-    greetingBox.setVisible(false);
-    close.setVisible(false);
-    isGreetingShown = false;
-  }
-
-  /** After the player close the greeting, the character can move. */
-  private void enablePlayerMovement() {
-    Timer greetingTimer = new Timer(true);
-    greetingTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            if (!isGreetingShown) {
-              movementSetup();
-              greetingTimer.cancel();
-            }
-          }
-        },
-        0,
-        100);
-      }
   @FXML
   private void toggleSound(MouseEvent event) {
     if (GameState.isSoundEnabled) {

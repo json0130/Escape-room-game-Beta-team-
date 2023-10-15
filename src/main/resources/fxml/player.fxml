@@ -131,17 +131,6 @@
             <Image url="@../images/robotfloat.png" />
          </image>
       </ImageView>
-      <Rectangle fx:id="greetingBox" arcHeight="5.0" arcWidth="5.0" fill="#153451" height="200.0" layoutX="66.0" layoutY="81.0" stroke="BLACK" strokeType="INSIDE" width="868.0" />
-      <Label fx:id="greeting" layoutX="104.0" layoutY="93.0" prefHeight="167.0" prefWidth="809.0" textFill="WHITE">
-         <font>
-            <Font name="Arial" size="26.0" />
-         </font>
-      </Label>
-      <ImageView fx:id="close" fitHeight="28.0" fitWidth="32.0" layoutX="72.0" layoutY="88.0" onMouseClicked="#clickClose" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/closeButton.png" />
-         </image>
-      </ImageView>
       <fx:include fx:id="aiWindowController" layoutX="850.0" layoutY="200.0" source="aiwindow.fxml" />
       <Button fx:id="resetButton" layoutX="985.0" layoutY="14.0" mnemonicParsing="false" onAction="#reset" text="Button" />
    </children>
