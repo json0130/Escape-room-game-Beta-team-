@@ -229,11 +229,11 @@ public class ExitController implements Initializable {
     alert.setVisible(false); // Initially hide the alert label
     aiWindowController.setVisible(true);
 
-    black2.setVisible(false);
-    resetBox.setVisible(false);
-    resetLabel.setVisible(false);
-    resetYes.setVisible(false);
-    resetCancel.setVisible(false);
+    // black2.setVisible(false);
+    // resetBox.setVisible(false);
+    // resetLabel.setVisible(false);
+    // resetYes.setVisible(false);
+    // resetCancel.setVisible(false);
 
     // if difficulty is selected, label is updated
     detectDifficulty();
