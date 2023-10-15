@@ -41,12 +41,12 @@
             <Font name="Arial" size="25.0" />
          </font></Button>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="52.0" layoutX="140.0" layoutY="128.0" stroke="#062643" strokeType="INSIDE" width="725.0" />
-      <Label fx:id="hintLabel" alignment="CENTER_RIGHT" layoutX="506.0" layoutY="132.0" prefHeight="34.0" prefWidth="152.0" text="UNLIMITED" textFill="WHITE">
+      <Label fx:id="hintLabel" alignment="CENTER_RIGHT" layoutX="455.0" layoutY="132.0" prefHeight="34.0" prefWidth="152.0" text="UNLIMITED" textFill="WHITE">
          <font>
             <Font size="28.0" />
          </font>
       </Label>
-      <Label fx:id="hintLabel2" alignment="CENTER_RIGHT" layoutX="665.0" layoutY="132.0" prefHeight="34.0" prefWidth="85.0" text="HINTS" textFill="WHITE">
+      <Label fx:id="hintLabel2" alignment="CENTER_RIGHT" layoutX="614.0" layoutY="132.0" prefHeight="34.0" prefWidth="85.0" text="HINTS" textFill="WHITE">
          <font>
             <Font size="28.0" />
          </font>
@@ -86,5 +86,32 @@
             <Image url="@../images/glitch-effect-black-background.jpg" />
          </image>
       </ImageView>
+      <ImageView fx:id="robotBase" fitHeight="184.0" fitWidth="200.0" layoutX="799.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/base.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="robotThink" fitHeight="184.0" fitWidth="200.0" layoutX="799.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/robot-think.gif" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="robotReply" fitHeight="184.0" fitWidth="200.0" layoutX="799.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/reply.png" />
+         </image>
+      </ImageView>
+      <fx:include layoutX="150.0" layoutY="94.0" source="countdowntimer.fxml" />
+      <ImageView fx:id="soundOff" fitHeight="50.0" fitWidth="50.0" layoutX="720.0" layoutY="127.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Firefly_20231010001007-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="soundOn" fitHeight="50.0" fitWidth="50.0" layoutX="720.0" layoutY="127.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../images/Firefly_sound_icon_inside_the_white_circle_with_no_fill_74516-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="toggleSoundButton" layoutX="861.0" layoutY="79.0" mnemonicParsing="false" text="SETTING" visible="false" />
   </children>
 </AnchorPane>

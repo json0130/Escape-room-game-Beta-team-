@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
@@ -58,6 +59,12 @@ public class IntroController implements Initializable {
   @FXML private Label medium;
   @FXML private Label hard;
   @FXML private Label letter;
+
+  @FXML private Rectangle black2;
+  @FXML private Rectangle resetBox;
+  @FXML private Label resetLabel;
+  @FXML private Button resetYes;
+  @FXML private Button resetCancel;
 
   @FXML private Rectangle letterbox;
 
@@ -284,6 +291,7 @@ public class IntroController implements Initializable {
       tutorial.setVisible(false);
       close.setVisible(false);
 
+      spaceshipSound();
       // Create a timeline to continuously increase the scaling factor
       Timeline continuousScaling =
           new Timeline(
@@ -318,7 +326,6 @@ public class IntroController implements Initializable {
           event -> {
             startButton.setDisable(false);
             App.setScene(AppUi.TUTORIAL);
-
             App.timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), this::updateTimer));
             App.timerTimeline.setCycleCount(App.timerSeconds);
             // App.timerTimeline.play();
@@ -328,11 +335,29 @@ public class IntroController implements Initializable {
     }
   }
 
+  @FXML
+  private void spaceshipSound() {
+    String soundEffect = "src/main/resources/sounds/spaceship.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setVolume(0.2);
+    mediaPlayer.setAutoPlay(true);
+  }
+
   private void updateTimer(ActionEvent event) {
     App.timerSeconds--;
     if (!GameState.isGameFinished) {
       if (App.timerSeconds <= 0) {
         App.timerTimeline.stop();
+        String musicFile;
+        musicFile = "src/main/resources/sounds/final-BG-MUSIC.mp3";
+        App.musicType = "final";
+        Media media = new Media(new File(musicFile).toURI().toString());
+        App.mediaPlayer.stop();
+        App.mediaPlayer = new MediaPlayer(media);
+        App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        App.mediaPlayer.setVolume(0.3);
+        App.mediaPlayer.setAutoPlay(true);
         App.setScene(AppUi.LOSE);
         introTextToSpeech();
       }
@@ -447,5 +472,32 @@ public class IntroController implements Initializable {
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
+  }
+
+  @FXML
+  private void restartClicked(ActionEvent event) throws IOException {
+    black2.setVisible(true);
+    resetBox.setVisible(true);
+    resetLabel.setVisible(true);
+    resetYes.setVisible(true);
+    resetCancel.setVisible(true);
+  }
+
+  @FXML
+  private void restartCanceled(ActionEvent event) throws IOException {
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
+  }
+
+  @FXML
+  private void reset(ActionEvent event) throws IOException {
+    try {
+      GameState.resetGames();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
   }
 }

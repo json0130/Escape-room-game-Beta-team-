@@ -28,6 +28,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
@@ -98,6 +100,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   private boolean hasHappend = false;
 
   @FXML private Button toggleSoundButton;
+  private MediaPlayer walkingMediaPlayer;
 
   @FXML
   Image rightCharacterAnimation =
@@ -168,6 +171,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
           checkCollision2(player, walls);
           checkExit(player, exit);
           checkMonitor(player, blinkingRectangle);
+
         }
       };
 
@@ -200,6 +204,9 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     animateExclamationMark();
     animateRobot();
 
+              // if difficulty is selected, label is updated
+          detectDifficulty();
+
     walls.add(wall);
     walls.add(wall2);
     walls.add(wall3);
@@ -224,10 +231,13 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
 
+    String walkSoundEffect = "src/main/resources/sounds/walking.mp3";
+    Media walkMedia = new Media(new File(walkSoundEffect).toURI().toString());
+    walkingMediaPlayer = new MediaPlayer(walkMedia);
+    walkingMediaPlayer.setVolume(2.0);
+
     alert.setVisible(false); // Initially hide the alert label
     aiWindowController.setVisible(true);
-    // if difficulty is selected, label is updated
-    detectDifficulty();
 
     shapesize = player.getFitWidth();
     enablePlayerMovement();
@@ -272,6 +282,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             GameState.isPlayerInRoom2 = false;
             GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
+            enterRoom();
           });
       pauseTransition.play();
     } else {
@@ -346,6 +357,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
     scene.setOnKeyPressed(
         e -> {
+          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
           if (e.getCode() == KeyCode.W) {
             if (walkAnimationPlaying == false) {
               player.setImage(lastPlayedWalk);
@@ -379,10 +392,19 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             }
             dPressed.set(true);
           }
+
+          boolean isMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+          // If we started moving and weren't before, start the sound.
+          if (isMoving && !wasMoving) {
+            walkingMediaPlayer.play();
+          }
         });
 
     scene.setOnKeyReleased(
         e -> {
+          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
           if (e.getCode() == KeyCode.W) {
             if (player.getImage() == leftCharacterAnimation
                 && sPressed.get() == false
@@ -437,6 +459,19 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             }
 
             dPressed.set(false);
+          }
+
+          boolean isMovinng = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+          // If we stopped moving and were before, stop the sound.
+          if (!isMovinng && wasMoving) {
+            walkingMediaPlayer.stop();
+            try {
+              // This line will reset audio clip from start when stopped
+              walkingMediaPlayer.seek(Duration.ZERO);
+            } catch (Exception ex) {
+              System.out.println("Error resetting audio: " + ex.getMessage());
+            }
           }
         });
   }
@@ -502,6 +537,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
       GameState.foundComputer = true;
       eMark.setVisible(false);
       App.setScene(AppUi.TILEPUZZLE);
+      enterRoom();
     }
   }
 
@@ -584,6 +620,14 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     }
 
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  }
+
+  @FXML
+  private void enterRoom() {
+    String soundEffect = "src/main/resources/sounds/enterReal.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
   }
 
   // game master robot animation

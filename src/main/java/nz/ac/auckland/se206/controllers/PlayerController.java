@@ -32,13 +32,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
-import nz.ac.auckland.se206.speech.TextToSpeech;
 
 public class PlayerController implements Initializable {
 
@@ -110,8 +108,16 @@ public class PlayerController implements Initializable {
   @FXML private Button btnClose;
   @FXML private Button resetButton;
 
+  @FXML private Rectangle black2;
+  @FXML private Rectangle resetBox;
+  @FXML private Label resetLabel;
+  @FXML private Button resetYes;
+  @FXML private Button resetCancel;
+
   @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
+
+  @FXML private Label playerLabel;
 
   private double previousX;
   private double previousY;
@@ -127,6 +133,8 @@ public class PlayerController implements Initializable {
 
   private Timeline alertBlinkTimeline;
   @FXML public Pane aiWindowController;
+
+  private MediaPlayer walkingMediaPlayer;
 
   private ChatCompletionRequest chatCompletionRequest;
   private String lastUserMessage = ""; // Track the last user message for GPT response
@@ -145,8 +153,6 @@ public class PlayerController implements Initializable {
           checkRoom1(player, room1);
           checkRoom2(player, room2);
           checkRoom3(player, room3);
-          // if difficulty is selected, label is updated
-          detectDifficulty();
         }
       };
 
@@ -178,9 +184,19 @@ public class PlayerController implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     animateRobot();
-    introTextToSpeech();
+    // if difficulty is selected, label is updated
+    detectDifficulty();
+
+    playerLabel.setVisible(true);
     black.setVisible(true);
 
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
+
+    // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
     aiWindowController.setVisible(true);
 
@@ -219,6 +235,11 @@ public class PlayerController implements Initializable {
     walls.add(wall20);
     walls.add(wall21);
 
+    String walkSoundEffect = "src/main/resources/sounds/walking.mp3";
+    Media walkMedia = new Media(new File(walkSoundEffect).toURI().toString());
+    walkingMediaPlayer = new MediaPlayer(walkMedia);
+    walkingMediaPlayer.setVolume(4.0);
+
     collisionTimer.start();
 
     previousX = player.getLayoutX();
@@ -236,15 +257,6 @@ public class PlayerController implements Initializable {
     // if difficulty is selected, label is updated
     detectDifficulty();
 
-    Platform.runLater(
-        () -> {
-          Stage stage = (Stage) scene.getScene().getWindow();
-          stage.setOnCloseRequest(
-              event -> {
-                Platform.exit();
-                System.exit(0);
-              });
-        });
     greeting.setWrapText(true);
     greeting.setText(App.greetingInMap);
   }
@@ -252,7 +264,15 @@ public class PlayerController implements Initializable {
   // Modify your setupAlertBlinking method as follows
   private void setupAlertBlinking() {
     alert.setVisible(true); // Initially show the alert label
-
+    String musicFile;
+    musicFile = "src/main/resources/sounds/alert.mp3";
+    App.musicType = "final";
+    Media media = new Media(new File(musicFile).toURI().toString());
+    App.mediaPlayer.stop();
+    App.mediaPlayer = new MediaPlayer(media);
+    App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    App.mediaPlayer.setVolume(0.04);
+    App.mediaPlayer.setAutoPlay(true);
     // Set up the blinking animation for the alert label
     alertBlinkTimeline =
         new Timeline(
@@ -267,6 +287,7 @@ public class PlayerController implements Initializable {
     if (alertBlinkTimeline != null) {
       alertBlinkTimeline.stop();
       alert.setVisible(false);
+      App.mediaPlayer.stop();
     }
   }
 
@@ -275,12 +296,17 @@ public class PlayerController implements Initializable {
       room1.setVisible(true);
       timer.stop();
 
+      enterRoom();
+
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
           event -> {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(272);
             player.setLayoutY(336);
+            GameState.isPlayerInMap = false;
+            GameState.isPlayerInRoom1 = true;
+            // GameState.hasHappend = false;
             App.setScene(AppUi.ROOM1);
           });
       pauseTransition.play();
@@ -293,6 +319,7 @@ public class PlayerController implements Initializable {
     if (player.getBoundsInParent().intersects(room2.getBoundsInParent())) {
       room2.setVisible(true);
       timer.stop();
+      enterRoom();
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
@@ -300,7 +327,8 @@ public class PlayerController implements Initializable {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(500);
             player.setLayoutY(284);
-
+            GameState.isPlayerInMap = false;
+            GameState.isPlayerInRoom2 = true;
             App.setScene(AppUi.TILEROOM);
           });
       pauseTransition.play();
@@ -320,13 +348,14 @@ public class PlayerController implements Initializable {
         App.musicType = "final";
         musicFile = "srcsrc/main/resources/sounds/final-BG-MUSIC.mp3";
         Media media = new Media(new File(musicFile).toURI().toString());
-
         App.mediaPlayer.stop();
         App.mediaPlayer = new MediaPlayer(media);
         App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         App.mediaPlayer.setVolume(0.1);
         App.mediaPlayer.setAutoPlay(true);
       }
+
+      enterRoom();
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
@@ -377,6 +406,8 @@ public class PlayerController implements Initializable {
   public void movementSetup() {
     scene.setOnKeyPressed(
         e -> {
+          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
           if (e.getCode() == KeyCode.W) {
             wPressed.set(true);
           }
@@ -392,10 +423,19 @@ public class PlayerController implements Initializable {
           if (e.getCode() == KeyCode.D) {
             dPressed.set(true);
           }
+
+          boolean isMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+          // If we started moving and weren't before, start the sound.
+          if (isMoving && !wasMoving) {
+            walkingMediaPlayer.play();
+          }
         });
 
     scene.setOnKeyReleased(
         e -> {
+          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
           if (e.getCode() == KeyCode.W) {
             wPressed.set(false);
           }
@@ -410,6 +450,24 @@ public class PlayerController implements Initializable {
 
           if (e.getCode() == KeyCode.D) {
             dPressed.set(false);
+          }
+
+          boolean isMovinng = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+          // If we stopped moving and were before, stop the sound.
+          if (!isMovinng && wasMoving) {
+            PauseTransition pause = new PauseTransition(Duration.seconds(0.3));
+            pause.setOnFinished(
+                event -> {
+                  walkingMediaPlayer.stop();
+                  try {
+                    // This line will reset audio clip from start when stopped
+                    walkingMediaPlayer.seek(Duration.ZERO);
+                  } catch (Exception ex) {
+                    System.out.println("Error resetting audio: " + ex.getMessage());
+                  }
+                });
+            pause.play();
           }
         });
   }
@@ -478,21 +536,6 @@ public class PlayerController implements Initializable {
     aiWindowController.setVisible(true);
   }
 
-  private void introTextToSpeech() {
-    Task<Void> introTask =
-        new Task<>() {
-
-          @Override
-          protected Void call() throws Exception {
-            TextToSpeech textToSpeech = new TextToSpeech();
-            textToSpeech.speak("Welcome to STARSHIP ESCAPE 1!");
-            return null;
-          }
-        };
-    Thread introThread = new Thread(introTask);
-    introThread.start();
-  }
-
   // update the header labels as the hint decreases
   private void updateLabels() {
     difficultyLabel.setText(GameState.difficulty);
@@ -549,6 +592,14 @@ public class PlayerController implements Initializable {
         100);
       }
   @FXML
+  private void enterRoom() {
+    String soundEffect = "src/main/resources/sounds/enterReal.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
+  }
+
+  @FXML
   private void toggleSound(MouseEvent event) {
     if (GameState.isSoundEnabled) {
       // Disable sound
@@ -562,11 +613,29 @@ public class PlayerController implements Initializable {
       if (App.mediaPlayer != null) {
         App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
       }
-      soundOff.setVisible(false);
       soundOn.setVisible(true);
+      soundOff.setVisible(false);
     }
 
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  }
+
+  @FXML
+  private void restartClicked(ActionEvent event) throws IOException {
+    black2.setVisible(true);
+    resetBox.setVisible(true);
+    resetLabel.setVisible(true);
+    resetYes.setVisible(true);
+    resetCancel.setVisible(true);
+  }
+
+  @FXML
+  private void restartCanceled(ActionEvent event) throws IOException {
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
   }
 
   @FXML
