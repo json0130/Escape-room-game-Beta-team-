@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.gpt;
 
 import nz.ac.auckland.se206.GameState;
+import nz.ac.auckland.se206.controllers.Room1Controller;
 
 /** Utility class for generating GPT prompt engineering strings. */
 public class GptPromptEngineering {
@@ -38,7 +39,11 @@ public class GptPromptEngineering {
               + " just want to talk to you. If ths user is asking for help, say you cannot give"
               + " hints and do not give a hint. If the user asks for the answer, say you cannot"
               + " reveal the answer and do not give a hint. Guessing includes sending a single"
-              + " answer and if the user's guess is"
+              + " answer and If"
+              + message
+              + "contains"
+              + Room1Controller.riddleAnswer
+              + "and the user's guess is"
               + " correct, start your prompt with 'Correct'. If the guess is wrong, just write"
               + " 'Incorrect' in your prompt. Otherwise, naturally respond to "
               + message
@@ -49,9 +54,13 @@ public class GptPromptEngineering {
               + " the user is asking for help, start your prompt with 'Hint' and give a hint."
               + " Otherwise, do not give a hint. If the user asks for the answer, say you cannot"
               + " reveal the answer and do not give a hint. Guessing includes sending a single"
-              + " answer and if the user's guess is correct, start your prompt with 'Correct'. If"
-              + " the user's guess is wrong, start you prompt with 'Incorrect'. Do not include the"
-              + " answer in your prompt. Otherwise, naturally respond to "
+              + " answer. If "
+              + message
+              + " contains "
+              + Room1Controller.riddleAnswer
+              + "and the user's guess is correct, start your prompt with"
+              + " 'Correct'. If the user's guess is wrong, start you prompt with 'Incorrect'. Do"
+              + " not include the answer in your prompt. Otherwise, naturally respond to "
               + message
               + ", but do not give a hint.";
     }
