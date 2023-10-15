@@ -142,8 +142,7 @@ public class PlayerController implements Initializable {
           checkRoom1(player, room1);
           checkRoom2(player, room2);
           checkRoom3(player, room3);
-          // if difficulty is selected, label is updated
-          detectDifficulty();
+          
         }
       };
 

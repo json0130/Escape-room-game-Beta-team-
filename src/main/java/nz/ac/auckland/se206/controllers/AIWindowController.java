@@ -18,6 +18,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -93,6 +94,17 @@ public class AIWindowController {
             chatTextArea.setScrollTop(Double.MAX_VALUE);
           }
         };
+    inputText.setOnKeyPressed(
+        event -> {
+          if (event.getCode() == KeyCode.ENTER) {
+            try {
+              onSendMessage(new ActionEvent());
+            } catch (ApiProxyException | IOException e) {
+
+              e.printStackTrace();
+            }
+          }
+        });
 
     timer.start();
 
@@ -137,23 +149,23 @@ public class AIWindowController {
     String messageToSend = msg.getContent();
     Label message = new Label(messageToSend);
     message.setWrapText(true);
-    message.setFont(Font.font("Arial", 17));
+    message.setFont(Font.font("Arial", 15));
     HBox hBox = new HBox();
     if (msg.getRole().equals("user")) {
       hBox.setAlignment(Pos.CENTER_RIGHT);
-      hBox.setPadding(new Insets(5, 10, 5, 10));
+      hBox.setPadding(new Insets(3, 4, 3, 4));
       message.setStyle(
           "-fx-background-color: lightblue; -fx-background-radius: 10;-fx-padding: 10,20,20,10;");
     } else {
       hBox.setAlignment(Pos.CENTER_LEFT);
-      hBox.setPadding(new Insets(5, 10, 5, 10));
+      hBox.setPadding(new Insets(3, 4, 3, 4));
       message.setStyle(
           "-fx-background-color: lightyellow; -fx-background-radius: 10;-fx-padding: 10,20,20,10;");
     }
     hBox.getChildren().addAll(message);
     chatContainer.getChildren().addAll(hBox);
     chatContainer.setAlignment(Pos.TOP_CENTER);
-    chatPane.setVvalue(1.0);
+    chatPane.vvalueProperty().bind(chatContainer.heightProperty());
   }
 
   /**
@@ -173,7 +185,7 @@ public class AIWindowController {
               ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
               Choice result = chatCompletionResult.getChoices().iterator().next();
               chatCompletionRequest.addMessage(result.getChatMessage());
-              appendChatMessage(result.getChatMessage());
+              Platform.runLater(()-> {appendChatMessage(result.getChatMessage());});
               Platform.runLater(
                   () -> {
                     if (result.getChatMessage().getRole().equals("assistant")

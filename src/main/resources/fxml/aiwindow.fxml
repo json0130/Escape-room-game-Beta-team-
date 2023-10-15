@@ -12,24 +12,24 @@
 
 <Pane fx:id="aiPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.AIWindowController">
    <children>
-      <TextArea fx:id="chatTextArea" layoutX="30.0" layoutY="105.0" prefHeight="300.0" prefWidth="320.0" style="-fx-background-color: grey;" wrapText="true">
+      <TextArea fx:id="chatTextArea" layoutX="30.0" layoutY="105.0" prefHeight="300.0" prefWidth="305.0" style="-fx-background-color: grey;" wrapText="true">
          <font>
             <Font name="Arial Italic" size="17.0" />
          </font>
       </TextArea>
-      <TextField fx:id="inputText" layoutX="30.0" layoutY="410.0" prefHeight="35.0" prefWidth="220.0">
+      <TextField fx:id="inputText" layoutX="6.0" layoutY="405.0" prefHeight="35.0" prefWidth="267.0">
          <font>
             <Font name="Arial Italic" size="17.0" />
          </font>
       </TextField>
-      <Button fx:id="sendButton" layoutX="240.0" layoutY="410.0" mnemonicParsing="false" onAction="#onSendMessage" prefHeight="35.0" prefWidth="110.0" style="-fx-background-color: black;" text="SEND" textFill="WHITE">
+      <Button fx:id="sendButton" layoutX="272.0" layoutY="405.0" mnemonicParsing="false" onAction="#onSendMessage" prefHeight="35.0" prefWidth="74.0" style="-fx-background-color: black;" text="SEND" textFill="WHITE">
          <font>
-            <Font name="Arial" size="25.0" />
+            <Font name="Arial" size="17.0" />
          </font>
       </Button>
-      <ScrollPane fx:id="chatPane" hbarPolicy="NEVER" layoutX="30.0" layoutY="105.0" maxWidth="719.0" minWidth="202.0" prefHeight="300.0" prefWidth="322.0">
+      <ScrollPane fx:id="chatPane" hbarPolicy="NEVER" layoutX="6.0" layoutY="105.0" maxWidth="340.0" minWidth="340.0" prefHeight="300.0" prefWidth="340.0">
          <content>
-            <VBox fx:id="chatContainer" maxWidth="690.0" minWidth="690.0" opacity="0.46" prefWidth="690.0" />
+            <VBox fx:id="chatContainer" maxWidth="323.0" minWidth="323.0" prefWidth="323.0" />
          </content>
       </ScrollPane>
       <ImageView fx:id="robotBase" fitHeight="184.0" fitWidth="200.0" layoutX="76.0" layoutY="-11.0" pickOnBounds="true" preserveRatio="true">
