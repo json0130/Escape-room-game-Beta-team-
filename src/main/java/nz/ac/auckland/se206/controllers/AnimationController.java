@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
@@ -16,6 +17,8 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
@@ -33,6 +36,7 @@ public class AnimationController implements Initializable {
   @FXML private Button toggleSoundButton;
 
   private Timeline animationTimeline;
+  private MediaPlayer spaceSoundEffect;
 
   @FXML
   private void startAnimation() {
@@ -80,6 +84,7 @@ public class AnimationController implements Initializable {
   }
 
   private void explosionAnimation(ImageView e1) {
+    soundButttonClick();
     // Create a scale transition to continuously increase the scaling factor
     ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1), e1);
     scaleTransition.setFromX(1.0);
@@ -104,17 +109,19 @@ public class AnimationController implements Initializable {
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
 
-    animationTimeline = new Timeline(
-                new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        // Update animation based on the current time
-                        checkCollision2();
-                    }
-                })
-        );
-        animationTimeline.setCycleCount(Timeline.INDEFINITE);
-        animationTimeline.play();
+    animationTimeline =
+        new Timeline(
+            new KeyFrame(
+                Duration.millis(100),
+                new EventHandler<ActionEvent>() {
+                  @Override
+                  public void handle(ActionEvent event) {
+                    // Update animation based on the current time
+                    checkCollision2();
+                  }
+                }));
+    animationTimeline.setCycleCount(Timeline.INDEFINITE);
+    animationTimeline.play();
 
     scene
         .sceneProperty()
@@ -128,7 +135,7 @@ public class AnimationController implements Initializable {
   }
 
   public void checkCollision2() {
-        // Initialize sound images based on the initial isSoundEnabled state
+    // Initialize sound images based on the initial isSoundEnabled state
     if (GameState.isSoundEnabled) {
       soundOn.setVisible(true);
       soundOff.setVisible(false);
@@ -140,22 +147,31 @@ public class AnimationController implements Initializable {
 
   @FXML
   private void toggleSound(MouseEvent event) {
-      if (GameState.isSoundEnabled) {
-          // Disable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.0); // Mute the media player
-          }
-          soundOff.setVisible(true);
-          soundOn.setVisible(false);
-      } else {
-          // Enable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-          }
-          soundOn.setVisible(true);
-          soundOff.setVisible(false);
+    if (GameState.isSoundEnabled) {
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
       }
-  
-      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+      soundOff.setVisible(true);
+      soundOn.setVisible(false);
+    } else {
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    }
+
+    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+  }
+
+  @FXML
+  private void soundButttonClick() {
+    String soundEffect = "src/main/resources/sounds/explosion.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setVolume(0.1);
+    mediaPlayer.setAutoPlay(true);
   }
 }

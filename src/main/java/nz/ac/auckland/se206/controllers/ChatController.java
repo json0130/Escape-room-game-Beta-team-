@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -17,6 +19,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -50,6 +53,11 @@ public class ChatController {
   @FXML private ScrollPane chatPane;
   @FXML private VBox chatContainer;
 
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
+
+  @FXML private Button toggleSoundButton;
+
   private ChatCompletionRequest chatCompletionRequest;
   public static boolean isRiddleGiven = false;
 
@@ -60,6 +68,9 @@ public class ChatController {
    */
   @FXML
   public void initialize() throws ApiProxyException {
+    // Add an event handler to the Toggle Sound button
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
+
     // when the enter key is pressed, message is sent
     inputText.setOnKeyPressed(
         event -> {
@@ -78,6 +89,29 @@ public class ChatController {
         new ChatCompletionRequest().setN(1).setTemperature(1).setTopP(1).setMaxTokens(100);
     runGpt(new ChatMessage("user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
     System.out.println(Room1Controller.riddleAnswer);
+    detectDifficulty();
+  }
+
+  public void detectDifficulty() {
+    Timer labelTimer = new Timer(true);
+    labelTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (GameState.difficulty != null) {
+              if (GameState.difficulty == "MEDIUM") {
+                Platform.runLater(() -> updateLabels());
+                if (GameState.numOfHints == 0) {
+                  labelTimer.cancel();
+                }
+              } else {
+                Platform.runLater(() -> updateLabels());
+              }
+            }
+          }
+        },
+        0,
+        500);
   }
 
   /**
@@ -236,29 +270,7 @@ public class ChatController {
     riddleGreeting.setVisible(true);
   }
 
-  // detect change in the game state difficulty in the intro scene
-  private void detectDifficulty() {
-    Timer labelTimer = new Timer(true);
-    labelTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            if (GameState.difficulty != null) {
-              if (GameState.difficulty.equals("MEDIUM")) {
-                Platform.runLater(() -> updateLabels());
-                if (GameState.numOfHints == 0) {
-                  labelTimer.cancel();
-                }
-              } else {
-                Platform.runLater(() -> updateLabels());
-                
-              }
-            }
-          }
-        },
-        0,
-        500);
-  }
+  
 
   // update labels for difficulty and hints as the game progress
   private void updateLabels() {
@@ -273,5 +285,67 @@ public class ChatController {
     } else {
       hintLabel.setText("NO");
     }
+  }
+
+  @FXML
+  private void robotThink() {
+    robotBase.setVisible(false);
+    robotReply.setVisible(false);
+    robotThink.setVisible(true);
+
+    Platform.runLater(
+        () -> {
+          PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
+          delay.setOnFinished(
+              event1 -> {
+                robotReply();
+              });
+          delay.play();
+        });
+  }
+
+  @FXML
+  private void robotReply() {
+    robotBase.setVisible(false);
+    robotReply.setVisible(true);
+    robotThink.setVisible(false);
+
+    Platform.runLater(
+        () -> {
+          PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
+          delay.setOnFinished(
+              event1 -> {
+                robotIdle();
+              });
+          delay.play();
+        });
+  }
+
+  @FXML
+  private void robotIdle() {
+    robotBase.setVisible(true);
+    robotReply.setVisible(false);
+    robotThink.setVisible(false);
+  }
+
+  @FXML
+  private void toggleSound(MouseEvent event) {
+    if (GameState.isSoundEnabled) {
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
+      }
+      soundOff.setVisible(true);
+      soundOn.setVisible(false);
+    } else {
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    }
+
+    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
   }
 }

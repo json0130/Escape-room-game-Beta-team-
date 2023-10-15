@@ -69,6 +69,7 @@ public class GptPromptEngineering {
   }
 
   public static String greeting() {
+    
     return "Your name is 'EVA' and you are the game master of Starship Escape 1. You were designed"
         + " to help crew members which is the user in the emergency situation. Now the"
         + " starship has crashed into a meteor. Your task is to communicate with the player"
