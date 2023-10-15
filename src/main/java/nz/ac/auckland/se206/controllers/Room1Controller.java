@@ -623,7 +623,7 @@ public class Room1Controller implements Initializable {
                 }
               } else {
                 Platform.runLater(() -> updateLabels());
-                labelTimer.cancel();
+      
               }
             }
           }

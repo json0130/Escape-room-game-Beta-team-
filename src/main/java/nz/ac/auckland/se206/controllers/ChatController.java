@@ -105,7 +105,8 @@ public class ChatController {
     hBox.getChildren().addAll(message);
     chatContainer.getChildren().addAll(hBox);
     chatContainer.setAlignment(Pos.TOP_CENTER);
-    chatPane.setVvalue(1.0);
+    chatPane.vvalueProperty().bind(chatContainer.heightProperty());
+
   }
 
   /**
@@ -250,7 +251,7 @@ public class ChatController {
                 }
               } else {
                 Platform.runLater(() -> updateLabels());
-                labelTimer.cancel();
+                
               }
             }
           }
