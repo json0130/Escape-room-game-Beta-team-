@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -30,6 +31,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
@@ -293,19 +295,20 @@ public class Room1Controller implements Initializable {
     greeting.setText(App.greetingInRoom1);
 
     enablePlayerMovement();
-    Task<Void> indicatorTask = new Task<Void>() {
-            @Override
-            protected Void call() {
-                moveIndicator(crew1Indicator);
-                moveIndicator(crew2Indicator);
-                moveIndicator(crew3Indicator);
-                moveIndicator(crew4Indicator);
-                return null;
-            }
+    Task<Void> indicatorTask =
+        new Task<Void>() {
+          @Override
+          protected Void call() {
+            moveIndicator(crew1Indicator);
+            moveIndicator(crew2Indicator);
+            moveIndicator(crew3Indicator);
+            moveIndicator(crew4Indicator);
+            return null;
+          }
         };
-        Thread thread = new Thread(indicatorTask);
-        thread.setDaemon(true); 
-        thread.start();
+    Thread thread = new Thread(indicatorTask);
+    thread.setDaemon(true);
+    thread.start();
   }
 
   // hide id and button and indicator at once
@@ -366,7 +369,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId1();
     crew1Indicator.setVisible(false);
-    scene.requestFocus();  // Add this line
+    scene.requestFocus(); // Add this line
   }
 
   public void onCollect2() {
@@ -374,7 +377,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId2();
     crew2Indicator.setVisible(false);
-    scene.requestFocus();  // Add this line
+    scene.requestFocus(); // Add this line
   }
 
   public void onCollect3() {
@@ -382,7 +385,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId3();
     crew3Indicator.setVisible(false);
-    scene.requestFocus();  // Add this line
+    scene.requestFocus(); // Add this line
   }
 
   public void onCollect4() {
@@ -390,7 +393,7 @@ public class Room1Controller implements Initializable {
     GameState.isIdCollected = true;
     hideId4();
     crew4Indicator.setVisible(false);
-    scene.requestFocus();  // Add this line
+    scene.requestFocus(); // Add this line
   }
 
   @FXML
@@ -416,8 +419,9 @@ public class Room1Controller implements Initializable {
             player.setLayoutY(431);
             GameState.isPlayerInMap = true;
             GameState.isPlayerInRoom1 = false;
-            //GameState.hasHappend = false;
+            // GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
+            simulateKeyPressAfterDelay();
           });
       pauseTransition.play();
     } else {
@@ -496,7 +500,7 @@ public class Room1Controller implements Initializable {
               lastPlayedWalk = player.getImage();
             }
             aPressed.set(true);
-            System.out.println("left");  
+            System.out.println("left");
           }
 
           if (e.getCode() == KeyCode.S) {
@@ -729,23 +733,23 @@ public class Room1Controller implements Initializable {
 
   @FXML
   private void toggleSound(MouseEvent event) {
-      if (GameState.isSoundEnabled) {
-          // Disable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.0); // Mute the media player
-          }
-          soundOff.setVisible(true);
-          soundOn.setVisible(false);
-      } else {
-          // Enable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-          }
-          soundOn.setVisible(true);
-          soundOff.setVisible(false);
+    if (GameState.isSoundEnabled) {
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
       }
-  
-      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+      soundOff.setVisible(true);
+      soundOn.setVisible(false);
+    } else {
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    }
+
+    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
   }
 
   // game master animation
@@ -815,6 +819,7 @@ public class Room1Controller implements Initializable {
         0,
         100);
   }
+
   /**
    * Move indicator up and down.
    *
@@ -828,5 +833,40 @@ public class Room1Controller implements Initializable {
     translate.setCycleCount(TranslateTransition.INDEFINITE);
     translate.setAutoReverse(true);
     translate.play();
+  }
+
+  private void simulateKeyPressAfterDelay() {
+    Thread thread =
+        new Thread(
+            () -> {
+              try {
+                Thread.sleep(50); // Delay of 0.1 seconds
+                KeyEvent keyReleaseEventS =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
+
+                KeyEvent keyReleaseEventA =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
+
+                KeyEvent keyReleaseEventW =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
+
+                KeyEvent keyReleaseEventD =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
+
+                scene.fireEvent(keyReleaseEventA);
+                // scene.fireEvent(keyPressEvent);
+                scene.fireEvent(keyReleaseEventD);
+                scene.fireEvent(keyReleaseEventW);
+                scene.fireEvent(keyReleaseEventS);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+            });
+
+    thread.start();
   }
 }

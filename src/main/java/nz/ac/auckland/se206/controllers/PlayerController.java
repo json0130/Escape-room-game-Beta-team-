@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -282,6 +283,7 @@ public class PlayerController implements Initializable {
             player.setLayoutX(272);
             player.setLayoutY(336);
             App.setScene(AppUi.ROOM1);
+            // simulateKeyPressAfterDelay();
           });
       pauseTransition.play();
     } else {
@@ -302,6 +304,7 @@ public class PlayerController implements Initializable {
             player.setLayoutY(284);
 
             App.setScene(AppUi.TILEROOM);
+            // simulateKeyPressAfterDelay();
           });
       pauseTransition.play();
     } else {
@@ -336,6 +339,7 @@ public class PlayerController implements Initializable {
             player.setLayoutY(292);
 
             App.setScene(AppUi.ROOM3);
+            // simulateKeyPressAfterDelay();
           });
       pauseTransition.play();
     } else {
@@ -547,7 +551,8 @@ public class PlayerController implements Initializable {
         },
         0,
         100);
-      }
+  }
+
   @FXML
   private void toggleSound(MouseEvent event) {
     if (GameState.isSoundEnabled) {
@@ -577,4 +582,22 @@ public class PlayerController implements Initializable {
       // TODO: handle exception
     }
   }
+
+  // private void simulateKeyPressAfterDelay() {
+  //   Thread thread =
+  //       new Thread(
+  //           () -> {
+  //             try {
+  //               Thread.sleep(50); // Delay of 0.1 seconds
+  //               Robot robot = new Robot();
+  //               // robot.keyPress(KeyEvent.VK_S); // Simulate "S" key press
+  //               robot.keyRelease(KeyEvent.VK_S);
+  //               robot.keyRelease(KeyEvent.VK_A);
+  //             } catch (AWTException | InterruptedException e) {
+  //               e.printStackTrace();
+  //             }
+  //           });
+
+  //   thread.start();
+  // }
 }

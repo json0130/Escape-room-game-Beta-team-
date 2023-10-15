@@ -28,6 +28,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
@@ -281,6 +282,7 @@ public class ExitController implements Initializable {
             GameState.isPlayerInRoom3 = false;
             // GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
+            simulateKeyPressAfterDelay();
           });
       pauseTransition.play();
     } else {
@@ -1046,17 +1048,17 @@ public class ExitController implements Initializable {
   @FXML
   private void toggleSound(MouseEvent event) {
     if (GameState.isSoundEnabled) {
-        // Disable sound
-        if (App.mediaPlayer != null) {
-            App.mediaPlayer.setVolume(0.0); // Mute the media player
-        }
-        toggleSoundButton.setText("Enable Sound");
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
+      }
+      toggleSoundButton.setText("Enable Sound");
     } else {
-        // Enable sound
-        if (App.mediaPlayer != null) {
-            App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-        }
-        toggleSoundButton.setText("Disable Sound");
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      toggleSoundButton.setText("Disable Sound");
     }
 
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
@@ -1107,5 +1109,40 @@ public class ExitController implements Initializable {
         },
         0,
         100);
+  }
+
+  private void simulateKeyPressAfterDelay() {
+    Thread thread =
+        new Thread(
+            () -> {
+              try {
+                Thread.sleep(50); // Delay of 0.1 seconds
+                KeyEvent keyReleaseEventS =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
+
+                KeyEvent keyReleaseEventA =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
+
+                KeyEvent keyReleaseEventW =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
+
+                KeyEvent keyReleaseEventD =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
+
+                scene.fireEvent(keyReleaseEventA);
+                // scene.fireEvent(keyPressEvent);
+                scene.fireEvent(keyReleaseEventD);
+                scene.fireEvent(keyReleaseEventW);
+                scene.fireEvent(keyReleaseEventS);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+            });
+
+    thread.start();
   }
 }
