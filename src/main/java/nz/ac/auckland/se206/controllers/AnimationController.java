@@ -109,8 +109,6 @@ public class AnimationController implements Initializable {
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
 
-    
-
     animationTimeline =
         new Timeline(
             new KeyFrame(

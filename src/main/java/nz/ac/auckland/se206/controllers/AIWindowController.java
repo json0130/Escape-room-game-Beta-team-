@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -54,7 +55,7 @@ public class AIWindowController {
         @Override
         public void handle(long now) {
           // if difficulty is selected, label is updated
-          detectDifficulty();
+
         }
       };
 
@@ -65,6 +66,19 @@ public class AIWindowController {
    */
   @FXML
   public void initialize() throws ApiProxyException {
+    detectDifficulty();
+    // when the enter key is pressed, message is sent
+    inputText.setOnKeyPressed(
+        event -> {
+          if (event.getCode() == KeyCode.ENTER) {
+            try {
+              onSendMessage(new ActionEvent());
+            } catch (ApiProxyException | IOException e) {
+
+              e.printStackTrace();
+            }
+          }
+        });
 
     chatTextArea.setEditable(false);
     System.out.println(Room1Controller.riddleAnswer);

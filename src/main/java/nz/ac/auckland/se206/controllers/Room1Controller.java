@@ -130,7 +130,6 @@ public class Room1Controller implements Initializable {
           checkCollision2(player, walls);
           checkExit(player, exit);
           checkMonitor(player, wall2);
-          detectDifficulty();
         }
       };
 
@@ -145,19 +144,15 @@ public class Room1Controller implements Initializable {
 
           if (wPressed.get()) {
             player.setLayoutY(player.getLayoutY() - movementVariable);
-            System.out.println("w");
           }
           if (aPressed.get()) {
             player.setLayoutX(player.getLayoutX() - movementVariable);
-            System.out.println("a");
           }
           if (sPressed.get()) {
             player.setLayoutY(player.getLayoutY() + movementVariable);
-            System.out.println("s");
           }
           if (dPressed.get()) {
             player.setLayoutX(player.getLayoutX() + movementVariable);
-            System.out.println("d");
           }
           squareBorder();
         }
@@ -170,6 +165,8 @@ public class Room1Controller implements Initializable {
     alert.setVisible(false);
 
     aiWindowController.setVisible(true);
+
+    detectDifficulty();
 
     collisionTimer.start();
 

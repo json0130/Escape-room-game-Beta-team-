@@ -117,8 +117,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
           checkCollision2(player, walls);
           checkExit(player, exit);
           checkMonitor(player, blinkingRectangle);
-          // if difficulty is selected, label is updated
-          detectDifficulty();
+
         }
       };
 
@@ -150,6 +149,9 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   public void initialize(URL url, ResourceBundle resourceBundle) {
     animateExclamationMark();
     animateRobot();
+
+              // if difficulty is selected, label is updated
+          detectDifficulty();
 
     walls.add(wall);
     walls.add(wall2);

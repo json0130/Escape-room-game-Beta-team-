@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -16,6 +15,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import nz.ac.auckland.se206.App;
@@ -40,17 +40,13 @@ public class ChatController {
   @FXML private Label hintLabel2;
   @FXML private ImageView glitch;
 
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
+
+  @FXML private Button toggleSoundButton;
+
   private ChatCompletionRequest chatCompletionRequest;
   public static boolean isRiddleGiven = false;
-
-  AnimationTimer collisionTimers =
-      new AnimationTimer() {
-        @Override
-        public void handle(long now) {
-          // if difficulty is selected, label is updated
-          detectDifficulty();
-        }
-      };
 
   /**
    * Initializes the chat view, loading the riddle.
@@ -59,6 +55,9 @@ public class ChatController {
    */
   @FXML
   public void initialize() throws ApiProxyException {
+    // Add an event handler to the Toggle Sound button
+    toggleSoundButton.setOnMouseClicked(this::toggleSound);
+
     // when the enter key is pressed, message is sent
     inputText.setOnKeyPressed(
         event -> {
@@ -73,6 +72,7 @@ public class ChatController {
         });
     chatTextArea.setEditable(false);
     System.out.println(Room1Controller.riddleAnswer);
+    detectDifficulty();
   }
 
   public void detectDifficulty() {
@@ -287,5 +287,26 @@ public class ChatController {
     robotBase.setVisible(true);
     robotReply.setVisible(false);
     robotThink.setVisible(false);
+  }
+
+  @FXML
+  private void toggleSound(MouseEvent event) {
+    if (GameState.isSoundEnabled) {
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
+      }
+      soundOff.setVisible(true);
+      soundOn.setVisible(false);
+    } else {
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    }
+
+    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
   }
 }

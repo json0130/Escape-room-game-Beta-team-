@@ -133,8 +133,6 @@ public class ExitController implements Initializable {
           checkExit(player, exit1);
           checkComputer(player, clickMonitor);
           checkId(player, id);
-              // if difficulty is selected, label is updated
-          detectDifficulty();
         }
       };
 
@@ -169,6 +167,9 @@ public class ExitController implements Initializable {
     clickButton.setVisible(false);
     alert.setVisible(false); // Initially hide the alert label
     aiWindowController.setVisible(true);
+
+    // if difficulty is selected, label is updated
+    detectDifficulty();
 
     walls.add(wall);
     walls.add(wall1);
@@ -756,6 +757,7 @@ public class ExitController implements Initializable {
             if (Room1Controller.riddleAnswer == "captain") {
               if (node1 == idCaptain) {
                 light.setFill(Color.GREEN);
+                GameState.isGameFinished = true;
                 soundCorrectCard();
                 GameState.isIdChecked = true;
                 ids.setVisible(false);
@@ -765,8 +767,8 @@ public class ExitController implements Initializable {
                 idEngineer.setVisible(false);
                 exit2.setVisible(false);
                 idCardList.setVisible(false);
+                endingMediaChange();
                 changeOpacity2();
-                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -775,6 +777,7 @@ public class ExitController implements Initializable {
             } else if (Room1Controller.riddleAnswer == "chef") {
               if (node1 == idChef) {
                 light.setFill(Color.GREEN);
+                GameState.isGameFinished = true;
                 soundCorrectCard();
                 GameState.isIdChecked = true;
                 ids.setVisible(false);
@@ -784,8 +787,8 @@ public class ExitController implements Initializable {
                 idEngineer.setVisible(false);
                 exit2.setVisible(false);
                 idCardList.setVisible(false);
+                endingMediaChange();
                 changeOpacity2();
-                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -794,6 +797,7 @@ public class ExitController implements Initializable {
             } else if (Room1Controller.riddleAnswer == "doctor") {
               if (node1 == idDoctor) {
                 light.setFill(Color.GREEN);
+                GameState.isGameFinished = true;
                 soundCorrectCard();
                 GameState.isIdChecked = true;
                 ids.setVisible(false);
@@ -803,8 +807,8 @@ public class ExitController implements Initializable {
                 idEngineer.setVisible(false);
                 exit2.setVisible(false);
                 idCardList.setVisible(false);
+                endingMediaChange();
                 changeOpacity2();
-                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -813,6 +817,7 @@ public class ExitController implements Initializable {
             } else if (Room1Controller.riddleAnswer == "engineer") {
               if (node1 == idEngineer) {
                 light.setFill(Color.GREEN);
+                GameState.isGameFinished = true;
                 soundCorrectCard();
                 GameState.isIdChecked = true;
                 ids.setVisible(false);
@@ -822,8 +827,8 @@ public class ExitController implements Initializable {
                 idEngineer.setVisible(false);
                 exit2.setVisible(false);
                 idCardList.setVisible(false);
+                endingMediaChange();
                 changeOpacity2();
-                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -832,6 +837,25 @@ public class ExitController implements Initializable {
           }
         }
       };
+
+  private void endingMediaChange() {
+    // Wait for 2 second and change the media
+    if (!GameState.isSoundEnabled) {
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(1.0));
+      pauseTransition.setOnFinished(
+          event -> {
+            String musicFile;
+            musicFile = "src/main/resources/sounds/final-BG-MUSIC.mp3";
+            App.musicType = "final";
+            Media media = new Media(new File(musicFile).toURI().toString());
+            App.mediaPlayer.stop();
+            App.mediaPlayer = new MediaPlayer(media);
+            App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            App.mediaPlayer.setVolume(0.1);
+            App.mediaPlayer.setAutoPlay(true);
+          });
+    }
+  }
 
   // update the labels of hint and difficulty as the game progresses
   private void updateLabels() {

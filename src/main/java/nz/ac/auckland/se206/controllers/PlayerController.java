@@ -148,8 +148,6 @@ public class PlayerController implements Initializable {
           checkRoom1(player, room1);
           checkRoom2(player, room2);
           checkRoom3(player, room3);
-          // if difficulty is selected, label is updated
-          detectDifficulty();
         }
       };
 
@@ -182,6 +180,8 @@ public class PlayerController implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     animateRobot();
+    // if difficulty is selected, label is updated
+    detectDifficulty();
 
     playerLabel.setVisible(true);
     black.setVisible(true);
@@ -264,7 +264,7 @@ public class PlayerController implements Initializable {
     App.mediaPlayer.stop();
     App.mediaPlayer = new MediaPlayer(media);
     App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-    App.mediaPlayer.setVolume(0.1);
+    App.mediaPlayer.setVolume(0.04);
     App.mediaPlayer.setAutoPlay(true);
     // Set up the blinking animation for the alert label
     alertBlinkTimeline =
@@ -280,6 +280,7 @@ public class PlayerController implements Initializable {
     if (alertBlinkTimeline != null) {
       alertBlinkTimeline.stop();
       alert.setVisible(false);
+      App.mediaPlayer.stop();
     }
   }
 
@@ -311,7 +312,6 @@ public class PlayerController implements Initializable {
     if (player.getBoundsInParent().intersects(room2.getBoundsInParent())) {
       room2.setVisible(true);
       timer.stop();
-
       enterRoom();
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
@@ -449,7 +449,7 @@ public class PlayerController implements Initializable {
 
           // If we stopped moving and were before, stop the sound.
           if (!isMovinng && wasMoving) {
-            PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+            PauseTransition pause = new PauseTransition(Duration.seconds(0.3));
             pause.setOnFinished(
                 event -> {
                   walkingMediaPlayer.stop();
