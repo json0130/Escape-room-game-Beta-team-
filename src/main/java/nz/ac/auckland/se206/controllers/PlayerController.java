@@ -28,6 +28,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
@@ -283,7 +284,7 @@ public class PlayerController implements Initializable {
             player.setLayoutX(272);
             player.setLayoutY(336);
             App.setScene(AppUi.ROOM1);
-            // simulateKeyPressAfterDelay();
+            simulateKeyPressAfterDelay();
           });
       pauseTransition.play();
     } else {
@@ -304,7 +305,7 @@ public class PlayerController implements Initializable {
             player.setLayoutY(284);
 
             App.setScene(AppUi.TILEROOM);
-            // simulateKeyPressAfterDelay();
+            simulateKeyPressAfterDelay();
           });
       pauseTransition.play();
     } else {
@@ -339,7 +340,7 @@ public class PlayerController implements Initializable {
             player.setLayoutY(292);
 
             App.setScene(AppUi.ROOM3);
-            // simulateKeyPressAfterDelay();
+            simulateKeyPressAfterDelay();
           });
       pauseTransition.play();
     } else {
@@ -446,6 +447,7 @@ public class PlayerController implements Initializable {
   public void onRoom3(ActionEvent event) {
 
     App.setScene(AppUi.ROOM3);
+    simulateKeyPressAfterDelay();
   }
 
   // detect if there is change isn gamestate difficulty in the intro page using timer
@@ -583,21 +585,38 @@ public class PlayerController implements Initializable {
     }
   }
 
-  // private void simulateKeyPressAfterDelay() {
-  //   Thread thread =
-  //       new Thread(
-  //           () -> {
-  //             try {
-  //               Thread.sleep(50); // Delay of 0.1 seconds
-  //               Robot robot = new Robot();
-  //               // robot.keyPress(KeyEvent.VK_S); // Simulate "S" key press
-  //               robot.keyRelease(KeyEvent.VK_S);
-  //               robot.keyRelease(KeyEvent.VK_A);
-  //             } catch (AWTException | InterruptedException e) {
-  //               e.printStackTrace();
-  //             }
-  //           });
+  private void simulateKeyPressAfterDelay() {
+    Thread thread =
+        new Thread(
+            () -> {
+              try {
+                Thread.sleep(50); // Delay of 0.1 seconds
+                KeyEvent keyReleaseEventS =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
 
-  //   thread.start();
-  // }
+                KeyEvent keyReleaseEventA =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
+
+                KeyEvent keyReleaseEventW =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
+
+                KeyEvent keyReleaseEventD =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
+
+                scene.fireEvent(keyReleaseEventA);
+                // scene.fireEvent(keyPressEvent);
+                scene.fireEvent(keyReleaseEventD);
+                scene.fireEvent(keyReleaseEventW);
+                scene.fireEvent(keyReleaseEventS);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+            });
+
+    thread.start();
+  }
 }
