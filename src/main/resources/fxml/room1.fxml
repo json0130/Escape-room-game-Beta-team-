@@ -66,10 +66,10 @@
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
-      <Button fx:id="btnCollect1" layoutX="190.0" layoutY="314.0" mnemonicParsing="false" onAction="#onCollect1" text="Collect Id" />
-      <Button fx:id="btnCollect2" layoutX="339.0" layoutY="181.0" mnemonicParsing="false" onAction="#onCollect2" text="Collect Id" />
-      <Button fx:id="btnCollect4" layoutX="773.0" layoutY="319.0" mnemonicParsing="false" onAction="#onCollect4" text="Collect Id" />
-      <Button fx:id="btnCollect3" layoutX="718.0" layoutY="176.0" mnemonicParsing="false" onAction="#onCollect3" text="Collect Id" />
+      <Button fx:id="btnCollect1" layoutX="190.0" layoutY="314.0" mnemonicParsing="false" onAction="#onCollect1" onMouseEntered="#enterCollect1" onMouseExited="#exitCollect1" style="-fx-background-color: lightgrey;" text="Collect Id" />
+      <Button fx:id="btnCollect2" layoutX="339.0" layoutY="181.0" mnemonicParsing="false" onAction="#onCollect2" onMouseEntered="#enterCollect2" onMouseExited="#exitCollect2" style="-fx-background-color: lightgrey;" text="Collect Id" />
+      <Button fx:id="btnCollect4" layoutX="773.0" layoutY="319.0" mnemonicParsing="false" onAction="#onCollect4" onMouseEntered="#enterCollect4" onMouseExited="#exitCollect4" style="-fx-background-color: lightgrey;" text="Collect Id" />
+      <Button fx:id="btnCollect3" layoutX="718.0" layoutY="176.0" mnemonicParsing="false" onAction="#onCollect3" onMouseEntered="#enterCollect3" onMouseExited="#exitCollect3" style="-fx-background-color: lightgrey;" text="Collect Id" />
       <Button fx:id="btnRiddle" layoutX="90.0" layoutY="554.0" mnemonicParsing="false" onAction="#onRiddle" prefHeight="53.0" prefWidth="72.0" text="Click Me" />
       <Rectangle fx:id="crew1Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="72.0" layoutX="59.0" layoutY="359.0" opacity="0.0" rotate="40.0" stroke="BLACK" strokeType="INSIDE" width="44.0" />
       <Rectangle fx:id="crew2Collision" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="31.0" layoutX="178.0" layoutY="238.0" opacity="0.0" rotate="-50.0" stroke="BLACK" strokeType="INSIDE" width="68.0" />
