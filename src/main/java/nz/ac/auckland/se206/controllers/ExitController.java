@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,6 +110,12 @@ public class ExitController implements Initializable {
   @FXML private Label greeting;
   @FXML private ImageView gameMaster;
   @FXML private ImageView close;
+
+  @FXML private Rectangle black2;
+  @FXML private Rectangle resetBox;
+  @FXML private Label resetLabel;
+  @FXML private Button resetYes;
+  @FXML private Button resetCancel;
 
   @FXML public Pane aiWindowController;
 
@@ -221,6 +228,12 @@ public class ExitController implements Initializable {
     clickButton.setVisible(false);
     alert.setVisible(false); // Initially hide the alert label
     aiWindowController.setVisible(true);
+
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
 
     // if difficulty is selected, label is updated
     detectDifficulty();
@@ -399,7 +412,7 @@ public class ExitController implements Initializable {
             }
             boolean isMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
 
-          // If we started moving and weren't before, start the sound.
+            // If we started moving and weren't before, start the sound.
             if (isMoving && !wasMoving) {
               walkingMediaPlayer.play();
             }
@@ -467,23 +480,24 @@ public class ExitController implements Initializable {
               dPressed.set(false);
             }
 
-            boolean isMovinng = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+            boolean isMovinng =
+                wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
 
-          // If we stopped moving and were before, stop the sound.
-          if (!isMovinng && wasMoving) {
-            PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
-            pause.setOnFinished(
-                event -> {
-                  walkingMediaPlayer.stop();
-                  try {
-                    // This line will reset audio clip from start when stopped
-                    walkingMediaPlayer.seek(Duration.ZERO);
-                  } catch (Exception ex) {
-                    System.out.println("Error resetting audio: " + ex.getMessage());
-                  }
-                });
-            pause.play();
-              }
+            // If we stopped moving and were before, stop the sound.
+            if (!isMovinng && wasMoving) {
+              PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+              pause.setOnFinished(
+                  event -> {
+                    walkingMediaPlayer.stop();
+                    try {
+                      // This line will reset audio clip from start when stopped
+                      walkingMediaPlayer.seek(Duration.ZERO);
+                    } catch (Exception ex) {
+                      System.out.println("Error resetting audio: " + ex.getMessage());
+                    }
+                  });
+              pause.play();
+            }
           }
         });
   }
@@ -961,12 +975,14 @@ public class ExitController implements Initializable {
 
   private void endingMediaChange() {
     // Wait for 2 second and change the media
-    if (!GameState.isSoundEnabled) {
+    if (GameState.isSoundEnabled) {
+      System.out.println("sound is off");
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(1.0));
       pauseTransition.setOnFinished(
           event -> {
+            System.out.println("sound is off2");
             String musicFile;
-            musicFile = "src/main/resources/sounds/final-BG-MUSIC.mp3";
+            musicFile = "src/main/resources/sounds/final.mp3";
             App.musicType = "final";
             Media media = new Media(new File(musicFile).toURI().toString());
             App.mediaPlayer.stop();
@@ -1037,7 +1053,7 @@ public class ExitController implements Initializable {
   }
 
   private void endingAnimation() {
-    // Create a timeline to continuously increase the scaling factor
+    // Create a FadeTransition for both background images
     Timeline continuousScaling =
         new Timeline(
             new KeyFrame(Duration.ZERO, new KeyValue(background3.scaleXProperty(), 1.0)),
@@ -1050,7 +1066,6 @@ public class ExitController implements Initializable {
     TranslateTransition Translation = new TranslateTransition(Duration.seconds(2.0), background3);
 
     // Set the animation properties
-
     Translation.setCycleCount(1); // Play the animation once
     Translation.setAutoReverse(false); // Don't reverse the animation
 
@@ -1119,17 +1134,17 @@ public class ExitController implements Initializable {
   @FXML
   private void toggleSound(MouseEvent event) {
     if (GameState.isSoundEnabled) {
-        // Disable sound
-        if (App.mediaPlayer != null) {
-            App.mediaPlayer.setVolume(0.0); // Mute the media player
-        }
-        toggleSoundButton.setText("Enable Sound");
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
+      }
+      toggleSoundButton.setText("Enable Sound");
     } else {
-        // Enable sound
-        if (App.mediaPlayer != null) {
-            App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-        }
-        toggleSoundButton.setText("Disable Sound");
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      toggleSoundButton.setText("Disable Sound");
     }
 
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
@@ -1180,5 +1195,23 @@ public class ExitController implements Initializable {
         },
         0,
         100);
+  }
+
+  @FXML
+  private void restartCanceled(ActionEvent event) throws IOException {
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
+  }
+
+  @FXML
+  private void reset(ActionEvent event) throws IOException {
+    try {
+      GameState.resetGames();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
   }
 }

@@ -36,7 +36,6 @@ public class AnimationController implements Initializable {
   @FXML private Button toggleSoundButton;
 
   private Timeline animationTimeline;
-  private MediaPlayer spaceSoundEffect;
 
   @FXML
   private void startAnimation() {
@@ -79,11 +78,11 @@ public class AnimationController implements Initializable {
     spaceshipTranslation.setOnFinished(
         event -> {
           e1.setVisible(true);
-          explosionAnimation(e1);
+          explosionAnimate(e1);
         });
   }
 
-  private void explosionAnimation(ImageView e1) {
+  private void explosionAnimate(ImageView e1) {
     soundButttonClick();
     // Create a scale transition to continuously increase the scaling factor
     ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1), e1);

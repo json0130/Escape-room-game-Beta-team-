@@ -69,17 +69,17 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000085" height="60.0" layoutX="215.0" layoutY="504.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000085" height="60.0" layoutX="504.0" layoutY="504.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000085" height="60.0" layoutX="795.0" layoutY="503.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
-      <Button fx:id="minB2" layoutX="215.0" layoutY="504.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="55.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" stylesheets="@../css/styles.css" text="2 MINUTES" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="minB2" layoutX="215.0" layoutY="504.0" mnemonicParsing="false" onAction="#minuteButtonClicked" prefHeight="55.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" stylesheets="@../css/styles.css" text="2 MINUTES" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="21.0" />
          </font>
       </Button>
-      <Button fx:id="minB4" layoutX="504.0" layoutY="504.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="55.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" stylesheets="@../css/styles.css" text="4 MINUTES" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="minB4" layoutX="504.0" layoutY="504.0" mnemonicParsing="false" onAction="#minuteButtonClicked" prefHeight="55.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" stylesheets="@../css/styles.css" text="4 MINUTES" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="21.0" />
          </font>
       </Button>
-      <Button fx:id="minB6" layoutX="795.0" layoutY="503.0" mnemonicParsing="false" onAction="#minBClicked" prefHeight="55.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" text="6 MINUTES" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="minB6" layoutX="795.0" layoutY="503.0" mnemonicParsing="false" onAction="#minuteButtonClicked" prefHeight="55.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" text="6 MINUTES" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="21.0" />
          </font>

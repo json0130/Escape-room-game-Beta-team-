@@ -97,6 +97,12 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private ImageView soundOn;
   @FXML private ImageView soundOff;
 
+  @FXML private Rectangle black2;
+  @FXML private Rectangle resetBox;
+  @FXML private Label resetLabel;
+  @FXML private Button resetYes;
+  @FXML private Button resetCancel;
+
   private boolean hasHappend = false;
 
   @FXML private Button toggleSoundButton;
@@ -171,7 +177,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
           checkCollision2(player, walls);
           checkExit(player, exit);
           checkMonitor(player, blinkingRectangle);
-
         }
       };
 
@@ -204,8 +209,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     animateExclamationMark();
     animateRobot();
 
-              // if difficulty is selected, label is updated
-          detectDifficulty();
+    // if difficulty is selected, label is updated
+    detectDifficulty();
 
     walls.add(wall);
     walls.add(wall2);
@@ -227,6 +232,12 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     walls.add(wall18);
     walls.add(wall19);
     walls.add(wall20);
+
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
 
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
@@ -669,5 +680,32 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
         },
         0,
         100);
+  }
+
+  @FXML
+  private void restartClicked(ActionEvent event) throws IOException {
+    black2.setVisible(true);
+    resetBox.setVisible(true);
+    resetLabel.setVisible(true);
+    resetYes.setVisible(true);
+    resetCancel.setVisible(true);
+  }
+
+  @FXML
+  private void restartCanceled(ActionEvent event) throws IOException {
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
+  }
+
+  @FXML
+  private void reset(ActionEvent event) throws IOException {
+    try {
+      GameState.resetGames();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
   }
 }

@@ -31,7 +31,6 @@ public class GptPromptEngineering {
   public static String checkRiddleAnswer(String message) {
     String user = "The user said " + message;
     String answer = "";
-
     if ((GameState.difficulty == "MEDIUM" && GameState.numOfHints <= 0)
         || GameState.difficulty == "HARD") {
       answer =
