@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
@@ -19,11 +20,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 
 public class EndController implements Initializable {
@@ -157,6 +161,7 @@ public class EndController implements Initializable {
   @FXML
   private void endAnimation() {
     spaceship.setVisible(true);
+    spaceshipSound();
 
     // Create a timeline to continuously increase the scaling factor
     Timeline continuousScaling =
@@ -191,9 +196,28 @@ public class EndController implements Initializable {
     spaceshipPathTransition.setOnFinished(
         event -> {
           youWin.setVisible(true);
+          String musicFile;
+          musicFile = "src/main/resources/sounds/final-BG-MUSIC.mp3";
+          App.musicType = "final";
+          Media media = new Media(new File(musicFile).toURI().toString());
+          App.mediaPlayer.stop();
+          App.mediaPlayer = new MediaPlayer(media);
+          App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+          App.mediaPlayer.setVolume(0.1);
+          App.mediaPlayer.setAutoPlay(true);
           introTextToSpeech();
         });
   }
+
+  @FXML
+  private void spaceshipSound() {
+    String soundEffect = "src/main/resources/sounds/spaceship.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setVolume(0.2);
+    mediaPlayer.setAutoPlay(true);
+  }
+
   private void introTextToSpeech() {
     Task<Void> introTask =
         new Task<>() {
@@ -201,7 +225,7 @@ public class EndController implements Initializable {
           @Override
           protected Void call() throws Exception {
             TextToSpeech textToSpeech = new TextToSpeech();
-            textToSpeech.speak("You Win!");
+            textToSpeech.speak("Congratulation. You Win!");
             return null;
           }
         };

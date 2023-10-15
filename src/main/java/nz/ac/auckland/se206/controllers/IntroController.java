@@ -343,6 +343,15 @@ public class IntroController implements Initializable {
       if (App.timerSeconds <= 0) {
         App.timerTimeline.stop();
         App.setScene(AppUi.LOSE);
+        String musicFile;
+        musicFile = "src/main/resources/sounds/final-BG-MUSIC.mp3";
+        App.musicType = "final";
+        Media media = new Media(new File(musicFile).toURI().toString());
+        App.mediaPlayer.stop();
+        App.mediaPlayer = new MediaPlayer(media);
+        App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        App.mediaPlayer.setVolume(0.1);
+        App.mediaPlayer.setAutoPlay(true);
         introTextToSpeech();
       }
     } else {

@@ -257,7 +257,15 @@ public class PlayerController implements Initializable {
   // Modify your setupAlertBlinking method as follows
   private void setupAlertBlinking() {
     alert.setVisible(true); // Initially show the alert label
-
+    String musicFile;
+    musicFile = "src/main/resources/sounds/alert.mp3";
+    App.musicType = "final";
+    Media media = new Media(new File(musicFile).toURI().toString());
+    App.mediaPlayer.stop();
+    App.mediaPlayer = new MediaPlayer(media);
+    App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    App.mediaPlayer.setVolume(0.1);
+    App.mediaPlayer.setAutoPlay(true);
     // Set up the blinking animation for the alert label
     alertBlinkTimeline =
         new Timeline(

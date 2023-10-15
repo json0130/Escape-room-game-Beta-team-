@@ -72,7 +72,6 @@ public class TutorialController implements Initializable {
 
   // Create a field for your meteor sound
   private MediaPlayer meteorSoundPlayer;
-  private MediaPlayer spaceMediaPlayer;
 
   // sound for rocket movement
   String soundEffect = "src/main/resources/sounds/rocket.mp3";
@@ -304,11 +303,6 @@ public class TutorialController implements Initializable {
     previousX = player.getLayoutX();
     previousY = player.getLayoutY();
 
-    String walkSoundEffect = "src/main/resources/sounds/spaceship1.mp3";
-    Media walkMedia = new Media(new File(walkSoundEffect).toURI().toString());
-    spaceMediaPlayer = new MediaPlayer(walkMedia);
-    spaceMediaPlayer.setVolume(0.1);
-
     // Initialize the sentenceLabel
     sentenceLabel.setWrapText(true);
     scene
@@ -435,19 +429,10 @@ public class TutorialController implements Initializable {
           if (e.getCode() == KeyCode.D) {
             dPressed.set(true);
           }
-
-          boolean isMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
-
-          // If we started moving and weren't before, start the sound.
-          if (isMoving && !wasMoving) {
-            spaceMediaPlayer.play();
-          }
         });
 
     scene.setOnKeyReleased(
         e -> {
-          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
-
           if (e.getCode() == KeyCode.W) {
             wPressed.set(false);
           }
@@ -462,24 +447,6 @@ public class TutorialController implements Initializable {
 
           if (e.getCode() == KeyCode.D) {
             dPressed.set(false);
-          }
-
-          boolean isMovinng = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
-
-          // If we stopped moving and were before, stop the sound.
-          if (!isMovinng && wasMoving) {
-            PauseTransition pause = new PauseTransition(Duration.seconds(0.7));
-            pause.setOnFinished(
-                event -> {
-                  spaceMediaPlayer.stop();
-                  try {
-                    // This line will reset audio clip from start when stopped
-                    spaceMediaPlayer.seek(Duration.ZERO);
-                  } catch (Exception ex) {
-                    System.out.println("Error resetting audio: " + ex.getMessage());
-                  }
-                });
-            pause.play();
           }
         });
   }

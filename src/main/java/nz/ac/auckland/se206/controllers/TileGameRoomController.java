@@ -117,6 +117,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
           checkCollision2(player, walls);
           checkExit(player, exit);
           checkMonitor(player, blinkingRectangle);
+          // if difficulty is selected, label is updated
+          detectDifficulty();
         }
       };
 
@@ -180,8 +182,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
     alert.setVisible(false); // Initially hide the alert label
     aiWindowController.setVisible(true);
-    // if difficulty is selected, label is updated
-    detectDifficulty();
 
     shapesize = player.getFitWidth();
     movementSetup();

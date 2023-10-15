@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -42,6 +43,15 @@ public class ChatController {
   private ChatCompletionRequest chatCompletionRequest;
   public static boolean isRiddleGiven = false;
 
+  AnimationTimer collisionTimers =
+      new AnimationTimer() {
+        @Override
+        public void handle(long now) {
+          // if difficulty is selected, label is updated
+          detectDifficulty();
+        }
+      };
+
   /**
    * Initializes the chat view, loading the riddle.
    *
@@ -56,13 +66,12 @@ public class ChatController {
             try {
               onSendMessage(new ActionEvent());
             } catch (ApiProxyException | IOException e) {
-            
+
               e.printStackTrace();
             }
           }
         });
     chatTextArea.setEditable(false);
-    detectDifficulty();
     System.out.println(Room1Controller.riddleAnswer);
   }
 
@@ -87,7 +96,7 @@ public class ChatController {
                         new ChatMessage(
                             "user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
                   } catch (ApiProxyException e) {
-                  
+
                     e.printStackTrace();
                   }
                   isRiddleGiven = true;
@@ -108,7 +117,7 @@ public class ChatController {
                       new ChatMessage(
                           "user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
                 } catch (ApiProxyException e) {
-                  
+
                   e.printStackTrace();
                 }
                 labelTimer.cancel();
@@ -163,7 +172,7 @@ public class ChatController {
                   });
               return result.getChatMessage();
             } catch (ApiProxyException e) {
-            
+
               e.printStackTrace();
               return null;
             }

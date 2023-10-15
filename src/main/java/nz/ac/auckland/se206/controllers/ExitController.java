@@ -133,6 +133,8 @@ public class ExitController implements Initializable {
           checkExit(player, exit1);
           checkComputer(player, clickMonitor);
           checkId(player, id);
+              // if difficulty is selected, label is updated
+          detectDifficulty();
         }
       };
 
@@ -210,8 +212,6 @@ public class ExitController implements Initializable {
     makeDraggable(idDoctor);
     makeDraggable(idEngineer);
     collisionTimer.start();
-    // if difficulty is selected, label is updated
-    detectDifficulty();
   }
 
   // if the charcter collides rectangle for exit, scene changes back to map
@@ -764,6 +764,7 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 exit2.setVisible(false);
+                idCardList.setVisible(false);
                 changeOpacity2();
                 GameState.isGameFinished = true;
               } else {
@@ -782,6 +783,7 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 exit2.setVisible(false);
+                idCardList.setVisible(false);
                 changeOpacity2();
                 GameState.isGameFinished = true;
               } else {
@@ -800,6 +802,7 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 exit2.setVisible(false);
+                idCardList.setVisible(false);
                 changeOpacity2();
                 GameState.isGameFinished = true;
               } else {
@@ -818,6 +821,7 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 exit2.setVisible(false);
+                idCardList.setVisible(false);
                 changeOpacity2();
                 GameState.isGameFinished = true;
               } else {

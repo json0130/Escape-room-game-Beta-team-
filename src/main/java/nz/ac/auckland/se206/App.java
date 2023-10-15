@@ -118,7 +118,6 @@ public class App extends Application {
 
     // Set the cycle count to loop indefinitely
     mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-
     mediaPlayer.setVolume(0.05);
     mediaPlayer.setAutoPlay(true);
 

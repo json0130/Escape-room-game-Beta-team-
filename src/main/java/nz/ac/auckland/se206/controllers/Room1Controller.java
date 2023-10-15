@@ -130,6 +130,7 @@ public class Room1Controller implements Initializable {
           checkCollision2(player, walls);
           checkExit(player, exit);
           checkMonitor(player, wall2);
+          detectDifficulty();
         }
       };
 
@@ -233,9 +234,6 @@ public class Room1Controller implements Initializable {
     crew2Indicator.setVisible(false);
     crew3Indicator.setVisible(false);
     crew4Indicator.setVisible(false);
-
-    // if difficulty is selected, label is updated
-    detectDifficulty();
 
     // when the riddle is resolved, indicators are visible
     revealIndicator();

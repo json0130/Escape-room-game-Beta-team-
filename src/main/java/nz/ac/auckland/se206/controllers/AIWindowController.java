@@ -49,6 +49,15 @@ public class AIWindowController {
 
   private AnimationTimer timer;
 
+  AnimationTimer collisionTimers =
+      new AnimationTimer() {
+        @Override
+        public void handle(long now) {
+          // if difficulty is selected, label is updated
+          detectDifficulty();
+        }
+      };
+
   /**
    * Initializes the chat view, loading the riddle.
    *
@@ -58,7 +67,6 @@ public class AIWindowController {
   public void initialize() throws ApiProxyException {
 
     chatTextArea.setEditable(false);
-    detectDifficulty();
     System.out.println(Room1Controller.riddleAnswer);
     aiPane
         .visibleProperty()
