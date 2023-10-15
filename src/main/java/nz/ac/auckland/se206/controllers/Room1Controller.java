@@ -898,6 +898,7 @@ public class Room1Controller implements Initializable {
     }
 
   }
+  @FXML
   private void enterCollect1(MouseEvent e) {
     btnCollect1.setStyle("-fx-background-color:grey; -fx-text-fill: white");
   }
