@@ -1,7 +1,6 @@
 package nz.ac.auckland.se206.gpt;
 
 import nz.ac.auckland.se206.GameState;
-import nz.ac.auckland.se206.controllers.Room1Controller;
 
 /** Utility class for generating GPT prompt engineering strings. */
 public class GptPromptEngineering {
@@ -23,7 +22,7 @@ public class GptPromptEngineering {
   public static String riddleAi(String answer) {
 
     return "You are name is WALL-E and you are the game maser in a starship escape room game."
-               + " Provide a riddle which the answer is "
+        + " Provide a riddle which the answer is "
         + answer
         + " in 30 words. Do not include the answer in your prompt.";
   }
@@ -31,7 +30,6 @@ public class GptPromptEngineering {
   public static String checkRiddleAnswer(String message) {
     String user = "The user said " + message;
     String answer = "";
-
     if ((GameState.difficulty == "MEDIUM" && GameState.numOfHints <= 0)
         || GameState.difficulty == "HARD") {
       answer =
@@ -70,7 +68,8 @@ public class GptPromptEngineering {
         + " and help them to complete tasks and to escape within the time limit. Now the"
         + " player is in the map. There are three rooms where the player can visit."
         + hintAvailability
-        + " Introduce yourself to the player and suggest to look around the rooms in less than 50 words.";
+        + " Introduce yourself to the player and tell the player to move around the map in less"
+        + " suggest to look around the rooms.";
   }
 
   public static String greetingRoom1() {
@@ -87,7 +86,8 @@ public class GptPromptEngineering {
 
   public static String greetingRoom3() {
     return "Now the player is in the control room. Players can escape the starship through this"
-        + " room using the passcode and id card. Introduce this room to the player in less than 50 words.";
+        + " room using the passcode and id card. Introduce this room to the player in less"
+        + " than 50 words.";
   }
 
   public static String easy(String message) {

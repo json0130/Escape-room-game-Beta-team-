@@ -62,6 +62,12 @@ public class App extends Application {
     return new FXMLLoader(App.class.getResource("/fxml/" + fxml + ".fxml")).load();
   }
 
+  /**
+   * This method is invoked when the application starts. It loads and shows the "Canvas" scene.
+   *
+   * @param stage The primary stage of the application.
+   * @throws IOException If "src/main/resources/fxml/canvas.fxml" is not found.
+   */
   public static void resetRooms() throws IOException {
     // re initilaze all the rooms.
     try {

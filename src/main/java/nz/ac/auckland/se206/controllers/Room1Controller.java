@@ -41,7 +41,6 @@ import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class Room1Controller implements Initializable {
-
   private BooleanProperty wPressed = new SimpleBooleanProperty();
   private BooleanProperty aPressed = new SimpleBooleanProperty();
   private BooleanProperty sPressed = new SimpleBooleanProperty();
@@ -51,7 +50,7 @@ public class Room1Controller implements Initializable {
   private int movementVariable = 5;
   private double shapesize;
 
-  List<Rectangle> walls = new ArrayList<>();
+  private List<Rectangle> walls = new ArrayList<>();
 
   @FXML private ImageView player;
   @FXML private ImageView soundOn;
@@ -178,7 +177,7 @@ public class Room1Controller implements Initializable {
   private boolean isGreetingShown = true;
 
   // timer for collsion check between monitor and walls
-  AnimationTimer collisionTimer =
+  private AnimationTimer collisionTimer =
       new AnimationTimer() {
         @Override
         public void handle(long now) {
@@ -189,7 +188,7 @@ public class Room1Controller implements Initializable {
       };
 
   // Prevent the character moves outside of the window
-  AnimationTimer timer =
+  private AnimationTimer timer =
       new AnimationTimer() {
         @Override
         public void handle(long now) {
@@ -217,11 +216,8 @@ public class Room1Controller implements Initializable {
     animateRobot();
     shapesize = player.getFitWidth();
     alert.setVisible(false);
-
     aiWindowController.setVisible(true);
-
     detectDifficulty();
-
     collisionTimer.start();
 
     walls.add(wall1);
@@ -295,19 +291,20 @@ public class Room1Controller implements Initializable {
     greeting.setText(App.greetingInRoom1);
 
     enablePlayerMovement();
-    Task<Void> indicatorTask = new Task<Void>() {
-            @Override
-            protected Void call() {
-                moveIndicator(crew1Indicator);
-                moveIndicator(crew2Indicator);
-                moveIndicator(crew3Indicator);
-                moveIndicator(crew4Indicator);
-                return null;
-            }
+    Task<Void> indicatorTask =
+        new Task<Void>() {
+          @Override
+          protected Void call() {
+            moveIndicator(crew1Indicator);
+            moveIndicator(crew2Indicator);
+            moveIndicator(crew3Indicator);
+            moveIndicator(crew4Indicator);
+            return null;
+          }
         };
-        Thread thread = new Thread(indicatorTask);
-        thread.setDaemon(true); 
-        thread.start();
+    Thread thread = new Thread(indicatorTask);
+    thread.setDaemon(true);
+    thread.start();
   }
 
   // hide id and button and indicator at once
@@ -846,6 +843,7 @@ public class Room1Controller implements Initializable {
         0,
         100);
   }
+
   /**
    * Move indicator up and down.
    *

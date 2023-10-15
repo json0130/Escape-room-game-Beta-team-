@@ -8,7 +8,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
-import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
@@ -31,21 +30,18 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 
 public class EndController implements Initializable {
-
   @FXML private Label win;
   @FXML private Label youWin;
   @FXML private Label lose;
   @FXML private Label lose1;
   @FXML private Pane scene;
   @FXML private Button button;
-  @FXML private Button s;
   @FXML private Button start;
   @FXML private ImageView e1;
   @FXML private ImageView background;
   @FXML private ImageView spaceship;
   @FXML private ImageView ship;
   @FXML private Rectangle grey;
-
   @FXML private Rectangle black2;
   @FXML private Rectangle resetBox;
   @FXML private Label resetLabel;
@@ -84,18 +80,17 @@ public class EndController implements Initializable {
     continuousScaling.setCycleCount(1); // Play the animation once
 
     // Create a translate animation for the r1
-    TranslateTransition Translation = new TranslateTransition(Duration.seconds(2.4), background);
+    TranslateTransition translation = new TranslateTransition(Duration.seconds(2.4), background);
 
     // Set the animation properties
-
-    Translation.setCycleCount(1); // Play the animation once
-    Translation.setAutoReverse(false); // Don't reverse the animation
+    translation.setCycleCount(1); // Play the animation once
+    translation.setAutoReverse(false); // Don't reverse the animation
 
     // Start the animations
     continuousScaling.play();
-    Translation.play();
+    translation.play();
     // Enable the button when the animation is finished
-    Translation.setOnFinished(
+    translation.setOnFinished(
         event -> {
           // Adjust the background scale to original size
           grey.setVisible(false);
@@ -133,43 +128,22 @@ public class EndController implements Initializable {
     continuousScaling.setCycleCount(1); // Play the animation once
 
     // Create a translate animation for the r1
-    TranslateTransition Translation = new TranslateTransition(Duration.seconds(3), win);
+    TranslateTransition translation = new TranslateTransition(Duration.seconds(3), win);
 
     // Set the animation properties
-
-    Translation.setCycleCount(1); // Play the animation once
-    Translation.setAutoReverse(false); // Don't reverse the animation
+    translation.setCycleCount(1); // Play the animation once
+    translation.setAutoReverse(false); // Don't reverse the animation
 
     // Start the animations
     continuousScaling.play();
-    Translation.play();
-  }
-
-  @FXML
-  private void animation() {
-    // Create a scale transition
-    ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(2), win);
-    scaleTransition.setFromX(1.0); // Starting X scale
-    scaleTransition.setFromY(1.0); // Starting Y scale
-    scaleTransition.setToX(2.0); // Ending X scale (scale up by a factor of 2)
-    scaleTransition.setToY(2.0); // Ending Y scale (scale up by a factor of 2)
-
-    // Create a translate transition
-    TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(2), win);
-    translateTransition.setByX(100); // Move label 100 units to the right
-    translateTransition.setByY(50); // Move label 50 units down
-
-    // Play both transitions in parallel
-    scaleTransition.play();
-    translateTransition.play();
+    translation.play();
   }
 
   @FXML
   private void endAnimation() {
+    // Create a timeline to continuously increase the scaling factor
     spaceship.setVisible(true);
     spaceshipSound();
-
-    // Create a timeline to continuously increase the scaling factor
     Timeline continuousScaling =
         new Timeline(
             new KeyFrame(Duration.ZERO, new KeyValue(spaceship.scaleXProperty(), 1.0)),
@@ -202,8 +176,8 @@ public class EndController implements Initializable {
     spaceshipPathTransition.setOnFinished(
         event -> {
           youWin.setVisible(true);
-          App.mediaPlayer.setVolume(0.3);
-          introTextToSpeech();
+          App.mediaPlayer.setVolume(0.2);
+          winTextToSpeech();
         });
   }
 
@@ -216,7 +190,8 @@ public class EndController implements Initializable {
     mediaPlayer.setAutoPlay(true);
   }
 
-  private void introTextToSpeech() {
+  private void winTextToSpeech() {
+    // Create a task to speak the text when the player win the game.
     Task<Void> introTask =
         new Task<>() {
 

@@ -73,6 +73,8 @@ public class IntroController implements Initializable {
   @FXML private boolean isLevelSelected = false;
   @FXML private boolean isTimeSelected = false;
 
+  private MediaPlayer alertSoundPlayer;
+
   @FXML private Button toggleSoundButton;
   @FXML private ImageView title;
 
@@ -135,10 +137,6 @@ public class IntroController implements Initializable {
   private void levelButtonClicked(ActionEvent events) {
     soundButttonClick();
 
-    // easyButton.setOnMouseEntered(null); // Disable hover effect
-    // mediumButton.setOnMouseEntered(null); // Disable hover effect
-    // hardButton.setOnMouseEntered(null); // Disable hover effect
-
     easybox.setVisible(false);
     mediumbox.setVisible(false);
     hardbox.setVisible(false);
@@ -187,12 +185,8 @@ public class IntroController implements Initializable {
   }
 
   @FXML
-  private void minBClicked(ActionEvent events) {
+  private void minuteButtonClicked(ActionEvent events) {
     soundButttonClick();
-
-    // minB2.setOnMouseEntered(null); // Disable hover effect
-    // minB4.setOnMouseEntered(null); // Disable hover effect
-    // minB6.setOnMouseEntered(null); // Disable hover effect
 
     Button cButton = (Button) events.getSource();
 
@@ -237,6 +231,8 @@ public class IntroController implements Initializable {
 
   @FXML
   private void startButtonClicked(ActionEvent event) {
+    // If level and time is selected then the start button will be visible and allow the user to
+    // start the game.
     soundButttonClick();
     if (isLevelSelected && isTimeSelected) {
       startButton.setDisable(true);
@@ -260,6 +256,7 @@ public class IntroController implements Initializable {
 
   @FXML
   private void closeClicked() {
+    // If the user clicks the close button then the start button will be visible again.
     startButton.setDisable(false);
     startButton.setVisible(true);
     letter.setVisible(false);
@@ -328,7 +325,6 @@ public class IntroController implements Initializable {
             App.setScene(AppUi.TUTORIAL);
             App.timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), this::updateTimer));
             App.timerTimeline.setCycleCount(App.timerSeconds);
-            // App.timerTimeline.play();
           });
 
       animationStarted = true;
@@ -345,28 +341,39 @@ public class IntroController implements Initializable {
   }
 
   private void updateTimer(ActionEvent event) {
+    // This update the timer by decreasing the timerSeconds by 1 every second.
     App.timerSeconds--;
     if (!GameState.isGameFinished) {
       if (App.timerSeconds <= 0) {
         App.timerTimeline.stop();
+        App.setScene(AppUi.LOSE);
+        System.out.println("GAME OVER");
         String musicFile;
-        musicFile = "src/main/resources/sounds/final-BG-MUSIC.mp3";
+        musicFile = "src/main/resources/sounds/final.mp3";
         App.musicType = "final";
         Media media = new Media(new File(musicFile).toURI().toString());
+        // Stop current playing media
         App.mediaPlayer.stop();
+
+        // Create new media player for alert sound
         App.mediaPlayer = new MediaPlayer(media);
-        App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        App.mediaPlayer.setVolume(0.3);
-        App.mediaPlayer.setAutoPlay(true);
-        App.setScene(AppUi.LOSE);
-        introTextToSpeech();
+
+        // Check if sound is enabled before setting volume and playing.
+        if (GameState.isSoundEnabled) {
+          App.mediaPlayer.setVolume(0.04);
+          App.mediaPlayer.setAutoPlay(true);
+          App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        }
+        loseTextToSpeech();
+        GameState.isGameFinished = true;
       }
     } else {
       App.timerTimeline.stop();
     }
   }
 
-  private void introTextToSpeech() {
+  private void loseTextToSpeech() {
+    // This is the text to speech for the lose scene.
     Task<Void> introTask =
         new Task<>() {
 
@@ -417,6 +424,7 @@ public class IntroController implements Initializable {
 
   @FXML
   private void miniuteButtonHovered(Button button) {
+    // This is for the minute button hovering effect.
     button.setOnMouseEntered(
         e -> {
           // Change the style of the button for 0.2 seconds only and back to original style

@@ -107,7 +107,7 @@
             <Image url="@../images/Firefly_20231010001007-removebg-preview.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="soundOn" fitHeight="50.0" fitWidth="50.0" layoutX="720.0" layoutY="127.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true" visible="false">
+      <ImageView fx:id="soundOn" fitHeight="50.0" fitWidth="50.0" layoutX="720.0" layoutY="127.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly_sound_icon_inside_the_white_circle_with_no_fill_74516-removebg-preview.png" />
          </image>
