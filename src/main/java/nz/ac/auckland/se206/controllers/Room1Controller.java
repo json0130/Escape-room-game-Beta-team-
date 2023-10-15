@@ -108,6 +108,12 @@ public class Room1Controller implements Initializable {
   @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
 
+  @FXML private Rectangle black2;
+  @FXML private Rectangle resetBox;
+  @FXML private Label resetLabel;
+  @FXML private Button resetYes;
+  @FXML private Button resetCancel;
+
   @FXML public Pane aiWindowController;
 
   @FXML
@@ -219,6 +225,12 @@ public class Room1Controller implements Initializable {
     aiWindowController.setVisible(true);
     detectDifficulty();
     collisionTimer.start();
+
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
 
     walls.add(wall1);
     walls.add(wall3);
@@ -857,5 +869,32 @@ public class Room1Controller implements Initializable {
     translate.setCycleCount(TranslateTransition.INDEFINITE);
     translate.setAutoReverse(true);
     translate.play();
+  }
+
+  @FXML
+  private void restartClicked(ActionEvent event) throws IOException {
+    black2.setVisible(true);
+    resetBox.setVisible(true);
+    resetLabel.setVisible(true);
+    resetYes.setVisible(true);
+    resetCancel.setVisible(true);
+  }
+
+  @FXML
+  private void restartCanceled(ActionEvent event) throws IOException {
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
+  }
+
+  @FXML
+  private void reset(ActionEvent event) throws IOException {
+    try {
+      GameState.resetGames();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
   }
 }

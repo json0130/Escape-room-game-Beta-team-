@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,6 +110,12 @@ public class ExitController implements Initializable {
   @FXML private Label greeting;
   @FXML private ImageView gameMaster;
   @FXML private ImageView close;
+
+  @FXML private Rectangle black2;
+  @FXML private Rectangle resetBox;
+  @FXML private Label resetLabel;
+  @FXML private Button resetYes;
+  @FXML private Button resetCancel;
 
   @FXML public Pane aiWindowController;
 
@@ -221,6 +228,12 @@ public class ExitController implements Initializable {
     clickButton.setVisible(false);
     alert.setVisible(false); // Initially hide the alert label
     aiWindowController.setVisible(true);
+
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
 
     // if difficulty is selected, label is updated
     detectDifficulty();
@@ -1182,5 +1195,23 @@ public class ExitController implements Initializable {
         },
         0,
         100);
+  }
+
+  @FXML
+  private void restartCanceled(ActionEvent event) throws IOException {
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
+  }
+
+  @FXML
+  private void reset(ActionEvent event) throws IOException {
+    try {
+      GameState.resetGames();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
   }
 }
