@@ -60,23 +60,22 @@
             <VBox fx:id="chatContainer" maxWidth="690.0" minWidth="690.0" prefWidth="690.0" />
          </content>
       </ScrollPane>
-      <fx:include layoutX="150.0" layoutY="94.0" source="countdowntimer.fxml" />
-      <ImageView fx:id="riddleCorrect" fitHeight="141.0" fitWidth="138.0" layoutX="439.0" layoutY="-13.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="riddleCorrect" fitHeight="193.0" fitWidth="236.0" layoutX="942.0" layoutY="240.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/riddleRobot/riddleCorrect.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="riddleHint" fitHeight="150.0" fitWidth="140.0" layoutX="436.0" layoutY="-16.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="riddleHint" fitHeight="193.0" fitWidth="236.0" layoutX="942.0" layoutY="247.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/riddleRobot/riddleHint.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="riddleWrong" fitHeight="150.0" fitWidth="200.0" layoutX="433.0" layoutY="-17.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="riddleWrong" fitHeight="193.0" fitWidth="183.0" layoutX="942.0" layoutY="250.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/riddleRobot/riddleWrong.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="riddleGreeting" fitHeight="150.0" fitWidth="200.0" layoutX="432.0" layoutY="-18.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="riddleGreeting" fitHeight="193.0" fitWidth="236.0" layoutX="939.0" layoutY="247.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/riddleRobot/riddleGreeting.png" />
          </image>
@@ -102,7 +101,7 @@
          </image>
       </ImageView>
       <fx:include layoutX="150.0" layoutY="94.0" source="countdowntimer.fxml" />
-      <ImageView fx:id="soundOff" fitHeight="50.0" fitWidth="50.0" layoutX="720.0" layoutY="127.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="soundOff" fitHeight="50.0" fitWidth="50.0" layoutX="720.0" layoutY="127.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../images/Firefly_20231010001007-removebg-preview.png" />
          </image>

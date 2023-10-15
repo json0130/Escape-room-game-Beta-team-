@@ -656,7 +656,7 @@ public class Room1Controller implements Initializable {
                 }
               } else {
                 Platform.runLater(() -> updateLabels());
-                labelTimer.cancel();
+      
               }
             }
           }
@@ -896,5 +896,37 @@ public class Room1Controller implements Initializable {
     } catch (Exception e) {
       // TODO: handle exception
     }
+
+  }
+  private void enterCollect1(MouseEvent e) {
+    btnCollect1.setStyle("-fx-background-color:grey; -fx-text-fill: white");
+  }
+  @FXML
+  private void exitCollect1(MouseEvent e) {
+    btnCollect1.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
+  }
+  @FXML
+  private void enterCollect2(MouseEvent e) {
+    btnCollect2.setStyle("-fx-background-color:grey; -fx-text-fill: white");
+  }
+  @FXML
+  private void exitCollect2(MouseEvent e) {
+    btnCollect2.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
+  }
+  @FXML
+  private void enterCollect3(MouseEvent e) {
+    btnCollect3.setStyle("-fx-background-color:grey; -fx-text-fill: white");
+  }
+  @FXML
+  private void exitCollect3(MouseEvent e) {
+    btnCollect3.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
+  }
+  @FXML
+  private void enterCollect4(MouseEvent e) {
+    btnCollect4.setStyle("-fx-background-color:grey; -fx-text-fill: white");
+  }
+  @FXML
+  private void exitCollect4(MouseEvent e) {
+    btnCollect4.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
   }
 }

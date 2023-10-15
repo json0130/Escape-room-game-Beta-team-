@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.gpt;
 
 import nz.ac.auckland.se206.GameState;
+import nz.ac.auckland.se206.controllers.Room1Controller;
 
 /** Utility class for generating GPT prompt engineering strings. */
 public class GptPromptEngineering {
@@ -21,7 +22,7 @@ public class GptPromptEngineering {
 
   public static String riddleAi(String answer) {
 
-    return "You are name is WALL-E and you are the game maser in a starship escape room game."
+    return "Your name is 'WALL-E' and you are the game maser in a starship escape room game."
         + " Provide a riddle which the answer is "
         + answer
         + " in 30 words. Do not include the answer in your prompt.";
@@ -33,43 +34,49 @@ public class GptPromptEngineering {
     if ((GameState.difficulty == "MEDIUM" && GameState.numOfHints <= 0)
         || GameState.difficulty == "HARD") {
       answer =
-          "Do not give a hint. Do not include the answer in your prompt. Determine if the user is"
-              + " asking for hint or asking for answer or quessing the answer or just want to talk"
-              + " to you.If ths user is asking for hints, say you cannot give hints. If the user"
-              + " asks for the answer, say you cannot reveal the answer. If the answer is same with"
-              + " the answer, start your prompt with 'Correct'. If the answer is wrong, start"
-              + " your prompt with 'Incorrect'. Otherwise, naturally respond to "
-              + message;
+          "Determine if the user is asking for help or asking for answer or quessing the answer or"
+              + " just want to talk to you. If ths user is asking for help, say you cannot give"
+              + " hints and do not give a hint. If the user asks for the answer, say you cannot"
+              + " reveal the answer and do not give a hint. Guessing includes sending a single"
+              + " answer and If"
+              + message
+              + "contains"
+              + Room1Controller.riddleAnswer
+              + "and the user's guess is"
+              + " correct, start your prompt with 'Correct'. If the guess is wrong, just write"
+              + " 'Incorrect' in your prompt. Otherwise, naturally respond to "
+              + message
+              + ",but do not give a hint.";
     } else {
       answer =
-          "Determine if the user is asking for hint or asking for answer or quessing the answer or"
-              + " just want to talk to you. If the user is asking for hints, start your prompt with"
-              + " 'Hint' and give a hint. Otherwise, do not give a hint. If the user asks for the"
-              + " answer, say you cannot reveal the answer. If the answer is same with the answer,"
-              + " start your prompt with 'Correct'. If the answer is wrong, start your prompt with"
-              + " 'Incorrect'. Do not include the answer in your prompt. Otherwise, naturally"
-              + " respond to "
-              + message;
+          "Determine if the user is asking for help or asking for answer or quessing the answer. If"
+              + " the user is asking for help, start your prompt with 'Hint' and give a hint."
+              + " Otherwise, do not give a hint. If the user asks for the answer, say you cannot"
+              + " reveal the answer and do not give a hint. Guessing includes sending a single"
+              + " answer. If "
+              + message
+              + " contains "
+              + Room1Controller.riddleAnswer
+              + "and the user's guess is correct, start your prompt with"
+              + " 'Correct'. If the user's guess is wrong, start you prompt with 'Incorrect'. Do"
+              + " not include the answer in your prompt. Otherwise, naturally respond to "
+              + message
+              + ", but do not give a hint.";
     }
 
     return user + answer;
   }
 
   public static String greeting() {
-    String hintAvailability;
-    if (GameState.difficulty == "HARD") {
-      hintAvailability = "However you cannot provide any direct hints to the player.";
-    } else {
-      hintAvailability = "You can provide hints if the player requests.";
-    }
+    
     return "Your name is 'EVA' and you are the game master of Starship Escape 1. You were designed"
         + " to help crew members which is the user in the emergency situation. Now the"
         + " starship has crashed into a meteor. Your task is to communicate with the player"
         + " and help them to complete tasks and to escape within the time limit. Now the"
-        + " player is in the map. There are three rooms where the player can visit."
-        + hintAvailability
-        + " Introduce yourself to the player and tell the player to move around the map in less"
-        + " suggest to look around the rooms.";
+        + " player is in the map. There are three rooms that are closet room, computer room,"
+        + " and control room, where the player can visit."
+        + " Introduce yourself to the player and suggest to look around the rooms in less than 50"
+        + " words.";
   }
 
   public static String greetingRoom1() {
@@ -166,12 +173,7 @@ public class GptPromptEngineering {
     }
 
     String intro =
-        "Your name is 'EVA' and you are the game master of Starship Escape 1. You were designed"
-            + " to help crew members which is the user in the emergency situation. Now the"
-            + " starship has crashed into a meteor. Your task is to communicate with the player"
-            + " and help them to complete tasks and to escape within the time limit. Now the"
-            + " player is in the map. There are three rooms where the player can visit."
-            + "The user said"
+        "The user said"
             + message
             + ". First determine if the user is asking for hint or not. This"
             + " can be related to not knowing what to do, or asking for"
@@ -270,12 +272,7 @@ public class GptPromptEngineering {
       }
 
       intro =
-          "Your name is 'EVA' and you are the game master of Starship Escape 1. You were designed"
-              + " to help crew members which is the user in the emergency situation. Now the"
-              + " starship has crashed into a meteor. Your task is to communicate with the player"
-              + " and help them to complete tasks and to escape within the time limit. Now the"
-              + " player is in the map. There are three rooms where the player can visit."
-              + "The user said"
+          "The user said"
               + message
               + ". First determine if the user is asking for hint or not. This can be related to"
               + " not knowing what to do, or asking for what to find or asking for what is the next"
@@ -295,12 +292,7 @@ public class GptPromptEngineering {
   }
 
   public static String hard(String message) {
-    return "Your name is 'EVA' and you are the game master of Starship Escape 1. You were designed"
-        + " to help crew members which is the user in the emergency situation. Now the"
-        + " starship has crashed into a meteor. Your task is to communicate with the player"
-        + " and help them to complete tasks and to escape within the time limit. Now the"
-        + " player is in the map. There are three rooms where the player can visit."
-        + "The user said"
+    return "The user said"
         + message
         + ". you should naturally respond to user and do not give any hint. If the user is asking"
         + " for hint, tell you cannot provide any hints. If the user is keep asking for hint, still"

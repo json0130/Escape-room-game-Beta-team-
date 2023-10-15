@@ -101,43 +101,11 @@ public class ChatController {
             if (GameState.difficulty != null) {
               if (GameState.difficulty == "MEDIUM") {
                 Platform.runLater(() -> updateLabels());
-                if (!isRiddleGiven) {
-                  chatCompletionRequest =
-                      new ChatCompletionRequest()
-                          .setN(1)
-                          .setTemperature(0.5)
-                          .setTopP(0.5)
-                          .setMaxTokens(100);
-                  try {
-                    runGpt(
-                        new ChatMessage(
-                            "user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
-                  } catch (ApiProxyException e) {
-
-                    e.printStackTrace();
-                  }
-                  isRiddleGiven = true;
-                }
                 if (GameState.numOfHints == 0) {
                   labelTimer.cancel();
                 }
               } else {
                 Platform.runLater(() -> updateLabels());
-                chatCompletionRequest =
-                    new ChatCompletionRequest()
-                        .setN(1)
-                        .setTemperature(0.5)
-                        .setTopP(0.5)
-                        .setMaxTokens(100);
-                try {
-                  runGpt(
-                      new ChatMessage(
-                          "user", GptPromptEngineering.riddleAi(Room1Controller.riddleAnswer)));
-                } catch (ApiProxyException e) {
-
-                  e.printStackTrace();
-                }
-                labelTimer.cancel();
               }
             }
           }
@@ -171,7 +139,8 @@ public class ChatController {
     hBox.getChildren().addAll(message);
     chatContainer.getChildren().addAll(hBox);
     chatContainer.setAlignment(Pos.TOP_CENTER);
-    chatPane.setVvalue(1.0);
+    chatPane.vvalueProperty().bind(chatContainer.heightProperty());
+
   }
 
   /**
@@ -301,29 +270,7 @@ public class ChatController {
     riddleGreeting.setVisible(true);
   }
 
-  // // detect change in the game state difficulty in the intro scene
-  // private void detectDifficulty() {
-  //   Timer labelTimer = new Timer(true);
-  //   labelTimer.scheduleAtFixedRate(
-  //       new TimerTask() {
-  //         @Override
-  //         public void run() {
-  //           if (GameState.difficulty != null) {
-  //             if (GameState.difficulty.equals("MEDIUM")) {
-  //               Platform.runLater(() -> updateLabels());
-  //               if (GameState.numOfHints == 0) {
-  //                 labelTimer.cancel();
-  //               }
-  //             } else {
-  //               Platform.runLater(() -> updateLabels());
-  //               labelTimer.cancel();
-  //             }
-  //           }
-  //         }
-  //       },
-  //       0,
-  //       500);
-  // }
+  
 
   // update labels for difficulty and hints as the game progress
   private void updateLabels() {
