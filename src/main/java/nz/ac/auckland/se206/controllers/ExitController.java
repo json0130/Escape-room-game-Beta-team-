@@ -25,6 +25,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -62,6 +63,7 @@ public class ExitController implements Initializable {
   @FXML private Rectangle wall;
   @FXML private Rectangle wall1;
   @FXML private Rectangle id;
+  @FXML private Rectangle greetingBox;
 
   @FXML private Button one;
   @FXML private Button two;
@@ -100,10 +102,13 @@ public class ExitController implements Initializable {
   @FXML private Rectangle light;
   @FXML private Rectangle monitor;
   @FXML private Rectangle clickMonitor;
+  @FXML private Rectangle black;
   @FXML private Label idLabel;
   @FXML private Label clickButton;
   @FXML private Label click;
+  @FXML private Label greeting;
   @FXML private ImageView gameMaster;
+  @FXML private ImageView close;
 
   @FXML public Pane aiWindowController;
 
@@ -124,6 +129,55 @@ public class ExitController implements Initializable {
 
   private double mouseAnchorX;
   private double mouseAnchorY;
+
+  @FXML
+  Image rightCharacterAnimation =
+      new Image(
+          new File("src/main/resources/images/walkingRight.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image leftCharacterAnimation =
+      new Image(
+          new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image leftCharacterIdle =
+      new Image(
+          new File("src/main/resources/images/gameCharacterArtLeft.png").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image rightCharacterIdle =
+      new Image(
+          new File("src/main/resources/images/gameCharacterArtRight.png").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image lastPlayedWalk =
+      new Image(
+          new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  Boolean walkAnimationPlaying = false;
+
+  private boolean isGreetingShown = true;
 
   AnimationTimer collisionTimers =
       new AnimationTimer() {
@@ -183,7 +237,7 @@ public class ExitController implements Initializable {
     walkingMediaPlayer.setVolume(2.0);
 
     shapesize = player.getFitWidth();
-    movementSetup();
+    enablePlayerMovement();
 
     collisionTimers.start();
     previousX = player.getLayoutX();
@@ -213,6 +267,11 @@ public class ExitController implements Initializable {
     makeDraggable(idDoctor);
     makeDraggable(idEngineer);
     collisionTimer.start();
+    // if difficulty is selected, label is updated
+    detectDifficulty();
+
+    greeting.setWrapText(true);
+    greeting.setText(App.greetingInRoom3);
   }
 
   // if the charcter collides rectangle for exit, scene changes back to map
@@ -299,31 +358,51 @@ public class ExitController implements Initializable {
 
   @FXML
   public void movementSetup() {
+
     scene.setOnKeyPressed(
         e -> {
           boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
 
-          if (e.getCode() == KeyCode.W) {
-            wPressed.set(true);
-          }
+          if (keyboardControlEnabled) {
+            if (e.getCode() == KeyCode.W) {
+              if (walkAnimationPlaying == false) {
+                player.setImage(lastPlayedWalk);
+                walkAnimationPlaying = true;
+              }
+              wPressed.set(true);
+            }
 
-          if (e.getCode() == KeyCode.A) {
-            aPressed.set(true);
-          }
+            if (e.getCode() == KeyCode.A) {
+              if (player.getImage() != leftCharacterAnimation) {
+                player.setImage(leftCharacterAnimation);
+                walkAnimationPlaying = true;
+                lastPlayedWalk = player.getImage();
+              }
+              aPressed.set(true);
+            }
 
-          if (e.getCode() == KeyCode.S) {
-            sPressed.set(true);
-          }
+            if (e.getCode() == KeyCode.S) {
+              if (walkAnimationPlaying == false) {
+                player.setImage(lastPlayedWalk);
+                walkAnimationPlaying = true;
+              }
+              sPressed.set(true);
+            }
 
-          if (e.getCode() == KeyCode.D) {
-            dPressed.set(true);
-          }
-
-          boolean isMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+            if (e.getCode() == KeyCode.D) {
+              if (player.getImage() != rightCharacterAnimation) {
+                player.setImage(rightCharacterAnimation);
+                walkAnimationPlaying = true;
+                lastPlayedWalk = player.getImage();
+              }
+              dPressed.set(true);
+            }
+            boolean isMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
 
           // If we started moving and weren't before, start the sound.
-          if (isMoving && !wasMoving) {
-            walkingMediaPlayer.play();
+            if (isMoving && !wasMoving) {
+              walkingMediaPlayer.play();
+            }
           }
         });
 
@@ -331,23 +410,64 @@ public class ExitController implements Initializable {
         e -> {
           boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
 
-          if (e.getCode() == KeyCode.W) {
-            wPressed.set(false);
-          }
+          if (keyboardControlEnabled) {
+            if (e.getCode() == KeyCode.W) {
+              if (player.getImage() == leftCharacterAnimation
+                  && sPressed.get() == false
+                  && aPressed.get() == false) {
+                player.setImage(leftCharacterIdle);
+                walkAnimationPlaying = false;
+              } else if (sPressed.get() == true) {
+                player.setImage(lastPlayedWalk);
+              } else if (aPressed.get() == false
+                  && dPressed.get() == false
+                  && sPressed.get() == false) {
+                player.setImage(rightCharacterIdle);
+                walkAnimationPlaying = false;
+              }
+              wPressed.set(false);
+            }
 
-          if (e.getCode() == KeyCode.A) {
-            aPressed.set(false);
-          }
+            if (e.getCode() == KeyCode.A) {
+              if (dPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+                player.setImage(leftCharacterIdle);
+                walkAnimationPlaying = false;
+              } else if (dPressed.get() == true) {
+                player.setImage(rightCharacterAnimation);
+              }
 
-          if (e.getCode() == KeyCode.S) {
-            sPressed.set(false);
-          }
+              aPressed.set(false);
+            }
 
-          if (e.getCode() == KeyCode.D) {
-            dPressed.set(false);
-          }
+            if (e.getCode() == KeyCode.S) {
+              if (player.getImage() == leftCharacterAnimation
+                  && wPressed.get() == false
+                  && aPressed.get() == false) {
+                player.setImage(leftCharacterIdle);
+                walkAnimationPlaying = false;
+              } else if (wPressed.get() == true) {
+                player.setImage(lastPlayedWalk);
+              } else if (aPressed.get() == false
+                  && dPressed.get() == false
+                  && wPressed.get() == false) {
+                player.setImage(rightCharacterIdle);
+                walkAnimationPlaying = false;
+              }
+              sPressed.set(false);
+            }
 
-          boolean isMovinng = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+            if (e.getCode() == KeyCode.D) {
+              if (aPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+                player.setImage(rightCharacterIdle);
+                walkAnimationPlaying = false;
+              } else if (aPressed.get() == true) {
+                player.setImage(leftCharacterAnimation);
+              }
+
+              dPressed.set(false);
+            }
+
+            boolean isMovinng = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
 
           // If we stopped moving and were before, stop the sound.
           if (!isMovinng && wasMoving) {
@@ -363,6 +483,7 @@ public class ExitController implements Initializable {
                   }
                 });
             pause.play();
+              }
           }
         });
   }
@@ -998,19 +1119,17 @@ public class ExitController implements Initializable {
   @FXML
   private void toggleSound(MouseEvent event) {
     if (GameState.isSoundEnabled) {
-      // Disable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.0); // Mute the media player
-      }
-      soundOff.setVisible(true);
-      soundOn.setVisible(false);
+        // Disable sound
+        if (App.mediaPlayer != null) {
+            App.mediaPlayer.setVolume(0.0); // Mute the media player
+        }
+        toggleSoundButton.setText("Enable Sound");
     } else {
-      // Enable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-      }
-      soundOn.setVisible(true);
-      soundOff.setVisible(false);
+        // Enable sound
+        if (App.mediaPlayer != null) {
+            App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+        }
+        toggleSoundButton.setText("Disable Sound");
     }
 
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
@@ -1028,5 +1147,38 @@ public class ExitController implements Initializable {
     translate.setAutoReverse(true);
 
     translate.play();
+  }
+
+  @FXML
+  public void clickGameMaster(MouseEvent event) {
+    aiWindowController.setVisible(true);
+    System.out.print("HI");
+  }
+
+  /** When the close image is clicked, greeting disappears. */
+  @FXML
+  private void clickClose(MouseEvent e) {
+    greeting.setVisible(false);
+    greetingBox.setVisible(false);
+    close.setVisible(false);
+    isGreetingShown = false;
+    black.setVisible(false);
+  }
+
+  /** After the player close the greeting, the character can move. */
+  private void enablePlayerMovement() {
+    Timer greetingTimer = new Timer(true);
+    greetingTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (!isGreetingShown) {
+              movementSetup();
+              greetingTimer.cancel();
+            }
+          }
+        },
+        0,
+        100);
   }
 }

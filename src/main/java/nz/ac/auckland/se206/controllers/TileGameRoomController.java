@@ -22,6 +22,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -88,6 +89,10 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private Rectangle wall19;
   @FXML private Rectangle wall20;
   @FXML private Rectangle blinkingRectangle;
+  @FXML private Rectangle greetingBox;
+  @FXML private Rectangle black;
+  @FXML private ImageView close;
+  @FXML private Label greeting;
   private FadeTransition fadeTransition;
   @FXML private ImageView soundOn;
   @FXML private ImageView soundOff;
@@ -96,6 +101,53 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   @FXML private Button toggleSoundButton;
   private MediaPlayer walkingMediaPlayer;
+
+  @FXML
+  Image rightCharacterAnimation =
+      new Image(
+          new File("src/main/resources/images/walkingRight.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image leftCharacterAnimation =
+      new Image(
+          new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image leftCharacterIdle =
+      new Image(
+          new File("src/main/resources/images/gameCharacterArtLeft.png").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image rightCharacterIdle =
+      new Image(
+          new File("src/main/resources/images/gameCharacterArtRight.png").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image lastPlayedWalk =
+      new Image(
+          new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  Boolean walkAnimationPlaying = false;
 
   // Add this variable to your class
   private Timeline alertBlinkTimeline;
@@ -109,6 +161,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private Pane aiWindowController;
 
   TranslateTransition translate = new TranslateTransition();
+
+  private boolean isGreetingShown = true;
 
   AnimationTimer collisionTimer =
       new AnimationTimer() {
@@ -186,7 +240,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     aiWindowController.setVisible(true);
 
     shapesize = player.getFitWidth();
-    movementSetup();
+    enablePlayerMovement();
 
     collisionTimer.start();
 
@@ -209,6 +263,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     fadeTransition.setAutoReverse(true); // Reverse the animation
     // Start the animation
     fadeTransition.play();
+    greeting.setWrapText(true);
+    greeting.setText(App.greetingInRoom2);
   }
 
   public void checkExit(ImageView player, Rectangle exit) {
@@ -220,8 +276,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
       pauseTransition.setOnFinished(
           event -> {
             // Adjust the player's position to be right in front of the room
-            player.setLayoutX(436);
-            player.setLayoutY(488);
+            player.setLayoutX(404);
+            player.setLayoutY(410);
             GameState.isPlayerInMap = true;
             GameState.isPlayerInRoom2 = false;
             GameState.hasHappend = false;
@@ -298,23 +354,42 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   // code for player movement using wasd keys
   @FXML
   public void movementSetup() {
+
     scene.setOnKeyPressed(
         e -> {
           boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
 
           if (e.getCode() == KeyCode.W) {
+            if (walkAnimationPlaying == false) {
+              player.setImage(lastPlayedWalk);
+              walkAnimationPlaying = true;
+            }
             wPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.A) {
+            if (player.getImage() != leftCharacterAnimation) {
+              player.setImage(leftCharacterAnimation);
+              walkAnimationPlaying = true;
+              lastPlayedWalk = player.getImage();
+            }
             aPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.S) {
+            if (walkAnimationPlaying == false) {
+              player.setImage(lastPlayedWalk);
+              walkAnimationPlaying = true;
+            }
             sPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.D) {
+            if (player.getImage() != rightCharacterAnimation) {
+              player.setImage(rightCharacterAnimation);
+              walkAnimationPlaying = true;
+              lastPlayedWalk = player.getImage();
+            }
             dPressed.set(true);
           }
 
@@ -331,18 +406,58 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
           boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
 
           if (e.getCode() == KeyCode.W) {
+            if (player.getImage() == leftCharacterAnimation
+                && sPressed.get() == false
+                && aPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (sPressed.get() == true) {
+              player.setImage(lastPlayedWalk);
+            } else if (aPressed.get() == false
+                && dPressed.get() == false
+                && sPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            }
             wPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.A) {
+            if (dPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (dPressed.get() == true) {
+              player.setImage(rightCharacterAnimation);
+            }
+
             aPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.S) {
+            if (player.getImage() == leftCharacterAnimation
+                && wPressed.get() == false
+                && aPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (wPressed.get() == true) {
+              player.setImage(lastPlayedWalk);
+            } else if (aPressed.get() == false
+                && dPressed.get() == false
+                && wPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            }
             sPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.D) {
+            if (aPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (aPressed.get() == true) {
+              player.setImage(leftCharacterAnimation);
+            }
+
             dPressed.set(false);
           }
 
@@ -492,6 +607,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
       if (App.mediaPlayer != null) {
         App.mediaPlayer.setVolume(0.0); // Mute the media player
       }
+      toggleSoundButton.setText("Enable Sound");
       soundOff.setVisible(true);
       soundOn.setVisible(false);
     } else {
@@ -526,5 +642,32 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     translate.setAutoReverse(true);
 
     translate.play();
+  }
+
+  /** When the close image is clicked, greeting disappears. */
+  @FXML
+  private void clickClose(MouseEvent e) {
+    greeting.setVisible(false);
+    greetingBox.setVisible(false);
+    close.setVisible(false);
+    isGreetingShown = false;
+    black.setVisible(false);
+  }
+
+  /** After the player close the greeting, the character can move. */
+  private void enablePlayerMovement() {
+    Timer greetingTimer = new Timer(true);
+    greetingTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (!isGreetingShown) {
+              movementSetup();
+              greetingTimer.cancel();
+            }
+          }
+        },
+        0,
+        100);
   }
 }

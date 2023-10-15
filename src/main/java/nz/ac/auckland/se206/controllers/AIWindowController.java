@@ -2,8 +2,6 @@ package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -46,18 +44,8 @@ public class AIWindowController {
   private String currentRoomName;
 
   public static ChatCompletionRequest chatCompletionRequest;
-  public static boolean isRiddleGiven = false;
 
   private AnimationTimer timer;
-
-  AnimationTimer collisionTimers =
-      new AnimationTimer() {
-        @Override
-        public void handle(long now) {
-          // if difficulty is selected, label is updated
-
-        }
-      };
 
   /**
    * Initializes the chat view, loading the riddle.
@@ -66,7 +54,7 @@ public class AIWindowController {
    */
   @FXML
   public void initialize() throws ApiProxyException {
-    detectDifficulty();
+    //detectDifficulty();
     // when the enter key is pressed, message is sent
     inputText.setOnKeyPressed(
         event -> {
@@ -113,42 +101,18 @@ public class AIWindowController {
         };
 
     timer.start();
-  }
+  
 
-  public void detectDifficulty() {
-    Timer labelTimer = new Timer(true);
-    labelTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            if (GameState.difficulty != null) {
-              if (GameState.difficulty == "MEDIUM") {
-                if (!isRiddleGiven) {
-                  chatCompletionRequest =
-                      new ChatCompletionRequest()
-                          .setN(1)
-                          .setTemperature(0.5)
-                          .setTopP(0.5)
-                          .setMaxTokens(100);
-                  isRiddleGiven = true;
-                }
-                if (GameState.numOfHints == 0) {
-                  labelTimer.cancel();
-                }
-              } else {
-                chatCompletionRequest =
-                    new ChatCompletionRequest()
-                        .setN(1)
-                        .setTemperature(0.5)
-                        .setTopP(0.5)
-                        .setMaxTokens(100);
-                labelTimer.cancel();
-              }
-            }
-          }
-        },
-        0,
-        500);
+    chatCompletionRequest =
+        new ChatCompletionRequest().setN(1).setTemperature(1).setTopP(1).setMaxTokens(100);
+    App.greetingInMap =
+        runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greeting()));
+    App.greetingInRoom1 =
+        runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom1()));
+    App.greetingInRoom2 =
+        runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom2()));
+    App.greetingInRoom3 =
+        runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom3()));
   }
 
   /**
@@ -199,13 +163,8 @@ public class AIWindowController {
               Choice result = chatCompletionResult.getChoices().iterator().next();
               chatCompletionRequest.addMessage(result.getChatMessage());
               appendChatMessage(result.getChatMessage());
-              // Check the correctness of player's answer for the riddle
               Platform.runLater(
                   () -> {
-                    if (result.getChatMessage().getRole().equals("assistant")
-                        && result.getChatMessage().getContent().startsWith("Correct")) {
-                      GameState.isRiddleResolved = true;
-                    }
                     if (result.getChatMessage().getRole().equals("assistant")
                         && result.getChatMessage().getContent().startsWith("Hint")) {
                       GameState.numOfHints--;
@@ -213,7 +172,6 @@ public class AIWindowController {
                   });
               return result.getChatMessage();
             } catch (ApiProxyException e) {
-              // TODO handle exception appropriately
               e.printStackTrace();
               return null;
             }
@@ -226,6 +184,26 @@ public class AIWindowController {
   }
 
   /**
+   * Runs the GPT model with a given chat message.
+   *
+   * @param msg the chat message to process
+   * @return the response chat message
+   * @throws ApiProxyException if there is an error communicating with the API proxy
+   */
+  private String runGptWithoutPrinting(ChatMessage msg) {
+    chatCompletionRequest.addMessage(msg);
+    try {
+      ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
+      Choice result = chatCompletionResult.getChoices().iterator().next();
+      chatCompletionRequest.addMessage(result.getChatMessage());
+      return result.getChatMessage().getContent();
+    } catch (ApiProxyException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  /**
    * Sends a message to the GPT model.
    *
    * @param event the action event triggered by the send button
@@ -234,17 +212,15 @@ public class AIWindowController {
    */
   @FXML
   private void onSendMessage(ActionEvent event) throws ApiProxyException, IOException {
-    soundButttonClick();
     String message = inputText.getText();
     if (message.trim().isEmpty()) {
       return;
     }
-
     inputText.clear();
+
     ChatMessage msg = new ChatMessage("user", message);
     appendChatMessage(msg);
 
-    // ChatMessage lastMsg = runGpt(msg);
     if (GameState.difficulty == "EASY") {
       robotThink();
       // Handle Easy difficulty

@@ -58,7 +58,6 @@ public class IntroController implements Initializable {
   @FXML private Label easy;
   @FXML private Label medium;
   @FXML private Label hard;
-  @FXML private Label title;
   @FXML private Label letter;
 
   @FXML private Rectangle black2;
@@ -75,6 +74,7 @@ public class IntroController implements Initializable {
   @FXML private boolean isTimeSelected = false;
 
   @FXML private Button toggleSoundButton;
+  @FXML private ImageView title;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {

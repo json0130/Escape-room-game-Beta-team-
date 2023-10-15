@@ -19,6 +19,7 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,6 +27,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -69,6 +71,8 @@ public class Room1Controller implements Initializable {
   @FXML private Rectangle crew2Collision;
   @FXML private Rectangle crew3Collision;
   @FXML private Rectangle crew4Collision;
+  @FXML private Rectangle greetingBox;
+  @FXML private Rectangle black;
 
   @FXML private Button btnCollect1;
   @FXML private Button btnCollect2;
@@ -90,6 +94,7 @@ public class Room1Controller implements Initializable {
   @FXML private ImageView crew2Indicator;
   @FXML private ImageView crew3Indicator;
   @FXML private ImageView crew4Indicator;
+  @FXML private ImageView close;
 
   @FXML private ImageView gameMaster;
 
@@ -97,6 +102,7 @@ public class Room1Controller implements Initializable {
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
   @FXML private Label clickLabel;
+  @FXML private Label greeting;
 
   @FXML private Button btnSend;
   @FXML private Button btnClose;
@@ -104,6 +110,53 @@ public class Room1Controller implements Initializable {
   @FXML private TextField inputText;
 
   @FXML public Pane aiWindowController;
+
+  @FXML
+  Image rightCharacterAnimation =
+      new Image(
+          new File("src/main/resources/images/walkingRight.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image leftCharacterAnimation =
+      new Image(
+          new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image leftCharacterIdle =
+      new Image(
+          new File("src/main/resources/images/gameCharacterArtLeft.png").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image rightCharacterIdle =
+      new Image(
+          new File("src/main/resources/images/gameCharacterArtRight.png").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image lastPlayedWalk =
+      new Image(
+          new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  Boolean walkAnimationPlaying = false;
 
   private FadeTransition fadeTransition;
   public static String riddleAnswer;
@@ -121,6 +174,8 @@ public class Room1Controller implements Initializable {
 
   private boolean nextToButton = false;
   private boolean hasHappend = false;
+
+  private boolean isGreetingShown = true;
 
   // timer for collsion check between monitor and walls
   AnimationTimer collisionTimer =
@@ -161,7 +216,6 @@ public class Room1Controller implements Initializable {
   public void initialize(URL url, ResourceBundle resource) {
     animateRobot();
     shapesize = player.getFitWidth();
-    movementSetup();
     alert.setVisible(false);
 
     aiWindowController.setVisible(true);
@@ -236,6 +290,24 @@ public class Room1Controller implements Initializable {
     revealIndicator();
 
     crewCollisionTimer.start();
+
+    greeting.setWrapText(true);
+    greeting.setText(App.greetingInRoom1);
+
+    enablePlayerMovement();
+    Task<Void> indicatorTask = new Task<Void>() {
+            @Override
+            protected Void call() {
+                moveIndicator(crew1Indicator);
+                moveIndicator(crew2Indicator);
+                moveIndicator(crew3Indicator);
+                moveIndicator(crew4Indicator);
+                return null;
+            }
+        };
+        Thread thread = new Thread(indicatorTask);
+        thread.setDaemon(true); 
+        thread.start();
   }
 
   // hide id and button and indicator at once
@@ -343,8 +415,8 @@ public class Room1Controller implements Initializable {
       pauseTransition.setOnFinished(
           event -> {
             // Adjust the player's position to be right in front of the room
-            player.setLayoutX(433);
-            player.setLayoutY(468);
+            player.setLayoutX(398);
+            player.setLayoutY(431);
             GameState.isPlayerInMap = true;
             GameState.isPlayerInRoom1 = false;
             // GameState.hasHappend = false;
@@ -409,23 +481,42 @@ public class Room1Controller implements Initializable {
   // code for player movement using wasd keys
   @FXML
   public void movementSetup() {
+
     scene.setOnKeyPressed(
         e -> {
           boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
 
           if (e.getCode() == KeyCode.W) {
+            if (walkAnimationPlaying == false) {
+              player.setImage(lastPlayedWalk);
+              walkAnimationPlaying = true;
+            }
             wPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.A) {
+            if (player.getImage() != leftCharacterAnimation) {
+              player.setImage(leftCharacterAnimation);
+              walkAnimationPlaying = true;
+              lastPlayedWalk = player.getImage();
+            }
             aPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.S) {
+            if (walkAnimationPlaying == false) {
+              player.setImage(lastPlayedWalk);
+              walkAnimationPlaying = true;
+            }
             sPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.D) {
+            if (player.getImage() != rightCharacterAnimation) {
+              player.setImage(rightCharacterAnimation);
+              walkAnimationPlaying = true;
+              lastPlayedWalk = player.getImage();
+            }
             dPressed.set(true);
           }
 
@@ -442,18 +533,58 @@ public class Room1Controller implements Initializable {
           boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
 
           if (e.getCode() == KeyCode.W) {
+            if (player.getImage() == leftCharacterAnimation
+                && sPressed.get() == false
+                && aPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (sPressed.get() == true) {
+              player.setImage(lastPlayedWalk);
+            } else if (aPressed.get() == false
+                && dPressed.get() == false
+                && sPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            }
             wPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.A) {
+            if (dPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (dPressed.get() == true) {
+              player.setImage(rightCharacterAnimation);
+            }
+
             aPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.S) {
+            if (player.getImage() == leftCharacterAnimation
+                && wPressed.get() == false
+                && aPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (wPressed.get() == true) {
+              player.setImage(lastPlayedWalk);
+            } else if (aPressed.get() == false
+                && dPressed.get() == false
+                && wPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            }
             sPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.D) {
+            if (aPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (aPressed.get() == true) {
+              player.setImage(leftCharacterAnimation);
+            }
+
             dPressed.set(false);
           }
 
@@ -687,5 +818,46 @@ public class Room1Controller implements Initializable {
     crew2Indicator.setVisible(true);
     crew3Indicator.setVisible(true);
     crew4Indicator.setVisible(true);
+  }
+
+  /** When the close image is clicked, greeting disappears. */
+  @FXML
+  private void clickClose(MouseEvent e) {
+    greeting.setVisible(false);
+    greetingBox.setVisible(false);
+    close.setVisible(false);
+    isGreetingShown = false;
+    black.setVisible(false);
+  }
+
+  /** After the player close the greeting, the character can move. */
+  private void enablePlayerMovement() {
+    Timer greetingTimer = new Timer(true);
+    greetingTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (!isGreetingShown) {
+              movementSetup();
+              greetingTimer.cancel();
+            }
+          }
+        },
+        0,
+        100);
+  }
+  /**
+   * Move indicator up and down.
+   *
+   * @param indicator
+   */
+  private void moveIndicator(ImageView indicator) {
+    TranslateTransition translate = new TranslateTransition();
+    translate.setNode(indicator);
+    translate.setDuration(Duration.millis(1000));
+    translate.setByY(-15);
+    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setAutoReverse(true);
+    translate.play();
   }
 }
