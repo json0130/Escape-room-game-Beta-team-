@@ -47,7 +47,7 @@
             <Image url="@../images/png-transparent-strange-meteorite-alien-stone-meteorite-thumbnail-removebg-preview.png" />
          </image>
       </ImageView>
-      <Button fx:id="skipButton" layoutX="1033.0" layoutY="580.0" mnemonicParsing="false" onAction="#skipTutorial" prefHeight="36.0" prefWidth="93.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 3px;" text="SKIP" textFill="WHITE">
+      <Button fx:id="skipButton" layoutX="1033.0" layoutY="580.0" mnemonicParsing="false" onAction="#skipTutorial" onMouseEntered="#enterSkip" onMouseExited="#exitSkip" prefHeight="36.0" prefWidth="93.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 3px;" text="SKIP" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="15.0" />
          </font></Button>
@@ -78,7 +78,7 @@
          </image>
       </ImageView>
       <Button fx:id="toggleSoundButton" layoutX="851.0" layoutY="69.0" mnemonicParsing="false" text="SETTING" visible="false" />
-      <Rectangle fx:id="gate1" arcHeight="5.0" arcWidth="5.0" fill="#9d9d9d" height="253.0" layoutX="508.0" layoutY="70.0" stroke="BLACK" strokeType="INSIDE" width="19.0" />
-      <Rectangle fx:id="gate2" arcHeight="5.0" arcWidth="5.0" fill="#9d9d9d" height="328.0" layoutX="508.0" layoutY="322.0" stroke="BLACK" strokeType="INSIDE" width="19.0" />
+      <Rectangle fx:id="gate1" arcHeight="5.0" arcWidth="5.0" fill="#9d9d9d" height="253.0" layoutX="508.0" layoutY="70.0" stroke="#9d9d9d" strokeType="INSIDE" width="19.0" />
+      <Rectangle fx:id="gate2" arcHeight="5.0" arcWidth="5.0" fill="#9d9d9d" height="328.0" layoutX="508.0" layoutY="322.0" stroke="#9d9d9d" strokeType="INSIDE" width="19.0" />
    </children>
 </Pane>

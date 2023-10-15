@@ -304,9 +304,9 @@ public class PlayerController implements Initializable {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(272);
             player.setLayoutY(336);
-            GameState.isPlayerInMap = false;
             GameState.isPlayerInRoom1 = true;
-            // GameState.hasHappend = false;
+            GameState.isPlayerInMap = false;
+            GameState.beenToRoom1 = true;
             App.setScene(AppUi.ROOM1);
           });
       pauseTransition.play();
@@ -327,8 +327,10 @@ public class PlayerController implements Initializable {
             // Adjust the player's position to be right in front of the room
             player.setLayoutX(500);
             player.setLayoutY(284);
-            GameState.isPlayerInMap = false;
+
             GameState.isPlayerInRoom2 = true;
+            GameState.isPlayerInMap = false;
+            GameState.beenToRoom2 = true;
             App.setScene(AppUi.TILEROOM);
           });
       pauseTransition.play();
@@ -364,6 +366,9 @@ public class PlayerController implements Initializable {
             player.setLayoutX(674);
             player.setLayoutY(292);
 
+            GameState.isPlayerInRoom3 = true;
+            GameState.isPlayerInMap = false;
+            GameState.beenToRoom3 = true;
             App.setScene(AppUi.ROOM3);
           });
       pauseTransition.play();
@@ -517,7 +522,7 @@ public class PlayerController implements Initializable {
                 }
               } else {
                 Platform.runLater(() -> updateLabels());
-                labelTimer.cancel();
+
               }
             }
           }

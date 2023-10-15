@@ -86,17 +86,17 @@
          </font>
       </Label>
       <Rectangle fx:id="header" arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1204.0" />
-      <Label fx:id="difficultyLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="109.0" layoutY="7.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
+      <Label fx:id="difficultyLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="258.0" layoutY="8.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
          <font>
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
-      <Label fx:id="hintLabel2" alignment="CENTER_RIGHT" layoutX="617.0" layoutY="6.0" prefHeight="37.0" prefWidth="96.0" text="HINTS" textFill="WHITE">
+      <Label fx:id="hintLabel2" alignment="CENTER_RIGHT" layoutX="863.0" layoutY="8.0" prefHeight="37.0" prefWidth="96.0" text="HINTS" textFill="WHITE">
          <font>
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
-      <Label fx:id="hintLabel" alignment="TOP_RIGHT" contentDisplay="CENTER" layoutX="369.0" layoutY="6.0" prefHeight="37.0" prefWidth="230.0" text="UNLIMITED" textFill="WHITE">
+      <Label fx:id="hintLabel" alignment="TOP_RIGHT" contentDisplay="CENTER" layoutX="618.0" layoutY="8.0" prefHeight="37.0" prefWidth="230.0" text="UNLIMITED" textFill="WHITE">
          <font>
             <Font name="Arial" size="32.0" />
          </font>

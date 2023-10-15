@@ -558,7 +558,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
                 // easy and hard, turn off just after difficulty selection
               } else {
                 Platform.runLater(() -> updateLabels());
-                labelTimer.cancel();
+  
               }
             }
           }

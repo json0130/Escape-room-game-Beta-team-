@@ -557,7 +557,7 @@ public class ExitController implements Initializable {
                 }
               } else {
                 Platform.runLater(() -> updateLabels());
-                labelTimer.cancel();
+
               }
             }
           }

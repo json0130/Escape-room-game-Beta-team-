@@ -507,5 +507,16 @@ public class TutorialController implements Initializable {
     }
 
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
-  }
+}
+
+@FXML
+private void enterSkip(MouseEvent e) {
+  skipButton.setStyle("-fx-background-color: white; -fx-text-fill: black;");
+}
+
+@FXML
+private void exitSkip(MouseEvent e) {
+  skipButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white;-fx-border-width: 3px;");
+}
+
 }
