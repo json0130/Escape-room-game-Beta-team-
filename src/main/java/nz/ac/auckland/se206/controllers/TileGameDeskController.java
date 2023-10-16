@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
@@ -149,17 +147,19 @@ public class TileGameDeskController {
     alert.setVisible(false); // Initially hide the alert label
     aiWindowController.setVisible(true);
 
-    animationTimeline = new Timeline(
-                new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        // Update animation based on the current time
-                        checkCollision2();
-                    }
-                })
-        );
-        animationTimeline.setCycleCount(Timeline.INDEFINITE);
-        animationTimeline.play();
+    animationTimeline =
+        new Timeline(
+            new KeyFrame(
+                Duration.millis(100),
+                new EventHandler<ActionEvent>() {
+                  @Override
+                  public void handle(ActionEvent event) {
+                    // Update animation based on the current time
+                    checkCollision2();
+                  }
+                }));
+    animationTimeline.setCycleCount(Timeline.INDEFINITE);
+    animationTimeline.play();
 
     // dialogueList.add("WHO DARES DISTURB MY SLUMBER!?!");
     dialogueList.add("Ahhh... Another treasure hunter who wishes to steal from me!");
@@ -187,7 +187,7 @@ public class TileGameDeskController {
   public void checkCollision2() {
     // Detect if the timer is 30 seconds left and start the alert blinking
     if (App.timerSeconds == 30) {
-      if (!hasHappend){
+      if (!hasHappend) {
         System.out.println("30 seconds left");
         hasHappend = true;
         setupAlertBlinking();
@@ -209,12 +209,24 @@ public class TileGameDeskController {
   // Modify your setupAlertBlinking method as follows
   private void setupAlertBlinking() {
     alert.setVisible(true); // Initially show the alert label
+    // Stop current playing media
+    App.mediaPlayer.stop();
+    // Check if sound is enabled before setting volume and playing.
+    if (GameState.isSoundEnabled) {
+      App.alertSoundPlayer.setVolume(0.01);
+    } else {
+      App.alertSoundPlayer.setVolume(0.0);
+    }
+    App.alertSoundPlayer.setAutoPlay(true);
+    App.alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    App.alertSoundPlayer.play();
 
     // Set up the blinking animation for the alert label
-    alertBlinkTimeline = new Timeline(
-        new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
-        new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false))
-    );
+    alertBlinkTimeline =
+        new Timeline(
+            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
+            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
+
     alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
     alertBlinkTimeline.play();
   }
@@ -222,8 +234,10 @@ public class TileGameDeskController {
   // Add a method to stop the alert blinking
   private void stopAlertBlinking() {
     if (alertBlinkTimeline != null) {
-        alertBlinkTimeline.stop();
-        alert.setVisible(false);
+      // Stop timeline and hide label
+      alertBlinkTimeline.stop();
+      alert.setVisible(false);
+      App.alertSoundPlayer.stop();
     }
   }
 
@@ -625,23 +639,20 @@ public class TileGameDeskController {
 
   @FXML
   private void toggleSound(MouseEvent event) {
-      if (GameState.isSoundEnabled) {
-          // Disable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.0); // Mute the media player
-          }
-          soundOff.setVisible(true);
-          soundOn.setVisible(false);
-      } else {
-          // Enable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-          }
-          soundOn.setVisible(true);
-          soundOff.setVisible(false);
-      }
-  
-      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+    GameState.isSoundEnabled = !GameState.isSoundEnabled;
+
+    double volume = GameState.isSoundEnabled ? 0.03 : 0;
+    if (App.mediaPlayer != null) {
+      App.mediaPlayer.setVolume(volume);
+    }
+
+    if (App.alertSoundPlayer != null) {
+      // If an Alert Sound Player exists, adjust its volume as well.
+      App.alertSoundPlayer.setVolume(volume);
+    }
+
+    soundOn.setVisible(GameState.isSoundEnabled);
+    soundOff.setVisible(!GameState.isSoundEnabled);
   }
 
   // game master animation

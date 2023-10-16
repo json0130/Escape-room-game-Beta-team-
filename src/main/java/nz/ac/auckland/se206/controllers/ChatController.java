@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -21,10 +23,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
@@ -55,11 +59,23 @@ public class ChatController {
 
   @FXML private ImageView soundOn;
   @FXML private ImageView soundOff;
+  private boolean hasHappened = false;
+
+  @FXML private Pane alert;
+  private Timeline alertBlinkTimeline;
 
   @FXML private Button toggleSoundButton;
 
   private ChatCompletionRequest chatCompletionRequest;
   public static boolean isRiddleGiven = false;
+
+  private AnimationTimer collisionTimer =
+      new AnimationTimer() {
+        @Override
+        public void handle(long now) {
+          checkCollision2();
+        }
+      };
 
   /**
    * Initializes the chat view, loading the riddle.
@@ -70,6 +86,8 @@ public class ChatController {
   public void initialize() throws ApiProxyException {
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
+    alert.setVisible(false);
+    collisionTimer.start();
 
     // when the enter key is pressed, message is sent
     inputText.setOnKeyPressed(
@@ -114,6 +132,28 @@ public class ChatController {
         500);
   }
 
+  public void checkCollision2() {
+    if (App.timerSeconds == 30) {
+      if (!hasHappened) {
+        System.out.println("30 seconds left");
+        hasHappened = true;
+        setupAlertBlinking();
+      }
+    } else if (App.timerSeconds == 0) {
+      // Stop the alert blinking when the timer reaches 0
+      stopAlertBlinking();
+    }
+
+    // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
+    }
+  }
+
   /**
    * Appends a chat message to the chat text area.
    *
@@ -140,7 +180,6 @@ public class ChatController {
     chatContainer.getChildren().addAll(hBox);
     chatContainer.setAlignment(Pos.TOP_CENTER);
     chatPane.vvalueProperty().bind(chatContainer.heightProperty());
-
   }
 
   /**
@@ -270,8 +309,6 @@ public class ChatController {
     riddleGreeting.setVisible(true);
   }
 
-  
-
   // update labels for difficulty and hints as the game progress
   private void updateLabels() {
     if (GameState.difficulty == "EASY") {
@@ -328,24 +365,55 @@ public class ChatController {
     robotThink.setVisible(false);
   }
 
+  // Modify your setupAlertBlinking method as follows
+  private void setupAlertBlinking() {
+    alert.setVisible(true); // Initially show the alert label
+    // Stop current playing media
+    App.mediaPlayer.stop();
+    // Check if sound is enabled before setting volume and playing.
+    if (GameState.isSoundEnabled) {
+      App.alertSoundPlayer.setVolume(0.03);
+    } else {
+      App.alertSoundPlayer.setVolume(0.0);
+    }
+    App.alertSoundPlayer.setAutoPlay(true);
+    App.alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    App.alertSoundPlayer.play();
+
+    // Set up the blinking animation for the alert label
+    alertBlinkTimeline =
+        new Timeline(
+            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
+            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
+
+    alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
+    alertBlinkTimeline.play();
+  }
+
+  // Add a method to stop the alert blinking
+  private void stopAlertBlinking() {
+    if (alertBlinkTimeline != null) {
+      // Stop timeline and hide label
+      alertBlinkTimeline.stop();
+      App.alertSoundPlayer.stop();
+    }
+  }
+
   @FXML
   private void toggleSound(MouseEvent event) {
-    if (GameState.isSoundEnabled) {
-      // Disable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.0); // Mute the media player
-      }
-      soundOff.setVisible(true);
-      soundOn.setVisible(false);
-    } else {
-      // Enable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-      }
-      soundOn.setVisible(true);
-      soundOff.setVisible(false);
+    GameState.isSoundEnabled = !GameState.isSoundEnabled;
+
+    double volume = GameState.isSoundEnabled ? 0.03 : 0;
+    if (App.mediaPlayer != null) {
+      App.mediaPlayer.setVolume(volume);
     }
 
-    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+    if (App.alertSoundPlayer != null) {
+      // If an Alert Sound Player exists, adjust its volume as well.
+      App.alertSoundPlayer.setVolume(volume);
+    }
+
+    soundOn.setVisible(GameState.isSoundEnabled);
+    soundOff.setVisible(!GameState.isSoundEnabled);
   }
 }

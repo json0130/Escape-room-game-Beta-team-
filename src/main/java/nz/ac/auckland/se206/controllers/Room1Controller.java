@@ -656,7 +656,6 @@ public class Room1Controller implements Initializable {
                 }
               } else {
                 Platform.runLater(() -> updateLabels());
-      
               }
             }
           }
@@ -668,12 +667,24 @@ public class Room1Controller implements Initializable {
   // Modify your setupAlertBlinking method as follows
   private void setupAlertBlinking() {
     alert.setVisible(true); // Initially show the alert label
+    // Stop current playing media
+    App.mediaPlayer.stop();
+    // Check if sound is enabled before setting volume and playing.
+    if (GameState.isSoundEnabled) {
+      App.alertSoundPlayer.setVolume(0.03);
+    } else {
+      App.alertSoundPlayer.setVolume(0.0);
+    }
+    App.alertSoundPlayer.setAutoPlay(true);
+    App.alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    App.alertSoundPlayer.play();
 
     // Set up the blinking animation for the alert label
     alertBlinkTimeline =
         new Timeline(
             new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
             new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
+
     alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
     alertBlinkTimeline.play();
   }
@@ -681,8 +692,10 @@ public class Room1Controller implements Initializable {
   // Add a method to stop the alert blinking
   private void stopAlertBlinking() {
     if (alertBlinkTimeline != null) {
+      // Stop timeline and hide label
       alertBlinkTimeline.stop();
       alert.setVisible(false);
+      App.alertSoundPlayer.stop();
     }
   }
 
@@ -762,23 +775,22 @@ public class Room1Controller implements Initializable {
 
   @FXML
   private void toggleSound(MouseEvent event) {
-    if (GameState.isSoundEnabled) {
-      // Disable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.0); // Mute the media player
-      }
-      soundOff.setVisible(true);
-      soundOn.setVisible(false);
-    } else {
-      // Enable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-      }
-      soundOn.setVisible(true);
-      soundOff.setVisible(false);
+    GameState.isSoundEnabled = !GameState.isSoundEnabled;
+
+    double volume = GameState.isSoundEnabled ? 0.03 : 0;
+    double volume1 = GameState.isSoundEnabled ? 0.01 : 0;
+
+    if (App.mediaPlayer != null) {
+      App.mediaPlayer.setVolume(volume);
     }
 
-    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+    if (App.alertSoundPlayer != null) {
+      // If an Alert Sound Player exists, adjust its volume as well.
+      App.alertSoundPlayer.setVolume(volume1);
+    }
+
+    soundOn.setVisible(GameState.isSoundEnabled);
+    soundOff.setVisible(!GameState.isSoundEnabled);
   }
 
   @FXML
@@ -896,36 +908,43 @@ public class Room1Controller implements Initializable {
     } catch (Exception e) {
       // TODO: handle exception
     }
-
   }
+
   @FXML
   private void enterCollect1(MouseEvent e) {
     btnCollect1.setStyle("-fx-background-color:grey; -fx-text-fill: white");
   }
+
   @FXML
   private void exitCollect1(MouseEvent e) {
     btnCollect1.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
   }
+
   @FXML
   private void enterCollect2(MouseEvent e) {
     btnCollect2.setStyle("-fx-background-color:grey; -fx-text-fill: white");
   }
+
   @FXML
   private void exitCollect2(MouseEvent e) {
     btnCollect2.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
   }
+
   @FXML
   private void enterCollect3(MouseEvent e) {
     btnCollect3.setStyle("-fx-background-color:grey; -fx-text-fill: white");
   }
+
   @FXML
   private void exitCollect3(MouseEvent e) {
     btnCollect3.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
   }
+
   @FXML
   private void enterCollect4(MouseEvent e) {
     btnCollect4.setStyle("-fx-background-color:grey; -fx-text-fill: white");
   }
+
   @FXML
   private void exitCollect4(MouseEvent e) {
     btnCollect4.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");

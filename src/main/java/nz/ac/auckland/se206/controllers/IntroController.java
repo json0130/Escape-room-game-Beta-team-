@@ -1,7 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
@@ -73,7 +72,8 @@ public class IntroController implements Initializable {
   @FXML private boolean isLevelSelected = false;
   @FXML private boolean isTimeSelected = false;
 
-  private MediaPlayer alertSoundPlayer;
+  @FXML private Rectangle grey2;
+  @FXML private Button resetButton1;
 
   @FXML private Button toggleSoundButton;
   @FXML private ImageView title;
@@ -354,13 +354,12 @@ public class IntroController implements Initializable {
         Media media = new Media(new File(musicFile).toURI().toString());
         // Stop current playing media
         App.mediaPlayer.stop();
-
         // Create new media player for alert sound
         App.mediaPlayer = new MediaPlayer(media);
 
         // Check if sound is enabled before setting volume and playing.
         if (GameState.isSoundEnabled) {
-          App.mediaPlayer.setVolume(0.04);
+          App.mediaPlayer.setVolume(0.2);
           App.mediaPlayer.setAutoPlay(true);
           App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         }
@@ -372,6 +371,7 @@ public class IntroController implements Initializable {
     }
   }
 
+  @FXML
   private void loseTextToSpeech() {
     // This is the text to speech for the lose scene.
     Task<Void> introTask =
@@ -480,32 +480,5 @@ public class IntroController implements Initializable {
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
-  }
-
-  @FXML
-  private void restartClicked(ActionEvent event) throws IOException {
-    black2.setVisible(true);
-    resetBox.setVisible(true);
-    resetLabel.setVisible(true);
-    resetYes.setVisible(true);
-    resetCancel.setVisible(true);
-  }
-
-  @FXML
-  private void restartCanceled(ActionEvent event) throws IOException {
-    black2.setVisible(false);
-    resetBox.setVisible(false);
-    resetLabel.setVisible(false);
-    resetYes.setVisible(false);
-    resetCancel.setVisible(false);
-  }
-
-  @FXML
-  private void reset(ActionEvent event) throws IOException {
-    try {
-      GameState.resetGames();
-    } catch (Exception e) {
-      // TODO: handle exception
-    }
   }
 }

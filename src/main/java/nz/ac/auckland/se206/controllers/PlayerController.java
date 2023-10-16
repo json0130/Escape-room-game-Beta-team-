@@ -131,8 +131,6 @@ public class PlayerController implements Initializable {
 
   @FXML private MediaPlayer walkingMediaPlayer;
 
-  @FXML private MediaPlayer alertSoundPlayer;
-
   private AnimationTimer collisionTimer =
       new AnimationTimer() {
         @Override
@@ -244,8 +242,8 @@ public class PlayerController implements Initializable {
     // if difficulty is selected, label is updated
     detectDifficulty();
 
-    greeting.setWrapText(true);
-    greeting.setText(App.greetingInMap);
+    // greeting.setWrapText(true);
+    // greeting.setText(App.greetingInMap);
   }
 
   @FXML
@@ -257,25 +255,17 @@ public class PlayerController implements Initializable {
   // Modify your setupAlertBlinking method as follows
   private void setupAlertBlinking() {
     alert.setVisible(true); // Initially show the alert label
-    String musicFile;
-    musicFile = "src/main/resources/sounds/alert.mp3";
-    App.musicType = "final";
-    Media media = new Media(new File(musicFile).toURI().toString());
-
     // Stop current playing media
     App.mediaPlayer.stop();
-
-    // Create a new MediaPlayer specifically for the alert sound
-    alertSoundPlayer = new MediaPlayer(media);
-
     // Check if sound is enabled before setting volume and playing.
     if (GameState.isSoundEnabled) {
-      alertSoundPlayer.setVolume(0.04);
+      App.alertSoundPlayer.setVolume(0.03);
     } else {
-      alertSoundPlayer.setVolume(0.0);
+      App.alertSoundPlayer.setVolume(0.0);
     }
-    alertSoundPlayer.setAutoPlay(true);
-    alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    App.alertSoundPlayer.setAutoPlay(true);
+    App.alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    App.alertSoundPlayer.play();
 
     // Set up the blinking animation for the alert label
     alertBlinkTimeline =
@@ -292,12 +282,7 @@ public class PlayerController implements Initializable {
     if (alertBlinkTimeline != null) {
       // Stop timeline and hide label
       alertBlinkTimeline.stop();
-
-      // Stop and clean up the Alert Sound Player as well.
-      if (alertSoundPlayer != null) {
-        alertSoundPlayer.stop();
-        alertSoundPlayer.dispose();
-      }
+      App.alertSoundPlayer.stop();
     }
   }
 
@@ -537,7 +522,6 @@ public class PlayerController implements Initializable {
                 }
               } else {
                 Platform.runLater(() -> updateLabels());
-
               }
             }
           }
@@ -613,15 +597,14 @@ public class PlayerController implements Initializable {
   private void toggleSound(MouseEvent event) {
     GameState.isSoundEnabled = !GameState.isSoundEnabled;
 
-    double volume = GameState.isSoundEnabled ? 0.05 : 0;
-
+    double volume = GameState.isSoundEnabled ? 0.03 : 0;
     if (App.mediaPlayer != null) {
       App.mediaPlayer.setVolume(volume);
     }
 
-    if (alertSoundPlayer != null) {
+    if (App.alertSoundPlayer != null) {
       // If an Alert Sound Player exists, adjust its volume as well.
-      alertSoundPlayer.setVolume(volume);
+      App.alertSoundPlayer.setVolume(volume);
     }
 
     soundOn.setVisible(GameState.isSoundEnabled);

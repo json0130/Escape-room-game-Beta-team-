@@ -229,17 +229,17 @@ public class ExitController implements Initializable {
     alert.setVisible(false); // Initially hide the alert label
     aiWindowController.setVisible(true);
 
-    // black2.setVisible(false);
-    // resetBox.setVisible(false);
-    // resetLabel.setVisible(false);
-    // resetYes.setVisible(false);
-    // resetCancel.setVisible(false);
-
     // if difficulty is selected, label is updated
     detectDifficulty();
 
     walls.add(wall);
     walls.add(wall1);
+
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
 
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
@@ -283,8 +283,8 @@ public class ExitController implements Initializable {
     // if difficulty is selected, label is updated
     detectDifficulty();
 
-    greeting.setWrapText(true);
-    greeting.setText(App.greetingInRoom3);
+    // greeting.setWrapText(true);
+    // greeting.setText(App.greetingInRoom3);
   }
 
   // if the charcter collides rectangle for exit, scene changes back to map
@@ -343,12 +343,23 @@ public class ExitController implements Initializable {
   // Modify your setupAlertBlinking method as follows
   private void setupAlertBlinking() {
     alert.setVisible(true); // Initially show the alert label
+    App.mediaPlayer.stop();
+    // Check if sound is enabled before setting volume and playing.
+    if (GameState.isSoundEnabled) {
+      App.alertSoundPlayer.setVolume(0.03);
+    } else {
+      App.alertSoundPlayer.setVolume(0.0);
+    }
+    App.alertSoundPlayer.setAutoPlay(true);
+    App.alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    App.alertSoundPlayer.play();
 
     // Set up the blinking animation for the alert label
     alertBlinkTimeline =
         new Timeline(
             new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
             new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
+
     alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
     alertBlinkTimeline.play();
   }
@@ -356,8 +367,10 @@ public class ExitController implements Initializable {
   // Add a method to stop the alert blinking
   private void stopAlertBlinking() {
     if (alertBlinkTimeline != null) {
+      // Stop timeline and hide label
       alertBlinkTimeline.stop();
       alert.setVisible(false);
+      App.alertSoundPlayer.stop();
     }
   }
 
@@ -571,7 +584,6 @@ public class ExitController implements Initializable {
                 }
               } else {
                 Platform.runLater(() -> updateLabels());
-
               }
             }
           }
@@ -975,23 +987,7 @@ public class ExitController implements Initializable {
 
   private void endingMediaChange() {
     // Wait for 2 second and change the media
-    if (GameState.isSoundEnabled) {
-      System.out.println("sound is off");
-      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(1.0));
-      pauseTransition.setOnFinished(
-          event -> {
-            System.out.println("sound is off2");
-            String musicFile;
-            musicFile = "src/main/resources/sounds/final.mp3";
-            App.musicType = "final";
-            Media media = new Media(new File(musicFile).toURI().toString());
-            App.mediaPlayer.stop();
-            App.mediaPlayer = new MediaPlayer(media);
-            App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            App.mediaPlayer.setVolume(0.1);
-            App.mediaPlayer.setAutoPlay(true);
-          });
-    }
+    App.alertSoundPlayer.stop();
   }
 
   // update the labels of hint and difficulty as the game progresses
@@ -1133,21 +1129,20 @@ public class ExitController implements Initializable {
 
   @FXML
   private void toggleSound(MouseEvent event) {
-    if (GameState.isSoundEnabled) {
-      // Disable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.0); // Mute the media player
-      }
-      toggleSoundButton.setText("Enable Sound");
-    } else {
-      // Enable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-      }
-      toggleSoundButton.setText("Disable Sound");
+    GameState.isSoundEnabled = !GameState.isSoundEnabled;
+
+    double volume = GameState.isSoundEnabled ? 0.03 : 0;
+    if (App.mediaPlayer != null) {
+      App.mediaPlayer.setVolume(volume);
     }
 
-    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+    if (App.alertSoundPlayer != null) {
+      // If an Alert Sound Player exists, adjust its volume as well.
+      App.alertSoundPlayer.setVolume(volume);
+    }
+
+    soundOn.setVisible(GameState.isSoundEnabled);
+    soundOff.setVisible(!GameState.isSoundEnabled);
   }
 
   // game master robot animation
@@ -1195,6 +1190,15 @@ public class ExitController implements Initializable {
         },
         0,
         100);
+  }
+
+  @FXML
+  private void restartClicked(ActionEvent event) throws IOException {
+    black2.setVisible(true);
+    resetBox.setVisible(true);
+    resetLabel.setVisible(true);
+    resetYes.setVisible(true);
+    resetCancel.setVisible(true);
   }
 
   @FXML
