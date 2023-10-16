@@ -7,19 +7,15 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import nz.ac.auckland.se206.App;
@@ -44,8 +40,6 @@ public class AIWindowController {
 
   @FXML private Pane aiPane;
   @FXML private ImageView closeWindow;
-  @FXML private ScrollPane chatPane;
-  @FXML private VBox chatContainer;
 
   private nz.ac.auckland.se206.chatHistory chatHistory;
   private String currentRoomName;
@@ -115,43 +109,43 @@ public class AIWindowController {
     // App.greetingInRoom3 =
     //     runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom3()));
 
-    App.chatBubbleList.addListener(
-        new ListChangeListener<ChatBubble>() {
-          public void onChanged(Change<? extends ChatBubble> c) {
-            while (c.next()) {
-              if (c.wasPermutated()) {
-                // handle permutation
-              } else if (c.wasUpdated()) {
-                // handle update
-              } else {
-                for (ChatBubble removedItem : c.getRemoved()) {
-                  System.out.println("Removed: " + removedItem);
-                }
-                for (ChatBubble addedItem : c.getAddedSubList()) {
-                  Platform.runLater(
-                      () -> {
-                        chatContainer
-                            .getChildren()
-                            .addAll(
-                                App.chatBubbleList
-                                    .get(App.chatBubbleList.size() - 1)
-                                    .getBubbleBox());
-                        chatContainer.setAlignment(Pos.TOP_CENTER);
-                        chatPane.vvalueProperty().bind(chatContainer.heightProperty());
-                        System.out.println(
-                            "Added: "
-                                + App.chatBubbleList
-                                    .get(App.chatBubbleList.size() - 1)
-                                    .getBubbleText()
-                                    .getText()
-                                + " "
-                                + this.getClass().getSimpleName());
-                      });
-                }
-              }
-            }
-          }
-        });
+    // App.chatBubbleList.addListener(
+    //     new ListChangeListener<ChatBubble>() {
+    //       public void onChanged(Change<? extends ChatBubble> c) {
+    //         while (c.next()) {
+    //           if (c.wasPermutated()) {
+    //             // handle permutation
+    //           } else if (c.wasUpdated()) {
+    //             // handle update
+    //           } else {
+    //             for (ChatBubble removedItem : c.getRemoved()) {
+    //               System.out.println("Removed: " + removedItem);
+    //             }
+    //             for (ChatBubble addedItem : c.getAddedSubList()) {
+    //               Platform.runLater(
+    //                   () -> {
+    //                     chatContainer
+    //                         .getChildren()
+    //                         .addAll(
+    //                             App.chatBubbleList
+    //                                 .get(App.chatBubbleList.size() - 1)
+    //                                 .getBubbleBox());
+    //                     chatContainer.setAlignment(Pos.TOP_CENTER);
+    //                     chatPane.vvalueProperty().bind(chatContainer.heightProperty());
+    //                     System.out.println(
+    //                         "Added: "
+    //                             + App.chatBubbleList
+    //                                 .get(App.chatBubbleList.size() - 1)
+    //                                 .getBubbleText()
+    //                                 .getText()
+    //                             + " "
+    //                             + this.getClass().getSimpleName());
+    //                   });
+    //             }
+    //           }
+    //         }
+    //       }
+    //     });
   }
 
   /**
@@ -200,12 +194,25 @@ public class AIWindowController {
     //       "-fx-background-color: lightyellow; -fx-background-radius: 10;-fx-padding:
     // 10,20,20,10;");
     // }
-    ChatBubble newMessage = new ChatBubble(msg);
-    chatPane.vvalueProperty().bind(chatContainer.heightProperty());
-    App.chatBubbleList.add(newMessage);
+    ChatBubble newMessage1 = new ChatBubble(msg);
+    ChatBubble newMessage2 = new ChatBubble(msg);
+    ChatBubble newMessage3 = new ChatBubble(msg);
+    ChatBubble newMessage4 = new ChatBubble(msg);
+    ChatBubble newMessage5 = new ChatBubble(msg);
+    ChatBubble newMessage6 = new ChatBubble(msg);
+
+    App.chatBubbleList.add(newMessage1);
+    PlayerController.chatBubbleListPlayer.add(newMessage2);
+    Room1Controller.chatBubbleListRoom1.add(newMessage3);
+    TileGameRoomController.chatBubbleListTileRoom.add(newMessage4);
+    TileGameDeskController.chatBubbleListTileDesk.add(newMessage5);
+    ExitController.chatBubbleListExit.add(newMessage6);
     System.out.println(
         "Appended: "
-            + App.chatBubbleList.get(App.chatBubbleList.size() - 1).getBubbleText().getText());
+            + App.chatBubbleList
+                .get(PlayerController.chatBubbleListPlayer.size() - 1)
+                .getBubbleText()
+                .getText());
   }
 
   /**
@@ -368,7 +375,6 @@ public class AIWindowController {
     robotBase.setVisible(true);
     robotReply.setVisible(false);
     robotThink.setVisible(false);
-    chatTextArea.setText(App.aiWindow);
   }
 
   @FXML

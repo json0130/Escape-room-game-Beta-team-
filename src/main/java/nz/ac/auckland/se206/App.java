@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -37,7 +38,10 @@ public class App extends Application {
       "Hello! I'm EVA. Your personal AI Assistant. We're in a bit of an"
           + " emergency so if you have any questions on what you need to do, I'm here to help!"
           + " \n\n";
+
+  @FXML
   public static ObservableList<ChatBubble> chatBubbleList = FXCollections.observableArrayList();
+
   public static VBox globalChatContainer = new VBox();
   public static String greetingInMap;
   public static String greetingInRoom1;

@@ -23,10 +23,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Circle;
@@ -68,7 +70,9 @@ public class TutorialController implements Initializable {
   @FXML private ImageView soundOff;
   @FXML private Rectangle box;
   @FXML private Rectangle gate1;
-  @FXML private Rectangle gate2; 
+  @FXML private Rectangle gate2;
+  @FXML private ScrollPane chatPaneOne;
+  @FXML private VBox chatContainerOne;
 
   // sound for rocket movement
   String soundEffect = "src/main/resources/sounds/rocket.mp3";
@@ -170,16 +174,16 @@ public class TutorialController implements Initializable {
       animateGates();
       isInstructionDone = true;
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.0));
-          pauseTransition.setOnFinished(
-              events -> {
-                // Adjust the player's position to be right in front of the room
-                playRock();
-                box.setVisible(false);
-                gate1.setVisible(false);
-                gate2.setVisible(false);
-                sentenceLabel.setVisible(false);
-              });
-          pauseTransition.play();
+      pauseTransition.setOnFinished(
+          events -> {
+            // Adjust the player's position to be right in front of the room
+            playRock();
+            box.setVisible(false);
+            gate1.setVisible(false);
+            gate2.setVisible(false);
+            sentenceLabel.setVisible(false);
+          });
+      pauseTransition.play();
     }
   }
 
@@ -192,14 +196,13 @@ public class TutorialController implements Initializable {
     TranslateTransition upTransition = new TranslateTransition(Duration.seconds(2), gate1);
     upTransition.setByY(-250);
     upTransition.play();
-}
+  }
 
-private void animateGate2UpAndDown() {
+  private void animateGate2UpAndDown() {
     TranslateTransition downTransition = new TranslateTransition(Duration.seconds(2), gate2);
     downTransition.setByY(250);
     downTransition.play();
-}
-
+  }
 
   private void setRotate(Circle c, boolean reverse, int angle, int duration) {
     RotateTransition rt = new RotateTransition(Duration.seconds(duration), c);
@@ -354,13 +357,13 @@ private void animateGate2UpAndDown() {
   }
 
   public void checkCollision1(ImageView player, Rectangle box) {
-    if(!isInstructionDone){
+    if (!isInstructionDone) {
       if (player.getBoundsInParent().intersects(box.getBoundsInParent())) {
-      player.setLayoutX(previousX);
-      player.setLayoutY(previousY);
+        player.setLayoutX(previousX);
+        player.setLayoutY(previousY);
       }
     }
-    
+
     // Initialize sound images based on the initial isSoundEnabled state
     if (GameState.isSoundEnabled) {
       soundOn.setVisible(true);
@@ -458,24 +461,23 @@ private void animateGate2UpAndDown() {
   }
 
   @FXML
-private void toggleSound(MouseEvent event) {
+  private void toggleSound(MouseEvent event) {
     if (GameState.isSoundEnabled) {
-        // Disable sound
-        if (App.mediaPlayer != null) {
-            App.mediaPlayer.setVolume(0.0); // Mute the media player
-        }
-        soundOff.setVisible(true);
-        soundOn.setVisible(false);
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
+      }
+      soundOff.setVisible(true);
+      soundOn.setVisible(false);
     } else {
-        // Enable sound
-        if (App.mediaPlayer != null) {
-            App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-        }
-        soundOn.setVisible(true);
-        soundOff.setVisible(false);
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
     }
 
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
-}
-
+  }
 }

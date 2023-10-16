@@ -17,23 +17,30 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
@@ -43,6 +50,8 @@ public class PlayerController implements Initializable {
 
   public static boolean hintContained = false;
   public static boolean answerContained = false;
+  public static ObservableList<ChatBubble> chatBubbleListPlayer =
+      FXCollections.observableArrayList();
 
   private BooleanProperty wPressed = new SimpleBooleanProperty();
   private BooleanProperty aPressed = new SimpleBooleanProperty();
@@ -109,6 +118,8 @@ public class PlayerController implements Initializable {
 
   @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
+  @FXML private ScrollPane chatPane;
+  @FXML private VBox chatContainer;
 
   private double previousX;
   private double previousY;
@@ -142,7 +153,6 @@ public class PlayerController implements Initializable {
           checkRoom1(player, room1);
           checkRoom2(player, room2);
           checkRoom3(player, room3);
-          
         }
       };
 
@@ -231,6 +241,66 @@ public class PlayerController implements Initializable {
     // if difficulty is selected, label is updated
     detectDifficulty();
     movementSetup();
+
+    // App.chatBubbleList.addListener(
+    //     new ListChangeListener<ChatBubble>() {
+    //       public void onChanged(Change<? extends ChatBubble> c) {
+    //         while (c.next()) {
+    //           if (c.wasPermutated()) {
+    //             // handle permutation
+    //           } else if (c.wasUpdated()) {
+    //             // handle update
+    //           } else {
+    //             for (ChatBubble removedItem : c.getRemoved()) {
+    //               System.out.println("Removed: " + removedItem);
+    //             }
+    //             for (ChatBubble addedItem : c.getAddedSubList()) {
+    //               Platform.runLater(
+    //                   () -> {
+    //                     chatContainer
+    //                         .getChildren()
+    //                         .addAll(
+    //                             App.chatBubbleList
+    //                                 .get(App.chatBubbleList.size() - 1)
+    //                                 .getBubbleBox());
+    //                     chatContainer.setAlignment(Pos.TOP_CENTER);
+    //                     chatPane.vvalueProperty().bind(chatContainer.heightProperty());
+    //                     System.out.println(
+    //                         "Added: "
+    //                             + App.chatBubbleList
+    //                                 .get(App.chatBubbleList.size() - 1)
+    //                                 .getBubbleText()
+    //                                 .getText()
+    //                             + " "
+    //                             + this.getClass().getSimpleName());
+    //                   });
+    //             }
+    //           }
+    //         }
+    //       }
+    //     });
+
+    ListChangeListener<ChatBubble> listener2 =
+        change -> {
+          Platform.runLater(
+              () -> {
+                chatContainer
+                    .getChildren()
+                    .addAll(
+                        chatBubbleListPlayer.get(chatBubbleListPlayer.size() - 1).getBubbleBox());
+                chatContainer.setAlignment(Pos.TOP_CENTER);
+                chatPane.vvalueProperty().bind(chatContainer.heightProperty());
+                System.out.println(
+                    "Added: "
+                        + chatBubbleListPlayer
+                            .get(chatBubbleListPlayer.size() - 1)
+                            .getBubbleText()
+                            .getText()
+                        + " "
+                        + this.getClass().getSimpleName());
+              });
+        };
+    chatBubbleListPlayer.addListener(listener2);
   }
 
   // Modify your setupAlertBlinking method as follows

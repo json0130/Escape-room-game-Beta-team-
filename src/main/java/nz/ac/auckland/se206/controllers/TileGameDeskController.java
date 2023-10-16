@@ -5,27 +5,33 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.LetterGenerator;
 import nz.ac.auckland.se206.SceneManager.AppUi;
@@ -43,6 +49,9 @@ import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
  * well as animations for different props within the scene.
  */
 public class TileGameDeskController {
+
+  public static ObservableList<ChatBubble> chatBubbleListTileDesk =
+      FXCollections.observableArrayList();
 
   public static String riddleAnswer;
 
@@ -132,6 +141,8 @@ public class TileGameDeskController {
   @FXML private Button leaveComputerButton;
   @FXML private ImageView powerButton;
   @FXML private ImageView gameMaster;
+  @FXML private ScrollPane chatPaneOne;
+  @FXML private VBox chatContainerOne;
 
   private Timeline animationTimeline;
   @FXML public Pane aiWindowController;
@@ -149,17 +160,19 @@ public class TileGameDeskController {
     alert.setVisible(false); // Initially hide the alert label
     aiWindowController.setVisible(true);
 
-    animationTimeline = new Timeline(
-                new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        // Update animation based on the current time
-                        checkCollision2();
-                    }
-                })
-        );
-        animationTimeline.setCycleCount(Timeline.INDEFINITE);
-        animationTimeline.play();
+    animationTimeline =
+        new Timeline(
+            new KeyFrame(
+                Duration.millis(100),
+                new EventHandler<ActionEvent>() {
+                  @Override
+                  public void handle(ActionEvent event) {
+                    // Update animation based on the current time
+                    checkCollision2();
+                  }
+                }));
+    animationTimeline.setCycleCount(Timeline.INDEFINITE);
+    animationTimeline.play();
 
     // dialogueList.add("WHO DARES DISTURB MY SLUMBER!?!");
     dialogueList.add("Ahhh... Another treasure hunter who wishes to steal from me!");
@@ -182,12 +195,36 @@ public class TileGameDeskController {
     System.out.println(riddleAnswer);
 
     wordText.setText(riddleAnswer);
+
+    ListChangeListener<ChatBubble> listener3 =
+        change -> {
+          Platform.runLater(
+              () -> {
+                chatContainerOne
+                    .getChildren()
+                    .addAll(
+                        chatBubbleListTileDesk
+                            .get(chatBubbleListTileDesk.size() - 1)
+                            .getBubbleBox());
+                chatContainerOne.setAlignment(Pos.TOP_RIGHT);
+                chatPaneOne.vvalueProperty().bind(chatContainerOne.heightProperty());
+                System.out.println(
+                    "Added: "
+                        + chatBubbleListTileDesk
+                            .get(chatBubbleListTileDesk.size() - 1)
+                            .getBubbleText()
+                            .getText()
+                        + " "
+                        + this.getClass().getSimpleName());
+              });
+        };
+    chatBubbleListTileDesk.addListener(listener3);
   }
 
   public void checkCollision2() {
     // Detect if the timer is 30 seconds left and start the alert blinking
     if (App.timerSeconds == 30) {
-      if (!hasHappend){
+      if (!hasHappend) {
         System.out.println("30 seconds left");
         hasHappend = true;
         setupAlertBlinking();
@@ -211,10 +248,10 @@ public class TileGameDeskController {
     alert.setVisible(true); // Initially show the alert label
 
     // Set up the blinking animation for the alert label
-    alertBlinkTimeline = new Timeline(
-        new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
-        new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false))
-    );
+    alertBlinkTimeline =
+        new Timeline(
+            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
+            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
     alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
     alertBlinkTimeline.play();
   }
@@ -222,8 +259,8 @@ public class TileGameDeskController {
   // Add a method to stop the alert blinking
   private void stopAlertBlinking() {
     if (alertBlinkTimeline != null) {
-        alertBlinkTimeline.stop();
-        alert.setVisible(false);
+      alertBlinkTimeline.stop();
+      alert.setVisible(false);
     }
   }
 
@@ -612,7 +649,7 @@ public class TileGameDeskController {
   @FXML
   private void onPuzzleGoBackClick() {
     App.setScene(AppUi.TILEROOM);
-    //GameState.hasHappend = false;
+    // GameState.hasHappend = false;
     // String musicFile;
     // if (App.timerSeconds < 60) {
     //   musicFile = "src/main/resources/sounds/final-BG-MUSIC.mp3";
@@ -641,23 +678,23 @@ public class TileGameDeskController {
 
   @FXML
   private void toggleSound(MouseEvent event) {
-      if (GameState.isSoundEnabled) {
-          // Disable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.0); // Mute the media player
-          }
-          soundOff.setVisible(true);
-          soundOn.setVisible(false);
-      } else {
-          // Enable sound
-          if (App.mediaPlayer != null) {
-              App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-          }
-          soundOn.setVisible(true);
-          soundOff.setVisible(false);
+    if (GameState.isSoundEnabled) {
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
       }
-  
-      GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+      soundOff.setVisible(true);
+      soundOn.setVisible(false);
+    } else {
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    }
+
+    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
   }
 
   // game master animation

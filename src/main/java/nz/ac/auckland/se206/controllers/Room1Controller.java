@@ -19,12 +19,17 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -32,15 +37,20 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class Room1Controller implements Initializable {
+
+  public static ObservableList<ChatBubble> chatBubbleListRoom1 =
+      FXCollections.observableArrayList();
 
   private BooleanProperty wPressed = new SimpleBooleanProperty();
   private BooleanProperty aPressed = new SimpleBooleanProperty();
@@ -107,6 +117,8 @@ public class Room1Controller implements Initializable {
   @FXML private TextField inputText;
 
   @FXML public Pane aiWindowController;
+  @FXML private ScrollPane chatPaneOne;
+  @FXML private VBox chatContainerOne;
 
   @FXML
   Image rightCharacterAnimation =
@@ -301,6 +313,65 @@ public class Room1Controller implements Initializable {
     Thread thread = new Thread(indicatorTask);
     thread.setDaemon(true);
     thread.start();
+
+    // App.chatBubbleList.addListener(
+    //     new ListChangeListener<ChatBubble>() {
+    //       public void onChanged(Change<? extends ChatBubble> c) {
+    //         while (c.next()) {
+    //           if (c.wasPermutated()) {
+    //             // handle permutation
+    //           } else if (c.wasUpdated()) {
+    //             // handle update
+    //           } else {
+    //             for (ChatBubble removedItem : c.getRemoved()) {
+    //               System.out.println("Removed: " + removedItem);
+    //             }
+    //             for (ChatBubble addedItem : c.getAddedSubList()) {
+    //               Platform.runLater(
+    //                   () -> {
+    //                     chatContainer
+    //                         .getChildren()
+    //                         .addAll(
+    //                             App.chatBubbleList
+    //                                 .get(App.chatBubbleList.size() - 1)
+    //                                 .getBubbleBox());
+    //                     chatContainer.setAlignment(Pos.TOP_CENTER);
+    //                     chatPane.vvalueProperty().bind(chatContainer.heightProperty());
+    //                     System.out.println(
+    //                         "Added: "
+    //                             + App.chatBubbleList
+    //                                 .get(App.chatBubbleList.size() - 1)
+    //                                 .getBubbleText()
+    //                                 .getText()
+    //                             + " "
+    //                             + this.getClass().getSimpleName());
+    //                   });
+    //             }
+    //           }
+    //         }
+    //       }
+    //     });
+
+    ListChangeListener<ChatBubble> listener1 =
+        change -> {
+          Platform.runLater(
+              () -> {
+                chatContainerOne
+                    .getChildren()
+                    .addAll(chatBubbleListRoom1.get(chatBubbleListRoom1.size() - 1).getBubbleBox());
+                chatContainerOne.setAlignment(Pos.TOP_RIGHT);
+                chatPaneOne.vvalueProperty().bind(chatContainerOne.heightProperty());
+                System.out.println(
+                    "Added: "
+                        + chatBubbleListRoom1
+                            .get(chatBubbleListRoom1.size() - 1)
+                            .getBubbleText()
+                            .getText()
+                        + " "
+                        + this.getClass().getSimpleName());
+              });
+        };
+    chatBubbleListRoom1.addListener(listener1);
   }
 
   // hide id and button and indicator at once
