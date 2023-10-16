@@ -38,6 +38,7 @@ public class App extends Application {
   public static String greetingInRoom1;
   public static String greetingInRoom2;
   public static String greetingInRoom3;
+
   public static void main(final String[] args) {
     launch();
   }
