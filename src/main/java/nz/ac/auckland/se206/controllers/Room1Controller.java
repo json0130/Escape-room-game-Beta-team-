@@ -168,11 +168,6 @@ public class Room1Controller implements Initializable {
 
   private FadeTransition fadeTransition;
 
-  private boolean isCrew1Colliding = false;
-  private boolean isCrew2Colliding = false;
-  private boolean isCrew3Colliding = false;
-  private boolean isCrew4Colliding = false;
-
   private MediaPlayer walkingMediaPlayer;
 
   @FXML private Button toggleSoundButton;
@@ -764,42 +759,34 @@ public class Room1Controller implements Initializable {
           // if character near costume1 and not collected, show id card and hide indicator
           if (GameState.isRiddleResolved) {
             if (player.getBoundsInParent().intersects(crew1Collision.getBoundsInParent())) {
-              isCrew1Colliding = true;
               if (!GameState.isDoctorCollected) {
                 Platform.runLater(() -> showId1());
               }
             } else if (!GameState.isDoctorCollected) {
-              isCrew1Colliding = false;
               Platform.runLater(() -> hideId1());
             }
             // if character near costume2 and not collected, show id and hide indicator
             if (player.getBoundsInParent().intersects(crew2Collision.getBoundsInParent())) {
-              isCrew2Colliding = true;
               if (!GameState.isCaptainCollected) {
                 Platform.runLater(() -> showId2());
               }
             } else if (!GameState.isCaptainCollected) {
-              isCrew2Colliding = false;
               Platform.runLater(() -> hideId2());
             }
             // if character near costume3 and not collected, show id and hide indicator
             if (player.getBoundsInParent().intersects(crew3Collision.getBoundsInParent())) {
-              isCrew3Colliding = true;
               if (!GameState.isChefCollected) {
                 Platform.runLater(() -> showId3());
               }
             } else if (!GameState.isChefCollected) {
-              isCrew3Colliding = false;
               Platform.runLater(() -> hideId3());
             }
             // if character near costume4 and not collected, show id and hide indicator
             if (player.getBoundsInParent().intersects(crew4Collision.getBoundsInParent())) {
-              isCrew4Colliding = true;
               if (!GameState.isEngineerCollected) {
                 Platform.runLater(() -> showId4());
               }
             } else if (!GameState.isEngineerCollected) {
-              isCrew4Colliding = false;
               Platform.runLater(() -> hideId4());
             }
           }
@@ -977,7 +964,8 @@ public class Room1Controller implements Initializable {
 
   /**
    * Change the colour of button on hover
-   * @param e mouse is clicked 
+   *
+   * @param e mouse is clicked
    */
   @FXML
   private void enterCollect1(MouseEvent e) {
@@ -991,7 +979,8 @@ public class Room1Controller implements Initializable {
 
   /**
    * Change the colour of button on hover
-   * @param e mouse is clicked 
+   *
+   * @param e mouse is clicked
    */
   @FXML
   private void enterCollect2(MouseEvent e) {
@@ -1000,7 +989,8 @@ public class Room1Controller implements Initializable {
 
   /**
    * Change the colour of button after the cursor leaves.
-   * @param e mouse is clicked 
+   *
+   * @param e mouse is clicked
    */
   @FXML
   private void exitCollect2(MouseEvent e) {
@@ -1009,7 +999,8 @@ public class Room1Controller implements Initializable {
 
   /**
    * Change the colour of button on hover.
-   * @param e mouse is clicked 
+   *
+   * @param e mouse is clicked
    */
   @FXML
   private void enterCollect3(MouseEvent e) {
@@ -1018,7 +1009,8 @@ public class Room1Controller implements Initializable {
 
   /**
    * Change the colour of button after the cursor leaves.
-   * @param e mouse is clicked 
+   *
+   * @param e mouse is clicked
    */
   @FXML
   private void exitCollect3(MouseEvent e) {
@@ -1027,7 +1019,8 @@ public class Room1Controller implements Initializable {
 
   /**
    * Change the colour of button on hover.
-   * @param e mouse is clicked 
+   *
+   * @param e mouse is clicked
    */
   @FXML
   private void enterCollect4(MouseEvent e) {
@@ -1035,8 +1028,9 @@ public class Room1Controller implements Initializable {
   }
 
   /**
-   * Change the colour of button after the cursor leaves. 
-   * @param e mouse is clicked 
+   * Change the colour of button after the cursor leaves.
+   *
+   * @param e mouse is clicked
    */
   @FXML
   private void exitCollect4(MouseEvent e) {
