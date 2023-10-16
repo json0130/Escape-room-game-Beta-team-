@@ -56,7 +56,8 @@ public class PlayerController implements Initializable {
   private BooleanProperty isSKeyPressed = new SimpleBooleanProperty();
   private BooleanProperty isDKeyPressed = new SimpleBooleanProperty();
 
-  private BooleanBinding keyPressed = isWKeyPressed.or(isAKeyPressed).or(isSKeyPressed).or(isDKeyPressed);
+  private BooleanBinding keyPressed =
+      isWKeyPressed.or(isAKeyPressed).or(isSKeyPressed).or(isDKeyPressed);
   private int movementVariable = 5;
   private double shapesize;
 
@@ -292,12 +293,6 @@ public class PlayerController implements Initializable {
     detectDifficulty();
     movementSetup();
 
-  }
-
-  @FXML
-  void start(ActionEvent event) {
-    player.setLayoutX(10);
-    player.setLayoutY(200);
     ListChangeListener<ChatBubble> listener2 =
         change -> {
           Platform.runLater(
@@ -319,6 +314,12 @@ public class PlayerController implements Initializable {
               });
         };
     chatBubbleListPlayer.addListener(listener2);
+  }
+
+  @FXML
+  void start(ActionEvent event) {
+    player.setLayoutX(10);
+    player.setLayoutY(200);
   }
 
   // Modify your setupAlertBlinking method as follows
@@ -359,7 +360,7 @@ public class PlayerController implements Initializable {
   /**
    * When the player is having collisions with room1 then it will go to the room1.
    *
-    * @param event when the player is having collisions with room1
+   * @param event when the player is having collisions with room1
    * @throws IOException if an input or output exception occurred
    */
   @FXML
@@ -497,7 +498,11 @@ public class PlayerController implements Initializable {
     // code for enabling palyer to move using wasd keys
     scene.setOnKeyPressed(
         e -> {
-          boolean wasMoving = isWKeyPressed.get() || isAKeyPressed.get() || isSKeyPressed.get() || isDKeyPressed.get();
+          boolean wasMoving =
+              isWKeyPressed.get()
+                  || isAKeyPressed.get()
+                  || isSKeyPressed.get()
+                  || isDKeyPressed.get();
 
           if (e.getCode() == KeyCode.W) {
             isWKeyPressed.set(true);
@@ -515,7 +520,11 @@ public class PlayerController implements Initializable {
             isDKeyPressed.set(true);
           }
 
-          boolean isMoving = isWKeyPressed.get() || isAKeyPressed.get() || isSKeyPressed.get() || isDKeyPressed.get();
+          boolean isMoving =
+              isWKeyPressed.get()
+                  || isAKeyPressed.get()
+                  || isSKeyPressed.get()
+                  || isDKeyPressed.get();
 
           // If we started moving and weren't before, start the sound.
           if (isMoving && !wasMoving) {
@@ -525,7 +534,11 @@ public class PlayerController implements Initializable {
 
     scene.setOnKeyReleased(
         e -> {
-          boolean wasMoving = isWKeyPressed.get() || isAKeyPressed.get() || isSKeyPressed.get() || isDKeyPressed.get();
+          boolean wasMoving =
+              isWKeyPressed.get()
+                  || isAKeyPressed.get()
+                  || isSKeyPressed.get()
+                  || isDKeyPressed.get();
 
           if (e.getCode() == KeyCode.W) {
             isWKeyPressed.set(false);
@@ -544,7 +557,11 @@ public class PlayerController implements Initializable {
           }
 
           // Check if we're still moving
-          boolean isMovinng = isWKeyPressed.get() || isAKeyPressed.get() || isSKeyPressed.get() || isDKeyPressed.get();
+          boolean isMovinng =
+              isWKeyPressed.get()
+                  || isAKeyPressed.get()
+                  || isSKeyPressed.get()
+                  || isDKeyPressed.get();
 
           // If we stopped moving and were before, stop the sound.
           if (!isMovinng && wasMoving) {
@@ -564,7 +581,6 @@ public class PlayerController implements Initializable {
         });
   }
 
-  
   /**
    * When the player is touching the border then it will keep the player to be in the position.
    *
@@ -673,7 +689,11 @@ public class PlayerController implements Initializable {
 
     scene.setOnKeyPressed(
         e -> {
-          boolean wasMoving = isWKeyPressed.get() || isAKeyPressed.get() || isSKeyPressed.get() || isDKeyPressed.get();
+          boolean wasMoving =
+              isWKeyPressed.get()
+                  || isAKeyPressed.get()
+                  || isSKeyPressed.get()
+                  || isDKeyPressed.get();
 
           if (e.getCode() == KeyCode.W) {
             if (walkAnimationPlaying == false) {
@@ -709,7 +729,11 @@ public class PlayerController implements Initializable {
             isDKeyPressed.set(true);
           }
 
-          boolean isMoving = isWKeyPressed.get() || isAKeyPressed.get() || isSKeyPressed.get() || isDKeyPressed.get();
+          boolean isMoving =
+              isWKeyPressed.get()
+                  || isAKeyPressed.get()
+                  || isSKeyPressed.get()
+                  || isDKeyPressed.get();
 
           // If we started moving and weren't before, start the sound.
           if (isMoving && !wasMoving) {
@@ -719,7 +743,11 @@ public class PlayerController implements Initializable {
 
     scene.setOnKeyReleased(
         e -> {
-          boolean wasMoving = isWKeyPressed.get() || isAKeyPressed.get() || isSKeyPressed.get() || isDKeyPressed.get();
+          boolean wasMoving =
+              isWKeyPressed.get()
+                  || isAKeyPressed.get()
+                  || isSKeyPressed.get()
+                  || isDKeyPressed.get();
 
           if (e.getCode() == KeyCode.W) {
             if (player.getImage() == leftCharacterAnimation
@@ -739,7 +767,9 @@ public class PlayerController implements Initializable {
           }
 
           if (e.getCode() == KeyCode.A) {
-            if (isDKeyPressed.get() == false && isWKeyPressed.get() == false && isSKeyPressed.get() == false) {
+            if (isDKeyPressed.get() == false
+                && isWKeyPressed.get() == false
+                && isSKeyPressed.get() == false) {
               player.setImage(leftCharacterIdle);
               walkAnimationPlaying = false;
             } else if (isDKeyPressed.get() == true) {
@@ -767,7 +797,9 @@ public class PlayerController implements Initializable {
           }
 
           if (e.getCode() == KeyCode.D) {
-            if (isAKeyPressed.get() == false && isWKeyPressed.get() == false && isSKeyPressed.get() == false) {
+            if (isAKeyPressed.get() == false
+                && isWKeyPressed.get() == false
+                && isSKeyPressed.get() == false) {
               player.setImage(rightCharacterIdle);
               walkAnimationPlaying = false;
             } else if (isAKeyPressed.get() == true) {
@@ -777,7 +809,11 @@ public class PlayerController implements Initializable {
             isDKeyPressed.set(false);
           }
 
-          boolean isMovinng = isWKeyPressed.get() || isAKeyPressed.get() || isSKeyPressed.get() || isDKeyPressed.get();
+          boolean isMovinng =
+              isWKeyPressed.get()
+                  || isAKeyPressed.get()
+                  || isSKeyPressed.get()
+                  || isDKeyPressed.get();
 
           // If we stopped moving and were before, stop the sound.
           if (!isMovinng && wasMoving) {
@@ -826,6 +862,7 @@ public class PlayerController implements Initializable {
     resetYes.setVisible(true);
     resetCancel.setVisible(true);
   }
+
   /**
    * Show buttons to restart the game or cancel.
    *
@@ -840,7 +877,6 @@ public class PlayerController implements Initializable {
     resetYes.setVisible(true);
     resetCancel.setVisible(true);
   }
-
 
   @FXML
   private void restartCanceled(ActionEvent event) throws IOException {
