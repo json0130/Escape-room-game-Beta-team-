@@ -163,11 +163,6 @@
             <Image url="@../images/power.gif" />
          </image>
       </ImageView>
-      <ImageView fx:id="gameMaster" fitHeight="418.0" fitWidth="197.0" layoutX="974.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/robotfloat.png" />
-         </image>
-      </ImageView>
       <fx:include fx:id="aiWindowController" layoutX="850.0" layoutY="200.0" source="aiwindow.fxml" />
       <ImageView fx:id="soundOff" fitHeight="50.0" fitWidth="50.0" layoutX="880.0" layoutY="35.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
          <image>

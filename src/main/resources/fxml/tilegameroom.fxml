@@ -108,11 +108,6 @@
             <Image url="@../images/Firefly_sound_icon_inside_the_white_circle_with_no_fill_74516-removebg-preview.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="gameMaster" fitHeight="150.0" fitWidth="200.0" layoutX="1000.0" layoutY="150.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/robotfloat.png" />
-         </image>
-      </ImageView>
       <Button fx:id="toggleSoundButton" layoutX="861.0" layoutY="79.0" mnemonicParsing="false" text="SETTING" visible="false" />
       <Button fx:id="resetButton" layoutX="1024.0" layoutY="8.0" mnemonicParsing="false" onAction="#restartClicked" style="-fx-background-color: transparent;" text="RESTART" textFill="WHITE">
          <font>

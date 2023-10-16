@@ -208,7 +208,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     animateExclamationMark();
-    animateRobot();
 
     // if difficulty is selected, label is updated
     detectDifficulty();

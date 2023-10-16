@@ -17,11 +17,6 @@
          </image>
       </ImageView>
       <Pane fx:id="alert" layoutX="-12.0" layoutY="-8.0" opacity="0.23" prefHeight="671.0" prefWidth="1227.0" style="-fx-background-color: red;" />
-      <ImageView fx:id="gameMaster" fitHeight="165.0" fitWidth="179.0" layoutX="1022.0" layoutY="138.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/robotfloat.png" />
-         </image>
-      </ImageView>
       <ImageView fx:id="player" fitHeight="178.0" fitWidth="171.0" layoutX="398.0" layoutY="431.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/gameCharacterArtRight.png" />

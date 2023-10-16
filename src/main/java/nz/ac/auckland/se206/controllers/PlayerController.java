@@ -167,8 +167,6 @@ public class PlayerController implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    animateRobot();
-
     playerLabel.setVisible(true);
     black.setVisible(true);
 
