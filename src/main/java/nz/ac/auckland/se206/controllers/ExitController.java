@@ -19,12 +19,17 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -32,16 +37,20 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class ExitController implements Initializable {
+
+  public static ObservableList<ChatBubble> chatBubbleListExit = FXCollections.observableArrayList();
 
   private BooleanProperty wPressed = new SimpleBooleanProperty();
   private BooleanProperty aPressed = new SimpleBooleanProperty();
@@ -65,7 +74,6 @@ public class ExitController implements Initializable {
   @FXML private Rectangle wall;
   @FXML private Rectangle wall1;
   @FXML private Rectangle id;
-  @FXML private Rectangle greetingBox;
 
   @FXML private Button one;
   @FXML private Button two;
@@ -104,11 +112,9 @@ public class ExitController implements Initializable {
   @FXML private Rectangle light;
   @FXML private Rectangle monitor;
   @FXML private Rectangle clickMonitor;
-  @FXML private Rectangle black;
   @FXML private Label idLabel;
   @FXML private Label clickButton;
   @FXML private Label click;
-  @FXML private Label greeting;
   @FXML private ImageView gameMaster;
   @FXML private ImageView close;
 
@@ -119,6 +125,8 @@ public class ExitController implements Initializable {
   @FXML private Button resetCancel;
 
   @FXML public Pane aiWindowController;
+  @FXML private ScrollPane chatPaneOne;
+  @FXML private VBox chatContainerOne;
 
   private boolean nextToButton = false;
   private FadeTransition fadeTransition;
@@ -185,8 +193,6 @@ public class ExitController implements Initializable {
 
   Boolean walkAnimationPlaying = false;
 
-  private boolean isGreetingShown = true;
-
   AnimationTimer collisionTimers =
       new AnimationTimer() {
         @Override
@@ -251,7 +257,7 @@ public class ExitController implements Initializable {
     walkingMediaPlayer.setVolume(2.0);
 
     shapesize = player.getFitWidth();
-    enablePlayerMovement();
+    movementSetup();
 
     collisionTimers.start();
     previousX = player.getLayoutX();
@@ -283,9 +289,28 @@ public class ExitController implements Initializable {
     collisionTimer.start();
     // if difficulty is selected, label is updated
     detectDifficulty();
+    movementSetup();
 
-    // greeting.setWrapText(true);
-    // greeting.setText(App.greetingInRoom3);
+    ListChangeListener<ChatBubble> listener3 =
+        change -> {
+          Platform.runLater(
+              () -> {
+                chatContainerOne
+                    .getChildren()
+                    .addAll(chatBubbleListExit.get(chatBubbleListExit.size() - 1).getBubbleBox());
+                chatContainerOne.setAlignment(Pos.TOP_RIGHT);
+                chatPaneOne.vvalueProperty().bind(chatContainerOne.heightProperty());
+                System.out.println(
+                    "Added: "
+                        + chatBubbleListExit
+                            .get(chatBubbleListExit.size() - 1)
+                            .getBubbleText()
+                            .getText()
+                        + " "
+                        + this.getClass().getSimpleName());
+              });
+        };
+    chatBubbleListExit.addListener(listener3);
   }
 
   // if the charcter collides rectangle for exit, scene changes back to map
@@ -1165,33 +1190,6 @@ public class ExitController implements Initializable {
   public void clickGameMaster(MouseEvent event) {
     aiWindowController.setVisible(true);
     System.out.print("HI");
-  }
-
-  /** When the close image is clicked, greeting disappears. */
-  @FXML
-  private void clickClose(MouseEvent e) {
-    greeting.setVisible(false);
-    greetingBox.setVisible(false);
-    close.setVisible(false);
-    isGreetingShown = false;
-    black.setVisible(false);
-  }
-
-  /** After the player close the greeting, the character can move. */
-  private void enablePlayerMovement() {
-    Timer greetingTimer = new Timer(true);
-    greetingTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            if (!isGreetingShown) {
-              movementSetup();
-              greetingTimer.cancel();
-            }
-          }
-        },
-        0,
-        100);
   }
 
   @FXML

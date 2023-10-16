@@ -19,12 +19,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.gpt.ChatMessage;
 import nz.ac.auckland.se206.gpt.GptPromptEngineering;
 import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
-import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
 
@@ -40,7 +40,8 @@ public class AIWindowController {
   @FXML private Pane aiPane;
   @FXML private ImageView closeWindow;
 
-  public static ChatCompletionRequest chatCompletionRequest;
+  // private nz.ac.auckland.se206.chatHistory chatHistory;
+  private String currentRoomName;
 
   private AnimationTimer timer;
 
@@ -95,19 +96,32 @@ public class AIWindowController {
             chatTextArea.setScrollTop(Double.MAX_VALUE);
           }
         };
+    inputText.setOnKeyPressed(
+        event -> {
+          if (event.getCode() == KeyCode.ENTER) {
+            try {
+              onSendMessage(new ActionEvent());
+            } catch (ApiProxyException | IOException e) {
+
+              e.printStackTrace();
+            }
+          }
+        });
 
     timer.start();
 
-    chatCompletionRequest =
-        new ChatCompletionRequest().setN(1).setTemperature(1).setTopP(1).setMaxTokens(100);
-    App.greetingInMap =
-        runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greeting()));
-    App.greetingInRoom1 =
-        runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom1()));
-    App.greetingInRoom2 =
-        runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom2()));
-    App.greetingInRoom3 =
-        runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom3()));
+    if (App.hasGreeting == false) {
+      App.hasGreeting = true;
+      runGpt(new ChatMessage("user", GptPromptEngineering.greeting()), true);
+    }
+
+    // App.greetingInRoom1 =
+    //     runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom1()));
+    // App.greetingInRoom2 =
+    //     runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom2()));
+    // App.greetingInRoom3 =
+    //     runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom3()));
+
   }
 
   /**
@@ -115,13 +129,26 @@ public class AIWindowController {
    *
    * @param msg the chat message to append
    */
-  private void appendChatMessage(ChatMessage msg) {
-    App.aiWindow = App.aiWindow.concat(msg.getRole() + ": " + msg.getContent() + "\n\n");
-    Platform.runLater(
-        () -> {
-          chatTextArea.setText(App.aiWindow);
-          chatTextArea.setScrollTop(Double.MAX_VALUE); // this will scroll to the bottom
-        });
+  private void appendChatMessage(ChatMessage msg, Boolean isGreeting) {
+    ChatBubble newMessage1 = new ChatBubble(msg, isGreeting);
+    ChatBubble newMessage2 = new ChatBubble(msg, isGreeting);
+    ChatBubble newMessage3 = new ChatBubble(msg, isGreeting);
+    ChatBubble newMessage4 = new ChatBubble(msg, isGreeting);
+    ChatBubble newMessage5 = new ChatBubble(msg, isGreeting);
+    ChatBubble newMessage6 = new ChatBubble(msg, isGreeting);
+
+    App.chatBubbleList.add(newMessage1);
+    PlayerController.chatBubbleListPlayer.add(newMessage2);
+    Room1Controller.chatBubbleListRoom1.add(newMessage3);
+    TileGameRoomController.chatBubbleListTileRoom.add(newMessage4);
+    TileGameDeskController.chatBubbleListTileDesk.add(newMessage5);
+    ExitController.chatBubbleListExit.add(newMessage6);
+    System.out.println(
+        "Appended: "
+            + App.chatBubbleList
+                .get(PlayerController.chatBubbleListPlayer.size() - 1)
+                .getBubbleText()
+                .getText());
   }
 
   /**
@@ -131,18 +158,20 @@ public class AIWindowController {
    * @return the response chat message
    * @throws ApiProxyException if there is an error communicating with the API proxy
    */
-  private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
-    // This method is used to run the GPT model.
+  private ChatMessage runGpt(ChatMessage msg, Boolean isGreeting) throws ApiProxyException {
     Task<ChatMessage> runningGptTask =
         new Task<ChatMessage>() {
           @Override
           protected ChatMessage call() {
-            chatCompletionRequest.addMessage(msg);
+            App.chatCompletionRequest.addMessage(msg);
             try {
-              ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
+              ChatCompletionResult chatCompletionResult = App.chatCompletionRequest.execute();
               Choice result = chatCompletionResult.getChoices().iterator().next();
-              chatCompletionRequest.addMessage(result.getChatMessage());
-              appendChatMessage(result.getChatMessage());
+              App.chatCompletionRequest.addMessage(result.getChatMessage());
+              Platform.runLater(
+                  () -> {
+                    appendChatMessage(result.getChatMessage(), isGreeting);
+                  });
               Platform.runLater(
                   () -> {
                     if (result.getChatMessage().getRole().equals("assistant")
@@ -171,11 +200,11 @@ public class AIWindowController {
    * @throws ApiProxyException if there is an error communicating with the API proxy
    */
   private String runGptWithoutPrinting(ChatMessage msg) {
-    chatCompletionRequest.addMessage(msg);
+    App.chatCompletionRequest.addMessage(msg);
     try {
-      ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
+      ChatCompletionResult chatCompletionResult = App.chatCompletionRequest.execute();
       Choice result = chatCompletionResult.getChoices().iterator().next();
-      chatCompletionRequest.addMessage(result.getChatMessage());
+      App.chatCompletionRequest.addMessage(result.getChatMessage());
       return result.getChatMessage().getContent();
     } catch (ApiProxyException e) {
       e.printStackTrace();
@@ -198,21 +227,27 @@ public class AIWindowController {
     }
     inputText.clear();
     ChatMessage msg = new ChatMessage("user", message);
-    appendChatMessage(msg);
+    appendChatMessage(msg, false);
 
     if (GameState.difficulty == "EASY") {
       robotThink();
       // Handle Easy difficulty
-      runGpt(new ChatMessage("user", GptPromptEngineering.easy(message)));
+      runGpt(new ChatMessage("user", GptPromptEngineering.easy(message)), false);
     } else if (GameState.difficulty == "MEDIUM") {
       robotThink();
       // Handle Medium difficulty
-      runGpt(new ChatMessage("user", GptPromptEngineering.medium(message)));
+      runGpt(new ChatMessage("user", GptPromptEngineering.medium(message)), false);
     } else if (GameState.difficulty == "HARD") {
       robotThink();
-      runGpt(new ChatMessage("user", GptPromptEngineering.hard(message)));
+      runGpt(new ChatMessage("user", GptPromptEngineering.hard(message)), false);
     }
-    aiPane.requestFocus();
+    // if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("Correct")) {
+    //   GameState.isRiddleResolved = true;
+    // }
+    // if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("hint")) {
+    //   GameState.numOfHints--;
+    // }
+    aiPane.requestFocus(); // Add this line
   }
 
   /**
@@ -277,15 +312,8 @@ public class AIWindowController {
     robotBase.setVisible(true);
     robotReply.setVisible(false);
     robotThink.setVisible(false);
-    chatTextArea.setText(App.aiWindow);
   }
 
-  /**
-   * Sets the pane to be visible.
-   *
-   * @param event the action event triggered by the go back button
-   * @throws ApiProxyException if there is an error communicating with the API proxy
-   */
   @FXML
   public void setPaneVisible() {
     if (aiPane.isVisible() == false) {
