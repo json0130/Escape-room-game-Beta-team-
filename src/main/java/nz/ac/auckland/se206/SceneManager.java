@@ -3,6 +3,7 @@ package nz.ac.auckland.se206;
 import java.util.HashMap;
 import javafx.scene.Parent;
 
+/** Manages the scenes in the application. */
 public class SceneManager {
   public enum AppUi {
     CHAT,

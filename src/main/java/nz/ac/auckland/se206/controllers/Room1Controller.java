@@ -224,7 +224,6 @@ public class Room1Controller implements Initializable {
       };
 
   public void initialize(URL url, ResourceBundle resource) {
-    animateRobot();
     shapesize = player.getFitWidth();
     alert.setVisible(false);
     aiWindowController.setVisible(true);

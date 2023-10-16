@@ -31,7 +31,6 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 
 public class IntroController implements Initializable {
-
   @FXML private Button minB2;
   @FXML private Button minB4;
   @FXML private Button minB6;
@@ -122,6 +121,13 @@ public class IntroController implements Initializable {
     animationTimeline.play();
   }
 
+  /**
+   * Check if the spaceship collides with the rock
+   *
+   * @param spaceship the spaceship
+   * @param rock the rock
+   * @return true if the spaceship collides with the rock
+   */
   public void checkCollision2() {
     // Initialize sound images based on the initial isSoundEnabled state
     if (GameState.isSoundEnabled) {
@@ -135,6 +141,7 @@ public class IntroController implements Initializable {
 
   @FXML
   private void levelButtonClicked(ActionEvent events) {
+    // If the user clicks the level button then the time buttons will be visible.
     soundButttonClick();
 
     easybox.setVisible(false);
@@ -186,11 +193,12 @@ public class IntroController implements Initializable {
 
   @FXML
   private void minuteButtonClicked(ActionEvent events) {
+    // If the user clicks the minute button then the start button will be visible.
     soundButttonClick();
 
-    Button cButton = (Button) events.getSource();
+    Button clickedButton = (Button) events.getSource();
 
-    switch (cButton.getId()) {
+    switch (clickedButton.getId()) {
       case "minB2":
         App.timerSeconds = 120;
         App.chosenTimer = 120;
@@ -214,7 +222,7 @@ public class IntroController implements Initializable {
     minB2.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
     minB4.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
     minB6.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
-    cButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: dark blue;");
+    clickedButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: dark blue;");
     isTimeSelected = true;
 
     if (isLevelSelected && isTimeSelected) {
@@ -255,7 +263,7 @@ public class IntroController implements Initializable {
   }
 
   @FXML
-  private void closeClicked() {
+  private void handleCloseAction() {
     // If the user clicks the close button then the start button will be visible again.
     startButton.setDisable(false);
     startButton.setVisible(true);

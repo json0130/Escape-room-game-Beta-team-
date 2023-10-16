@@ -160,6 +160,6 @@
          <font>
             <Font name="Arial Bold Italic" size="18.0" />
          </font></Button>
-      <Button fx:id="close" layoutX="823.0" layoutY="98.0" mnemonicParsing="false" onAction="#closeClicked" text="X" visible="false" />
+      <Button fx:id="close" layoutX="823.0" layoutY="98.0" mnemonicParsing="false" onAction="#handleCloseAction" text="X" visible="false" />
    </children>
 </Pane>

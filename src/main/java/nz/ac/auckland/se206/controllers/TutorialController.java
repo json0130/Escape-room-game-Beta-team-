@@ -40,13 +40,12 @@ import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class TutorialController implements Initializable {
+  private BooleanProperty isWKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty isAKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty isSKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty isDKeyPressed = new SimpleBooleanProperty();
 
-  private BooleanProperty wKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty aKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty sKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty dKeyPressed = new SimpleBooleanProperty();
-
-  private BooleanBinding keyPressed = wKeyPressed.or(aKeyPressed).or(sKeyPressed).or(dKeyPressed);
+  private BooleanBinding keyPressed = isWKeyPressed.or(isAKeyPressed).or(isSKeyPressed).or(isDKeyPressed);
 
   private int movementVariable = 5;
   private double shapesize;
@@ -110,16 +109,16 @@ public class TutorialController implements Initializable {
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
 
-          if (wKeyPressed.get()) {
+          if (isWKeyPressed.get()) {
             player.setLayoutY(player.getLayoutY() - movementVariable);
           }
-          if (aKeyPressed.get()) {
+          if (isAKeyPressed.get()) {
             player.setLayoutX(player.getLayoutX() - movementVariable);
           }
-          if (sKeyPressed.get()) {
+          if (isSKeyPressed.get()) {
             player.setLayoutY(player.getLayoutY() + movementVariable);
           }
-          if (dKeyPressed.get()) {
+          if (isDKeyPressed.get()) {
             player.setLayoutX(player.getLayoutX() + movementVariable);
           }
           squareBorder();
@@ -323,8 +322,8 @@ public class TutorialController implements Initializable {
             });
 
     keyPressed.addListener(
-        ((observableValue, aBoolean, t1) -> {
-          if (!aBoolean) {
+        ((observable, wasKeyPressed, isKeyPressed) -> {
+          if (!wasKeyPressed) {
             timer.start();
           } else {
             timer.stop();
@@ -332,6 +331,11 @@ public class TutorialController implements Initializable {
         }));
   }
 
+  /**
+   * Play the rock animation
+   *
+   * @param event The event
+   */
   @FXML
   private void playRock() {
     setRotate(c1, true, 360, 10);
@@ -345,20 +349,16 @@ public class TutorialController implements Initializable {
     setMovement(r4, false, 3, -900, 0, 5);
   }
 
+
   /**
-   * Check if the player collides with any rocks. If so, move the player back a bit and decrease the
-   * progress bar.
+   * Check if the player collides with any of the rocks
    *
-   * @param event the event that triggered this method
-   * @param player the player
-   * @param rocks the rocks
-   * @param progressBar the progress bar
-   * @param health the health
-   * @param collisionDetected the collision detected
-   * @param collisionPause the collision pause
-   * @param meteorSoundPlayer the meteor sound player
+   * @param player The player
+   * @param rocks The rocks
    */
+  @FXML
   public void checkCollision(ImageView player, List<ImageView> rocks) {
+    // Check if the player collides with any of the rocks
     if (!collisionDetected) {
       for (ImageView rock : rocks) {
         if (player.getBoundsInParent().intersects(rock.getBoundsInParent())) {
@@ -384,7 +384,14 @@ public class TutorialController implements Initializable {
     }
   }
 
+  /**
+   * Check if the player collides with the finish line
+   *
+   * @param player The player
+   * @param c3 The finish line
+   */
   public void checkFinish(ImageView player, Circle c3) {
+    // Check if the player collides with the finish line .
     if (player.getBoundsInParent().intersects(c3.getBoundsInParent())) {
       App.setScene(AppUi.ANIMATION);
       collisionTimer.stop();
@@ -393,12 +400,18 @@ public class TutorialController implements Initializable {
       if (meteorSoundPlayer != null) {
         meteorSoundPlayer.stop();
       }
-
       GameState.isTutorialFinished = true;
     }
   }
 
+  /**
+   * Check if the player collides with the box
+   *
+   * @param player The player
+   * @param box The box
+   */
   public void checkCollision1(ImageView player, Rectangle box) {
+    // Check if the player collides with the box
     if (!isInstructionDone) {
       if (player.getBoundsInParent().intersects(box.getBoundsInParent())) {
         player.setLayoutX(previousX);
@@ -416,48 +429,59 @@ public class TutorialController implements Initializable {
     }
   }
 
+  /**
+   * Set the movement of the player
+   *
+   * @param player The player
+   */
   @FXML
   public void playerMove() {
     // If key is pressed, set the boolean to true. If key is released, set the boolean to false.
     scene.setOnKeyPressed(
         e -> {
           if (e.getCode() == KeyCode.W) {
-            wKeyPressed.set(true);
+            isWKeyPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.A) {
-            aKeyPressed.set(true);
+            isAKeyPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.S) {
-            sKeyPressed.set(true);
+            isSKeyPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.D) {
-            dKeyPressed.set(true);
+            isDKeyPressed.set(true);
           }
         });
 
+    // If key is pressed, set the boolean to true. If key is released, set the boolean to false.
     scene.setOnKeyReleased(
         e -> {
           if (e.getCode() == KeyCode.W) {
-            wKeyPressed.set(false);
+            isWKeyPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.A) {
-            aKeyPressed.set(false);
+            isAKeyPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.S) {
-            sKeyPressed.set(false);
+            isSKeyPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.D) {
-            dKeyPressed.set(false);
+            isDKeyPressed.set(false);
           }
         });
   }
 
+  /**
+   * Check if the player collides with the boundaries of the scene
+   *
+   * @param player The player
+   */
   public void squareBorder() {
     // Set the boundaries of the scene
     double left = 0;
@@ -507,7 +531,6 @@ public class TutorialController implements Initializable {
       soundOn.setVisible(true);
       soundOff.setVisible(false);
     }
-
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
   }
 

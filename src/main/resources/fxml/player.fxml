@@ -128,6 +128,19 @@
          </image>
       </ImageView>
       <Button fx:id="toggleSoundButton" layoutX="851.0" layoutY="69.0" mnemonicParsing="false" text="SETTING" visible="false" />
+      <Rectangle fx:id="greetingBox" arcHeight="5.0" arcWidth="5.0" fill="#153451" height="200.0" layoutX="66.0" layoutY="81.0" stroke="BLACK" strokeType="INSIDE" width="868.0" />
+      <Label fx:id="greeting" layoutX="104.0" layoutY="93.0" prefHeight="167.0" prefWidth="809.0" textFill="WHITE">
+         <font>
+            <Font name="Arial" size="26.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="close" fitHeight="28.0" fitWidth="32.0" layoutX="72.0" layoutY="88.0" onMouseClicked="#clickClose" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/closeButton.png" />
+         </image>
+      </ImageView>
+      <fx:include fx:id="aiWindowController" layoutX="850.0" layoutY="200.0" source="aiwindow.fxml" />
+      <Button fx:id="resetButton" layoutX="1015.0" layoutY="9.0" mnemonicParsing="false" onAction="#handleRestartButtonClick" style="-fx-background-color: transparent;" text="RESTART" textFill="WHITE">
       <ImageView fx:id="gameMaster" fitHeight="167.0" fitWidth="165.0" layoutX="978.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../images/robotfloat.png" />

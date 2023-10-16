@@ -32,6 +32,6 @@
          </font>
       </Label>
       <Rectangle fx:id="grey1" arcHeight="5.0" arcWidth="5.0" fill="#000000a3" height="866.0" layoutX="-35.0" layoutY="-10.0" opacity="0.37" stroke="BLACK" strokeType="INSIDE" width="1257.0" />
-      <Button fx:id="resetButton" layoutX="897.0" layoutY="545.0" mnemonicParsing="false" onAction="#reset" text="Button" />
+      <Button fx:id="resetButton" layoutX="897.0" layoutY="545.0" mnemonicParsing="false" onAction="#handleResetEvent" text="Button" />
    </children>
 </Pane>

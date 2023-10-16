@@ -87,21 +87,6 @@
             <Image url="@../images/glitch-effect-black-background.jpg" />
          </image>
       </ImageView>
-      <ImageView fx:id="robotBase" fitHeight="184.0" fitWidth="200.0" layoutX="799.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/base.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="robotThink" fitHeight="184.0" fitWidth="200.0" layoutX="799.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/robot-think.gif" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="robotReply" fitHeight="184.0" fitWidth="200.0" layoutX="799.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/reply.png" />
-         </image>
-      </ImageView>
       <fx:include layoutX="150.0" layoutY="94.0" source="countdowntimer.fxml" />
       <ImageView fx:id="soundOff" fitHeight="50.0" fitWidth="50.0" layoutX="720.0" layoutY="127.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>

@@ -156,7 +156,6 @@ public class TileGameDeskController {
     App.timerSeconds = 120;
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
-    animateRobot();
     alert.setVisible(false); // Initially hide the alert label
     aiWindowController.setVisible(true);
 

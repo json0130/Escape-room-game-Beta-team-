@@ -229,7 +229,6 @@ public class ExitController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    animateRobot();
     background.setOpacity(1);
     clickButton.setVisible(false);
     alert.setVisible(false); // Initially hide the alert label

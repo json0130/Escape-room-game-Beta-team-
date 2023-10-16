@@ -54,12 +54,6 @@ public class EndController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    // black2.setVisible(false);
-    // resetBox.setVisible(false);
-    // resetLabel.setVisible(false);
-    // resetYes.setVisible(false);
-    // resetCancel.setVisible(false);
-
     if (scene != null) {
       scene
           .sceneProperty()
@@ -247,7 +241,7 @@ public class EndController implements Initializable {
   }
 
   @FXML
-  private void reset(ActionEvent event) throws IOException {
+  private void handleResetEvent(ActionEvent event) throws IOException {
     try {
       GameState.resetGames();
     } catch (Exception e) {
