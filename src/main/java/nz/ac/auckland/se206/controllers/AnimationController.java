@@ -25,7 +25,6 @@ import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class AnimationController implements Initializable {
-
   @FXML private ImageView spaceship;
   @FXML private ImageView r1;
   @FXML private Pane scene;
@@ -133,6 +132,13 @@ public class AnimationController implements Initializable {
             });
   }
 
+  /**
+   * Check if the spaceship collides with the rock
+   *
+   * @param spaceship the spaceship
+   * @param rock the rock
+   * @return true if the spaceship collides with the rock
+   */
   public void checkCollision2() {
     // Initialize sound images based on the initial isSoundEnabled state
     if (GameState.isSoundEnabled) {

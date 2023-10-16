@@ -1,6 +1,5 @@
 package nz.ac.auckland.se206.controllers;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -42,18 +41,14 @@ public class PlayerController implements Initializable {
   public static boolean hintContained = false;
   public static boolean answerContained = false;
 
-  private BooleanProperty wPressed = new SimpleBooleanProperty();
-  private BooleanProperty aPressed = new SimpleBooleanProperty();
-  private BooleanProperty sPressed = new SimpleBooleanProperty();
-  private BooleanProperty dPressed = new SimpleBooleanProperty();
+  private BooleanProperty isWKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty isAKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty isSKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty isDKeyPressed = new SimpleBooleanProperty();
 
-  private BooleanBinding keyPressed = wPressed.or(aPressed).or(sPressed).or(dPressed);
+  private BooleanBinding keyPressed = isWKeyPressed.or(isAKeyPressed).or(isSKeyPressed).or(isDKeyPressed);
   private int movementVariable = 5;
   private double shapesize;
-
-  private String soundEffect = "src/main/resources/sounds/door-open.mp3";
-  private Media media = new Media(new File(soundEffect).toURI().toString());
-  private MediaPlayer mediaPlayer = new MediaPlayer(media);
 
   private List<Rectangle> walls = new ArrayList<>();
 
@@ -126,9 +121,9 @@ public class PlayerController implements Initializable {
 
   @FXML private Label countdownLabel;
 
-  private boolean hasHappened = false;
+  @FXML private boolean hasHappened = false;
 
-  private Timeline alertBlinkTimeline;
+  @FXML private Timeline alertBlinkTimeline;
   @FXML public Pane aiWindowController;
 
   @FXML private MediaPlayer walkingMediaPlayer;
@@ -154,16 +149,16 @@ public class PlayerController implements Initializable {
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
 
-          if (wPressed.get()) {
+          if (isWKeyPressed.get()) {
             player.setLayoutY(player.getLayoutY() - movementVariable);
           }
-          if (aPressed.get()) {
+          if (isAKeyPressed.get()) {
             player.setLayoutX(player.getLayoutX() - movementVariable);
           }
-          if (sPressed.get()) {
+          if (isSKeyPressed.get()) {
             player.setLayoutY(player.getLayoutY() + movementVariable);
           }
-          if (dPressed.get()) {
+          if (isDKeyPressed.get()) {
             player.setLayoutX(player.getLayoutX() + movementVariable);
           }
           squareBorder();
@@ -233,8 +228,8 @@ public class PlayerController implements Initializable {
     previousY = player.getLayoutY();
 
     keyPressed.addListener(
-        ((observableValue, aBoolean, t1) -> {
-          if (!aBoolean) {
+        ((observable, wasKeyPressed, isKeyPressed) -> {
+          if (!wasKeyPressed) {
             timer.start();
           } else {
             timer.stop();
@@ -244,8 +239,8 @@ public class PlayerController implements Initializable {
     // if difficulty is selected, label is updated
     detectDifficulty();
 
-    // greeting.setWrapText(true);
-    // greeting.setText(App.greetingInMap);
+    greeting.setWrapText(true);
+    greeting.setText(App.greetingInMap);
   }
 
   @FXML
@@ -279,8 +274,9 @@ public class PlayerController implements Initializable {
     alertBlinkTimeline.play();
   }
 
-  // Add a method to stop the alert blinking
+  @FXML
   private void stopAlertBlinking() {
+    // Add a method to stop the alert blinking
     if (alertBlinkTimeline != null) {
       // Stop timeline and hide label
       alertBlinkTimeline.stop();
@@ -289,10 +285,10 @@ public class PlayerController implements Initializable {
   }
 
   /**
-   * When the go back button is clicked, the player will go back to the intro page.
+   * When the player is having collisions with room1 then it will go to the room1.
    *
-   * @param event when the go back button is clicked
-   * @throws IOException
+    * @param event when the player is having collisions with room1
+   * @throws IOException if an input or output exception occurred
    */
   @FXML
   public void checkRoom1(ImageView player, Rectangle room1) {
@@ -319,6 +315,12 @@ public class PlayerController implements Initializable {
     }
   }
 
+  /**
+   * When player is having collisions with room2 then it will go to the room2.
+   *
+   * @param event when the player is having collisions with room2
+   * @throws IOException
+   */
   public void checkRoom2(ImageView player, Rectangle room2) {
     if (player.getBoundsInParent().intersects(room2.getBoundsInParent())) {
       room2.setVisible(true);
@@ -344,6 +346,13 @@ public class PlayerController implements Initializable {
     }
   }
 
+  /**
+   * When the go back button is clicked, the player will go back to the intro page.
+   *
+   * @param event when the go back button is clicked
+   * @throws IOException
+   */
+  @FXML
   public void checkRoom3(ImageView player, Rectangle room3) {
     // If the player intersects with the room, go to the room.
     if (player.getBoundsInParent().intersects(room3.getBoundsInParent())) {
@@ -370,6 +379,12 @@ public class PlayerController implements Initializable {
     }
   }
 
+  /**
+   * When the go back button is clicked, the player will go back to the intro page.
+   *
+   * @param event when the go back button is clicked
+   * @throws IOException
+   */
   public void checkCollision2(ImageView player, List<Rectangle> walls) {
     for (Rectangle wall : walls) {
       if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
@@ -399,30 +414,36 @@ public class PlayerController implements Initializable {
     }
   }
 
-  // code for enabling palyer to move using wasd keys
+  /**
+   * When the go back button is clicked, the player will go back to the intro page.
+   *
+   * @param event when the go back button is clicked
+   * @throws IOException
+   */
   @FXML
   public void playerMove() {
+    // code for enabling palyer to move using wasd keys
     scene.setOnKeyPressed(
         e -> {
-          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+          boolean wasMoving = isWKeyPressed.get() || isAKeyPressed.get() || isSKeyPressed.get() || isDKeyPressed.get();
 
           if (e.getCode() == KeyCode.W) {
-            wPressed.set(true);
+            isWKeyPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.A) {
-            aPressed.set(true);
+            isAKeyPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.S) {
-            sPressed.set(true);
+            isSKeyPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.D) {
-            dPressed.set(true);
+            isDKeyPressed.set(true);
           }
 
-          boolean isMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+          boolean isMoving = isWKeyPressed.get() || isAKeyPressed.get() || isSKeyPressed.get() || isDKeyPressed.get();
 
           // If we started moving and weren't before, start the sound.
           if (isMoving && !wasMoving) {
@@ -432,26 +453,26 @@ public class PlayerController implements Initializable {
 
     scene.setOnKeyReleased(
         e -> {
-          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+          boolean wasMoving = isWKeyPressed.get() || isAKeyPressed.get() || isSKeyPressed.get() || isDKeyPressed.get();
 
           if (e.getCode() == KeyCode.W) {
-            wPressed.set(false);
+            isWKeyPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.A) {
-            aPressed.set(false);
+            isAKeyPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.S) {
-            sPressed.set(false);
+            isSKeyPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.D) {
-            dPressed.set(false);
+            isDKeyPressed.set(false);
           }
 
           // Check if we're still moving
-          boolean isMovinng = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+          boolean isMovinng = isWKeyPressed.get() || isAKeyPressed.get() || isSKeyPressed.get() || isDKeyPressed.get();
 
           // If we stopped moving and were before, stop the sound.
           if (!isMovinng && wasMoving) {
@@ -471,12 +492,13 @@ public class PlayerController implements Initializable {
         });
   }
 
+  
   /**
-   * When the go back button is clicked, the player will go back to the intro page.
+   * When the player is touching the border then it will keep the player to be in the position.
    *
-   * @param event when the go back button is clicked
-   * @throws IOException
+   * @param event when the player is touching the border
    */
+  @FXML
   public void squareBorder() {
     // Border that the player cannot move outof the window.
     double left = 0;
@@ -513,6 +535,13 @@ public class PlayerController implements Initializable {
     simulateKeyPressAfterDelay();
   }
 
+  /**
+   * When the go back button is clicked, the player will go back to the intro page.
+   *
+   * @param event when the go back button is clicked
+   * @throws IOException
+   */
+  @FXML
   public void detectDifficulty() {
     // detect if there is change in gamestate difficulty in the intro page using timer
     Timer labelTimer = new Timer(true);
@@ -520,6 +549,7 @@ public class PlayerController implements Initializable {
         new TimerTask() {
           @Override
           public void run() {
+            // if difficulty is selected, label is updated
             if (GameState.difficulty != null) {
               if (GameState.difficulty == "MEDIUM") {
                 Platform.runLater(() -> updateLabels());
@@ -574,8 +604,9 @@ public class PlayerController implements Initializable {
     isGreetingShown = false;
   }
 
-  /** After the player close the greeting, the character can move. */
+  @FXML
   private void enablePlayerMovement() {
+    /** After the player close the greeting, the character can move. */
     Timer greetingTimer = new Timer(true);
     greetingTimer.scheduleAtFixedRate(
         new TimerTask() {
@@ -618,7 +649,7 @@ public class PlayerController implements Initializable {
   }
 
   @FXML
-  private void restartClicked(ActionEvent event) throws IOException {
+  private void handleRestartButtonClick(ActionEvent event) throws IOException {
     black2.setVisible(true);
     resetBox.setVisible(true);
     resetLabel.setVisible(true);
@@ -667,7 +698,6 @@ public class PlayerController implements Initializable {
                         KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
 
                 scene.fireEvent(keyReleaseEventA);
-                // scene.fireEvent(keyPressEvent);
                 scene.fireEvent(keyReleaseEventD);
                 scene.fireEvent(keyReleaseEventW);
                 scene.fireEvent(keyReleaseEventS);

@@ -143,7 +143,7 @@
          </image>
       </ImageView>
       <fx:include fx:id="aiWindowController" layoutX="850.0" layoutY="200.0" source="aiwindow.fxml" />
-      <Button fx:id="resetButton" layoutX="1015.0" layoutY="9.0" mnemonicParsing="false" onAction="#restartClicked" style="-fx-background-color: transparent;" text="RESTART" textFill="WHITE">
+      <Button fx:id="resetButton" layoutX="1015.0" layoutY="9.0" mnemonicParsing="false" onAction="#handleRestartButtonClick" style="-fx-background-color: transparent;" text="RESTART" textFill="WHITE">
          <font>
             <Font name="Arial Bold Italic" size="20.0" />
          </font></Button>
