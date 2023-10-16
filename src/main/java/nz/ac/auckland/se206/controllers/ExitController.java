@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -114,6 +116,13 @@ public class ExitController implements Initializable {
   @FXML private Label clickButton;
   @FXML private Label click;
   @FXML private ImageView gameMaster;
+  @FXML private ImageView close;
+
+  @FXML private Rectangle black2;
+  @FXML private Rectangle resetBox;
+  @FXML private Label resetLabel;
+  @FXML private Button resetYes;
+  @FXML private Button resetCancel;
 
   @FXML public Pane aiWindowController;
   @FXML private ScrollPane chatPaneOne;
@@ -123,6 +132,7 @@ public class ExitController implements Initializable {
   private FadeTransition fadeTransition;
 
   @FXML private Button toggleSoundButton;
+  private MediaPlayer walkingMediaPlayer;
 
   private boolean hasHappend = false;
   private boolean keyboardControlEnabled = true;
@@ -226,11 +236,25 @@ public class ExitController implements Initializable {
     alert.setVisible(false); // Initially hide the alert label
     aiWindowController.setVisible(true);
 
+    // if difficulty is selected, label is updated
+    detectDifficulty();
+
     walls.add(wall);
     walls.add(wall1);
 
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
+
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
+
+    String walkSoundEffect = "src/main/resources/sounds/walking.mp3";
+    Media walkMedia = new Media(new File(walkSoundEffect).toURI().toString());
+    walkingMediaPlayer = new MediaPlayer(walkMedia);
+    walkingMediaPlayer.setVolume(2.0);
 
     shapesize = player.getFitWidth();
     movementSetup();
@@ -265,6 +289,7 @@ public class ExitController implements Initializable {
     collisionTimer.start();
     // if difficulty is selected, label is updated
     detectDifficulty();
+    movementSetup();
 
     ListChangeListener<ChatBubble> listener3 =
         change -> {
@@ -304,6 +329,8 @@ public class ExitController implements Initializable {
             GameState.isPlayerInRoom3 = false;
             // GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
+            enterRoom();
+            simulateKeyPressAfterDelay();
           });
       pauseTransition.play();
     } else {
@@ -343,12 +370,23 @@ public class ExitController implements Initializable {
   // Modify your setupAlertBlinking method as follows
   private void setupAlertBlinking() {
     alert.setVisible(true); // Initially show the alert label
+    App.mediaPlayer.stop();
+    // Check if sound is enabled before setting volume and playing.
+    if (GameState.isSoundEnabled) {
+      App.alertSoundPlayer.setVolume(0.03);
+    } else {
+      App.alertSoundPlayer.setVolume(0.0);
+    }
+    App.alertSoundPlayer.setAutoPlay(true);
+    App.alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    App.alertSoundPlayer.play();
 
     // Set up the blinking animation for the alert label
     alertBlinkTimeline =
         new Timeline(
             new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
             new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
+
     alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
     alertBlinkTimeline.play();
   }
@@ -356,8 +394,10 @@ public class ExitController implements Initializable {
   // Add a method to stop the alert blinking
   private void stopAlertBlinking() {
     if (alertBlinkTimeline != null) {
+      // Stop timeline and hide label
       alertBlinkTimeline.stop();
       alert.setVisible(false);
+      App.alertSoundPlayer.stop();
     }
   }
 
@@ -374,6 +414,8 @@ public class ExitController implements Initializable {
 
     scene.setOnKeyPressed(
         e -> {
+          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
           if (keyboardControlEnabled) {
             if (e.getCode() == KeyCode.W) {
               if (walkAnimationPlaying == false) {
@@ -408,11 +450,19 @@ public class ExitController implements Initializable {
               }
               dPressed.set(true);
             }
+            boolean isMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+            // If we started moving and weren't before, start the sound.
+            if (isMoving && !wasMoving) {
+              walkingMediaPlayer.play();
+            }
           }
         });
 
     scene.setOnKeyReleased(
         e -> {
+          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
           if (keyboardControlEnabled) {
             if (e.getCode() == KeyCode.W) {
               if (player.getImage() == leftCharacterAnimation
@@ -468,6 +518,25 @@ public class ExitController implements Initializable {
               }
 
               dPressed.set(false);
+            }
+
+            boolean isMovinng =
+                wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+            // If we stopped moving and were before, stop the sound.
+            if (!isMovinng && wasMoving) {
+              PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+              pause.setOnFinished(
+                  event -> {
+                    walkingMediaPlayer.stop();
+                    try {
+                      // This line will reset audio clip from start when stopped
+                      walkingMediaPlayer.seek(Duration.ZERO);
+                    } catch (Exception ex) {
+                      System.out.println("Error resetting audio: " + ex.getMessage());
+                    }
+                  });
+              pause.play();
             }
           }
         });
@@ -542,7 +611,6 @@ public class ExitController implements Initializable {
                 }
               } else {
                 Platform.runLater(() -> updateLabels());
-                labelTimer.cancel();
               }
             }
           }
@@ -863,6 +931,7 @@ public class ExitController implements Initializable {
             if (Room1Controller.riddleAnswer == "captain") {
               if (node1 == idCaptain) {
                 light.setFill(Color.GREEN);
+                GameState.isGameFinished = true;
                 soundCorrectCard();
                 GameState.isIdChecked = true;
                 ids.setVisible(false);
@@ -871,8 +940,9 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 exit2.setVisible(false);
+                idCardList.setVisible(false);
+                endingMediaChange();
                 changeOpacity2();
-                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -881,6 +951,7 @@ public class ExitController implements Initializable {
             } else if (Room1Controller.riddleAnswer == "chef") {
               if (node1 == idChef) {
                 light.setFill(Color.GREEN);
+                GameState.isGameFinished = true;
                 soundCorrectCard();
                 GameState.isIdChecked = true;
                 ids.setVisible(false);
@@ -889,8 +960,9 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 exit2.setVisible(false);
+                idCardList.setVisible(false);
+                endingMediaChange();
                 changeOpacity2();
-                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -899,6 +971,7 @@ public class ExitController implements Initializable {
             } else if (Room1Controller.riddleAnswer == "doctor") {
               if (node1 == idDoctor) {
                 light.setFill(Color.GREEN);
+                GameState.isGameFinished = true;
                 soundCorrectCard();
                 GameState.isIdChecked = true;
                 ids.setVisible(false);
@@ -907,8 +980,9 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 exit2.setVisible(false);
+                idCardList.setVisible(false);
+                endingMediaChange();
                 changeOpacity2();
-                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -917,6 +991,7 @@ public class ExitController implements Initializable {
             } else if (Room1Controller.riddleAnswer == "engineer") {
               if (node1 == idEngineer) {
                 light.setFill(Color.GREEN);
+                GameState.isGameFinished = true;
                 soundCorrectCard();
                 GameState.isIdChecked = true;
                 ids.setVisible(false);
@@ -925,8 +1000,9 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 exit2.setVisible(false);
+                idCardList.setVisible(false);
+                endingMediaChange();
                 changeOpacity2();
-                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -935,6 +1011,11 @@ public class ExitController implements Initializable {
           }
         }
       };
+
+  private void endingMediaChange() {
+    // Wait for 2 second and change the media
+    App.alertSoundPlayer.stop();
+  }
 
   // update the labels of hint and difficulty as the game progresses
   private void updateLabels() {
@@ -995,7 +1076,7 @@ public class ExitController implements Initializable {
   }
 
   private void endingAnimation() {
-    // Create a timeline to continuously increase the scaling factor
+    // Create a FadeTransition for both background images
     Timeline continuousScaling =
         new Timeline(
             new KeyFrame(Duration.ZERO, new KeyValue(background3.scaleXProperty(), 1.0)),
@@ -1008,7 +1089,6 @@ public class ExitController implements Initializable {
     TranslateTransition Translation = new TranslateTransition(Duration.seconds(2.0), background3);
 
     // Set the animation properties
-
     Translation.setCycleCount(1); // Play the animation once
     Translation.setAutoReverse(false); // Don't reverse the animation
 
@@ -1060,6 +1140,14 @@ public class ExitController implements Initializable {
   }
 
   @FXML
+  private void enterRoom() {
+    String soundEffect = "src/main/resources/sounds/enterReal.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
+  }
+
+  @FXML
   private void onGameMasterClick() {
 
     aiWindowController.setVisible(true);
@@ -1068,21 +1156,20 @@ public class ExitController implements Initializable {
 
   @FXML
   private void toggleSound(MouseEvent event) {
-    if (GameState.isSoundEnabled) {
-      // Disable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.0); // Mute the media player
-      }
-      toggleSoundButton.setText("Enable Sound");
-    } else {
-      // Enable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-      }
-      toggleSoundButton.setText("Disable Sound");
+    GameState.isSoundEnabled = !GameState.isSoundEnabled;
+
+    double volume = GameState.isSoundEnabled ? 0.03 : 0;
+    if (App.mediaPlayer != null) {
+      App.mediaPlayer.setVolume(volume);
     }
 
-    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+    if (App.alertSoundPlayer != null) {
+      // If an Alert Sound Player exists, adjust its volume as well.
+      App.alertSoundPlayer.setVolume(volume);
+    }
+
+    soundOn.setVisible(GameState.isSoundEnabled);
+    soundOff.setVisible(!GameState.isSoundEnabled);
   }
 
   // game master robot animation
@@ -1103,5 +1190,67 @@ public class ExitController implements Initializable {
   public void clickGameMaster(MouseEvent event) {
     aiWindowController.setVisible(true);
     System.out.print("HI");
+  }
+
+  @FXML
+  private void restartClicked(ActionEvent event) throws IOException {
+    black2.setVisible(true);
+    resetBox.setVisible(true);
+    resetLabel.setVisible(true);
+    resetYes.setVisible(true);
+    resetCancel.setVisible(true);
+  }
+
+  @FXML
+  private void restartCanceled(ActionEvent event) throws IOException {
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
+  }
+
+  @FXML
+  private void reset(ActionEvent event) throws IOException {
+    try {
+      GameState.resetGames();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
+  }
+
+  private void simulateKeyPressAfterDelay() {
+    Thread thread =
+        new Thread(
+            () -> {
+              try {
+                Thread.sleep(50); // Delay of 0.1 seconds
+                KeyEvent keyReleaseEventS =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
+
+                KeyEvent keyReleaseEventA =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
+
+                KeyEvent keyReleaseEventW =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
+
+                KeyEvent keyReleaseEventD =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
+
+                scene.fireEvent(keyReleaseEventA);
+                // scene.fireEvent(keyPressEvent);
+                scene.fireEvent(keyReleaseEventD);
+                scene.fireEvent(keyReleaseEventW);
+                scene.fireEvent(keyReleaseEventS);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+            });
+
+    thread.start();
   }
 }

@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -34,6 +35,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
@@ -103,9 +106,16 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private ScrollPane chatPaneOne;
   @FXML private VBox chatContainerOne;
 
+  @FXML private Rectangle black2;
+  @FXML private Rectangle resetBox;
+  @FXML private Label resetLabel;
+  @FXML private Button resetYes;
+  @FXML private Button resetCancel;
+
   private boolean hasHappend = false;
 
   @FXML private Button toggleSoundButton;
+  private MediaPlayer walkingMediaPlayer;
 
   @FXML
   Image rightCharacterAnimation =
@@ -208,6 +218,9 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     animateExclamationMark();
     animateRobot();
 
+    // if difficulty is selected, label is updated
+    detectDifficulty();
+
     walls.add(wall);
     walls.add(wall2);
     walls.add(wall3);
@@ -229,13 +242,22 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     walls.add(wall19);
     walls.add(wall20);
 
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
+
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
 
+    String walkSoundEffect = "src/main/resources/sounds/walking.mp3";
+    Media walkMedia = new Media(new File(walkSoundEffect).toURI().toString());
+    walkingMediaPlayer = new MediaPlayer(walkMedia);
+    walkingMediaPlayer.setVolume(2.0);
+
     alert.setVisible(false); // Initially hide the alert label
     aiWindowController.setVisible(true);
-    // if difficulty is selected, label is updated
-    detectDifficulty();
 
     shapesize = player.getFitWidth();
     movementSetup();
@@ -302,6 +324,9 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             GameState.isPlayerInRoom2 = false;
             GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
+            simulateKeyPressAfterDelay();
+            // if (aPressed.get() == true && sPressed.get() == true) {}
+            enterRoom();
           });
       pauseTransition.play();
     } else {
@@ -328,17 +353,37 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
       // Stop the alert blinking when the timer reaches 0
       stopAlertBlinking();
     }
+
+    // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
+    }
   }
 
   // Modify your setupAlertBlinking method as follows
   private void setupAlertBlinking() {
     alert.setVisible(true); // Initially show the alert label
+    App.mediaPlayer.stop();
+    // Check if sound is enabled before setting volume and playing.
+    if (GameState.isSoundEnabled) {
+      App.alertSoundPlayer.setVolume(0.03);
+    } else {
+      App.alertSoundPlayer.setVolume(0.0);
+    }
+    App.alertSoundPlayer.setAutoPlay(true);
+    App.alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    App.alertSoundPlayer.play();
 
     // Set up the blinking animation for the alert label
     alertBlinkTimeline =
         new Timeline(
             new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
             new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
+
     alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
     alertBlinkTimeline.play();
   }
@@ -346,8 +391,10 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   // Add a method to stop the alert blinking
   private void stopAlertBlinking() {
     if (alertBlinkTimeline != null) {
+      // Stop timeline and hide label
       alertBlinkTimeline.stop();
       alert.setVisible(false);
+      App.alertSoundPlayer.stop();
     }
   }
 
@@ -376,6 +423,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
     scene.setOnKeyPressed(
         e -> {
+          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
           if (e.getCode() == KeyCode.W) {
             if (walkAnimationPlaying == false) {
               player.setImage(lastPlayedWalk);
@@ -409,10 +458,19 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             }
             dPressed.set(true);
           }
+
+          boolean isMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+          // If we started moving and weren't before, start the sound.
+          if (isMoving && !wasMoving) {
+            walkingMediaPlayer.play();
+          }
         });
 
     scene.setOnKeyReleased(
         e -> {
+          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
           if (e.getCode() == KeyCode.W) {
             if (player.getImage() == leftCharacterAnimation
                 && sPressed.get() == false
@@ -467,6 +525,19 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             }
 
             dPressed.set(false);
+          }
+
+          boolean isMovinng = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+          // If we stopped moving and were before, stop the sound.
+          if (!isMovinng && wasMoving) {
+            walkingMediaPlayer.stop();
+            try {
+              // This line will reset audio clip from start when stopped
+              walkingMediaPlayer.seek(Duration.ZERO);
+            } catch (Exception ex) {
+              System.out.println("Error resetting audio: " + ex.getMessage());
+            }
           }
         });
   }
@@ -532,6 +603,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
       GameState.foundComputer = true;
       eMark.setVisible(false);
       App.setScene(AppUi.TILEPUZZLE);
+      enterRoom();
     }
   }
 
@@ -552,7 +624,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
                 // easy and hard, turn off just after difficulty selection
               } else {
                 Platform.runLater(() -> updateLabels());
-                labelTimer.cancel();
               }
             }
           }
@@ -596,24 +667,28 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   @FXML
   private void toggleSound(MouseEvent event) {
-    if (GameState.isSoundEnabled) {
-      // Disable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.0); // Mute the media player
-      }
-      toggleSoundButton.setText("Enable Sound");
-      soundOff.setVisible(true);
-      soundOn.setVisible(false);
-    } else {
-      // Enable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-      }
-      soundOn.setVisible(true);
-      soundOff.setVisible(false);
+    GameState.isSoundEnabled = !GameState.isSoundEnabled;
+
+    double volume = GameState.isSoundEnabled ? 0.03 : 0;
+    if (App.mediaPlayer != null) {
+      App.mediaPlayer.setVolume(volume);
     }
 
-    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+    if (App.alertSoundPlayer != null) {
+      // If an Alert Sound Player exists, adjust its volume as well.
+      App.alertSoundPlayer.setVolume(volume);
+    }
+
+    soundOn.setVisible(GameState.isSoundEnabled);
+    soundOff.setVisible(!GameState.isSoundEnabled);
+  }
+
+  @FXML
+  private void enterRoom() {
+    String soundEffect = "src/main/resources/sounds/enterReal.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
   }
 
   // game master robot animation
@@ -628,5 +703,84 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     translate.setAutoReverse(true);
 
     translate.play();
+  }
+
+  /** After the player close the greeting, the character can move. */
+  private void enablePlayerMovement() {
+    Timer greetingTimer = new Timer(true);
+    greetingTimer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (!isGreetingShown) {
+              movementSetup();
+              greetingTimer.cancel();
+            }
+          }
+        },
+        0,
+        100);
+  }
+
+  private void simulateKeyPressAfterDelay() {
+    Thread thread =
+        new Thread(
+            () -> {
+              try {
+                Thread.sleep(50); // Delay of 0.1 seconds
+                KeyEvent keyReleaseEventS =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
+
+                KeyEvent keyReleaseEventA =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
+
+                KeyEvent keyReleaseEventW =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
+
+                KeyEvent keyReleaseEventD =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
+
+                scene.fireEvent(keyReleaseEventA);
+                // scene.fireEvent(keyPressEvent);
+                scene.fireEvent(keyReleaseEventD);
+                scene.fireEvent(keyReleaseEventW);
+                scene.fireEvent(keyReleaseEventS);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+            });
+
+    thread.start();
+  }
+
+  @FXML
+  private void restartClicked(ActionEvent event) throws IOException {
+    black2.setVisible(true);
+    resetBox.setVisible(true);
+    resetLabel.setVisible(true);
+    resetYes.setVisible(true);
+    resetCancel.setVisible(true);
+  }
+
+  @FXML
+  private void restartCanceled(ActionEvent event) throws IOException {
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
+  }
+
+  @FXML
+  private void reset(ActionEvent event) throws IOException {
+    try {
+      GameState.resetGames();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
   }
 }

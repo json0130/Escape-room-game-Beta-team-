@@ -40,7 +40,7 @@ public class AIWindowController {
   @FXML private Pane aiPane;
   @FXML private ImageView closeWindow;
 
-  private nz.ac.auckland.se206.chatHistory chatHistory;
+  // private nz.ac.auckland.se206.chatHistory chatHistory;
   private String currentRoomName;
 
   private AnimationTimer timer;
@@ -52,8 +52,21 @@ public class AIWindowController {
    */
   @FXML
   public void initialize() throws ApiProxyException {
+    // when the enter key is pressed, message is sent
+    inputText.setOnKeyPressed(
+        event -> {
+          if (event.getCode() == KeyCode.ENTER) {
+            try {
+              onSendMessage(new ActionEvent());
+            } catch (ApiProxyException | IOException e) {
+
+              e.printStackTrace();
+            }
+          }
+        });
 
     chatTextArea.setEditable(false);
+    System.out.println(Room1Controller.riddleAnswer);
     aiPane
         .visibleProperty()
         .addListener(
@@ -110,22 +123,6 @@ public class AIWindowController {
     //     runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom3()));
 
   }
-
-  /**
-   * Appends a chat message to the chat text area.
-   *
-   * @param msg the chat message to append
-   */
-  // private void appendChatMessage(ChatMessage msg) {
-  //   App.aiWindow = App.aiWindow.concat((msg.getRole() + ": " + msg.getContent() + "\n\n"));
-  //   chatTextArea.setText(App.aiWindow);
-  //   Platform.runLater(() -> {
-  //     //chatTextArea.positionCaret(chatTextArea.getText().length());
-  //     chatTextArea.setScrollTop(Double.MAX_VALUE); // this will scroll to the bottom
-  //     System.out.println(App.aiWindow);
-  //     GameState.hasHappend = false;
-  //   });
-  // }
 
   /**
    * Appends a chat message to the chat text area.
@@ -229,7 +226,6 @@ public class AIWindowController {
       return;
     }
     inputText.clear();
-
     ChatMessage msg = new ChatMessage("user", message);
     appendChatMessage(msg, false);
 
@@ -277,6 +273,7 @@ public class AIWindowController {
 
   @FXML
   private void robotThink() {
+    // This method is used to change the robot image to thinking
     robotBase.setVisible(false);
     robotReply.setVisible(false);
     robotThink.setVisible(true);
@@ -294,6 +291,7 @@ public class AIWindowController {
 
   @FXML
   private void robotReply() {
+    // This method is used to change the robot image to replying
     robotBase.setVisible(false);
     robotReply.setVisible(true);
     robotThink.setVisible(false);
@@ -322,12 +320,4 @@ public class AIWindowController {
       aiPane.setVisible(true);
     }
   }
-
-  // private ChatCompletionRequest getChatCompletionRequest() {
-  //   return this.chatCompletionRequest;
-  // }
-
-  // private void setChatCompletionRequest(ChatCompletionRequest incoming) {
-  //   this.chatCompletionRequest = incoming;
-  // }
 }

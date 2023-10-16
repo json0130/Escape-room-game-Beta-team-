@@ -194,7 +194,7 @@ public class TileGameDeskController {
             .getContent();
     System.out.println(riddleAnswer);
 
-    wordText.setText(riddleAnswer);
+    wordText.setText(riddleAnswer.substring(0, 3).toUpperCase());
 
     ListChangeListener<ChatBubble> listener3 =
         change -> {
@@ -246,6 +246,17 @@ public class TileGameDeskController {
   // Modify your setupAlertBlinking method as follows
   private void setupAlertBlinking() {
     alert.setVisible(true); // Initially show the alert label
+    // Stop current playing media
+    App.mediaPlayer.stop();
+    // Check if sound is enabled before setting volume and playing.
+    if (GameState.isSoundEnabled) {
+      App.alertSoundPlayer.setVolume(0.01);
+    } else {
+      App.alertSoundPlayer.setVolume(0.0);
+    }
+    App.alertSoundPlayer.setAutoPlay(true);
+    App.alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    App.alertSoundPlayer.play();
 
     // Set up the blinking animation for the alert label
     alertBlinkTimeline =
@@ -259,8 +270,10 @@ public class TileGameDeskController {
   // Add a method to stop the alert blinking
   private void stopAlertBlinking() {
     if (alertBlinkTimeline != null) {
+      // Stop timeline and hide label
       alertBlinkTimeline.stop();
       alert.setVisible(false);
+      App.alertSoundPlayer.stop();
     }
   }
 
@@ -649,22 +662,6 @@ public class TileGameDeskController {
   @FXML
   private void onPuzzleGoBackClick() {
     App.setScene(AppUi.TILEROOM);
-    // GameState.hasHappend = false;
-    // String musicFile;
-    // if (App.timerSeconds < 60) {
-    //   musicFile = "src/main/resources/sounds/final-BG-MUSIC.mp3";
-    //   App.musicType = "final";
-    // } else {
-    //   musicFile = "src/main/resources/sounds/Background-Music.mp3";
-    // }
-    // Media media = new Media(new File(musicFile).toURI().toString());
-
-    // App.mediaPlayer.stop();
-    // App.mediaPlayer = new MediaPlayer(media);
-    // App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-    // App.mediaPlayer.setVolume(0.1);
-    // App.mediaPlayer.setAutoPlay(true);
-    // System.out.println("click");
   }
 
   // sound for tile game
@@ -678,23 +675,20 @@ public class TileGameDeskController {
 
   @FXML
   private void toggleSound(MouseEvent event) {
-    if (GameState.isSoundEnabled) {
-      // Disable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.0); // Mute the media player
-      }
-      soundOff.setVisible(true);
-      soundOn.setVisible(false);
-    } else {
-      // Enable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-      }
-      soundOn.setVisible(true);
-      soundOff.setVisible(false);
+    GameState.isSoundEnabled = !GameState.isSoundEnabled;
+
+    double volume = GameState.isSoundEnabled ? 0.03 : 0;
+    if (App.mediaPlayer != null) {
+      App.mediaPlayer.setVolume(volume);
     }
 
-    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+    if (App.alertSoundPlayer != null) {
+      // If an Alert Sound Player exists, adjust its volume as well.
+      App.alertSoundPlayer.setVolume(volume);
+    }
+
+    soundOn.setVisible(GameState.isSoundEnabled);
+    soundOff.setVisible(!GameState.isSoundEnabled);
   }
 
   // game master animation

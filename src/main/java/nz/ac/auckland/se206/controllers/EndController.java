@@ -1,5 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
@@ -7,7 +9,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
-import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
@@ -19,31 +20,46 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 
 public class EndController implements Initializable {
-
   @FXML private Label win;
   @FXML private Label youWin;
   @FXML private Label lose;
   @FXML private Label lose1;
   @FXML private Pane scene;
   @FXML private Button button;
-  @FXML private Button s;
   @FXML private Button start;
   @FXML private ImageView e1;
   @FXML private ImageView background;
   @FXML private ImageView spaceship;
   @FXML private ImageView ship;
   @FXML private Rectangle grey;
+  @FXML private Rectangle black2;
+  @FXML private Rectangle resetBox;
+  @FXML private Label resetLabel;
+  @FXML private Button resetYes;
+  @FXML private Button resetCancel;
+
+  @FXML private Button resetButton;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    // black2.setVisible(false);
+    // resetBox.setVisible(false);
+    // resetLabel.setVisible(false);
+    // resetYes.setVisible(false);
+    // resetCancel.setVisible(false);
+
     if (scene != null) {
       scene
           .sceneProperty()
@@ -53,6 +69,17 @@ public class EndController implements Initializable {
                   // Schedule the endingAnimation to run after the scene is shown
                   Platform.runLater(this::endingAnimation);
                   youWin.setVisible(false);
+                  resetButton.setVisible(false);
+                  String musicFile;
+                  musicFile = "src/main/resources/sounds/final.mp3";
+                  App.musicType = "final";
+                  Media media = new Media(new File(musicFile).toURI().toString());
+                  App.mediaPlayer.stop();
+                  App.mediaPlayer = new MediaPlayer(media);
+                  App.mediaPlayer.setVolume(0.3);
+                  App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+                  App.mediaPlayer.setAutoPlay(true);
+                  App.mediaPlayer.play();
                 }
               });
     }
@@ -74,18 +101,17 @@ public class EndController implements Initializable {
     continuousScaling.setCycleCount(1); // Play the animation once
 
     // Create a translate animation for the r1
-    TranslateTransition Translation = new TranslateTransition(Duration.seconds(2.4), background);
+    TranslateTransition translation = new TranslateTransition(Duration.seconds(2.4), background);
 
     // Set the animation properties
-
-    Translation.setCycleCount(1); // Play the animation once
-    Translation.setAutoReverse(false); // Don't reverse the animation
+    translation.setCycleCount(1); // Play the animation once
+    translation.setAutoReverse(false); // Don't reverse the animation
 
     // Start the animations
     continuousScaling.play();
-    Translation.play();
+    translation.play();
     // Enable the button when the animation is finished
-    Translation.setOnFinished(
+    translation.setOnFinished(
         event -> {
           // Adjust the background scale to original size
           grey.setVisible(false);
@@ -123,42 +149,22 @@ public class EndController implements Initializable {
     continuousScaling.setCycleCount(1); // Play the animation once
 
     // Create a translate animation for the r1
-    TranslateTransition Translation = new TranslateTransition(Duration.seconds(3), win);
+    TranslateTransition translation = new TranslateTransition(Duration.seconds(3), win);
 
     // Set the animation properties
-
-    Translation.setCycleCount(1); // Play the animation once
-    Translation.setAutoReverse(false); // Don't reverse the animation
+    translation.setCycleCount(1); // Play the animation once
+    translation.setAutoReverse(false); // Don't reverse the animation
 
     // Start the animations
     continuousScaling.play();
-    Translation.play();
-  }
-
-  @FXML
-  private void animation() {
-    // Create a scale transition
-    ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(2), win);
-    scaleTransition.setFromX(1.0); // Starting X scale
-    scaleTransition.setFromY(1.0); // Starting Y scale
-    scaleTransition.setToX(2.0); // Ending X scale (scale up by a factor of 2)
-    scaleTransition.setToY(2.0); // Ending Y scale (scale up by a factor of 2)
-
-    // Create a translate transition
-    TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(2), win);
-    translateTransition.setByX(100); // Move label 100 units to the right
-    translateTransition.setByY(50); // Move label 50 units down
-
-    // Play both transitions in parallel
-    scaleTransition.play();
-    translateTransition.play();
+    translation.play();
   }
 
   @FXML
   private void endAnimation() {
-    spaceship.setVisible(true);
-
     // Create a timeline to continuously increase the scaling factor
+    spaceship.setVisible(true);
+    spaceshipSound();
     Timeline continuousScaling =
         new Timeline(
             new KeyFrame(Duration.ZERO, new KeyValue(spaceship.scaleXProperty(), 1.0)),
@@ -191,21 +197,61 @@ public class EndController implements Initializable {
     spaceshipPathTransition.setOnFinished(
         event -> {
           youWin.setVisible(true);
-          introTextToSpeech();
+          resetButton.setVisible(true);
+          App.mediaPlayer.setVolume(0.3);
+          winTextToSpeech();
         });
   }
-  private void introTextToSpeech() {
+
+  @FXML
+  private void spaceshipSound() {
+    String soundEffect = "src/main/resources/sounds/spaceship.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setVolume(0.2);
+    mediaPlayer.setAutoPlay(true);
+  }
+
+  private void winTextToSpeech() {
+    // Create a task to speak the text when the player win the game.
     Task<Void> introTask =
         new Task<>() {
 
           @Override
           protected Void call() throws Exception {
             TextToSpeech textToSpeech = new TextToSpeech();
-            textToSpeech.speak("You Win!");
+            textToSpeech.speak("Congratulation. You Win!");
             return null;
           }
         };
     Thread introThread = new Thread(introTask);
     introThread.start();
+  }
+
+  @FXML
+  private void restartClicked(ActionEvent event) throws IOException {
+    black2.setVisible(true);
+    resetBox.setVisible(true);
+    resetLabel.setVisible(true);
+    resetYes.setVisible(true);
+    resetCancel.setVisible(true);
+  }
+
+  @FXML
+  private void restartCanceled(ActionEvent event) throws IOException {
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
+  }
+
+  @FXML
+  private void reset(ActionEvent event) throws IOException {
+    try {
+      GameState.resetGames();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
   }
 }

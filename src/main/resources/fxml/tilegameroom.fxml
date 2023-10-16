@@ -70,17 +70,17 @@
          </children>
       </Pane>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1219.0" />
-      <Label fx:id="difficultyLabel" alignment="CENTER" layoutX="109.0" layoutY="6.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
+      <Label fx:id="difficultyLabel" alignment="CENTER" layoutX="258.0" layoutY="8.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
          <font>
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
-      <Label fx:id="hintLabel" alignment="CENTER_RIGHT" layoutX="336.0" layoutY="6.0" prefHeight="37.0" prefWidth="230.0" text="UNLIMITED" textFill="WHITE">
+      <Label fx:id="hintLabel" alignment="CENTER_RIGHT" layoutX="618.0" layoutY="8.0" prefHeight="37.0" prefWidth="230.0" text="UNLIMITED" textFill="WHITE">
          <font>
             <Font name="Arial" size="32.0" />
          </font>
       </Label>
-      <Label fx:id="hintLabel2" alignment="CENTER_RIGHT" layoutX="576.0" layoutY="6.0" prefHeight="37.0" prefWidth="96.0" text="HINTS" textFill="WHITE">
+      <Label fx:id="hintLabel2" alignment="CENTER_RIGHT" layoutX="863.0" layoutY="8.0" prefHeight="37.0" prefWidth="96.0" text="HINTS" textFill="WHITE">
          <font>
             <Font name="Arial" size="32.0" />
          </font>
@@ -113,5 +113,19 @@
          </image>
       </ImageView>
       <Button fx:id="toggleSoundButton" layoutX="861.0" layoutY="79.0" mnemonicParsing="false" text="SETTING" visible="false" />
+      <Button fx:id="resetButton" layoutX="1024.0" layoutY="8.0" mnemonicParsing="false" onAction="#restartClicked" style="-fx-background-color: transparent;" text="RESTART" textFill="WHITE">
+         <font>
+            <Font name="Arial Bold Italic" size="20.0" />
+         </font>
+      </Button>
+      <Rectangle fx:id="black2" arcHeight="5.0" arcWidth="5.0" fill="#00000081" height="619.0" layoutX="5.0" layoutY="56.0" stroke="BLACK" strokeType="INSIDE" width="1213.0" />
+      <Rectangle fx:id="resetBox" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="279.0" layoutX="342.0" layoutY="157.0" stroke="BLACK" strokeType="INSIDE" width="519.0" />
+      <Label fx:id="resetLabel" alignment="TOP_CENTER" layoutX="368.0" layoutY="221.0" prefHeight="99.0" prefWidth="464.0" text="DO YOU REALLY WANT TO &#10;RESTART THE GAME?">
+         <font>
+            <Font size="27.0" />
+         </font>
+      </Label>
+      <Button fx:id="resetYes" layoutX="725.0" layoutY="369.0" mnemonicParsing="false" onAction="#reset" text="YES" />
+      <Button fx:id="resetCancel" layoutX="441.0" layoutY="369.0" mnemonicParsing="false" onAction="#restartCanceled" text="CANCEL" />
    </children>
 </AnchorPane>

@@ -59,12 +59,21 @@ public class IntroController implements Initializable {
   @FXML private Label hard;
   @FXML private Label letter;
 
+  @FXML private Rectangle black2;
+  @FXML private Rectangle resetBox;
+  @FXML private Label resetLabel;
+  @FXML private Button resetYes;
+  @FXML private Button resetCancel;
+
   @FXML private Rectangle letterbox;
 
   private Timeline animationTimeline;
   private boolean animationStarted = false;
   @FXML private boolean isLevelSelected = false;
   @FXML private boolean isTimeSelected = false;
+
+  @FXML private Rectangle grey2;
+  @FXML private Button resetButton1;
 
   @FXML private Button toggleSoundButton;
   @FXML private ImageView title;
@@ -128,10 +137,6 @@ public class IntroController implements Initializable {
   private void levelButtonClicked(ActionEvent events) {
     soundButttonClick();
 
-    // easyButton.setOnMouseEntered(null); // Disable hover effect
-    // mediumButton.setOnMouseEntered(null); // Disable hover effect
-    // hardButton.setOnMouseEntered(null); // Disable hover effect
-
     easybox.setVisible(false);
     mediumbox.setVisible(false);
     hardbox.setVisible(false);
@@ -180,12 +185,8 @@ public class IntroController implements Initializable {
   }
 
   @FXML
-  private void minBClicked(ActionEvent events) {
+  private void minuteButtonClicked(ActionEvent events) {
     soundButttonClick();
-
-    // minB2.setOnMouseEntered(null); // Disable hover effect
-    // minB4.setOnMouseEntered(null); // Disable hover effect
-    // minB6.setOnMouseEntered(null); // Disable hover effect
 
     Button cButton = (Button) events.getSource();
 
@@ -230,6 +231,8 @@ public class IntroController implements Initializable {
 
   @FXML
   private void startButtonClicked(ActionEvent event) {
+    // If level and time is selected then the start button will be visible and allow the user to
+    // start the game.
     soundButttonClick();
     if (isLevelSelected && isTimeSelected) {
       startButton.setDisable(true);
@@ -253,6 +256,7 @@ public class IntroController implements Initializable {
 
   @FXML
   private void closeClicked() {
+    // If the user clicks the close button then the start button will be visible again.
     startButton.setDisable(false);
     startButton.setVisible(true);
     letter.setVisible(false);
@@ -284,6 +288,7 @@ public class IntroController implements Initializable {
       tutorial.setVisible(false);
       close.setVisible(false);
 
+      spaceshipSound();
       // Create a timeline to continuously increase the scaling factor
       Timeline continuousScaling =
           new Timeline(
@@ -318,30 +323,57 @@ public class IntroController implements Initializable {
           event -> {
             startButton.setDisable(false);
             App.setScene(AppUi.TUTORIAL);
-
             App.timerTimeline = new Timeline(new KeyFrame(Duration.seconds(1), this::updateTimer));
             App.timerTimeline.setCycleCount(App.timerSeconds);
-            // App.timerTimeline.play();
           });
 
       animationStarted = true;
     }
   }
 
+  @FXML
+  private void spaceshipSound() {
+    String soundEffect = "src/main/resources/sounds/spaceship.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setVolume(0.2);
+    mediaPlayer.setAutoPlay(true);
+  }
+
   private void updateTimer(ActionEvent event) {
+    // This update the timer by decreasing the timerSeconds by 1 every second.
     App.timerSeconds--;
     if (!GameState.isGameFinished) {
       if (App.timerSeconds <= 0) {
         App.timerTimeline.stop();
         App.setScene(AppUi.LOSE);
-        introTextToSpeech();
+        System.out.println("GAME OVER");
+        String musicFile;
+        musicFile = "src/main/resources/sounds/final.mp3";
+        App.musicType = "final";
+        Media media = new Media(new File(musicFile).toURI().toString());
+        // Stop current playing media
+        App.mediaPlayer.stop();
+        // Create new media player for alert sound
+        App.mediaPlayer = new MediaPlayer(media);
+
+        // Check if sound is enabled before setting volume and playing.
+        if (GameState.isSoundEnabled) {
+          App.mediaPlayer.setVolume(0.2);
+          App.mediaPlayer.setAutoPlay(true);
+          App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        }
+        loseTextToSpeech();
+        GameState.isGameFinished = true;
       }
     } else {
       App.timerTimeline.stop();
     }
   }
 
-  private void introTextToSpeech() {
+  @FXML
+  private void loseTextToSpeech() {
+    // This is the text to speech for the lose scene.
     Task<Void> introTask =
         new Task<>() {
 
@@ -392,6 +424,7 @@ public class IntroController implements Initializable {
 
   @FXML
   private void miniuteButtonHovered(Button button) {
+    // This is for the minute button hovering effect.
     button.setOnMouseEntered(
         e -> {
           // Change the style of the button for 0.2 seconds only and back to original style
