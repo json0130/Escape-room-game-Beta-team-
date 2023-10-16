@@ -181,7 +181,7 @@ public class TileGameDeskController {
             .getContent();
     System.out.println(riddleAnswer);
 
-    wordText.setText(riddleAnswer);
+    wordText.setText(riddleAnswer.substring(0, 3).toUpperCase());
   }
 
   public void checkCollision2() {
@@ -226,7 +226,6 @@ public class TileGameDeskController {
         new Timeline(
             new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
             new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
-
     alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
     alertBlinkTimeline.play();
   }

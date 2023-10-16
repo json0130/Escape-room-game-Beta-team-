@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -30,6 +31,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
@@ -430,6 +432,7 @@ public class Room1Controller implements Initializable {
             GameState.isPlayerInRoom1 = false;
             // GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
+            simulateKeyPressAfterDelay();
             enterRoom();
           });
       pauseTransition.play();
@@ -510,6 +513,7 @@ public class Room1Controller implements Initializable {
               lastPlayedWalk = player.getImage();
             }
             aPressed.set(true);
+            System.out.println("left");
           }
 
           if (e.getCode() == KeyCode.S) {
@@ -948,5 +952,40 @@ public class Room1Controller implements Initializable {
   @FXML
   private void exitCollect4(MouseEvent e) {
     btnCollect4.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
+  }
+
+  private void simulateKeyPressAfterDelay() {
+    Thread thread =
+        new Thread(
+            () -> {
+              try {
+                Thread.sleep(50); // Delay of 0.1 seconds
+                KeyEvent keyReleaseEventS =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
+
+                KeyEvent keyReleaseEventA =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
+
+                KeyEvent keyReleaseEventW =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
+
+                KeyEvent keyReleaseEventD =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
+
+                scene.fireEvent(keyReleaseEventA);
+                // scene.fireEvent(keyPressEvent);
+                scene.fireEvent(keyReleaseEventD);
+                scene.fireEvent(keyReleaseEventW);
+                scene.fireEvent(keyReleaseEventS);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+            });
+
+    thread.start();
   }
 }

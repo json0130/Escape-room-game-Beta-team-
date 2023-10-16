@@ -29,6 +29,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
@@ -304,6 +305,7 @@ public class ExitController implements Initializable {
             // GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
             enterRoom();
+            simulateKeyPressAfterDelay();
           });
       pauseTransition.play();
     } else {
@@ -1217,5 +1219,40 @@ public class ExitController implements Initializable {
     } catch (Exception e) {
       // TODO: handle exception
     }
+  }
+
+  private void simulateKeyPressAfterDelay() {
+    Thread thread =
+        new Thread(
+            () -> {
+              try {
+                Thread.sleep(50); // Delay of 0.1 seconds
+                KeyEvent keyReleaseEventS =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
+
+                KeyEvent keyReleaseEventA =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
+
+                KeyEvent keyReleaseEventW =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
+
+                KeyEvent keyReleaseEventD =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
+
+                scene.fireEvent(keyReleaseEventA);
+                // scene.fireEvent(keyPressEvent);
+                scene.fireEvent(keyReleaseEventD);
+                scene.fireEvent(keyReleaseEventW);
+                scene.fireEvent(keyReleaseEventS);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+            });
+
+    thread.start();
   }
 }

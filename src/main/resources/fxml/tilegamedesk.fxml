@@ -133,7 +133,7 @@
       </Pane>
       <Text fx:id="wordText" fill="WHITE" layoutX="710.0" layoutY="230.0" rotate="-6.3" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="187.5">
          <font>
-            <Font name="Arial Bold" size="83.0" />
+            <Font name="Arial Bold" size="50.0" />
          </font>
       </Text>
       <Label layoutX="714.0" layoutY="123.0" rotate="-8.1" text="YOUR WORD:" textFill="WHITE">
@@ -143,7 +143,7 @@
       </Label>
       <fx:include layoutX="699.0" layoutY="412.0" source="countdowntimer.fxml" />
       <Button fx:id="puzzleInfoButton" layoutX="820.0" layoutY="460.0" mnemonicParsing="false" onAction="#onpuzzleInfoButtonClick" text="INFO" />
-      <ImageView fx:id="smallScreenOff" fitHeight="535.0" fitWidth="282.0" layoutX="674.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="smallScreenOff" fitHeight="535.0" fitWidth="282.0" layoutX="674.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../images/SmallScreenOffImage.png" />
          </image>
