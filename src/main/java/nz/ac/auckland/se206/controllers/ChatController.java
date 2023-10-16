@@ -42,7 +42,7 @@ import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
 /** Controller class for the chat view. */
 public class ChatController {
   public static boolean isRiddleGiven = false;
-  
+
   @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
   @FXML private Button sendButton;
@@ -311,8 +311,8 @@ public class ChatController {
     riddleGreeting.setVisible(true);
   }
 
-  // update labels for difficulty and hints as the game progress
   private void updateLabels() {
+    // update labels for difficulty and hints as the game progress
     if (GameState.difficulty == "EASY") {
       hintLabel.setText("UNLIMITED");
     } else if (GameState.difficulty == "MEDIUM") {

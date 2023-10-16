@@ -221,7 +221,7 @@ public class Room1Controller implements Initializable {
           squareBorder();
         }
       };
-      
+
   /** Detect if the character goes closer to costumes. */
   private AnimationTimer crewCollisionTimer =
       new AnimationTimer() {
@@ -867,18 +867,18 @@ public class Room1Controller implements Initializable {
     soundOff.setVisible(!GameState.isSoundEnabled);
   }
 
-  /** Turn on the sound while the player is moving into the room. */
   @FXML
   private void enterRoom() {
+    /** Turn on the sound while the player is moving into the room. */
     String soundEffect = "src/main/resources/sounds/enterReal.mp3";
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
   }
 
-  /** Move the game master image up and down. */
   @FXML
   private void animateRobot() {
+    /** Move the game master image up and down. */
     TranslateTransition translate = new TranslateTransition();
     translate.setNode(gameMaster);
     translate.setDuration(Duration.millis(1000)); // the robot moves every 1 seconds
@@ -889,8 +889,8 @@ public class Room1Controller implements Initializable {
     translate.play();
   }
 
-  /** Reveal indicators after the player resolves the riddle. */
   private void revealIndicator() {
+    /** Reveal indicators after the player resolves the riddle. */
     Timer indicatorTimer = new Timer(true);
     indicatorTimer.scheduleAtFixedRate(
         new TimerTask() {
@@ -908,8 +908,8 @@ public class Room1Controller implements Initializable {
         100);
   }
 
-  /** Show all indicators at once. */
   private void showIndicators() {
+    /** Show all indicators at once. */
     crew1Indicator.setVisible(true);
     crew2Indicator.setVisible(true);
     crew3Indicator.setVisible(true);

@@ -80,6 +80,7 @@ public class PlayerController implements Initializable {
   @FXML private Label difficultyLabel;
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
+  @FXML private Label playerLabel;
 
   @FXML private Rectangle wall;
   @FXML private Rectangle wall1;
@@ -198,6 +199,7 @@ public class PlayerController implements Initializable {
         @Override
         public void handle(long now) {
           black.setVisible(false);
+          playerLabel.setVisible(false);
 
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
@@ -221,6 +223,7 @@ public class PlayerController implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     black.setVisible(true);
+    playerLabel.setVisible(true);
 
     black2.setVisible(false);
     resetBox.setVisible(false);

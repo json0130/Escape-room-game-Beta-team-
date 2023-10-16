@@ -45,15 +45,16 @@ public class EndController implements Initializable {
   @FXML private ImageView ship;
   @FXML private Rectangle grey;
   @FXML private Rectangle black2;
-  @FXML private Rectangle resetBox;
-  @FXML private Label resetLabel;
-  @FXML private Button resetYes;
-  @FXML private Button resetCancel;
+  @FXML private Rectangle restartBackground;
+  @FXML private Label restartLabel;
+  @FXML private Button restartYes;
+  @FXML private Button restartNo;
 
   @FXML private Button resetButton;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    // It initialize the winning scene if the scene is not null.
     if (scene != null) {
       scene
           .sceneProperty()
@@ -63,7 +64,6 @@ public class EndController implements Initializable {
                   // Schedule the endingAnimation to run after the scene is shown
                   Platform.runLater(this::endingAnimation);
                   youWin.setVisible(false);
-                  resetButton.setVisible(false);
                   String musicFile;
                   musicFile = "src/main/resources/sounds/final.mp3";
                   App.musicType = "final";
@@ -192,6 +192,10 @@ public class EndController implements Initializable {
         event -> {
           youWin.setVisible(true);
           resetButton.setVisible(true);
+          restartLabel.setVisible(false);
+          restartNo.setVisible(false);
+          restartYes.setVisible(false);
+          restartBackground.setVisible(false);
           App.mediaPlayer.setVolume(0.3);
           winTextToSpeech();
         });
@@ -222,22 +226,28 @@ public class EndController implements Initializable {
     introThread.start();
   }
 
+  /**
+   * Show buttons to restart the game or cancel.
+   *
+   * @param event mouse is clicked
+   * @throws IOException if the objects don't exist
+   */
   @FXML
-  private void restartClicked(ActionEvent event) throws IOException {
-    black2.setVisible(true);
-    resetBox.setVisible(true);
-    resetLabel.setVisible(true);
-    resetYes.setVisible(true);
-    resetCancel.setVisible(true);
+  private void handleRestartButtonClick(ActionEvent event) throws IOException {
+    resetButton.setVisible(false);
+    restartLabel.setVisible(true);
+    restartNo.setVisible(true);
+    restartYes.setVisible(true);
+    restartBackground.setVisible(true);
   }
 
   @FXML
-  private void restartCanceled(ActionEvent event) throws IOException {
-    black2.setVisible(false);
-    resetBox.setVisible(false);
-    resetLabel.setVisible(false);
-    resetYes.setVisible(false);
-    resetCancel.setVisible(false);
+  private void handleRestartButtonCanceled(ActionEvent event) throws IOException {
+    resetButton.setVisible(true);
+    restartLabel.setVisible(false);
+    restartNo.setVisible(false);
+    restartYes.setVisible(false);
+    restartBackground.setVisible(false);
   }
 
   @FXML

@@ -536,8 +536,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
         });
   }
 
-  // prevent the player moves out of the window
-  public void squareBorder() {
+  private void squareBorder() {
+    // prevent the player moves out of the window
     double left = 0;
     double right = scene.getWidth() - shapesize;
     double top = 0;
@@ -719,11 +719,12 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   @FXML
   private void simulateKeyPressAfterDelay() {
+    // It released the key pressed when the player is leaving the scene
     Thread thread =
         new Thread(
             () -> {
               try {
-                Thread.sleep(50); // Delay of 0.1 seconds
+                Thread.sleep(50);
                 KeyEvent keyReleaseEventS =
                     new KeyEvent(
                         KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
@@ -741,7 +742,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
                         KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
 
                 scene.fireEvent(keyReleaseEventA);
-                // scene.fireEvent(keyPressEvent);
                 scene.fireEvent(keyReleaseEventD);
                 scene.fireEvent(keyReleaseEventW);
                 scene.fireEvent(keyReleaseEventS);
