@@ -6,7 +6,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -42,7 +41,8 @@ import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
 /** Controller class for the chat view. */
 public class ChatController {
   public static boolean isRiddleGiven = false;
-
+  private boolean hasHappened = false;
+  private Timeline alertBlinkTimeline;
   @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
   @FXML private Button sendButton;
@@ -61,10 +61,8 @@ public class ChatController {
 
   @FXML private ImageView soundOn;
   @FXML private ImageView soundOff;
-  private boolean hasHappened = false;
 
   @FXML private Pane alert;
-  private Timeline alertBlinkTimeline;
 
   @FXML private Button toggleSoundButton;
 
@@ -112,12 +110,15 @@ public class ChatController {
   }
 
   @FXML
+  /** Detect difficulty of game whenever it changes. */
   public void detectDifficulty() {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
+        // Detect difficulty when the difficulty is selected in the intro
         new TimerTask() {
           @Override
           public void run() {
+            // Keep detect the number of hints in the medium difficuty
             if (GameState.difficulty != null) {
               if (GameState.difficulty == "MEDIUM") {
                 Platform.runLater(() -> updateLabels());
@@ -134,6 +135,7 @@ public class ChatController {
         500);
   }
 
+  /** Alert is shown when 30 seconds left. */
   public void checkCollision2() {
     if (App.timerSeconds == 30) {
       if (!hasHappened) {
@@ -166,20 +168,20 @@ public class ChatController {
     Label message = new Label(messageToSend);
     message.setWrapText(true);
     message.setFont(Font.font("Arial", 20));
-    HBox hBox = new HBox();
+    HBox chatBox = new HBox();
     if (msg.getRole().equals("user")) {
-      hBox.setAlignment(Pos.CENTER_RIGHT);
-      hBox.setPadding(new Insets(5, 10, 5, 200));
+      chatBox.setAlignment(Pos.CENTER_RIGHT);
+      chatBox.setPadding(new Insets(5, 10, 5, 200));
       message.setStyle(
           "-fx-background-color: lightblue; -fx-background-radius: 10;-fx-padding: 10,20,20,10;");
     } else {
-      hBox.setAlignment(Pos.CENTER_LEFT);
-      hBox.setPadding(new Insets(5, 200, 5, 10));
+      chatBox.setAlignment(Pos.CENTER_LEFT);
+      chatBox.setPadding(new Insets(5, 200, 5, 10));
       message.setStyle(
           "-fx-background-color: lightyellow; -fx-background-radius: 10;-fx-padding: 10,20,20,10;");
     }
-    hBox.getChildren().addAll(message);
-    chatContainer.getChildren().addAll(hBox);
+    chatBox.getChildren().addAll(message);
+    chatContainer.getChildren().addAll(chatBox);
     chatContainer.setAlignment(Pos.TOP_CENTER);
     chatPane.vvalueProperty().bind(chatContainer.heightProperty());
   }
@@ -193,6 +195,7 @@ public class ChatController {
    */
   private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
     glitch.setVisible(true);
+    // task to run gpt in multithread
     Task<ChatMessage> runningGptTask =
         new Task<ChatMessage>() {
           @Override
@@ -202,6 +205,7 @@ public class ChatController {
               ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
               Choice result = chatCompletionResult.getChoices().iterator().next();
               chatCompletionRequest.addMessage(result.getChatMessage());
+              // Update gui of the chat message scene
               Platform.runLater(
                   () -> {
                     appendChatMessage(result.getChatMessage());
@@ -209,14 +213,17 @@ public class ChatController {
               // Check the correctness of player's answer for the riddle
               Platform.runLater(
                   () -> {
+                    // The answer is correct
                     if (result.getChatMessage().getRole().equals("assistant")
                         && result.getChatMessage().getContent().startsWith("Correct")) {
                       GameState.isRiddleResolved = true;
                       riddleCorrect();
+                      // Giving hint
                     } else if (result.getChatMessage().getRole().equals("assistant")
                         && result.getChatMessage().getContent().startsWith("Hint")) {
                       GameState.numOfHints--;
                       riddleHint();
+                      // The answer is incorrect
                     } else if (result.getChatMessage().getRole().equals("assistant")
                         && result.getChatMessage().getContent().startsWith("Incorrect")) {
                       riddleWrong();
@@ -275,6 +282,7 @@ public class ChatController {
     App.setScene(AppUi.ROOM1);
   }
 
+  /** Sound effect is played when an object is clicked. */
   @FXML
   private void soundButttonClick() {
     String soundEffect = "src/main/resources/sounds/button-click.mp3";
@@ -283,6 +291,7 @@ public class ChatController {
     mediaPlayer.setAutoPlay(true);
   }
 
+  /** Riddle robot changes its face when the answer is correct. */
   private void riddleCorrect() {
     riddleHint.setVisible(false);
     riddleWrong.setVisible(false);
@@ -290,6 +299,7 @@ public class ChatController {
     riddleGreeting.setVisible(false);
   }
 
+  /** Riddle robot changes its face when it gives a hint. */
   private void riddleHint() {
     riddleHint.setVisible(true);
     riddleWrong.setVisible(false);
@@ -297,6 +307,7 @@ public class ChatController {
     riddleGreeting.setVisible(false);
   }
 
+  /** Riddle robot changes its face when the answer is wrong. */
   private void riddleWrong() {
     riddleHint.setVisible(false);
     riddleWrong.setVisible(true);
@@ -304,6 +315,7 @@ public class ChatController {
     riddleGreeting.setVisible(false);
   }
 
+  /** Riddle robot changes its face to normal state. */
   private void riddleGreeting() {
     riddleHint.setVisible(false);
     riddleWrong.setVisible(false);
@@ -311,6 +323,7 @@ public class ChatController {
     riddleGreeting.setVisible(true);
   }
 
+  /** update labels for difficulty and hints as the game progress. */
   private void updateLabels() {
     // update labels for difficulty and hints as the game progress
     if (GameState.difficulty == "EASY") {
@@ -326,48 +339,7 @@ public class ChatController {
     }
   }
 
-  @FXML
-  private void robotThink() {
-    robotBase.setVisible(false);
-    robotReply.setVisible(false);
-    robotThink.setVisible(true);
-
-    Platform.runLater(
-        () -> {
-          PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
-          delay.setOnFinished(
-              event1 -> {
-                robotReply();
-              });
-          delay.play();
-        });
-  }
-
-  @FXML
-  private void robotReply() {
-    robotBase.setVisible(false);
-    robotReply.setVisible(true);
-    robotThink.setVisible(false);
-
-    Platform.runLater(
-        () -> {
-          PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
-          delay.setOnFinished(
-              event1 -> {
-                robotIdle();
-              });
-          delay.play();
-        });
-  }
-
-  @FXML
-  private void robotIdle() {
-    robotBase.setVisible(true);
-    robotReply.setVisible(false);
-    robotThink.setVisible(false);
-  }
-
-  // Modify your setupAlertBlinking method as follows
+  /** Modify your setupAlertBlinking method as follows. */
   private void setupAlertBlinking() {
     alert.setVisible(true); // Initially show the alert label
     // Stop current playing media
@@ -392,7 +364,7 @@ public class ChatController {
     alertBlinkTimeline.play();
   }
 
-  // Add a method to stop the alert blinking
+  /** Add a method to stop the alert blinking. */
   private void stopAlertBlinking() {
     if (alertBlinkTimeline != null) {
       // Stop timeline and hide label
@@ -401,6 +373,11 @@ public class ChatController {
     }
   }
 
+  /**
+   * Turn on and off the background music.
+   *
+   * @param event mouse is clicked
+   */
   @FXML
   private void toggleSound(MouseEvent event) {
     GameState.isSoundEnabled = !GameState.isSoundEnabled;
