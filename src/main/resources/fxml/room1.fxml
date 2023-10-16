@@ -47,7 +47,7 @@
             <Image url="@../images/idphotos/idengineer.png" />
          </image>
       </ImageView>
-      <Button fx:id="backButton" layoutX="37.0" layoutY="475.0" mnemonicParsing="false" onAction="#back" opacity="0.0" text="Back" />
+      <Button fx:id="backButton" layoutX="37.0" layoutY="475.0" mnemonicParsing="false" onAction="#onBack" opacity="0.0" text="Back" />
       <Rectangle fx:id="wall1" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="31.0" layoutX="-8.0" layoutY="189.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="1019.0" />
       <Rectangle fx:id="wall2" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="53.0" layoutX="431.0" layoutY="221.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="83.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1200.0" />
@@ -129,7 +129,7 @@
       </ImageView>
       <Button fx:id="toggleSoundButton" layoutX="861.0" layoutY="79.0" mnemonicParsing="false" text="SETTING" visible="false" />
       <Rectangle fx:id="wall3" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="454.0" layoutX="870.0" layoutY="199.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="25.0" />
-      <Button fx:id="resetButton" layoutX="1009.0" layoutY="9.0" mnemonicParsing="false" onAction="#restartClicked" style="-fx-background-color: transparent;" text="RESTART" textFill="WHITE">
+      <Button fx:id="resetButton" layoutX="1009.0" layoutY="9.0" mnemonicParsing="false" onAction="#onRestartClicked" style="-fx-background-color: transparent;" text="RESTART" textFill="WHITE">
          <font>
             <Font name="Arial Bold Italic" size="20.0" />
          </font>
@@ -141,7 +141,7 @@
             <Font size="27.0" />
          </font>
       </Label>
-      <Button fx:id="resetYes" layoutX="725.0" layoutY="369.0" mnemonicParsing="false" onAction="#reset" text="YES" />
-      <Button fx:id="resetCancel" layoutX="441.0" layoutY="369.0" mnemonicParsing="false" onAction="#restartCanceled" text="CANCEL" />
+      <Button fx:id="resetYes" layoutX="725.0" layoutY="369.0" mnemonicParsing="false" onAction="#onReset" text="YES" />
+      <Button fx:id="resetCancel" layoutX="441.0" layoutY="369.0" mnemonicParsing="false" onAction="#onRestartCanceled" text="CANCEL" />
    </children>
 </Pane>
