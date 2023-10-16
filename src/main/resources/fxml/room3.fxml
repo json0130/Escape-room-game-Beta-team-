@@ -31,7 +31,7 @@
          </image>
       </ImageView>
       <Pane fx:id="alert" layoutX="-24.0" layoutY="14.0" opacity="0.23" prefHeight="686.0" prefWidth="1227.0" style="-fx-background-color: red;" />
-      <Button fx:id="button" layoutX="6.0" layoutY="405.0" mnemonicParsing="false" onAction="#back" opacity="0.0" text="Button" />
+      <Button fx:id="button" layoutX="6.0" layoutY="405.0" mnemonicParsing="false" onAction="#onBack" opacity="0.0" text="Button" />
       <ImageView fx:id="pad" fitHeight="420.0" fitWidth="387.0" layoutX="323.0" layoutY="159.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly_spaceship_passcode_touchpad_2D_46452-removebg-preview.png" />
@@ -45,62 +45,62 @@
       </Label>
       <Group layoutX="400.0" layoutY="293.0">
          <children>
-            <Button fx:id="zero" layoutX="-53.0" layoutY="192.0" mnemonicParsing="false" onAction="#onZero" prefHeight="36.0" prefWidth="100.0" text="0">
+            <Button fx:id="zero" layoutX="-53.0" layoutY="192.0" mnemonicParsing="false" onAction="#onClickZero" prefHeight="36.0" prefWidth="100.0" text="0">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="three" layoutX="148.0" layoutY="68.0" mnemonicParsing="false" onAction="#onThree" prefHeight="42.0" prefWidth="106.0" text="3">
+            <Button fx:id="three" layoutX="148.0" layoutY="68.0" mnemonicParsing="false" onAction="#onClickThree" prefHeight="42.0" prefWidth="106.0" text="3">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="two" layoutX="47.0" layoutY="67.0" mnemonicParsing="false" onAction="#onTwo" prefHeight="44.0" prefWidth="101.0" text="2">
+            <Button fx:id="two" layoutX="47.0" layoutY="67.0" mnemonicParsing="false" onAction="#onClickTwo" prefHeight="44.0" prefWidth="101.0" text="2">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="reset" layoutX="46.0" layoutY="191.0" mnemonicParsing="false" onAction="#onReset" prefHeight="37.0" prefWidth="102.0" text="Reset">
+            <Button fx:id="reset" layoutX="46.0" layoutY="191.0" mnemonicParsing="false" onAction="#onClickReset" prefHeight="37.0" prefWidth="102.0" text="Reset">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="four" layoutX="-52.0" layoutY="111.0" mnemonicParsing="false" onAction="#onFour" prefHeight="42.0" prefWidth="99.0" text="4">
+            <Button fx:id="four" layoutX="-52.0" layoutY="111.0" mnemonicParsing="false" onAction="#onClickFour" prefHeight="42.0" prefWidth="99.0" text="4">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="five" layoutX="47.0" layoutY="111.0" mnemonicParsing="false" onAction="#onFive" prefHeight="42.0" prefWidth="101.0" text="5">
+            <Button fx:id="five" layoutX="47.0" layoutY="111.0" mnemonicParsing="false" onAction="#onClickFive" prefHeight="42.0" prefWidth="101.0" text="5">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="six" layoutX="148.0" layoutY="110.0" mnemonicParsing="false" onAction="#onSix" prefHeight="44.0" prefWidth="106.0" text="6">
+            <Button fx:id="six" layoutX="148.0" layoutY="110.0" mnemonicParsing="false" onAction="#onClickSix" prefHeight="44.0" prefWidth="106.0" text="6">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="eight" layoutX="47.0" layoutY="153.0" mnemonicParsing="false" onAction="#onEight" prefHeight="38.0" prefWidth="101.0" text="8">
+            <Button fx:id="eight" layoutX="47.0" layoutY="153.0" mnemonicParsing="false" onAction="#onClickEight" prefHeight="38.0" prefWidth="101.0" text="8">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="nine" layoutX="148.0" layoutY="153.0" mnemonicParsing="false" onAction="#onNine" prefHeight="38.0" prefWidth="106.0" text="9">
+            <Button fx:id="nine" layoutX="148.0" layoutY="153.0" mnemonicParsing="false" onAction="#onClickNine" prefHeight="38.0" prefWidth="106.0" text="9">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="one" layoutX="-52.0" layoutY="67.0" mnemonicParsing="false" onAction="#onOne" prefHeight="45.0" prefWidth="99.0" text="1">
+            <Button fx:id="one" layoutX="-52.0" layoutY="67.0" mnemonicParsing="false" onAction="#onClickOne" prefHeight="45.0" prefWidth="99.0" text="1">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="enter" layoutX="147.0" layoutY="191.0" mnemonicParsing="false" onAction="#onEnter" prefHeight="36.0" prefWidth="108.0" text="Enter">
+            <Button fx:id="enter" layoutX="147.0" layoutY="191.0" mnemonicParsing="false" onAction="#onClickEnter" prefHeight="36.0" prefWidth="108.0" text="Enter">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="seven" layoutX="-52.0" layoutY="153.0" mnemonicParsing="false" onAction="#onSeven" prefHeight="39.0" prefWidth="99.0" text="7">
+            <Button fx:id="seven" layoutX="-52.0" layoutY="153.0" mnemonicParsing="false" onAction="#onClickSeven" prefHeight="39.0" prefWidth="99.0" text="7">
                <font>
                   <Font size="15.0" />
                </font>
@@ -161,7 +161,7 @@
             <Font name="Arial" size="20.0" />
          </font>
       </TextArea>
-      <Button fx:id="exit" layoutX="610.0" layoutY="163.0" mnemonicParsing="false" onAction="#clickExit" prefHeight="19.0" prefWidth="35.0" text="X">
+      <Button fx:id="exit" layoutX="610.0" layoutY="163.0" mnemonicParsing="false" onAction="#onClickExit" prefHeight="19.0" prefWidth="35.0" text="X">
          <font>
             <Font size="18.0" />
          </font>
@@ -175,7 +175,7 @@
       <Rectangle fx:id="exit1" arcHeight="5.0" arcWidth="5.0" fill="#ff95008e" height="216.0" layoutX="-17.0" layoutY="441.0" stroke="BLACK" strokeType="INSIDE" width="63.0" />
       <Rectangle fx:id="wall" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff" height="25.0" layoutX="35.0" layoutY="431.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="955.0" />
       <Rectangle fx:id="clickMonitor" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="83.0" layoutX="434.0" layoutY="410.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="146.0" />
-      <Button fx:id="exit2" layoutX="859.0" layoutY="99.0" mnemonicParsing="false" onAction="#clickExit2" prefHeight="19.0" prefWidth="35.0" text="X">
+      <Button fx:id="exit2" layoutX="859.0" layoutY="99.0" mnemonicParsing="false" onAction="#onClickExit2" prefHeight="19.0" prefWidth="35.0" text="X">
          <font>
             <Font size="18.0" />
          </font>
