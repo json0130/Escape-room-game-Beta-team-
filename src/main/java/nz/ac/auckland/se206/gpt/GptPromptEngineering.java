@@ -32,7 +32,7 @@ public class GptPromptEngineering {
     String user = "The user said " + message;
     String answer = "";
     if ((GameState.difficulty == "MEDIUM" && GameState.numOfHints <= 0)
-        || GameState.difficulty == "HARD") {
+        || GameState.difficulty == "settingHARD") {
       answer =
           "Determine if the user is asking for help or asking for answer or quessing the answer or"
               + " just want to talk to you. If ths user is asking for help, say you cannot give"
@@ -97,8 +97,7 @@ public class GptPromptEngineering {
         + " than 50 words.";
   }
 
-  public static String easy(String message) {
-
+  public static String settingEasy(String message) {
     String hint = "";
     if (GameState.isPlayerInMap) {
       if (!GameState.beenToRoom1 && !GameState.beenToRoom2 && !GameState.beenToRoom3) {
@@ -191,7 +190,7 @@ public class GptPromptEngineering {
     return intro;
   }
 
-  public static String medium(String message) {
+  public static String settingMedium(String message) {
     String intro = "";
     if (GameState.numOfHints <= 0) {
       intro =
@@ -291,7 +290,7 @@ public class GptPromptEngineering {
     return intro;
   }
 
-  public static String hard(String message) {
+  public static String settingHard(String message) {
     return "The user said"
         + message
         + ". you should naturally respond to user and do not give any hint. If the user is asking"

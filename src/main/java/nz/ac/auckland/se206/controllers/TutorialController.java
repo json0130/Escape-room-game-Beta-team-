@@ -126,7 +126,7 @@ public class TutorialController implements Initializable {
       };
 
   @FXML
-  private void skipTutorial(ActionEvent event) {
+  private void clickSkipTutorial(ActionEvent event) {
     soundButttonClick();
     App.setScene(AppUi.ANIMATION);
     collisionTimer.stop();
@@ -141,7 +141,7 @@ public class TutorialController implements Initializable {
   }
 
   @FXML
-  private void play(ActionEvent event) {
+  private void runAnimations(ActionEvent event) {
     setRotate(c1, true, 360, 10);
     setRotate(c2, true, 180, 18);
     setRotate(c3, true, 145, 24);

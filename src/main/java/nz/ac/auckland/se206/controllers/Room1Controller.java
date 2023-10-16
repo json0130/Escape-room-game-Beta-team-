@@ -51,7 +51,6 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
 public class Room1Controller implements Initializable {
   public static ObservableList<ChatBubble> chatBubbleListRoom1 =
       FXCollections.observableArrayList();
-
   public static String riddleAnswer;
 
   private BooleanProperty isWPressed = new SimpleBooleanProperty();
@@ -222,7 +221,50 @@ public class Room1Controller implements Initializable {
           squareBorder();
         }
       };
+      
+  /** Detect if the character goes closer to costumes. */
+  private AnimationTimer crewCollisionTimer =
+      new AnimationTimer() {
+        @Override
+        public void handle(long now) {
+          // if character near costume1 and not collected, show id card and hide indicator
+          if (GameState.isRiddleResolved) {
+            if (player.getBoundsInParent().intersects(crew1Collision.getBoundsInParent())) {
+              if (!GameState.isDoctorCollected) {
+                Platform.runLater(() -> showId1());
+              }
+            } else if (!GameState.isDoctorCollected) {
+              Platform.runLater(() -> hideId1());
+            }
+            // if character near costume2 and not collected, show id and hide indicator
+            if (player.getBoundsInParent().intersects(crew2Collision.getBoundsInParent())) {
+              if (!GameState.isCaptainCollected) {
+                Platform.runLater(() -> showId2());
+              }
+            } else if (!GameState.isCaptainCollected) {
+              Platform.runLater(() -> hideId2());
+            }
+            // if character near costume3 and not collected, show id and hide indicator
+            if (player.getBoundsInParent().intersects(crew3Collision.getBoundsInParent())) {
+              if (!GameState.isChefCollected) {
+                Platform.runLater(() -> showId3());
+              }
+            } else if (!GameState.isChefCollected) {
+              Platform.runLater(() -> hideId3());
+            }
+            // if character near costume4 and not collected, show id and hide indicator
+            if (player.getBoundsInParent().intersects(crew4Collision.getBoundsInParent())) {
+              if (!GameState.isEngineerCollected) {
+                Platform.runLater(() -> showId4());
+              }
+            } else if (!GameState.isEngineerCollected) {
+              Platform.runLater(() -> hideId4());
+            }
+          }
+        }
+      };
 
+  @FXML
   public void initialize(URL url, ResourceBundle resource) {
     shapesize = player.getFitWidth();
     alert.setVisible(false);
@@ -347,7 +389,8 @@ public class Room1Controller implements Initializable {
    * @param player player image
    * @param exit exit where player can move to the map
    */
-  public void checkExit(ImageView player, Rectangle exit) {
+  @FXML
+  private void checkExit(ImageView player, Rectangle exit) {
     if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
       exit.setOpacity(1);
       timer.stop();
@@ -377,7 +420,8 @@ public class Room1Controller implements Initializable {
    * @param player player image
    * @param walls border that the player cannot move across
    */
-  public void checkCollision2(ImageView player, List<Rectangle> walls) {
+  @FXML
+  private void checkCollision2(ImageView player, List<Rectangle> walls) {
     for (Rectangle wall : walls) {
       if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
         player.setLayoutX(previousX); // Restore the player's previous X position
@@ -406,7 +450,8 @@ public class Room1Controller implements Initializable {
   }
 
   /** Prevent the player moves out of the window. */
-  public void squareBorder() {
+  @FXML
+  private void squareBorder() {
     double left = 0;
     double right = scene.getWidth() - shapesize;
     double top = 0;
@@ -428,6 +473,46 @@ public class Room1Controller implements Initializable {
     if (player.getLayoutY() > bottom) {
       player.setLayoutY(bottom);
     }
+  }
+
+  /** If collect button is pressed, id is collected and state of idcollected changes. */
+  @FXML
+  private void onCollect1() {
+    GameState.isDoctorCollected = true;
+    GameState.isIdCollected = true;
+    hideId1();
+    crew1Indicator.setVisible(false);
+    scene.requestFocus(); // Add this line
+  }
+
+  /** If collect button is pressed, id is collected and state of idcollected changes. */
+  @FXML
+  private void onCollect2() {
+    GameState.isCaptainCollected = true;
+    GameState.isIdCollected = true;
+    hideId2();
+    crew2Indicator.setVisible(false);
+    scene.requestFocus(); // Add this line
+  }
+
+  /** If collect button is pressed, id is collected and state of idcollected changes. */
+  @FXML
+  private void onCollect3() {
+    GameState.isChefCollected = true;
+    GameState.isIdCollected = true;
+    hideId3();
+    crew3Indicator.setVisible(false);
+    scene.requestFocus(); // Add this line
+  }
+
+  /** If collect button is pressed, id is collected and state of idcollected changes. */
+  @FXML
+  private void onCollect4() {
+    GameState.isEngineerCollected = true;
+    GameState.isIdCollected = true;
+    hideId4();
+    crew4Indicator.setVisible(false);
+    scene.requestFocus(); // Add this line
   }
 
   /** Hide id and button and indicator at once. */
@@ -486,46 +571,6 @@ public class Room1Controller implements Initializable {
     crew4Indicator.setVisible(false);
   }
 
-  /** If collect button is pressed, id is collected and state of idcollected changes. */
-  @FXML
-  private void onCollect1() {
-    GameState.isDoctorCollected = true;
-    GameState.isIdCollected = true;
-    hideId1();
-    crew1Indicator.setVisible(false);
-    scene.requestFocus(); // Add this line
-  }
-
-  /** If collect button is pressed, id is collected and state of idcollected changes. */
-  @FXML
-  private void onCollect2() {
-    GameState.isCaptainCollected = true;
-    GameState.isIdCollected = true;
-    hideId2();
-    crew2Indicator.setVisible(false);
-    scene.requestFocus(); // Add this line
-  }
-
-  /** If collect button is pressed, id is collected and state of idcollected changes. */
-  @FXML
-  private void onCollect3() {
-    GameState.isChefCollected = true;
-    GameState.isIdCollected = true;
-    hideId3();
-    crew3Indicator.setVisible(false);
-    scene.requestFocus(); // Add this line
-  }
-
-  /** If collect button is pressed, id is collected and state of idcollected changes. */
-  @FXML
-  private void onCollect4() {
-    GameState.isEngineerCollected = true;
-    GameState.isIdCollected = true;
-    hideId4();
-    crew4Indicator.setVisible(false);
-    scene.requestFocus(); // Add this line
-  }
-
   /**
    * Change the scene to the riddle scene.
    *
@@ -548,6 +593,7 @@ public class Room1Controller implements Initializable {
    * @param player the player image
    * @param wall2 the monitor that shows click me button when the player touches it
    */
+  @FXML
   private void checkMonitor(ImageView player, Rectangle wall2) {
     if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
       blinkingRectangle.setOpacity(1);
@@ -570,7 +616,6 @@ public class Room1Controller implements Initializable {
   /** Enable player movement using wasd keys. */
   @FXML
   private void setUpMovement() {
-
     scene.setOnKeyPressed(
         e -> {
           boolean wasMoving =
@@ -711,6 +756,7 @@ public class Room1Controller implements Initializable {
   }
 
   /** Detect change in the game state difficulty in the intro scene. */
+  @FXML
   private void detectDifficulty() {
     // Made a new timer which detects change in difficulty which is selected in the intro scene
     Timer labelTimer = new Timer(true);
@@ -738,6 +784,7 @@ public class Room1Controller implements Initializable {
   }
 
   /** Modify your setupAlertBlinking method as follows. */
+  @FXML
   private void setupAlertBlinking() {
     alert.setVisible(true); // Initially show the alert label
     // Stop current playing media
@@ -789,48 +836,6 @@ public class Room1Controller implements Initializable {
       hintLabel.setText("NO");
     }
   }
-
-  /** Detect if the character goes closer to costumes. */
-  private AnimationTimer crewCollisionTimer =
-      new AnimationTimer() {
-        @Override
-        public void handle(long now) {
-          // if character near costume1 and not collected, show id card and hide indicator
-          if (GameState.isRiddleResolved) {
-            if (player.getBoundsInParent().intersects(crew1Collision.getBoundsInParent())) {
-              if (!GameState.isDoctorCollected) {
-                Platform.runLater(() -> showId1());
-              }
-            } else if (!GameState.isDoctorCollected) {
-              Platform.runLater(() -> hideId1());
-            }
-            // if character near costume2 and not collected, show id and hide indicator
-            if (player.getBoundsInParent().intersects(crew2Collision.getBoundsInParent())) {
-              if (!GameState.isCaptainCollected) {
-                Platform.runLater(() -> showId2());
-              }
-            } else if (!GameState.isCaptainCollected) {
-              Platform.runLater(() -> hideId2());
-            }
-            // if character near costume3 and not collected, show id and hide indicator
-            if (player.getBoundsInParent().intersects(crew3Collision.getBoundsInParent())) {
-              if (!GameState.isChefCollected) {
-                Platform.runLater(() -> showId3());
-              }
-            } else if (!GameState.isChefCollected) {
-              Platform.runLater(() -> hideId3());
-            }
-            // if character near costume4 and not collected, show id and hide indicator
-            if (player.getBoundsInParent().intersects(crew4Collision.getBoundsInParent())) {
-              if (!GameState.isEngineerCollected) {
-                Platform.runLater(() -> showId4());
-              }
-            } else if (!GameState.isEngineerCollected) {
-              Platform.runLater(() -> hideId4());
-            }
-          }
-        }
-      };
 
   /** Turn on the background sound. */
   @FXML

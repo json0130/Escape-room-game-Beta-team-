@@ -41,6 +41,8 @@ import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
 
 /** Controller class for the chat view. */
 public class ChatController {
+  public static boolean isRiddleGiven = false;
+  
   @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
   @FXML private Button sendButton;
@@ -67,7 +69,6 @@ public class ChatController {
   @FXML private Button toggleSoundButton;
 
   private ChatCompletionRequest chatCompletionRequest;
-  public static boolean isRiddleGiven = false;
 
   private AnimationTimer collisionTimer =
       new AnimationTimer() {
@@ -110,6 +111,7 @@ public class ChatController {
     detectDifficulty();
   }
 
+  @FXML
   public void detectDifficulty() {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(

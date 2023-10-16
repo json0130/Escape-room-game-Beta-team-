@@ -124,8 +124,6 @@ public class PlayerController implements Initializable {
   private double previousX;
   private double previousY;
 
-  private boolean isGreetingShown = true;
-
   @FXML private Button toggleSoundButton;
 
   @FXML private Label countdownLabel;
@@ -138,7 +136,7 @@ public class PlayerController implements Initializable {
   @FXML private MediaPlayer walkingMediaPlayer;
 
   @FXML
-  Image rightCharacterAnimation =
+  private Image rightCharacterAnimation =
       new Image(
           new File("src/main/resources/images/walkingRight.gif").toURI().toString(),
           171,
@@ -147,7 +145,7 @@ public class PlayerController implements Initializable {
           false);
 
   @FXML
-  Image leftCharacterAnimation =
+  private Image leftCharacterAnimation =
       new Image(
           new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
           171,
@@ -156,7 +154,7 @@ public class PlayerController implements Initializable {
           false);
 
   @FXML
-  Image leftCharacterIdle =
+  private Image leftCharacterIdle =
       new Image(
           new File("src/main/resources/images/gameCharacterArtLeft.png").toURI().toString(),
           171,
@@ -165,7 +163,7 @@ public class PlayerController implements Initializable {
           false);
 
   @FXML
-  Image rightCharacterIdle =
+  private Image rightCharacterIdle =
       new Image(
           new File("src/main/resources/images/gameCharacterArtRight.png").toURI().toString(),
           171,
@@ -174,7 +172,7 @@ public class PlayerController implements Initializable {
           false);
 
   @FXML
-  Image lastPlayedWalk =
+  private Image lastPlayedWalk =
       new Image(
           new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
           171,
@@ -182,7 +180,7 @@ public class PlayerController implements Initializable {
           false,
           false);
 
-  Boolean walkAnimationPlaying = false;
+  private Boolean walkAnimationPlaying = false;
 
   private AnimationTimer collisionTimer =
       new AnimationTimer() {
@@ -289,7 +287,7 @@ public class PlayerController implements Initializable {
 
     // if difficulty is selected, label is updated
     detectDifficulty();
-    movementSetup();
+    movingSetup();
 
     ListChangeListener<ChatBubble> listener2 =
         change -> {
@@ -683,8 +681,7 @@ public class PlayerController implements Initializable {
 
   // code for player movement using wasd keys
   @FXML
-  public void movementSetup() {
-
+  public void movingSetup() {
     scene.setOnKeyPressed(
         e -> {
           boolean wasMoving =
@@ -852,6 +849,12 @@ public class PlayerController implements Initializable {
     soundOff.setVisible(!GameState.isSoundEnabled);
   }
 
+  /**
+   * Show buttons to restart the game or cancel.
+   *
+   * @param event mouse is clicked
+   * @throws IOException if the objects don't exist
+   */
   @FXML
   private void handleRestartButtonClick(ActionEvent event) throws IOException {
     black2.setVisible(true);
@@ -861,23 +864,8 @@ public class PlayerController implements Initializable {
     resetCancel.setVisible(true);
   }
 
-  /**
-   * Show buttons to restart the game or cancel.
-   *
-   * @param event mouse is clicked
-   * @throws IOException if the objects don't exist
-   */
   @FXML
-  private void restartClicked(ActionEvent event) throws IOException {
-    black2.setVisible(true);
-    resetBox.setVisible(true);
-    resetLabel.setVisible(true);
-    resetYes.setVisible(true);
-    resetCancel.setVisible(true);
-  }
-
-  @FXML
-  private void restartCanceled(ActionEvent event) throws IOException {
+  private void handleRestartButtonCanceled(ActionEvent event) throws IOException {
     black2.setVisible(false);
     resetBox.setVisible(false);
     resetLabel.setVisible(false);
@@ -886,7 +874,7 @@ public class PlayerController implements Initializable {
   }
 
   @FXML
-  private void reset(ActionEvent event) throws IOException {
+  private void handleResetEvent(ActionEvent event) throws IOException {
     try {
       GameState.resetGames();
     } catch (Exception e) {
@@ -894,6 +882,7 @@ public class PlayerController implements Initializable {
     }
   }
 
+  @FXML
   private void simulateKeyPressAfterDelay() {
     Thread thread =
         new Thread(

@@ -639,6 +639,7 @@ public class ExitController implements Initializable {
   }
 
   /** If the player moves closer to the computer, button for keypad appears. */
+  @FXML
   private void checkComputer(ImageView player, Rectangle wall2) {
     if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
       monitor.setOpacity(1);
@@ -1301,7 +1302,6 @@ public class ExitController implements Initializable {
     translate.setByX(0);
     translate.setByY(20);
     translate.setAutoReverse(true);
-
     translate.play();
   }
 
@@ -1316,8 +1316,14 @@ public class ExitController implements Initializable {
     System.out.print("HI");
   }
 
+ /**
+   * Show buttons to restart the game or cancel.
+   *
+   * @param event mouse is clicked
+   * @throws IOException if the objects don't exist
+   */
   @FXML
-  private void restartClicked(ActionEvent event) throws IOException {
+  private void handleRestartButtonClick(ActionEvent event) throws IOException {
     black2.setVisible(true);
     resetBox.setVisible(true);
     resetLabel.setVisible(true);
@@ -1325,14 +1331,14 @@ public class ExitController implements Initializable {
     resetCancel.setVisible(true);
   }
 
-  /**
-   * The player can keep playing the game.
+ /**
+   * Cancel the restart when cancel button is clicked
    *
    * @param event mouse is clicked
    * @throws IOException if the objects don't exist
    */
   @FXML
-  private void restartCanceled(ActionEvent event) throws IOException {
+  private void handleRestartButtonCanceled(ActionEvent event) throws IOException {
     black2.setVisible(false);
     resetBox.setVisible(false);
     resetLabel.setVisible(false);
@@ -1340,14 +1346,8 @@ public class ExitController implements Initializable {
     resetCancel.setVisible(false);
   }
 
-  /**
-   * Reload the whole game again.
-   *
-   * @param event mouse is clicked
-   * @throws IOException if the game state does not exit
-   */
   @FXML
-  private void reset(ActionEvent event) throws IOException {
+  private void handleResetEvent(ActionEvent event) throws IOException {
     try {
       GameState.resetGames();
     } catch (Exception e) {
@@ -1355,6 +1355,7 @@ public class ExitController implements Initializable {
     }
   }
 
+  @FXML
   private void simulateKeyPressAfterDelay() {
     Thread thread =
         new Thread(
