@@ -28,6 +28,8 @@ public class App extends Application {
   public static Timeline timerTimeline;
   public static int chosenTimer;
   public static MediaPlayer mediaPlayer;
+  public static MediaPlayer alertSoundPlayer;
+
   public static String musicType = "starting";
   public static AppUi previousRoom = AppUi.PLAYER;
   public static String aiWindow =
@@ -93,7 +95,6 @@ public class App extends Application {
       SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
       SceneManager.addScene(AppUi.PLAYER, loadFxml("player"));
       SceneManager.addScene(AppUi.END, loadFxml("end"));
-      SceneManager.addScene(AppUi.WIN, loadFxml("win"));
       SceneManager.addScene(AppUi.LOSE, loadFxml("lose"));
       SceneManager.addScene(AppUi.TUTORIAL, loadFxml("tutorial"));
       SceneManager.addScene(AppUi.ANIMATION, loadFxml("animation"));
@@ -125,11 +126,18 @@ public class App extends Application {
     // your audio file
     Media media = new Media(new File(musicFile).toURI().toString());
     mediaPlayer = new MediaPlayer(media);
-
     // Set the cycle count to loop indefinitely
     mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
     mediaPlayer.setVolume(0.05);
     mediaPlayer.setAutoPlay(true);
+
+    String alertFile;
+    alertFile = "src/main/resources/sounds/alert.mp3";
+    Media alertMedia = new Media(new File(alertFile).toURI().toString());
+    // Create a new MediaPlayer specifically for the alert sound
+    alertSoundPlayer = new MediaPlayer(alertMedia);
+    alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    alertSoundPlayer.setVolume(0.3);
 
     SceneManager.addScene(AppUi.AIWINDOW, loadFxml("aiwindow"));
     SceneManager.addScene(AppUi.HELPERCHAT, loadFxml("helperchat"));
@@ -137,7 +145,6 @@ public class App extends Application {
     SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
     SceneManager.addScene(AppUi.PLAYER, loadFxml("player"));
     SceneManager.addScene(AppUi.END, loadFxml("end"));
-    SceneManager.addScene(AppUi.WIN, loadFxml("win"));
     SceneManager.addScene(AppUi.LOSE, loadFxml("lose"));
     SceneManager.addScene(AppUi.END1, loadFxml("end1"));
     SceneManager.addScene(AppUi.TUTORIAL, loadFxml("tutorial"));
