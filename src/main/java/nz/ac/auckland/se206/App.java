@@ -38,6 +38,7 @@ public class App extends Application {
   public static String greetingInRoom1;
   public static String greetingInRoom2;
   public static String greetingInRoom3;
+
   public static void main(final String[] args) {
     launch();
   }
@@ -62,24 +63,30 @@ public class App extends Application {
     return new FXMLLoader(App.class.getResource("/fxml/" + fxml + ".fxml")).load();
   }
 
-  public static void resetRooms() throws IOException{
-    //re initilaze all the rooms.
-    try{
+  /**
+   * This method is invoked when the application starts. It loads and shows the "Canvas" scene.
+   *
+   * @param stage The primary stage of the application.
+   * @throws IOException If "src/main/resources/fxml/canvas.fxml" is not found.
+   */
+  public static void resetRooms() throws IOException {
+    // re initilaze all the rooms.
+    try {
+      // Reset timer
+      if (timerTimeline != null) {
+        timerTimeline.stop();
+        timerSeconds = 120; // Reset to initial value
+        timerStarted = false;
+      }
+
+      aiWindow =
+          "Hello! I'm EVA. Your personal AI Assistant. We're in a bit of an"
+              + " emergency so if you have any questions on what you need to do, I'm here to help!"
+              + " \n\n";
+
       Random r = new Random();
       passcode = r.nextInt((9999 - 1000) + 1) + 1000;
       GameState.password = String.valueOf(passcode);
-
-      // String musicFile =
-      //     "src/main/resources/sounds/Background-Music.mp3"; // Replace with the actual path to
-      // // your audio file
-      // Media media = new Media(new File(musicFile).toURI().toString());
-      // mediaPlayer = new MediaPlayer(media);
-
-      // // Set the cycle count to loop indefinitely
-      // mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-
-      // mediaPlayer.setVolume(0.05);
-      // mediaPlayer.setAutoPlay(true);
 
       SceneManager.addScene(AppUi.HELPERCHAT, loadFxml("helperchat"));
       SceneManager.addScene(AppUi.ROOM1, loadFxml("room1"));
@@ -95,7 +102,7 @@ public class App extends Application {
       SceneManager.addScene(AppUi.TILEROOM, loadFxml("tilegameroom"));
       SceneManager.addScene(AppUi.ROOM3, loadFxml("room3"));
       SceneManager.addScene(AppUi.AIWINDOW, loadFxml("aiwindow"));
-    } catch (IOException e){
+    } catch (IOException e) {
       e.printStackTrace();
     }
   }
@@ -121,7 +128,6 @@ public class App extends Application {
 
     // Set the cycle count to loop indefinitely
     mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-
     mediaPlayer.setVolume(0.05);
     mediaPlayer.setAutoPlay(true);
 

@@ -41,17 +41,17 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class TutorialController implements Initializable {
 
-  private BooleanProperty wPressed = new SimpleBooleanProperty();
-  private BooleanProperty aPressed = new SimpleBooleanProperty();
-  private BooleanProperty sPressed = new SimpleBooleanProperty();
-  private BooleanProperty dPressed = new SimpleBooleanProperty();
+  private BooleanProperty wKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty aKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty sKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty dKeyPressed = new SimpleBooleanProperty();
 
-  private BooleanBinding keyPressed = wPressed.or(aPressed).or(sPressed).or(dPressed);
+  private BooleanBinding keyPressed = wKeyPressed.or(aKeyPressed).or(sKeyPressed).or(dKeyPressed);
 
   private int movementVariable = 5;
   private double shapesize;
 
-  List<ImageView> rocks = new ArrayList<>();
+  private List<ImageView> rocks = new ArrayList<>();
 
   @FXML private Button button;
   @FXML private Button skipButton;
@@ -68,17 +68,14 @@ public class TutorialController implements Initializable {
   @FXML private ImageView soundOff;
   @FXML private Rectangle box;
   @FXML private Rectangle gate1;
-  @FXML private Rectangle gate2; 
+  @FXML private Rectangle gate2;
 
-  // sound for rocket movement
-  String soundEffect = "src/main/resources/sounds/rocket.mp3";
-  Media media = new Media(new File(soundEffect).toURI().toString());
-  MediaPlayer mediaPlayer = new MediaPlayer(media);
+  // Create a field for your meteor sound
+  private MediaPlayer meteorSoundPlayer;
 
   @FXML private Button toggleSoundButton;
-
   @FXML private ProgressBar progressBar;
-  private PauseTransition collisionPause = new PauseTransition(Duration.seconds(1));
+  @FXML private PauseTransition collisionPause = new PauseTransition(Duration.seconds(1));
 
   private double health = 1.0;
 
@@ -92,7 +89,7 @@ public class TutorialController implements Initializable {
   private List<String> sentences = new ArrayList<>();
   private int currentSentenceIndex = 0;
 
-  AnimationTimer collisionTimer =
+  private AnimationTimer collisionTimer =
       new AnimationTimer() {
         @Override
         public void handle(long now) {
@@ -105,7 +102,7 @@ public class TutorialController implements Initializable {
       };
 
   //  code for character movement using wasd movement
-  AnimationTimer timer =
+  private AnimationTimer timer =
       new AnimationTimer() {
         @Override
         public void handle(long now) {
@@ -113,16 +110,16 @@ public class TutorialController implements Initializable {
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
 
-          if (wPressed.get()) {
+          if (wKeyPressed.get()) {
             player.setLayoutY(player.getLayoutY() - movementVariable);
           }
-          if (aPressed.get()) {
+          if (aKeyPressed.get()) {
             player.setLayoutX(player.getLayoutX() - movementVariable);
           }
-          if (sPressed.get()) {
+          if (sKeyPressed.get()) {
             player.setLayoutY(player.getLayoutY() + movementVariable);
           }
-          if (dPressed.get()) {
+          if (dKeyPressed.get()) {
             player.setLayoutX(player.getLayoutX() + movementVariable);
           }
           squareBorder();
@@ -135,6 +132,13 @@ public class TutorialController implements Initializable {
     App.setScene(AppUi.ANIMATION);
     collisionTimer.stop();
     timer.stop();
+
+    // Stop the meteor sound if it's playing
+    if (meteorSoundPlayer != null) {
+      meteorSoundPlayer.stop();
+    }
+
+    GameState.isTutorialFinished = true;
   }
 
   @FXML
@@ -170,16 +174,32 @@ public class TutorialController implements Initializable {
       animateGates();
       isInstructionDone = true;
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.0));
-          pauseTransition.setOnFinished(
-              events -> {
-                // Adjust the player's position to be right in front of the room
-                playRock();
-                box.setVisible(false);
-                gate1.setVisible(false);
-                gate2.setVisible(false);
-                sentenceLabel.setVisible(false);
-              });
-          pauseTransition.play();
+      pauseTransition.setOnFinished(
+          events -> {
+            // Adjust the player's position to be right in front of the room
+            playRock();
+            meteorSound();
+            box.setVisible(false);
+            gate1.setVisible(false);
+            gate2.setVisible(false);
+            sentenceLabel.setVisible(false);
+          });
+      pauseTransition.play();
+    }
+  }
+
+  @FXML
+  private void meteorSound() {
+    if (!GameState.isTutorialFinished) {
+      String soundEffect = "src/main/resources/sounds/meteor.mp3";
+      Media media = new Media(new File(soundEffect).toURI().toString());
+
+      // Assign this MediaPlayer instance to our new field so we can access it later.
+      this.meteorSoundPlayer = new MediaPlayer(media);
+
+      this.meteorSoundPlayer.setVolume(0.5);
+      this.meteorSoundPlayer.setAutoPlay(true);
+      this.meteorSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
     }
   }
 
@@ -192,16 +212,16 @@ public class TutorialController implements Initializable {
     TranslateTransition upTransition = new TranslateTransition(Duration.seconds(2), gate1);
     upTransition.setByY(-250);
     upTransition.play();
-}
+  }
 
-private void animateGate2UpAndDown() {
+  private void animateGate2UpAndDown() {
     TranslateTransition downTransition = new TranslateTransition(Duration.seconds(2), gate2);
     downTransition.setByY(250);
     downTransition.play();
-}
-
+  }
 
   private void setRotate(Circle c, boolean reverse, int angle, int duration) {
+    // Set the rotation of the circle which acts as the finish line in the tutorial game.
     RotateTransition rt = new RotateTransition(Duration.seconds(duration), c);
     rt.setAutoReverse(reverse);
     rt.setByAngle(angle);
@@ -266,7 +286,7 @@ private void animateGate2UpAndDown() {
     sentences = parseSentences(paragraph);
 
     shapesize = player.getFitHeight();
-    movementSetup();
+    playerMove();
 
     rocks.add(r1);
     rocks.add(r2);
@@ -325,6 +345,19 @@ private void animateGate2UpAndDown() {
     setMovement(r4, false, 3, -900, 0, 5);
   }
 
+  /**
+   * Check if the player collides with any rocks. If so, move the player back a bit and decrease the
+   * progress bar.
+   *
+   * @param event the event that triggered this method
+   * @param player the player
+   * @param rocks the rocks
+   * @param progressBar the progress bar
+   * @param health the health
+   * @param collisionDetected the collision detected
+   * @param collisionPause the collision pause
+   * @param meteorSoundPlayer the meteor sound player
+   */
   public void checkCollision(ImageView player, List<ImageView> rocks) {
     if (!collisionDetected) {
       for (ImageView rock : rocks) {
@@ -336,6 +369,12 @@ private void animateGate2UpAndDown() {
           progressBar.setProgress(health -= 0.25); // Decrease the progress bar
           if (health == 0) {
             App.setScene(AppUi.ANIMATION);
+            // Stop the meteor sound if it's playing
+            if (meteorSoundPlayer != null) {
+              meteorSoundPlayer.stop();
+            }
+
+            GameState.isTutorialFinished = true;
           }
           collisionPause.setOnFinished(
               event -> collisionDetected = false); // Re-enable collision detection after 1 second
@@ -350,17 +389,23 @@ private void animateGate2UpAndDown() {
       App.setScene(AppUi.ANIMATION);
       collisionTimer.stop();
       timer.stop();
+      // Stop the meteor sound if it's playing
+      if (meteorSoundPlayer != null) {
+        meteorSoundPlayer.stop();
+      }
+
+      GameState.isTutorialFinished = true;
     }
   }
 
   public void checkCollision1(ImageView player, Rectangle box) {
-    if(!isInstructionDone){
+    if (!isInstructionDone) {
       if (player.getBoundsInParent().intersects(box.getBoundsInParent())) {
-      player.setLayoutX(previousX);
-      player.setLayoutY(previousY);
+        player.setLayoutX(previousX);
+        player.setLayoutY(previousY);
       }
     }
-    
+
     // Initialize sound images based on the initial isSoundEnabled state
     if (GameState.isSoundEnabled) {
       soundOn.setVisible(true);
@@ -372,55 +417,49 @@ private void animateGate2UpAndDown() {
   }
 
   @FXML
-  public void movementSetup() {
+  public void playerMove() {
+    // If key is pressed, set the boolean to true. If key is released, set the boolean to false.
     scene.setOnKeyPressed(
         e -> {
           if (e.getCode() == KeyCode.W) {
-
-            wPressed.set(true);
+            wKeyPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.A) {
-
-            aPressed.set(true);
+            aKeyPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.S) {
-
-            sPressed.set(true);
+            sKeyPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.D) {
-
-            dPressed.set(true);
+            dKeyPressed.set(true);
           }
         });
 
     scene.setOnKeyReleased(
         e -> {
           if (e.getCode() == KeyCode.W) {
-
-            wPressed.set(false);
+            wKeyPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.A) {
-
-            aPressed.set(false);
+            aKeyPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.S) {
-
-            sPressed.set(false);
+            sKeyPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.D) {
-
-            dPressed.set(false);
+            dKeyPressed.set(false);
           }
         });
   }
 
   public void squareBorder() {
+    // Set the boundaries of the scene
     double left = 0;
     double right = scene.getWidth() - shapesize;
     double top = 0;
@@ -444,12 +483,6 @@ private void animateGate2UpAndDown() {
   }
 
   @FXML
-  private void playSoundRocket() {
-    mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-    mediaPlayer.play();
-  }
-
-  @FXML
   private void soundButttonClick() {
     String soundEffect = "src/main/resources/sounds/button-click.mp3";
     Media media = new Media(new File(soundEffect).toURI().toString());
@@ -458,24 +491,34 @@ private void animateGate2UpAndDown() {
   }
 
   @FXML
-private void toggleSound(MouseEvent event) {
+  private void toggleSound(MouseEvent event) {
     if (GameState.isSoundEnabled) {
-        // Disable sound
-        if (App.mediaPlayer != null) {
-            App.mediaPlayer.setVolume(0.0); // Mute the media player
-        }
-        soundOff.setVisible(true);
-        soundOn.setVisible(false);
+      // Disable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.0); // Mute the media player
+      }
+      soundOff.setVisible(true);
+      soundOn.setVisible(false);
     } else {
-        // Enable sound
-        if (App.mediaPlayer != null) {
-            App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-        }
-        soundOn.setVisible(true);
-        soundOff.setVisible(false);
+      // Enable sound
+      if (App.mediaPlayer != null) {
+        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
+      }
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
     }
 
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+}
+
+@FXML
+private void enterSkip(MouseEvent e) {
+  skipButton.setStyle("-fx-background-color: white; -fx-text-fill: black;");
+}
+
+@FXML
+private void exitSkip(MouseEvent e) {
+  skipButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white;-fx-border-width: 3px;");
 }
 
 }

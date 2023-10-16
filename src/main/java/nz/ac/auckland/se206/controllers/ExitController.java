@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -111,12 +112,19 @@ public class ExitController implements Initializable {
   @FXML private ImageView gameMaster;
   @FXML private ImageView close;
 
+  @FXML private Rectangle black2;
+  @FXML private Rectangle resetBox;
+  @FXML private Label resetLabel;
+  @FXML private Button resetYes;
+  @FXML private Button resetCancel;
+
   @FXML public Pane aiWindowController;
 
   private boolean nextToButton = false;
   private FadeTransition fadeTransition;
 
   @FXML private Button toggleSoundButton;
+  private MediaPlayer walkingMediaPlayer;
 
   private boolean hasHappend = false;
   private boolean keyboardControlEnabled = true;
@@ -222,11 +230,25 @@ public class ExitController implements Initializable {
     alert.setVisible(false); // Initially hide the alert label
     aiWindowController.setVisible(true);
 
+    // black2.setVisible(false);
+    // resetBox.setVisible(false);
+    // resetLabel.setVisible(false);
+    // resetYes.setVisible(false);
+    // resetCancel.setVisible(false);
+
+    // if difficulty is selected, label is updated
+    detectDifficulty();
+
     walls.add(wall);
     walls.add(wall1);
 
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
+
+    String walkSoundEffect = "src/main/resources/sounds/walking.mp3";
+    Media walkMedia = new Media(new File(walkSoundEffect).toURI().toString());
+    walkingMediaPlayer = new MediaPlayer(walkMedia);
+    walkingMediaPlayer.setVolume(2.0);
 
     shapesize = player.getFitWidth();
     enablePlayerMovement();
@@ -282,6 +304,7 @@ public class ExitController implements Initializable {
             GameState.isPlayerInRoom3 = false;
             // GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
+            enterRoom();
             simulateKeyPressAfterDelay();
           });
       pauseTransition.play();
@@ -353,6 +376,8 @@ public class ExitController implements Initializable {
 
     scene.setOnKeyPressed(
         e -> {
+          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
           if (keyboardControlEnabled) {
             if (e.getCode() == KeyCode.W) {
               if (walkAnimationPlaying == false) {
@@ -387,11 +412,19 @@ public class ExitController implements Initializable {
               }
               dPressed.set(true);
             }
+            boolean isMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+            // If we started moving and weren't before, start the sound.
+            if (isMoving && !wasMoving) {
+              walkingMediaPlayer.play();
+            }
           }
         });
 
     scene.setOnKeyReleased(
         e -> {
+          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
           if (keyboardControlEnabled) {
             if (e.getCode() == KeyCode.W) {
               if (player.getImage() == leftCharacterAnimation
@@ -447,6 +480,25 @@ public class ExitController implements Initializable {
               }
 
               dPressed.set(false);
+            }
+
+            boolean isMovinng =
+                wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+            // If we stopped moving and were before, stop the sound.
+            if (!isMovinng && wasMoving) {
+              PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+              pause.setOnFinished(
+                  event -> {
+                    walkingMediaPlayer.stop();
+                    try {
+                      // This line will reset audio clip from start when stopped
+                      walkingMediaPlayer.seek(Duration.ZERO);
+                    } catch (Exception ex) {
+                      System.out.println("Error resetting audio: " + ex.getMessage());
+                    }
+                  });
+              pause.play();
             }
           }
         });
@@ -521,7 +573,6 @@ public class ExitController implements Initializable {
                 }
               } else {
                 Platform.runLater(() -> updateLabels());
-                labelTimer.cancel();
               }
             }
           }
@@ -842,6 +893,7 @@ public class ExitController implements Initializable {
             if (Room1Controller.riddleAnswer == "captain") {
               if (node1 == idCaptain) {
                 light.setFill(Color.GREEN);
+                GameState.isGameFinished = true;
                 soundCorrectCard();
                 GameState.isIdChecked = true;
                 ids.setVisible(false);
@@ -850,8 +902,9 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 exit2.setVisible(false);
+                idCardList.setVisible(false);
+                endingMediaChange();
                 changeOpacity2();
-                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -860,6 +913,7 @@ public class ExitController implements Initializable {
             } else if (Room1Controller.riddleAnswer == "chef") {
               if (node1 == idChef) {
                 light.setFill(Color.GREEN);
+                GameState.isGameFinished = true;
                 soundCorrectCard();
                 GameState.isIdChecked = true;
                 ids.setVisible(false);
@@ -868,8 +922,9 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 exit2.setVisible(false);
+                idCardList.setVisible(false);
+                endingMediaChange();
                 changeOpacity2();
-                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -878,6 +933,7 @@ public class ExitController implements Initializable {
             } else if (Room1Controller.riddleAnswer == "doctor") {
               if (node1 == idDoctor) {
                 light.setFill(Color.GREEN);
+                GameState.isGameFinished = true;
                 soundCorrectCard();
                 GameState.isIdChecked = true;
                 ids.setVisible(false);
@@ -886,8 +942,9 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 exit2.setVisible(false);
+                idCardList.setVisible(false);
+                endingMediaChange();
                 changeOpacity2();
-                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -896,6 +953,7 @@ public class ExitController implements Initializable {
             } else if (Room1Controller.riddleAnswer == "engineer") {
               if (node1 == idEngineer) {
                 light.setFill(Color.GREEN);
+                GameState.isGameFinished = true;
                 soundCorrectCard();
                 GameState.isIdChecked = true;
                 ids.setVisible(false);
@@ -904,8 +962,9 @@ public class ExitController implements Initializable {
                 idDoctor.setVisible(false);
                 idEngineer.setVisible(false);
                 exit2.setVisible(false);
+                idCardList.setVisible(false);
+                endingMediaChange();
                 changeOpacity2();
-                GameState.isGameFinished = true;
               } else {
                 soundIncorrect();
                 light.setFill(Color.RED);
@@ -914,6 +973,27 @@ public class ExitController implements Initializable {
           }
         }
       };
+
+  private void endingMediaChange() {
+    // Wait for 2 second and change the media
+    if (GameState.isSoundEnabled) {
+      System.out.println("sound is off");
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(1.0));
+      pauseTransition.setOnFinished(
+          event -> {
+            System.out.println("sound is off2");
+            String musicFile;
+            musicFile = "src/main/resources/sounds/final.mp3";
+            App.musicType = "final";
+            Media media = new Media(new File(musicFile).toURI().toString());
+            App.mediaPlayer.stop();
+            App.mediaPlayer = new MediaPlayer(media);
+            App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            App.mediaPlayer.setVolume(0.1);
+            App.mediaPlayer.setAutoPlay(true);
+          });
+    }
+  }
 
   // update the labels of hint and difficulty as the game progresses
   private void updateLabels() {
@@ -974,7 +1054,7 @@ public class ExitController implements Initializable {
   }
 
   private void endingAnimation() {
-    // Create a timeline to continuously increase the scaling factor
+    // Create a FadeTransition for both background images
     Timeline continuousScaling =
         new Timeline(
             new KeyFrame(Duration.ZERO, new KeyValue(background3.scaleXProperty(), 1.0)),
@@ -987,7 +1067,6 @@ public class ExitController implements Initializable {
     TranslateTransition Translation = new TranslateTransition(Duration.seconds(2.0), background3);
 
     // Set the animation properties
-
     Translation.setCycleCount(1); // Play the animation once
     Translation.setAutoReverse(false); // Don't reverse the animation
 
@@ -1033,6 +1112,14 @@ public class ExitController implements Initializable {
   @FXML
   private void soundCorrectCard() {
     String soundEffect = "src/main/resources/sounds/correct-card.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
+  }
+
+  @FXML
+  private void enterRoom() {
+    String soundEffect = "src/main/resources/sounds/enterReal.mp3";
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
@@ -1109,6 +1196,24 @@ public class ExitController implements Initializable {
         },
         0,
         100);
+  }
+
+  @FXML
+  private void restartCanceled(ActionEvent event) throws IOException {
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
+  }
+
+  @FXML
+  private void reset(ActionEvent event) throws IOException {
+    try {
+      GameState.resetGames();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
   }
 
   private void simulateKeyPressAfterDelay() {

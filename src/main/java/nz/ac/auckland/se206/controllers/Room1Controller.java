@@ -43,7 +43,6 @@ import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class Room1Controller implements Initializable {
-
   private BooleanProperty wPressed = new SimpleBooleanProperty();
   private BooleanProperty aPressed = new SimpleBooleanProperty();
   private BooleanProperty sPressed = new SimpleBooleanProperty();
@@ -53,7 +52,7 @@ public class Room1Controller implements Initializable {
   private int movementVariable = 5;
   private double shapesize;
 
-  List<Rectangle> walls = new ArrayList<>();
+  private List<Rectangle> walls = new ArrayList<>();
 
   @FXML private ImageView player;
   @FXML private ImageView soundOn;
@@ -111,6 +110,12 @@ public class Room1Controller implements Initializable {
   @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
 
+  @FXML private Rectangle black2;
+  @FXML private Rectangle resetBox;
+  @FXML private Label resetLabel;
+  @FXML private Button resetYes;
+  @FXML private Button resetCancel;
+
   @FXML public Pane aiWindowController;
 
   @FXML
@@ -167,6 +172,8 @@ public class Room1Controller implements Initializable {
   public boolean isCrew3Colliding = false;
   public boolean isCrew4Colliding = false;
 
+  private MediaPlayer walkingMediaPlayer;
+
   @FXML private Button toggleSoundButton;
 
   // Add this variable to your class
@@ -178,7 +185,7 @@ public class Room1Controller implements Initializable {
   private boolean isGreetingShown = true;
 
   // timer for collsion check between monitor and walls
-  AnimationTimer collisionTimer =
+  private AnimationTimer collisionTimer =
       new AnimationTimer() {
         @Override
         public void handle(long now) {
@@ -189,7 +196,7 @@ public class Room1Controller implements Initializable {
       };
 
   // Prevent the character moves outside of the window
-  AnimationTimer timer =
+  private AnimationTimer timer =
       new AnimationTimer() {
         @Override
         public void handle(long now) {
@@ -199,19 +206,15 @@ public class Room1Controller implements Initializable {
 
           if (wPressed.get()) {
             player.setLayoutY(player.getLayoutY() - movementVariable);
-            System.out.println("w");
           }
           if (aPressed.get()) {
             player.setLayoutX(player.getLayoutX() - movementVariable);
-            System.out.println("a");
           }
           if (sPressed.get()) {
             player.setLayoutY(player.getLayoutY() + movementVariable);
-            System.out.println("s");
           }
           if (dPressed.get()) {
             player.setLayoutX(player.getLayoutX() + movementVariable);
-            System.out.println("d");
           }
           squareBorder();
         }
@@ -221,16 +224,26 @@ public class Room1Controller implements Initializable {
     animateRobot();
     shapesize = player.getFitWidth();
     alert.setVisible(false);
-
     aiWindowController.setVisible(true);
-
+    detectDifficulty();
     collisionTimer.start();
+
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
 
     walls.add(wall1);
     walls.add(wall3);
 
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
+
+    String walkSoundEffect = "src/main/resources/sounds/walking.mp3";
+    Media walkMedia = new Media(new File(walkSoundEffect).toURI().toString());
+    walkingMediaPlayer = new MediaPlayer(walkMedia);
+    walkingMediaPlayer.setVolume(2.0);
 
     previousX = player.getLayoutX();
     previousY = player.getLayoutY();
@@ -282,9 +295,6 @@ public class Room1Controller implements Initializable {
     crew2Indicator.setVisible(false);
     crew3Indicator.setVisible(false);
     crew4Indicator.setVisible(false);
-
-    // if difficulty is selected, label is updated
-    detectDifficulty();
 
     // when the riddle is resolved, indicators are visible
     revealIndicator();
@@ -402,6 +412,7 @@ public class Room1Controller implements Initializable {
       soundButttonClick();
       GameState.isRiddleGiven = true;
       App.setScene(AppUi.CHAT);
+      enterRoom();
     }
   }
 
@@ -422,6 +433,7 @@ public class Room1Controller implements Initializable {
             // GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
             simulateKeyPressAfterDelay();
+            enterRoom();
           });
       pauseTransition.play();
     } else {
@@ -484,13 +496,14 @@ public class Room1Controller implements Initializable {
 
     scene.setOnKeyPressed(
         e -> {
+          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
           if (e.getCode() == KeyCode.W) {
             if (walkAnimationPlaying == false) {
               player.setImage(lastPlayedWalk);
               walkAnimationPlaying = true;
             }
             wPressed.set(true);
-            System.out.println("up");
           }
 
           if (e.getCode() == KeyCode.A) {
@@ -509,7 +522,6 @@ public class Room1Controller implements Initializable {
               walkAnimationPlaying = true;
             }
             sPressed.set(true);
-            System.out.println("down");
           }
 
           if (e.getCode() == KeyCode.D) {
@@ -519,12 +531,20 @@ public class Room1Controller implements Initializable {
               lastPlayedWalk = player.getImage();
             }
             dPressed.set(true);
-            System.out.println("right");
+          }
+
+          boolean isMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+          // If we started moving and weren't before, start the sound.
+          if (isMoving && !wasMoving) {
+            walkingMediaPlayer.play();
           }
         });
 
     scene.setOnKeyReleased(
         e -> {
+          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
           if (e.getCode() == KeyCode.W) {
             if (player.getImage() == leftCharacterAnimation
                 && sPressed.get() == false
@@ -580,6 +600,19 @@ public class Room1Controller implements Initializable {
 
             dPressed.set(false);
           }
+
+          boolean isMovinng = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+          // If we stopped moving and were before, stop the sound.
+          if (!isMovinng && wasMoving) {
+            walkingMediaPlayer.stop();
+            try {
+              // This line will reset audio clip from start when stopped
+              walkingMediaPlayer.seek(Duration.ZERO);
+            } catch (Exception ex) {
+              System.out.println("Error resetting audio: " + ex.getMessage());
+            }
+          }
         });
   }
 
@@ -627,7 +660,6 @@ public class Room1Controller implements Initializable {
                 }
               } else {
                 Platform.runLater(() -> updateLabels());
-                labelTimer.cancel();
               }
             }
           }
@@ -752,6 +784,14 @@ public class Room1Controller implements Initializable {
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
   }
 
+  @FXML
+  private void enterRoom() {
+    String soundEffect = "src/main/resources/sounds/enterReal.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
+  }
+
   // game master animation
   @FXML
   private void animateRobot() {
@@ -772,7 +812,6 @@ public class Room1Controller implements Initializable {
         new TimerTask() {
           @Override
           public void run() {
-            // if the state of irRiddleResolved changed, indicators are visible
             // if the state of irRiddleResolved changed, indicators are visible
             if (GameState.isRiddleResolved) {
               System.out.println("riddle is resolved");
@@ -833,6 +872,73 @@ public class Room1Controller implements Initializable {
     translate.setCycleCount(TranslateTransition.INDEFINITE);
     translate.setAutoReverse(true);
     translate.play();
+  }
+
+  @FXML
+  private void restartClicked(ActionEvent event) throws IOException {
+    black2.setVisible(true);
+    resetBox.setVisible(true);
+    resetLabel.setVisible(true);
+    resetYes.setVisible(true);
+    resetCancel.setVisible(true);
+  }
+
+  @FXML
+  private void restartCanceled(ActionEvent event) throws IOException {
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
+  }
+
+  @FXML
+  private void reset(ActionEvent event) throws IOException {
+    try {
+      GameState.resetGames();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
+  }
+
+  @FXML
+  private void enterCollect1(MouseEvent e) {
+    btnCollect1.setStyle("-fx-background-color:grey; -fx-text-fill: white");
+  }
+
+  @FXML
+  private void exitCollect1(MouseEvent e) {
+    btnCollect1.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
+  }
+
+  @FXML
+  private void enterCollect2(MouseEvent e) {
+    btnCollect2.setStyle("-fx-background-color:grey; -fx-text-fill: white");
+  }
+
+  @FXML
+  private void exitCollect2(MouseEvent e) {
+    btnCollect2.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
+  }
+
+  @FXML
+  private void enterCollect3(MouseEvent e) {
+    btnCollect3.setStyle("-fx-background-color:grey; -fx-text-fill: white");
+  }
+
+  @FXML
+  private void exitCollect3(MouseEvent e) {
+    btnCollect3.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
+  }
+
+  @FXML
+  private void enterCollect4(MouseEvent e) {
+    btnCollect4.setStyle("-fx-background-color:grey; -fx-text-fill: white");
+  }
+
+  @FXML
+  private void exitCollect4(MouseEvent e) {
+    btnCollect4.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
   }
 
   private void simulateKeyPressAfterDelay() {
