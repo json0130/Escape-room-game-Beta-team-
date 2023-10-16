@@ -192,11 +192,12 @@ public class EndController implements Initializable {
         event -> {
           youWin.setVisible(true);
           resetButton.setVisible(true);
-          restartLabel.setVisible(false);
-          restartNo.setVisible(false);
-          restartYes.setVisible(false);
-          restartBackground.setVisible(false);
           App.mediaPlayer.setVolume(0.3);
+          resetButton.setVisible(true);
+          restartLabel.setOpacity(1);
+          restartNo.setOpacity(1);
+          restartYes.setOpacity(1);
+          restartBackground.setOpacity(1);
           winTextToSpeech();
         });
   }
