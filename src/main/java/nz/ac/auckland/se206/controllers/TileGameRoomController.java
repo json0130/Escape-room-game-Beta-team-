@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -18,26 +19,36 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 /** Controller class for the room view. */
 public class TileGameRoomController implements javafx.fxml.Initializable {
+
+  public static ObservableList<ChatBubble> chatBubbleListTileRoom =
+      FXCollections.observableArrayList();
 
   private BooleanProperty wPressed = new SimpleBooleanProperty();
   private BooleanProperty aPressed = new SimpleBooleanProperty();
@@ -89,13 +100,11 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private Rectangle wall19;
   @FXML private Rectangle wall20;
   @FXML private Rectangle blinkingRectangle;
-  @FXML private Rectangle greetingBox;
-  @FXML private Rectangle black;
-  @FXML private ImageView close;
-  @FXML private Label greeting;
   private FadeTransition fadeTransition;
   @FXML private ImageView soundOn;
   @FXML private ImageView soundOff;
+  @FXML private ScrollPane chatPaneOne;
+  @FXML private VBox chatContainerOne;
 
   @FXML private Rectangle black2;
   @FXML private Rectangle resetBox;
@@ -251,7 +260,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     aiWindowController.setVisible(true);
 
     shapesize = player.getFitWidth();
-    enablePlayerMovement();
+    movementSetup();
 
     collisionTimer.start();
 
@@ -274,8 +283,30 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     fadeTransition.setAutoReverse(true); // Reverse the animation
     // Start the animation
     fadeTransition.play();
-    greeting.setWrapText(true);
-    greeting.setText(App.greetingInRoom2);
+
+    ListChangeListener<ChatBubble> listener3 =
+        change -> {
+          Platform.runLater(
+              () -> {
+                chatContainerOne
+                    .getChildren()
+                    .addAll(
+                        chatBubbleListTileRoom
+                            .get(chatBubbleListTileRoom.size() - 1)
+                            .getBubbleBox());
+                chatContainerOne.setAlignment(Pos.TOP_RIGHT);
+                chatPaneOne.vvalueProperty().bind(chatContainerOne.heightProperty());
+                System.out.println(
+                    "Added: "
+                        + chatBubbleListTileRoom
+                            .get(chatBubbleListTileRoom.size() - 1)
+                            .getBubbleText()
+                            .getText()
+                        + " "
+                        + this.getClass().getSimpleName());
+              });
+        };
+    chatBubbleListTileRoom.addListener(listener3);
   }
 
   public void checkExit(ImageView player, Rectangle exit) {
@@ -293,6 +324,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             GameState.isPlayerInRoom2 = false;
             GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
+            simulateKeyPressAfterDelay();
+            // if (aPressed.get() == true && sPressed.get() == true) {}
             enterRoom();
           });
       pauseTransition.play();
@@ -320,17 +353,37 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
       // Stop the alert blinking when the timer reaches 0
       stopAlertBlinking();
     }
+
+    // Initialize sound images based on the initial isSoundEnabled state
+    if (GameState.isSoundEnabled) {
+      soundOn.setVisible(true);
+      soundOff.setVisible(false);
+    } else {
+      soundOn.setVisible(false);
+      soundOff.setVisible(true);
+    }
   }
 
   // Modify your setupAlertBlinking method as follows
   private void setupAlertBlinking() {
     alert.setVisible(true); // Initially show the alert label
+    App.mediaPlayer.stop();
+    // Check if sound is enabled before setting volume and playing.
+    if (GameState.isSoundEnabled) {
+      App.alertSoundPlayer.setVolume(0.03);
+    } else {
+      App.alertSoundPlayer.setVolume(0.0);
+    }
+    App.alertSoundPlayer.setAutoPlay(true);
+    App.alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    App.alertSoundPlayer.play();
 
     // Set up the blinking animation for the alert label
     alertBlinkTimeline =
         new Timeline(
             new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
             new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
+
     alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
     alertBlinkTimeline.play();
   }
@@ -338,8 +391,10 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   // Add a method to stop the alert blinking
   private void stopAlertBlinking() {
     if (alertBlinkTimeline != null) {
+      // Stop timeline and hide label
       alertBlinkTimeline.stop();
       alert.setVisible(false);
+      App.alertSoundPlayer.stop();
     }
   }
 
@@ -569,7 +624,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
                 // easy and hard, turn off just after difficulty selection
               } else {
                 Platform.runLater(() -> updateLabels());
-  
               }
             }
           }
@@ -613,24 +667,20 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   @FXML
   private void toggleSound(MouseEvent event) {
-    if (GameState.isSoundEnabled) {
-      // Disable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.0); // Mute the media player
-      }
-      toggleSoundButton.setText("Enable Sound");
-      soundOff.setVisible(true);
-      soundOn.setVisible(false);
-    } else {
-      // Enable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-      }
-      soundOn.setVisible(true);
-      soundOff.setVisible(false);
+    GameState.isSoundEnabled = !GameState.isSoundEnabled;
+
+    double volume = GameState.isSoundEnabled ? 0.03 : 0;
+    if (App.mediaPlayer != null) {
+      App.mediaPlayer.setVolume(volume);
     }
 
-    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+    if (App.alertSoundPlayer != null) {
+      // If an Alert Sound Player exists, adjust its volume as well.
+      App.alertSoundPlayer.setVolume(volume);
+    }
+
+    soundOn.setVisible(GameState.isSoundEnabled);
+    soundOff.setVisible(!GameState.isSoundEnabled);
   }
 
   @FXML
@@ -655,16 +705,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     translate.play();
   }
 
-  /** When the close image is clicked, greeting disappears. */
-  @FXML
-  private void clickClose(MouseEvent e) {
-    greeting.setVisible(false);
-    greetingBox.setVisible(false);
-    close.setVisible(false);
-    isGreetingShown = false;
-    black.setVisible(false);
-  }
-
   /** After the player close the greeting, the character can move. */
   private void enablePlayerMovement() {
     Timer greetingTimer = new Timer(true);
@@ -680,6 +720,41 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
         },
         0,
         100);
+  }
+
+  private void simulateKeyPressAfterDelay() {
+    Thread thread =
+        new Thread(
+            () -> {
+              try {
+                Thread.sleep(50); // Delay of 0.1 seconds
+                KeyEvent keyReleaseEventS =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
+
+                KeyEvent keyReleaseEventA =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
+
+                KeyEvent keyReleaseEventW =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
+
+                KeyEvent keyReleaseEventD =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
+
+                scene.fireEvent(keyReleaseEventA);
+                // scene.fireEvent(keyPressEvent);
+                scene.fireEvent(keyReleaseEventD);
+                scene.fireEvent(keyReleaseEventW);
+                scene.fireEvent(keyReleaseEventS);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+            });
+
+    thread.start();
   }
 
   @FXML

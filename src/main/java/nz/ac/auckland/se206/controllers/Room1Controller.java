@@ -19,28 +19,38 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class Room1Controller implements Initializable {
+  public static ObservableList<ChatBubble> chatBubbleListRoom1 =
+      FXCollections.observableArrayList();
 
   public static String riddleAnswer;
 
@@ -73,8 +83,6 @@ public class Room1Controller implements Initializable {
   @FXML private Rectangle crew2Collision;
   @FXML private Rectangle crew3Collision;
   @FXML private Rectangle crew4Collision;
-  @FXML private Rectangle greetingBox;
-  @FXML private Rectangle black;
 
   @FXML private Button btnCollect1;
   @FXML private Button btnCollect2;
@@ -104,7 +112,6 @@ public class Room1Controller implements Initializable {
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
   @FXML private Label clickLabel;
-  @FXML private Label greeting;
 
   @FXML private Button btnSend;
   @FXML private Button btnClose;
@@ -118,6 +125,8 @@ public class Room1Controller implements Initializable {
   @FXML private Button resetCancel;
 
   @FXML private Pane aiWindowController;
+  @FXML private ScrollPane chatPaneOne;
+  @FXML private VBox chatContainerOne;
 
   @FXML
   private Image rightCharacterAnimation =
@@ -177,8 +186,6 @@ public class Room1Controller implements Initializable {
 
   private boolean nextToButton = false;
   private boolean hasHappend = false;
-
-  private boolean isGreetingShown = true;
 
   // timer for collsion check between monitor and walls
   private AnimationTimer collisionTimer =
@@ -297,10 +304,7 @@ public class Room1Controller implements Initializable {
 
     crewCollisionTimer.start();
 
-    greeting.setWrapText(true);
-    greeting.setText(App.greetingInRoom1);
-
-    enablePlayerMovement();
+    setUpMovement();
     Task<Void> indicatorTask =
         new Task<Void>() {
           @Override
@@ -315,6 +319,27 @@ public class Room1Controller implements Initializable {
     Thread thread = new Thread(indicatorTask);
     thread.setDaemon(true);
     thread.start();
+
+    ListChangeListener<ChatBubble> listener1 =
+        change -> {
+          Platform.runLater(
+              () -> {
+                chatContainerOne
+                    .getChildren()
+                    .addAll(chatBubbleListRoom1.get(chatBubbleListRoom1.size() - 1).getBubbleBox());
+                chatContainerOne.setAlignment(Pos.TOP_RIGHT);
+                chatPaneOne.vvalueProperty().bind(chatContainerOne.heightProperty());
+                System.out.println(
+                    "Added: "
+                        + chatBubbleListRoom1
+                            .get(chatBubbleListRoom1.size() - 1)
+                            .getBubbleText()
+                            .getText()
+                        + " "
+                        + this.getClass().getSimpleName());
+              });
+        };
+    chatBubbleListRoom1.addListener(listener1);
   }
 
   /**
@@ -338,6 +363,7 @@ public class Room1Controller implements Initializable {
             GameState.isPlayerInRoom1 = false;
             // GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
+            simulateKeyPressAfterDelay();
             enterRoom();
           });
       pauseTransition.play();
@@ -715,12 +741,24 @@ public class Room1Controller implements Initializable {
   /** Modify your setupAlertBlinking method as follows. */
   private void setupAlertBlinking() {
     alert.setVisible(true); // Initially show the alert label
+    // Stop current playing media
+    App.mediaPlayer.stop();
+    // Check if sound is enabled before setting volume and playing.
+    if (GameState.isSoundEnabled) {
+      App.alertSoundPlayer.setVolume(0.03);
+    } else {
+      App.alertSoundPlayer.setVolume(0.0);
+    }
+    App.alertSoundPlayer.setAutoPlay(true);
+    App.alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    App.alertSoundPlayer.play();
 
     // Set up the blinking animation for the alert label
     alertBlinkTimeline =
         new Timeline(
             new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
             new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
+
     alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
     alertBlinkTimeline.play();
   }
@@ -728,8 +766,10 @@ public class Room1Controller implements Initializable {
   /** Add a method to stop the alert blinking. */
   private void stopAlertBlinking() {
     if (alertBlinkTimeline != null) {
+      // Stop timeline and hide label
       alertBlinkTimeline.stop();
       alert.setVisible(false);
+      App.alertSoundPlayer.stop();
     }
   }
 
@@ -805,23 +845,22 @@ public class Room1Controller implements Initializable {
   /** Turn on and off the background sound depending on the current state. */
   @FXML
   private void toggleSound(MouseEvent event) {
-    if (GameState.isSoundEnabled) {
-      // Disable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.0); // Mute the media player
-      }
-      soundOff.setVisible(true);
-      soundOn.setVisible(false);
-    } else {
-      // Enable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-      }
-      soundOn.setVisible(true);
-      soundOff.setVisible(false);
+    GameState.isSoundEnabled = !GameState.isSoundEnabled;
+
+    double volume = GameState.isSoundEnabled ? 0.03 : 0;
+    double volume1 = GameState.isSoundEnabled ? 0.01 : 0;
+
+    if (App.mediaPlayer != null) {
+      App.mediaPlayer.setVolume(volume);
     }
 
-    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+    if (App.alertSoundPlayer != null) {
+      // If an Alert Sound Player exists, adjust its volume as well.
+      App.alertSoundPlayer.setVolume(volume1);
+    }
+
+    soundOn.setVisible(GameState.isSoundEnabled);
+    soundOff.setVisible(!GameState.isSoundEnabled);
   }
 
   /** Turn on the sound while the player is moving into the room. */
@@ -871,35 +910,6 @@ public class Room1Controller implements Initializable {
     crew2Indicator.setVisible(true);
     crew3Indicator.setVisible(true);
     crew4Indicator.setVisible(true);
-  }
-
-  /** When the close image is clicked, greeting disappears. */
-  @FXML
-  private void clickClose(MouseEvent e) {
-    greeting.setVisible(false);
-    greetingBox.setVisible(false);
-    close.setVisible(false);
-    isGreetingShown = false;
-    black.setVisible(false);
-  }
-
-  /** After the player close the greeting, the character can move. */
-  private void enablePlayerMovement() {
-    Timer greetingTimer = new Timer(true);
-    greetingTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            // if the greeting is once closed, player becomes able to move
-            if (!isGreetingShown) {
-              setUpMovement();
-              // cancel the timer once the movement is enabled
-              greetingTimer.cancel();
-            }
-          }
-        },
-        0,
-        100);
   }
 
   /**
@@ -1035,5 +1045,41 @@ public class Room1Controller implements Initializable {
   @FXML
   private void exitCollect4(MouseEvent e) {
     btnCollect4.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
+  }
+
+  /** Give 0.1second of delay when the player is moving. */
+  private void simulateKeyPressAfterDelay() {
+    Thread thread =
+        new Thread(
+            () -> {
+              try {
+                Thread.sleep(50); // Delay of 0.1 seconds
+                KeyEvent keyReleaseEventS =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
+
+                KeyEvent keyReleaseEventA =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
+
+                KeyEvent keyReleaseEventW =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
+
+                KeyEvent keyReleaseEventD =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
+
+                scene.fireEvent(keyReleaseEventA);
+                // scene.fireEvent(keyPressEvent);
+                scene.fireEvent(keyReleaseEventD);
+                scene.fireEvent(keyReleaseEventW);
+                scene.fireEvent(keyReleaseEventS);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+            });
+
+    thread.start();
   }
 }

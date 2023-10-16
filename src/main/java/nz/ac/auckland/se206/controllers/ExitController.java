@@ -19,28 +19,37 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class ExitController implements Initializable {
+  public static ObservableList<ChatBubble> chatBubbleListExit = FXCollections.observableArrayList();
 
   private BooleanProperty isWPressed = new SimpleBooleanProperty();
   private BooleanProperty isAPressed = new SimpleBooleanProperty();
@@ -64,7 +73,6 @@ public class ExitController implements Initializable {
   @FXML private Rectangle wall;
   @FXML private Rectangle wall1;
   @FXML private Rectangle id;
-  @FXML private Rectangle greetingBox;
 
   @FXML private Button one;
   @FXML private Button two;
@@ -103,11 +111,9 @@ public class ExitController implements Initializable {
   @FXML private Rectangle light;
   @FXML private Rectangle monitor;
   @FXML private Rectangle clickMonitor;
-  @FXML private Rectangle black;
   @FXML private Label idLabel;
   @FXML private Label clickButton;
   @FXML private Label click;
-  @FXML private Label greeting;
   @FXML private ImageView gameMaster;
   @FXML private ImageView close;
 
@@ -118,6 +124,8 @@ public class ExitController implements Initializable {
   @FXML private Button resetCancel;
 
   @FXML private Pane aiWindowController;
+  @FXML private ScrollPane chatPaneOne;
+  @FXML private VBox chatContainerOne;
 
   private boolean nextToButton = false;
   private FadeTransition fadeTransition;
@@ -184,8 +192,6 @@ public class ExitController implements Initializable {
 
   private Boolean walkAnimationPlaying = false;
 
-  private boolean isGreetingShown = true;
-
   private AnimationTimer collisionTimers =
       new AnimationTimer() {
         @Override
@@ -235,6 +241,12 @@ public class ExitController implements Initializable {
     walls.add(wall);
     walls.add(wall1);
 
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
+
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
 
@@ -244,7 +256,7 @@ public class ExitController implements Initializable {
     walkingMediaPlayer.setVolume(2.0);
 
     shapesize = player.getFitWidth();
-    enablePlayerMovement();
+    setUpMovement();
 
     collisionTimers.start();
     previousX = player.getLayoutX();
@@ -277,8 +289,26 @@ public class ExitController implements Initializable {
     // if difficulty is selected, label is updated
     detectDifficulty();
 
-    greeting.setWrapText(true);
-    greeting.setText(App.greetingInRoom3);
+    ListChangeListener<ChatBubble> listener3 =
+        change -> {
+          Platform.runLater(
+              () -> {
+                chatContainerOne
+                    .getChildren()
+                    .addAll(chatBubbleListExit.get(chatBubbleListExit.size() - 1).getBubbleBox());
+                chatContainerOne.setAlignment(Pos.TOP_RIGHT);
+                chatPaneOne.vvalueProperty().bind(chatContainerOne.heightProperty());
+                System.out.println(
+                    "Added: "
+                        + chatBubbleListExit
+                            .get(chatBubbleListExit.size() - 1)
+                            .getBubbleText()
+                            .getText()
+                        + " "
+                        + this.getClass().getSimpleName());
+              });
+        };
+    chatBubbleListExit.addListener(listener3);
   }
 
   /**
@@ -303,6 +333,7 @@ public class ExitController implements Initializable {
             // GameState.hasHappend = false;
             App.setScene(AppUi.PLAYER);
             enterRoom();
+            simulateKeyPressAfterDelay();
           });
       pauseTransition.play();
     } else {
@@ -1084,23 +1115,7 @@ public class ExitController implements Initializable {
   /** Change the background music when 3 seconds are left. */
   private void endingMediaChange() {
     // Wait for 2 second and change the media
-    if (GameState.isSoundEnabled) {
-      System.out.println("sound is off");
-      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(1.0));
-      pauseTransition.setOnFinished(
-          event -> {
-            System.out.println("sound is off2");
-            String musicFile;
-            musicFile = "src/main/resources/sounds/final.mp3";
-            App.musicType = "final";
-            Media media = new Media(new File(musicFile).toURI().toString());
-            App.mediaPlayer.stop();
-            App.mediaPlayer = new MediaPlayer(media);
-            App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            App.mediaPlayer.setVolume(0.1);
-            App.mediaPlayer.setAutoPlay(true);
-          });
-    }
+    App.alertSoundPlayer.stop();
   }
 
   /** Update the labels of hint and difficulty as the game progresses. */
@@ -1261,21 +1276,20 @@ public class ExitController implements Initializable {
    */
   @FXML
   private void toggleSound(MouseEvent event) {
-    if (GameState.isSoundEnabled) {
-      // Disable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.0); // Mute the media player
-      }
-      toggleSoundButton.setText("Enable Sound");
-    } else {
-      // Enable sound
-      if (App.mediaPlayer != null) {
-        App.mediaPlayer.setVolume(0.05); // Set the volume to your desired level
-      }
-      toggleSoundButton.setText("Disable Sound");
+    GameState.isSoundEnabled = !GameState.isSoundEnabled;
+
+    double volume = GameState.isSoundEnabled ? 0.03 : 0;
+    if (App.mediaPlayer != null) {
+      App.mediaPlayer.setVolume(volume);
     }
 
-    GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
+    if (App.alertSoundPlayer != null) {
+      // If an Alert Sound Player exists, adjust its volume as well.
+      App.alertSoundPlayer.setVolume(volume);
+    }
+
+    soundOn.setVisible(GameState.isSoundEnabled);
+    soundOff.setVisible(!GameState.isSoundEnabled);
   }
 
   /** Move game master robot up and down. */
@@ -1303,31 +1317,13 @@ public class ExitController implements Initializable {
     System.out.print("HI");
   }
 
-  /** When the close image is clicked, greeting disappears. */
   @FXML
-  private void clickClose(MouseEvent e) {
-    greeting.setVisible(false);
-    greetingBox.setVisible(false);
-    close.setVisible(false);
-    isGreetingShown = false;
-    black.setVisible(false);
-  }
-
-  /** After the player close the greeting, the character can move. */
-  private void enablePlayerMovement() {
-    Timer greetingTimer = new Timer(true);
-    greetingTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            if (!isGreetingShown) {
-              setUpMovement();
-              greetingTimer.cancel();
-            }
-          }
-        },
-        0,
-        100);
+  private void restartClicked(ActionEvent event) throws IOException {
+    black2.setVisible(true);
+    resetBox.setVisible(true);
+    resetLabel.setVisible(true);
+    resetYes.setVisible(true);
+    resetCancel.setVisible(true);
   }
 
   /**
@@ -1358,5 +1354,40 @@ public class ExitController implements Initializable {
     } catch (Exception e) {
       // TODO: handle exception
     }
+  }
+
+  private void simulateKeyPressAfterDelay() {
+    Thread thread =
+        new Thread(
+            () -> {
+              try {
+                Thread.sleep(50); // Delay of 0.1 seconds
+                KeyEvent keyReleaseEventS =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
+
+                KeyEvent keyReleaseEventA =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
+
+                KeyEvent keyReleaseEventW =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
+
+                KeyEvent keyReleaseEventD =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
+
+                scene.fireEvent(keyReleaseEventA);
+                // scene.fireEvent(keyPressEvent);
+                scene.fireEvent(keyReleaseEventD);
+                scene.fireEvent(keyReleaseEventW);
+                scene.fireEvent(keyReleaseEventS);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+            });
+
+    thread.start();
   }
 }

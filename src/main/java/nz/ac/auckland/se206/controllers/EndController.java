@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
@@ -27,6 +28,7 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 
 public class EndController implements Initializable {
@@ -48,8 +50,16 @@ public class EndController implements Initializable {
   @FXML private Button resetYes;
   @FXML private Button resetCancel;
 
+  @FXML private Button resetButton;
+
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    // black2.setVisible(false);
+    // resetBox.setVisible(false);
+    // resetLabel.setVisible(false);
+    // resetYes.setVisible(false);
+    // resetCancel.setVisible(false);
+
     if (scene != null) {
       scene
           .sceneProperty()
@@ -59,6 +69,17 @@ public class EndController implements Initializable {
                   // Schedule the endingAnimation to run after the scene is shown
                   Platform.runLater(this::endingAnimation);
                   youWin.setVisible(false);
+                  resetButton.setVisible(false);
+                  String musicFile;
+                  musicFile = "src/main/resources/sounds/final.mp3";
+                  App.musicType = "final";
+                  Media media = new Media(new File(musicFile).toURI().toString());
+                  App.mediaPlayer.stop();
+                  App.mediaPlayer = new MediaPlayer(media);
+                  App.mediaPlayer.setVolume(0.3);
+                  App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+                  App.mediaPlayer.setAutoPlay(true);
+                  App.mediaPlayer.play();
                 }
               });
     }
@@ -176,7 +197,8 @@ public class EndController implements Initializable {
     spaceshipPathTransition.setOnFinished(
         event -> {
           youWin.setVisible(true);
-          App.mediaPlayer.setVolume(0.2);
+          resetButton.setVisible(true);
+          App.mediaPlayer.setVolume(0.3);
           winTextToSpeech();
         });
   }
@@ -204,5 +226,32 @@ public class EndController implements Initializable {
         };
     Thread introThread = new Thread(introTask);
     introThread.start();
+  }
+
+  @FXML
+  private void restartClicked(ActionEvent event) throws IOException {
+    black2.setVisible(true);
+    resetBox.setVisible(true);
+    resetLabel.setVisible(true);
+    resetYes.setVisible(true);
+    resetCancel.setVisible(true);
+  }
+
+  @FXML
+  private void restartCanceled(ActionEvent event) throws IOException {
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
+  }
+
+  @FXML
+  private void reset(ActionEvent event) throws IOException {
+    try {
+      GameState.resetGames();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
   }
 }

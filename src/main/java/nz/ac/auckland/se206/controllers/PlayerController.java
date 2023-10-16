@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -17,28 +18,39 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class PlayerController implements Initializable {
   public static boolean hintContained = false;
   public static boolean answerContained = false;
+  public static ObservableList<ChatBubble> chatBubbleListPlayer =
+      FXCollections.observableArrayList();
 
   private BooleanProperty wPressed = new SimpleBooleanProperty();
   private BooleanProperty aPressed = new SimpleBooleanProperty();
@@ -71,7 +83,6 @@ public class PlayerController implements Initializable {
   @FXML private Label difficultyLabel;
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
-  @FXML private Label greeting;
 
   @FXML private Rectangle wall;
   @FXML private Rectangle wall1;
@@ -93,8 +104,6 @@ public class PlayerController implements Initializable {
   @FXML private Rectangle wall19;
   @FXML private Rectangle wall20;
   @FXML private Rectangle wall21;
-  @FXML private Rectangle greetingBox;
-  @FXML private ImageView close;
 
   @FXML private Pane scene;
   @FXML private Pane alert;
@@ -112,8 +121,8 @@ public class PlayerController implements Initializable {
 
   @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
-
-  @FXML private Label playerLabel;
+  @FXML private ScrollPane chatPane;
+  @FXML private VBox chatContainer;
 
   private double previousX;
   private double previousY;
@@ -131,7 +140,52 @@ public class PlayerController implements Initializable {
 
   @FXML private MediaPlayer walkingMediaPlayer;
 
-  @FXML private MediaPlayer alertSoundPlayer;
+  @FXML
+  Image rightCharacterAnimation =
+      new Image(
+          new File("src/main/resources/images/walkingRight.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image leftCharacterAnimation =
+      new Image(
+          new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image leftCharacterIdle =
+      new Image(
+          new File("src/main/resources/images/gameCharacterArtLeft.png").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image rightCharacterIdle =
+      new Image(
+          new File("src/main/resources/images/gameCharacterArtRight.png").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  @FXML
+  Image lastPlayedWalk =
+      new Image(
+          new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
+          171,
+          177,
+          false,
+          false);
+
+  Boolean walkAnimationPlaying = false;
 
   private AnimationTimer collisionTimer =
       new AnimationTimer() {
@@ -149,7 +203,6 @@ public class PlayerController implements Initializable {
         @Override
         public void handle(long now) {
           black.setVisible(false);
-          playerLabel.setVisible(false);
 
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
@@ -174,7 +227,6 @@ public class PlayerController implements Initializable {
   public void initialize(URL url, ResourceBundle resourceBundle) {
     animateRobot();
 
-    playerLabel.setVisible(true);
     black.setVisible(true);
 
     black2.setVisible(false);
@@ -199,7 +251,6 @@ public class PlayerController implements Initializable {
     alert.setVisible(false);
 
     shapesize = player.getFitWidth();
-    enablePlayerMovement();
 
     walls.add(wall);
     walls.add(wall1);
@@ -243,39 +294,45 @@ public class PlayerController implements Initializable {
 
     // if difficulty is selected, label is updated
     detectDifficulty();
+    movementSetup();
 
-    greeting.setWrapText(true);
-    greeting.setText(App.greetingInMap);
-  }
-
-  @FXML
-  void start(ActionEvent event) {
-    player.setLayoutX(10);
-    player.setLayoutY(200);
+    ListChangeListener<ChatBubble> listener2 =
+        change -> {
+          Platform.runLater(
+              () -> {
+                chatContainer
+                    .getChildren()
+                    .addAll(
+                        chatBubbleListPlayer.get(chatBubbleListPlayer.size() - 1).getBubbleBox());
+                chatContainer.setAlignment(Pos.TOP_CENTER);
+                chatPane.vvalueProperty().bind(chatContainer.heightProperty());
+                System.out.println(
+                    "Added: "
+                        + chatBubbleListPlayer
+                            .get(chatBubbleListPlayer.size() - 1)
+                            .getBubbleText()
+                            .getText()
+                        + " "
+                        + this.getClass().getSimpleName());
+              });
+        };
+    chatBubbleListPlayer.addListener(listener2);
   }
 
   // Modify your setupAlertBlinking method as follows
   private void setupAlertBlinking() {
     alert.setVisible(true); // Initially show the alert label
-    String musicFile;
-    musicFile = "src/main/resources/sounds/alert.mp3";
-    App.musicType = "final";
-    Media media = new Media(new File(musicFile).toURI().toString());
-
     // Stop current playing media
     App.mediaPlayer.stop();
-
-    // Create a new MediaPlayer specifically for the alert sound
-    alertSoundPlayer = new MediaPlayer(media);
-
     // Check if sound is enabled before setting volume and playing.
     if (GameState.isSoundEnabled) {
-      alertSoundPlayer.setVolume(0.04);
+      App.alertSoundPlayer.setVolume(0.03);
     } else {
-      alertSoundPlayer.setVolume(0.0);
+      App.alertSoundPlayer.setVolume(0.0);
     }
-    alertSoundPlayer.setAutoPlay(true);
-    alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    App.alertSoundPlayer.setAutoPlay(true);
+    App.alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    App.alertSoundPlayer.play();
 
     // Set up the blinking animation for the alert label
     alertBlinkTimeline =
@@ -292,12 +349,7 @@ public class PlayerController implements Initializable {
     if (alertBlinkTimeline != null) {
       // Stop timeline and hide label
       alertBlinkTimeline.stop();
-
-      // Stop and clean up the Alert Sound Player as well.
-      if (alertSoundPlayer != null) {
-        alertSoundPlayer.stop();
-        alertSoundPlayer.dispose();
-      }
+      App.alertSoundPlayer.stop();
     }
   }
 
@@ -324,6 +376,7 @@ public class PlayerController implements Initializable {
             GameState.isPlayerInMap = false;
             GameState.beenToRoom1 = true;
             App.setScene(AppUi.ROOM1);
+            simulateKeyPressAfterDelay();
           });
       pauseTransition.play();
     } else {
@@ -348,6 +401,7 @@ public class PlayerController implements Initializable {
             GameState.isPlayerInMap = false;
             GameState.beenToRoom2 = true;
             App.setScene(AppUi.TILEROOM);
+            simulateKeyPressAfterDelay();
           });
       pauseTransition.play();
     } else {
@@ -373,6 +427,7 @@ public class PlayerController implements Initializable {
             GameState.isPlayerInMap = false;
             GameState.beenToRoom3 = true;
             App.setScene(AppUi.ROOM3);
+            simulateKeyPressAfterDelay();
           });
       pauseTransition.play();
     } else {
@@ -520,6 +575,7 @@ public class PlayerController implements Initializable {
   @FXML
   public void onRoom3(ActionEvent event) {
     App.setScene(AppUi.ROOM3);
+    simulateKeyPressAfterDelay();
   }
 
   public void detectDifficulty() {
@@ -537,7 +593,6 @@ public class PlayerController implements Initializable {
                 }
               } else {
                 Platform.runLater(() -> updateLabels());
-
               }
             }
           }
@@ -575,30 +630,129 @@ public class PlayerController implements Initializable {
     translate.play();
   }
 
-  /** When the close image is clicked, greeting disappears. */
   @FXML
-  private void clickClose(MouseEvent e) {
-    greeting.setVisible(false);
-    greetingBox.setVisible(false);
-    close.setVisible(false);
-    isGreetingShown = false;
-  }
+  public void movementSetup() {
 
-  /** After the player close the greeting, the character can move. */
-  private void enablePlayerMovement() {
-    Timer greetingTimer = new Timer(true);
-    greetingTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            if (!isGreetingShown) {
-              playerMove();
-              greetingTimer.cancel();
+    scene.setOnKeyPressed(
+        e -> {
+          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+          if (e.getCode() == KeyCode.W) {
+            if (walkAnimationPlaying == false) {
+              player.setImage(lastPlayedWalk);
+              walkAnimationPlaying = true;
+            }
+            wPressed.set(true);
+          }
+
+          if (e.getCode() == KeyCode.A) {
+            if (player.getImage() != leftCharacterAnimation) {
+              player.setImage(leftCharacterAnimation);
+              walkAnimationPlaying = true;
+              lastPlayedWalk = player.getImage();
+            }
+            aPressed.set(true);
+            System.out.println("left");
+          }
+
+          if (e.getCode() == KeyCode.S) {
+            if (walkAnimationPlaying == false) {
+              player.setImage(lastPlayedWalk);
+              walkAnimationPlaying = true;
+            }
+            sPressed.set(true);
+          }
+
+          if (e.getCode() == KeyCode.D) {
+            if (player.getImage() != rightCharacterAnimation) {
+              player.setImage(rightCharacterAnimation);
+              walkAnimationPlaying = true;
+              lastPlayedWalk = player.getImage();
+            }
+            dPressed.set(true);
+          }
+
+          boolean isMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+          // If we started moving and weren't before, start the sound.
+          if (isMoving && !wasMoving) {
+            walkingMediaPlayer.play();
+          }
+        });
+
+    scene.setOnKeyReleased(
+        e -> {
+          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+          if (e.getCode() == KeyCode.W) {
+            if (player.getImage() == leftCharacterAnimation
+                && sPressed.get() == false
+                && aPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (sPressed.get() == true) {
+              player.setImage(lastPlayedWalk);
+            } else if (aPressed.get() == false
+                && dPressed.get() == false
+                && sPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            }
+            wPressed.set(false);
+          }
+
+          if (e.getCode() == KeyCode.A) {
+            if (dPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (dPressed.get() == true) {
+              player.setImage(rightCharacterAnimation);
+            }
+
+            aPressed.set(false);
+          }
+
+          if (e.getCode() == KeyCode.S) {
+            if (player.getImage() == leftCharacterAnimation
+                && wPressed.get() == false
+                && aPressed.get() == false) {
+              player.setImage(leftCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (wPressed.get() == true) {
+              player.setImage(lastPlayedWalk);
+            } else if (aPressed.get() == false
+                && dPressed.get() == false
+                && wPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            }
+            sPressed.set(false);
+          }
+
+          if (e.getCode() == KeyCode.D) {
+            if (aPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+              player.setImage(rightCharacterIdle);
+              walkAnimationPlaying = false;
+            } else if (aPressed.get() == true) {
+              player.setImage(leftCharacterAnimation);
+            }
+
+            dPressed.set(false);
+          }
+
+          boolean isMovinng = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+
+          // If we stopped moving and were before, stop the sound.
+          if (!isMovinng && wasMoving) {
+            walkingMediaPlayer.stop();
+            try {
+              // This line will reset audio clip from start when stopped
+              walkingMediaPlayer.seek(Duration.ZERO);
+            } catch (Exception ex) {
+              System.out.println("Error resetting audio: " + ex.getMessage());
             }
           }
-        },
-        0,
-        100);
+        });
   }
 
   @FXML
@@ -613,15 +767,14 @@ public class PlayerController implements Initializable {
   private void toggleSound(MouseEvent event) {
     GameState.isSoundEnabled = !GameState.isSoundEnabled;
 
-    double volume = GameState.isSoundEnabled ? 0.05 : 0;
-
+    double volume = GameState.isSoundEnabled ? 0.03 : 0;
     if (App.mediaPlayer != null) {
       App.mediaPlayer.setVolume(volume);
     }
 
-    if (alertSoundPlayer != null) {
+    if (App.alertSoundPlayer != null) {
       // If an Alert Sound Player exists, adjust its volume as well.
-      alertSoundPlayer.setVolume(volume);
+      App.alertSoundPlayer.setVolume(volume);
     }
 
     soundOn.setVisible(GameState.isSoundEnabled);
@@ -653,5 +806,40 @@ public class PlayerController implements Initializable {
     } catch (Exception e) {
       // TODO: handle exception
     }
+  }
+
+  private void simulateKeyPressAfterDelay() {
+    Thread thread =
+        new Thread(
+            () -> {
+              try {
+                Thread.sleep(50); // Delay of 0.1 seconds
+                KeyEvent keyReleaseEventS =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
+
+                KeyEvent keyReleaseEventA =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
+
+                KeyEvent keyReleaseEventW =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
+
+                KeyEvent keyReleaseEventD =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
+
+                scene.fireEvent(keyReleaseEventA);
+                // scene.fireEvent(keyPressEvent);
+                scene.fireEvent(keyReleaseEventD);
+                scene.fireEvent(keyReleaseEventW);
+                scene.fireEvent(keyReleaseEventS);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+            });
+
+    thread.start();
   }
 }
