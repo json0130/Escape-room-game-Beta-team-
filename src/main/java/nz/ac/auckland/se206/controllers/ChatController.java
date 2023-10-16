@@ -43,15 +43,6 @@ public class ChatController {
   public static boolean isRiddleGiven = false;
   private boolean hasHappened = false;
   private Timeline alertBlinkTimeline;
-  private ChatCompletionRequest chatCompletionRequest;
-
-  private AnimationTimer collisionTimer =
-      new AnimationTimer() {
-        @Override
-        public void handle(long now) {
-          checkCollision2();
-        }
-      };
   @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
   @FXML private Button sendButton;
@@ -74,6 +65,16 @@ public class ChatController {
   @FXML private Pane alert;
 
   @FXML private Button toggleSoundButton;
+
+  private ChatCompletionRequest chatCompletionRequest;
+
+  private AnimationTimer collisionTimer =
+      new AnimationTimer() {
+        @Override
+        public void handle(long now) {
+          checkCollision2();
+        }
+      };
 
   /**
    * Initializes the chat view, loading the riddle.
@@ -108,6 +109,7 @@ public class ChatController {
     detectDifficulty();
   }
 
+  @FXML
   /** Detect difficulty of game whenever it changes. */
   public void detectDifficulty() {
     Timer labelTimer = new Timer(true);
@@ -323,6 +325,7 @@ public class ChatController {
 
   /** update labels for difficulty and hints as the game progress. */
   private void updateLabels() {
+    // update labels for difficulty and hints as the game progress
     if (GameState.difficulty == "EASY") {
       hintLabel.setText("UNLIMITED");
     } else if (GameState.difficulty == "MEDIUM") {

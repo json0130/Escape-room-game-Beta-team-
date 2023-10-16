@@ -11,7 +11,6 @@ public class ChatBubble {
 
   private Label bubbleText;
   private HBox bubbleBox;
-  private Boolean isGreeting;
 
   public ChatBubble(ChatMessage msg, Boolean isGreeting) {
 

@@ -128,6 +128,7 @@ public class IntroController implements Initializable {
    * @param rock the rock
    * @return true if the spaceship collides with the rock
    */
+  @FXML
   public void checkCollision2() {
     // Initialize sound images based on the initial isSoundEnabled state
     if (GameState.isSoundEnabled) {
@@ -140,7 +141,7 @@ public class IntroController implements Initializable {
   }
 
   @FXML
-  private void levelButtonClicked(ActionEvent events) {
+  private void handleLevelButtonClicked(ActionEvent events) {
     // If the user clicks the level button then the time buttons will be visible.
     soundButttonClick();
 
@@ -192,7 +193,7 @@ public class IntroController implements Initializable {
   }
 
   @FXML
-  private void minuteButtonClicked(ActionEvent events) {
+  private void handleMinuteButtonClicked(ActionEvent events) {
     // If the user clicks the minute button then the start button will be visible.
     soundButttonClick();
 

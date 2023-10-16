@@ -61,7 +61,7 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000085" height="60.0" layoutX="505.0" layoutY="360.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000085" height="60.0" layoutX="216.0" layoutY="363.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000085" height="60.0" layoutX="797.0" layoutY="363.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
-      <Button fx:id="easyButton" layoutX="216.0" layoutY="363.0" mnemonicParsing="false" onAction="#levelButtonClicked" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" styleClass="ba" text="EASY" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="easyButton" layoutX="216.0" layoutY="363.0" mnemonicParsing="false" onAction="#handleLevelButtonClicked" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" styleClass="ba" text="EASY" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="25.0" />
          </font>
@@ -69,17 +69,17 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000085" height="60.0" layoutX="215.0" layoutY="504.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000085" height="60.0" layoutX="504.0" layoutY="504.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000085" height="60.0" layoutX="795.0" layoutY="503.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
-      <Button fx:id="minB2" layoutX="215.0" layoutY="504.0" mnemonicParsing="false" onAction="#minuteButtonClicked" prefHeight="55.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" stylesheets="@../css/styles.css" text="2 MINUTES" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="minB2" layoutX="215.0" layoutY="504.0" mnemonicParsing="false" onAction="#handleMinuteButtonClicked" prefHeight="55.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" stylesheets="@../css/styles.css" text="2 MINUTES" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="21.0" />
          </font>
       </Button>
-      <Button fx:id="minB4" layoutX="504.0" layoutY="504.0" mnemonicParsing="false" onAction="#minuteButtonClicked" prefHeight="55.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" stylesheets="@../css/styles.css" text="4 MINUTES" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="minB4" layoutX="504.0" layoutY="504.0" mnemonicParsing="false" onAction="#handleMinuteButtonClicked" prefHeight="55.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" stylesheets="@../css/styles.css" text="4 MINUTES" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="21.0" />
          </font>
       </Button>
-      <Button fx:id="minB6" layoutX="795.0" layoutY="503.0" mnemonicParsing="false" onAction="#minuteButtonClicked" prefHeight="55.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" text="6 MINUTES" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="minB6" layoutX="795.0" layoutY="503.0" mnemonicParsing="false" onAction="#handleMinuteButtonClicked" prefHeight="55.0" prefWidth="202.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" text="6 MINUTES" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="21.0" />
          </font>
@@ -120,12 +120,12 @@
             </LinearGradient>
          </textFill>
       </Button>
-      <Button fx:id="mediumButton" layoutX="505.0" layoutY="360.0" mnemonicParsing="false" onAction="#levelButtonClicked" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" styleClass="ba" text="MEDIUM" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="mediumButton" layoutX="505.0" layoutY="360.0" mnemonicParsing="false" onAction="#handleLevelButtonClicked" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" styleClass="ba" text="MEDIUM" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="25.0" />
          </font>
       </Button>
-      <Button fx:id="hardButton" layoutX="797.0" layoutY="363.0" mnemonicParsing="false" onAction="#levelButtonClicked" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" styleClass="ba" text="HARD" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="hardButton" layoutX="797.0" layoutY="363.0" mnemonicParsing="false" onAction="#handleLevelButtonClicked" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2;" styleClass="ba" text="HARD" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="25.0" />
          </font>

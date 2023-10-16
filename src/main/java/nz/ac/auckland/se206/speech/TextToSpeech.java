@@ -8,8 +8,6 @@ import javax.speech.synthesis.SynthesizerModeDesc;
 
 /** Text-to-speech API using the JavaX speech library. */
 public class TextToSpeech {
-
-  private boolean interupt = false;
   private final Synthesizer synthesizer;
   
   /** Custom unchecked exception for Text-to-speech issues. */
@@ -111,9 +109,4 @@ public class TextToSpeech {
       throw new TextToSpeechException(e.getMessage());
     }
   }
-
-  // public void setInterupt() {
-  //   this.interupt = true;
-  //   synthesizer.cancelAll();
-  // }
 }

@@ -31,7 +31,18 @@
             <Font name="Arial Bold" size="96.0" />
          </font>
       </Label>
-      <Rectangle fx:id="grey1" arcHeight="5.0" arcWidth="5.0" fill="#000000a3" height="866.0" layoutX="-35.0" layoutY="-10.0" opacity="0.37" stroke="BLACK" strokeType="INSIDE" width="1257.0" />
-      <Button fx:id="resetButton" layoutX="897.0" layoutY="545.0" mnemonicParsing="false" onAction="#handleResetEvent" text="Button" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000097" height="58.0" layoutX="969.0" layoutY="557.0" stroke="BLACK" strokeType="INSIDE" width="192.0" />
+      <Button fx:id="resetButton" layoutX="969.0" layoutY="557.0" mnemonicParsing="false" onAction="#handleRestartButtonClick" prefHeight="58.0" prefWidth="192.0" style="-fx-background-color: transparent; -fx-border-color: white;" text="RESTART" textFill="WHITE">
+         <font>
+            <Font name="Arial Bold Italic" size="29.0" />
+         </font></Button>
+      <Rectangle fx:id="restartBackground" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="303.0" layoutX="311.0" layoutY="213.0" opacity="0.0" stroke="WHITE" strokeType="INSIDE" width="538.0" />
+      <Label fx:id="resetLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="381.0" layoutY="300.0" opacity="0.0" prefHeight="92.0" prefWidth="377.0" text="Would you like to RESTART the game?" textAlignment="CENTER">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Button fx:id="restartNo" layoutX="381.0" layoutY="442.0" mnemonicParsing="false" onAction="#handleRestartButtonCanceled" opacity="0.0" text="CANCEL" />
+      <Button fx:id="restartYes" layoutX="713.0" layoutY="442.0" mnemonicParsing="false" onAction="#handleResetEvent" opacity="0.0" text="RESTART" />
    </children>
 </Pane>

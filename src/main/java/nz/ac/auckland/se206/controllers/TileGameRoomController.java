@@ -1,6 +1,5 @@
 package nz.ac.auckland.se206.controllers;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -46,7 +45,6 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
 
 /** Controller class for the room view. */
 public class TileGameRoomController implements javafx.fxml.Initializable {
-
   public static ObservableList<ChatBubble> chatBubbleListTileRoom =
       FXCollections.observableArrayList();
 
@@ -59,7 +57,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   private int movementVariable = 5;
   private double shapesize;
 
-  List<Rectangle> walls = new ArrayList<>();
+  private List<Rectangle> walls = new ArrayList<>();
 
   @FXML private ImageView player;
   @FXML private Pane scene;
@@ -100,7 +98,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML private Rectangle wall19;
   @FXML private Rectangle wall20;
   @FXML private Rectangle blinkingRectangle;
-  private FadeTransition fadeTransition;
+  @FXML private FadeTransition fadeTransition;
   @FXML private ImageView soundOn;
   @FXML private ImageView soundOff;
   @FXML private ScrollPane chatPaneOne;
@@ -118,7 +116,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   private MediaPlayer walkingMediaPlayer;
 
   @FXML
-  Image rightCharacterAnimation =
+  private Image rightCharacterAnimation =
       new Image(
           new File("src/main/resources/images/walkingRight.gif").toURI().toString(),
           171,
@@ -127,7 +125,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
           false);
 
   @FXML
-  Image leftCharacterAnimation =
+  private Image leftCharacterAnimation =
       new Image(
           new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
           171,
@@ -136,7 +134,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
           false);
 
   @FXML
-  Image leftCharacterIdle =
+  private Image leftCharacterIdle =
       new Image(
           new File("src/main/resources/images/gameCharacterArtLeft.png").toURI().toString(),
           171,
@@ -145,7 +143,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
           false);
 
   @FXML
-  Image rightCharacterIdle =
+  private Image rightCharacterIdle =
       new Image(
           new File("src/main/resources/images/gameCharacterArtRight.png").toURI().toString(),
           171,
@@ -154,7 +152,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
           false);
 
   @FXML
-  Image lastPlayedWalk =
+  private Image lastPlayedWalk =
       new Image(
           new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
           171,
@@ -162,15 +160,13 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
           false,
           false);
 
-  Boolean walkAnimationPlaying = false;
-
-  // Add this variable to your class
+  private Boolean walkAnimationPlaying = false;
   private Timeline alertBlinkTimeline;
 
   private boolean nextToButton = false;
   @FXML private Button btnRoom1;
   @FXML private Button button;
-  @FXML ImageView eMark;
+  @FXML private ImageView eMark;
   @FXML private ImageView gameMaster;
 
   @FXML private Pane aiWindowController;
@@ -179,7 +175,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   private boolean isGreetingShown = true;
 
-  AnimationTimer collisionTimer =
+  private AnimationTimer collisionTimer =
       new AnimationTimer() {
         @Override
         public void handle(long now) {
@@ -189,7 +185,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
         }
       };
 
-  AnimationTimer timer =
+  private AnimationTimer timer =
       new AnimationTimer() {
         @Override
         public void handle(long now) {
@@ -259,7 +255,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     aiWindowController.setVisible(true);
 
     shapesize = player.getFitWidth();
-    movementSetup();
+    movingSetup();
 
     collisionTimer.start();
 
@@ -418,8 +414,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   // code for player movement using wasd keys
   @FXML
-  public void movementSetup() {
-
+  public void movingSetup() {
     scene.setOnKeyPressed(
         e -> {
           boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
@@ -541,8 +536,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
         });
   }
 
-  // prevent the player moves out of the window
-  public void squareBorder() {
+  private void squareBorder() {
+    // prevent the player moves out of the window
     double left = 0;
     double right = scene.getWidth() - shapesize;
     double top = 0;
@@ -705,6 +700,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   }
 
   /** After the player close the greeting, the character can move. */
+  @FXML
   private void enablePlayerMovement() {
     Timer greetingTimer = new Timer(true);
     greetingTimer.scheduleAtFixedRate(
@@ -712,7 +708,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
           @Override
           public void run() {
             if (!isGreetingShown) {
-              movementSetup();
+              movingSetup();
               greetingTimer.cancel();
             }
           }
@@ -721,12 +717,14 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
         100);
   }
 
+  @FXML
   private void simulateKeyPressAfterDelay() {
+    // It released the key pressed when the player is leaving the scene
     Thread thread =
         new Thread(
             () -> {
               try {
-                Thread.sleep(50); // Delay of 0.1 seconds
+                Thread.sleep(50);
                 KeyEvent keyReleaseEventS =
                     new KeyEvent(
                         KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
@@ -744,7 +742,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
                         KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
 
                 scene.fireEvent(keyReleaseEventA);
-                // scene.fireEvent(keyPressEvent);
                 scene.fireEvent(keyReleaseEventD);
                 scene.fireEvent(keyReleaseEventW);
                 scene.fireEvent(keyReleaseEventS);
@@ -756,8 +753,14 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     thread.start();
   }
 
+  /**
+   * Show buttons to restart the game or cancel.
+   *
+   * @param event mouse is clicked
+   * @throws IOException if the objects don't exist
+   */
   @FXML
-  private void restartClicked(ActionEvent event) throws IOException {
+  private void handleRestartButtonClick(ActionEvent event) throws IOException {
     black2.setVisible(true);
     resetBox.setVisible(true);
     resetLabel.setVisible(true);
@@ -766,7 +769,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   }
 
   @FXML
-  private void restartCanceled(ActionEvent event) throws IOException {
+  private void handleRestartButtonCanceled(ActionEvent event) throws IOException {
     black2.setVisible(false);
     resetBox.setVisible(false);
     resetLabel.setVisible(false);
@@ -775,7 +778,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   }
 
   @FXML
-  private void reset(ActionEvent event) throws IOException {
+  private void handleResetEvent(ActionEvent event) throws IOException {
     try {
       GameState.resetGames();
     } catch (Exception e) {

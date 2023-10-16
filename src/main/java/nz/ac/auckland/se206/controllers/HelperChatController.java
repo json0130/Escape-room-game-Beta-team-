@@ -135,14 +135,14 @@ public class HelperChatController {
     if (GameState.difficulty == "EASY") {
       robotThink();
       // Handle Easy difficulty
-      runGpt(new ChatMessage("user", GptPromptEngineering.easy(message)));
+      runGpt(new ChatMessage("user", GptPromptEngineering.settingEasy(message)));
     } else if (GameState.difficulty == "MEDIUM") {
       robotThink();
       // Handle Medium difficulty
-      runGpt(new ChatMessage("user", GptPromptEngineering.medium(message)));
-    } else if (GameState.difficulty == "HARD") {
+      runGpt(new ChatMessage("user", GptPromptEngineering.settingMedium(message)));
+    } else if (GameState.difficulty == "settingHard") {
       robotThink();
-      runGpt(new ChatMessage("user", GptPromptEngineering.hard(message)));
+      runGpt(new ChatMessage("user", GptPromptEngineering.settingHard(message)));
     }
   }
 

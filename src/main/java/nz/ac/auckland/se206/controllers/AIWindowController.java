@@ -40,9 +40,6 @@ public class AIWindowController {
   @FXML private Pane aiPane;
   @FXML private ImageView closeWindow;
 
-  // private nz.ac.auckland.se206.chatHistory chatHistory;
-  private String currentRoomName;
-
   private AnimationTimer timer;
 
   /**
@@ -121,7 +118,6 @@ public class AIWindowController {
     //     runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom2()));
     // App.greetingInRoom3 =
     //     runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom3()));
-
   }
 
   /**
@@ -232,21 +228,15 @@ public class AIWindowController {
     if (GameState.difficulty == "EASY") {
       robotThink();
       // Handle Easy difficulty
-      runGpt(new ChatMessage("user", GptPromptEngineering.easy(message)), false);
+      runGpt(new ChatMessage("user", GptPromptEngineering.settingEasy(message)), false);
     } else if (GameState.difficulty == "MEDIUM") {
       robotThink();
       // Handle Medium difficulty
-      runGpt(new ChatMessage("user", GptPromptEngineering.medium(message)), false);
+      runGpt(new ChatMessage("user", GptPromptEngineering.settingMedium(message)), false);
     } else if (GameState.difficulty == "HARD") {
       robotThink();
-      runGpt(new ChatMessage("user", GptPromptEngineering.hard(message)), false);
+      runGpt(new ChatMessage("user", GptPromptEngineering.settingHard(message)), false);
     }
-    // if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("Correct")) {
-    //   GameState.isRiddleResolved = true;
-    // }
-    // if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("hint")) {
-    //   GameState.numOfHints--;
-    // }
     aiPane.requestFocus(); // Add this line
   }
 
