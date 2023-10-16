@@ -106,14 +106,9 @@
       <fx:include layoutX="7.0" layoutY="-31.0" source="countdowntimer.fxml" />
 
       <Rectangle fx:id="black" arcHeight="5.0" arcWidth="5.0" fill="#1f1f1fac" height="606.0" layoutX="-6.0" layoutY="46.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="1209.0" />
-      <Label fx:id="playerLabel" layoutX="268.0" layoutY="209.0" text="PLAYER" textFill="WHITE" visible="false">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Label>
-      <ImageView fx:id="player" fitHeight="50.0" fitWidth="56.0" layoutX="281.0" layoutY="237.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="player" fitHeight="80.0" fitWidth="80.0" layoutX="281.0" layoutY="237.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/images-removebg-preview.png" />
+            <Image url="@../images/gameCharacterArtRight.png" />
          </image>
       </ImageView>
       <Button fx:id="toggleSoundButton" layoutX="912.0" layoutY="13.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Button" visible="false" />
@@ -129,7 +124,6 @@
       </ImageView>
       <Button fx:id="toggleSoundButton" layoutX="851.0" layoutY="69.0" mnemonicParsing="false" text="SETTING" visible="false" />
       <fx:include fx:id="aiWindowController" layoutX="850.0" layoutY="200.0" source="aiwindow.fxml" />
-      <Button fx:id="resetButton" layoutX="1015.0" layoutY="9.0" mnemonicParsing="false" onAction="#handleRestartButtonClick" style="-fx-background-color: transparent;" text="RESTART" textFill="WHITE"/>
       <ImageView fx:id="gameMaster" fitHeight="167.0" fitWidth="165.0" layoutX="978.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../images/robotfloat.png" />

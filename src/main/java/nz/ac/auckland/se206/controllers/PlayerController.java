@@ -71,7 +71,6 @@ public class PlayerController implements Initializable {
   @FXML private ImageView gameMaster;
   @FXML private ImageView soundOn;
   @FXML private ImageView soundOff;
-  @FXML private Label playerLabel;
   @FXML private Label greeting;
 
   @FXML private Label main;
@@ -223,7 +222,6 @@ public class PlayerController implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    playerLabel.setVisible(true);
     black.setVisible(true);
 
     black2.setVisible(false);
