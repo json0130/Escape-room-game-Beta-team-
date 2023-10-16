@@ -25,7 +25,6 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.gpt.ChatMessage;
 import nz.ac.auckland.se206.gpt.GptPromptEngineering;
 import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
-import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
 
@@ -43,8 +42,6 @@ public class AIWindowController {
 
   private nz.ac.auckland.se206.chatHistory chatHistory;
   private String currentRoomName;
-
-  public static ChatCompletionRequest chatCompletionRequest;
 
   private AnimationTimer timer;
 
@@ -100,8 +97,11 @@ public class AIWindowController {
 
     timer.start();
 
-    chatCompletionRequest =
-        new ChatCompletionRequest().setN(1).setTemperature(1).setTopP(1).setMaxTokens(100);
+    if (App.hasGreeting == false) {
+      App.hasGreeting = true;
+      runGpt(new ChatMessage("user", GptPromptEngineering.greeting()), true);
+    }
+
     // App.greetingInRoom1 =
     //     runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom1()));
     // App.greetingInRoom2 =
@@ -109,43 +109,6 @@ public class AIWindowController {
     // App.greetingInRoom3 =
     //     runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom3()));
 
-    // App.chatBubbleList.addListener(
-    //     new ListChangeListener<ChatBubble>() {
-    //       public void onChanged(Change<? extends ChatBubble> c) {
-    //         while (c.next()) {
-    //           if (c.wasPermutated()) {
-    //             // handle permutation
-    //           } else if (c.wasUpdated()) {
-    //             // handle update
-    //           } else {
-    //             for (ChatBubble removedItem : c.getRemoved()) {
-    //               System.out.println("Removed: " + removedItem);
-    //             }
-    //             for (ChatBubble addedItem : c.getAddedSubList()) {
-    //               Platform.runLater(
-    //                   () -> {
-    //                     chatContainer
-    //                         .getChildren()
-    //                         .addAll(
-    //                             App.chatBubbleList
-    //                                 .get(App.chatBubbleList.size() - 1)
-    //                                 .getBubbleBox());
-    //                     chatContainer.setAlignment(Pos.TOP_CENTER);
-    //                     chatPane.vvalueProperty().bind(chatContainer.heightProperty());
-    //                     System.out.println(
-    //                         "Added: "
-    //                             + App.chatBubbleList
-    //                                 .get(App.chatBubbleList.size() - 1)
-    //                                 .getBubbleText()
-    //                                 .getText()
-    //                             + " "
-    //                             + this.getClass().getSimpleName());
-    //                   });
-    //             }
-    //           }
-    //         }
-    //       }
-    //     });
   }
 
   /**
@@ -169,37 +132,13 @@ public class AIWindowController {
    *
    * @param msg the chat message to append
    */
-  private void appendChatMessage(ChatMessage msg) {
-    // App.aiWindow = App.aiWindow.concat(msg.getRole() + ": " + msg.getContent() + "\n\n");
-    // Platform.runLater(
-    //     () -> {
-    //       chatTextArea.setText(App.aiWindow);
-    //       chatTextArea.setScrollTop(Double.MAX_VALUE); // this will scroll to the bottom
-    //     });
-    // String messageToSend = msg.getContent();
-    // Label message = new Label(messageToSend);
-    // message.setWrapText(true);
-    // message.setFont(Font.font("Arial", 15));
-    // HBox hBox = new HBox();
-    // if (msg.getRole().equals("user")) {
-    //   hBox.setAlignment(Pos.CENTER_RIGHT);
-    //   hBox.setPadding(new Insets(3, 4, 3, 4));
-    //   message.setStyle(
-    //       "-fx-background-color: lightblue; -fx-background-radius: 10;-fx-padding:
-    // 10,20,20,10;");
-    // } else {
-    //   hBox.setAlignment(Pos.CENTER_LEFT);
-    //   hBox.setPadding(new Insets(3, 4, 3, 4));
-    //   message.setStyle(
-    //       "-fx-background-color: lightyellow; -fx-background-radius: 10;-fx-padding:
-    // 10,20,20,10;");
-    // }
-    ChatBubble newMessage1 = new ChatBubble(msg);
-    ChatBubble newMessage2 = new ChatBubble(msg);
-    ChatBubble newMessage3 = new ChatBubble(msg);
-    ChatBubble newMessage4 = new ChatBubble(msg);
-    ChatBubble newMessage5 = new ChatBubble(msg);
-    ChatBubble newMessage6 = new ChatBubble(msg);
+  private void appendChatMessage(ChatMessage msg, Boolean isGreeting) {
+    ChatBubble newMessage1 = new ChatBubble(msg, isGreeting);
+    ChatBubble newMessage2 = new ChatBubble(msg, isGreeting);
+    ChatBubble newMessage3 = new ChatBubble(msg, isGreeting);
+    ChatBubble newMessage4 = new ChatBubble(msg, isGreeting);
+    ChatBubble newMessage5 = new ChatBubble(msg, isGreeting);
+    ChatBubble newMessage6 = new ChatBubble(msg, isGreeting);
 
     App.chatBubbleList.add(newMessage1);
     PlayerController.chatBubbleListPlayer.add(newMessage2);
@@ -222,19 +161,19 @@ public class AIWindowController {
    * @return the response chat message
    * @throws ApiProxyException if there is an error communicating with the API proxy
    */
-  private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
+  private ChatMessage runGpt(ChatMessage msg, Boolean isGreeting) throws ApiProxyException {
     Task<ChatMessage> runningGptTask =
         new Task<ChatMessage>() {
           @Override
           protected ChatMessage call() {
-            chatCompletionRequest.addMessage(msg);
+            App.chatCompletionRequest.addMessage(msg);
             try {
-              ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
+              ChatCompletionResult chatCompletionResult = App.chatCompletionRequest.execute();
               Choice result = chatCompletionResult.getChoices().iterator().next();
-              chatCompletionRequest.addMessage(result.getChatMessage());
+              App.chatCompletionRequest.addMessage(result.getChatMessage());
               Platform.runLater(
                   () -> {
-                    appendChatMessage(result.getChatMessage());
+                    appendChatMessage(result.getChatMessage(), isGreeting);
                   });
               Platform.runLater(
                   () -> {
@@ -264,11 +203,11 @@ public class AIWindowController {
    * @throws ApiProxyException if there is an error communicating with the API proxy
    */
   private String runGptWithoutPrinting(ChatMessage msg) {
-    chatCompletionRequest.addMessage(msg);
+    App.chatCompletionRequest.addMessage(msg);
     try {
-      ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
+      ChatCompletionResult chatCompletionResult = App.chatCompletionRequest.execute();
       Choice result = chatCompletionResult.getChoices().iterator().next();
-      chatCompletionRequest.addMessage(result.getChatMessage());
+      App.chatCompletionRequest.addMessage(result.getChatMessage());
       return result.getChatMessage().getContent();
     } catch (ApiProxyException e) {
       e.printStackTrace();
@@ -292,19 +231,19 @@ public class AIWindowController {
     inputText.clear();
 
     ChatMessage msg = new ChatMessage("user", message);
-    appendChatMessage(msg);
+    appendChatMessage(msg, false);
 
     if (GameState.difficulty == "EASY") {
       robotThink();
       // Handle Easy difficulty
-      runGpt(new ChatMessage("user", GptPromptEngineering.easy(message)));
+      runGpt(new ChatMessage("user", GptPromptEngineering.easy(message)), false);
     } else if (GameState.difficulty == "MEDIUM") {
       robotThink();
       // Handle Medium difficulty
-      runGpt(new ChatMessage("user", GptPromptEngineering.medium(message)));
+      runGpt(new ChatMessage("user", GptPromptEngineering.medium(message)), false);
     } else if (GameState.difficulty == "HARD") {
       robotThink();
-      runGpt(new ChatMessage("user", GptPromptEngineering.hard(message)));
+      runGpt(new ChatMessage("user", GptPromptEngineering.hard(message)), false);
     }
     // if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("Correct")) {
     //   GameState.isRiddleResolved = true;

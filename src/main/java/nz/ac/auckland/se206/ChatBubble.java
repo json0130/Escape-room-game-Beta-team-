@@ -11,8 +11,9 @@ public class ChatBubble {
 
   private Label bubbleText;
   private HBox bubbleBox;
+  private Boolean isGreeting;
 
-  public ChatBubble(ChatMessage msg) {
+  public ChatBubble(ChatMessage msg, Boolean isGreeting) {
 
     bubbleText = new Label(msg.getContent());
     bubbleText.setWrapText(true);
@@ -24,10 +25,19 @@ public class ChatBubble {
       bubbleText.setStyle(
           "-fx-background-color: lightblue; -fx-background-radius: 10;-fx-padding: 10,20,20,10;");
     } else {
-      bubbleBox.setAlignment(Pos.CENTER_LEFT);
-      bubbleBox.setPadding(new Insets(3, 4, 3, 4));
-      bubbleText.setStyle(
-          "-fx-background-color: lightyellow; -fx-background-radius: 10;-fx-padding: 10,20,20,10;");
+      if (isGreeting) {
+        bubbleBox.setAlignment(Pos.CENTER_LEFT);
+        bubbleBox.setPadding(new Insets(3, 4, 3, 4));
+        bubbleText.setStyle(
+            "-fx-background-color: lightgreen; -fx-background-radius: 10;-fx-padding:"
+                + " 10,20,20,10;");
+      } else {
+        bubbleBox.setAlignment(Pos.CENTER_LEFT);
+        bubbleBox.setPadding(new Insets(3, 4, 3, 4));
+        bubbleText.setStyle(
+            "-fx-background-color: lightyellow; -fx-background-radius: 10;-fx-padding:"
+                + " 10,20,20,10;");
+      }
     }
 
     bubbleBox.getChildren().addAll(bubbleText);

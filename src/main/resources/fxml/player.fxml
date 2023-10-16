@@ -133,16 +133,16 @@
             <Image url="@../images/robotfloat.png" />
          </image>
       </ImageView>
-      <Pane fx:id="aiPane" layoutX="851.0" layoutY="200.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="350.0">
+      <fx:include fx:id="aiWindowController" layoutX="850.0" layoutY="200.0" source="aiwindow.fxml" />
+      <Pane fx:id="aiPane" layoutX="851.0" layoutY="293.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="310.0" prefWidth="350.0">
          <children>
-            <ScrollPane fx:id="chatPane" hbarPolicy="NEVER" layoutX="6.0" layoutY="105.0" maxWidth="340.0" minWidth="340.0" prefHeight="300.0" prefWidth="340.0">
+            <ScrollPane fx:id="chatPane" hbarPolicy="NEVER" layoutX="6.0" layoutY="12.0" maxWidth="340.0" minWidth="340.0" prefHeight="299.0" prefWidth="340.0">
                <content>
                   <VBox fx:id="chatContainer" maxWidth="323.0" minWidth="323.0" prefWidth="323.0" />
                </content>
             </ScrollPane>
          </children>
       </Pane>
-      <fx:include fx:id="aiWindowController" layoutX="850.0" layoutY="200.0" source="aiwindow.fxml" />
       <Button fx:id="resetButton" layoutX="985.0" layoutY="14.0" mnemonicParsing="false" onAction="#reset" text="Button" />
    </children>
 </Pane>

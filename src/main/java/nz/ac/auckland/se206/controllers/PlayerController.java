@@ -242,44 +242,6 @@ public class PlayerController implements Initializable {
     detectDifficulty();
     movementSetup();
 
-    // App.chatBubbleList.addListener(
-    //     new ListChangeListener<ChatBubble>() {
-    //       public void onChanged(Change<? extends ChatBubble> c) {
-    //         while (c.next()) {
-    //           if (c.wasPermutated()) {
-    //             // handle permutation
-    //           } else if (c.wasUpdated()) {
-    //             // handle update
-    //           } else {
-    //             for (ChatBubble removedItem : c.getRemoved()) {
-    //               System.out.println("Removed: " + removedItem);
-    //             }
-    //             for (ChatBubble addedItem : c.getAddedSubList()) {
-    //               Platform.runLater(
-    //                   () -> {
-    //                     chatContainer
-    //                         .getChildren()
-    //                         .addAll(
-    //                             App.chatBubbleList
-    //                                 .get(App.chatBubbleList.size() - 1)
-    //                                 .getBubbleBox());
-    //                     chatContainer.setAlignment(Pos.TOP_CENTER);
-    //                     chatPane.vvalueProperty().bind(chatContainer.heightProperty());
-    //                     System.out.println(
-    //                         "Added: "
-    //                             + App.chatBubbleList
-    //                                 .get(App.chatBubbleList.size() - 1)
-    //                                 .getBubbleText()
-    //                                 .getText()
-    //                             + " "
-    //                             + this.getClass().getSimpleName());
-    //                   });
-    //             }
-    //           }
-    //         }
-    //       }
-    //     });
-
     ListChangeListener<ChatBubble> listener2 =
         change -> {
           Platform.runLater(

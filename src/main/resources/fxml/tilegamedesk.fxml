@@ -170,7 +170,8 @@
             <Image url="@../images/robotfloat.png" />
          </image>
       </ImageView>
-      <Pane fx:id="aiPane" layoutX="850.0" layoutY="201.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="350.0">
+      <fx:include fx:id="aiWindowController" layoutX="850.0" layoutY="200.0" source="aiwindow.fxml" />
+      <Pane fx:id="aiPane" layoutX="850.0" layoutY="201.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="404.0" prefWidth="350.0">
          <children>
             <ScrollPane fx:id="chatPaneOne" hbarPolicy="NEVER" layoutX="6.0" layoutY="105.0" maxWidth="340.0" minWidth="340.0" prefHeight="300.0" prefWidth="340.0">
                <content>
@@ -179,7 +180,6 @@
             </ScrollPane>
          </children>
       </Pane>
-      <fx:include fx:id="aiWindowController" layoutX="850.0" layoutY="200.0" source="aiwindow.fxml" />
       <ImageView fx:id="soundOff" fitHeight="50.0" fitWidth="50.0" layoutX="880.0" layoutY="35.0" onMouseClicked="#toggleSound" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Firefly_20231010001007-removebg-preview.png" />
