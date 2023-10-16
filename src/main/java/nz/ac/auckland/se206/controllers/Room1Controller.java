@@ -1,6 +1,5 @@
 package nz.ac.auckland.se206.controllers;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -20,12 +19,17 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -34,21 +38,28 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 public class Room1Controller implements Initializable {
-  private BooleanProperty wPressed = new SimpleBooleanProperty();
-  private BooleanProperty aPressed = new SimpleBooleanProperty();
-  private BooleanProperty sPressed = new SimpleBooleanProperty();
-  private BooleanProperty dPressed = new SimpleBooleanProperty();
+  public static ObservableList<ChatBubble> chatBubbleListRoom1 =
+      FXCollections.observableArrayList();
 
-  private BooleanBinding keyPressed = wPressed.or(aPressed).or(sPressed).or(dPressed);
+  public static String riddleAnswer;
+
+  private BooleanProperty isWPressed = new SimpleBooleanProperty();
+  private BooleanProperty isAPressed = new SimpleBooleanProperty();
+  private BooleanProperty isSPressed = new SimpleBooleanProperty();
+  private BooleanProperty isDPressed = new SimpleBooleanProperty();
+
+  private BooleanBinding keyPressed = isWPressed.or(isAPressed).or(isSPressed).or(isDPressed);
   private int movementVariable = 5;
   private double shapesize;
 
@@ -72,8 +83,6 @@ public class Room1Controller implements Initializable {
   @FXML private Rectangle crew2Collision;
   @FXML private Rectangle crew3Collision;
   @FXML private Rectangle crew4Collision;
-  @FXML private Rectangle greetingBox;
-  @FXML private Rectangle black;
 
   @FXML private Button btnCollect1;
   @FXML private Button btnCollect2;
@@ -103,7 +112,6 @@ public class Room1Controller implements Initializable {
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
   @FXML private Label clickLabel;
-  @FXML private Label greeting;
 
   @FXML private Button btnSend;
   @FXML private Button btnClose;
@@ -116,10 +124,12 @@ public class Room1Controller implements Initializable {
   @FXML private Button resetYes;
   @FXML private Button resetCancel;
 
-  @FXML public Pane aiWindowController;
+  @FXML private Pane aiWindowController;
+  @FXML private ScrollPane chatPaneOne;
+  @FXML private VBox chatContainerOne;
 
   @FXML
-  Image rightCharacterAnimation =
+  private Image rightCharacterAnimation =
       new Image(
           new File("src/main/resources/images/walkingRight.gif").toURI().toString(),
           171,
@@ -128,7 +138,7 @@ public class Room1Controller implements Initializable {
           false);
 
   @FXML
-  Image leftCharacterAnimation =
+  private Image leftCharacterAnimation =
       new Image(
           new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
           171,
@@ -137,7 +147,7 @@ public class Room1Controller implements Initializable {
           false);
 
   @FXML
-  Image leftCharacterIdle =
+  private Image leftCharacterIdle =
       new Image(
           new File("src/main/resources/images/gameCharacterArtLeft.png").toURI().toString(),
           171,
@@ -146,7 +156,7 @@ public class Room1Controller implements Initializable {
           false);
 
   @FXML
-  Image rightCharacterIdle =
+  private Image rightCharacterIdle =
       new Image(
           new File("src/main/resources/images/gameCharacterArtRight.png").toURI().toString(),
           171,
@@ -155,7 +165,7 @@ public class Room1Controller implements Initializable {
           false);
 
   @FXML
-  Image lastPlayedWalk =
+  private Image lastPlayedWalk =
       new Image(
           new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
           171,
@@ -163,14 +173,9 @@ public class Room1Controller implements Initializable {
           false,
           false);
 
-  Boolean walkAnimationPlaying = false;
+  private Boolean walkAnimationPlaying = false;
 
   private FadeTransition fadeTransition;
-  public static String riddleAnswer;
-  public boolean isCrew1Colliding = false;
-  public boolean isCrew2Colliding = false;
-  public boolean isCrew3Colliding = false;
-  public boolean isCrew4Colliding = false;
 
   private MediaPlayer walkingMediaPlayer;
 
@@ -181,8 +186,6 @@ public class Room1Controller implements Initializable {
 
   private boolean nextToButton = false;
   private boolean hasHappend = false;
-
-  private boolean isGreetingShown = true;
 
   // timer for collsion check between monitor and walls
   private AnimationTimer collisionTimer =
@@ -204,16 +207,16 @@ public class Room1Controller implements Initializable {
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
 
-          if (wPressed.get()) {
+          if (isWPressed.get()) {
             player.setLayoutY(player.getLayoutY() - movementVariable);
           }
-          if (aPressed.get()) {
+          if (isAPressed.get()) {
             player.setLayoutX(player.getLayoutX() - movementVariable);
           }
-          if (sPressed.get()) {
+          if (isSPressed.get()) {
             player.setLayoutY(player.getLayoutY() + movementVariable);
           }
-          if (dPressed.get()) {
+          if (isDPressed.get()) {
             player.setLayoutX(player.getLayoutX() + movementVariable);
           }
           squareBorder();
@@ -266,7 +269,7 @@ public class Room1Controller implements Initializable {
     idEngineer.setVisible(false);
 
     keyPressed.addListener(
-        ((observableValue, aBoolean, t1) -> {
+        ((observableValue, aBoolean, time) -> {
           if (!aBoolean) {
             timer.start();
           } else {
@@ -300,10 +303,7 @@ public class Room1Controller implements Initializable {
 
     crewCollisionTimer.start();
 
-    greeting.setWrapText(true);
-    greeting.setText(App.greetingInRoom1);
-
-    enablePlayerMovement();
+    setUpMovement();
     Task<Void> indicatorTask =
         new Task<Void>() {
           @Override
@@ -318,104 +318,35 @@ public class Room1Controller implements Initializable {
     Thread thread = new Thread(indicatorTask);
     thread.setDaemon(true);
     thread.start();
+
+    ListChangeListener<ChatBubble> listener1 =
+        change -> {
+          Platform.runLater(
+              () -> {
+                chatContainerOne
+                    .getChildren()
+                    .addAll(chatBubbleListRoom1.get(chatBubbleListRoom1.size() - 1).getBubbleBox());
+                chatContainerOne.setAlignment(Pos.TOP_RIGHT);
+                chatPaneOne.vvalueProperty().bind(chatContainerOne.heightProperty());
+                System.out.println(
+                    "Added: "
+                        + chatBubbleListRoom1
+                            .get(chatBubbleListRoom1.size() - 1)
+                            .getBubbleText()
+                            .getText()
+                        + " "
+                        + this.getClass().getSimpleName());
+              });
+        };
+    chatBubbleListRoom1.addListener(listener1);
   }
 
-  // hide id and button and indicator at once
-  private void hideId1() {
-    idDoctor.setVisible(false);
-    btnCollect1.setVisible(false);
-    crew1Indicator.setVisible(true);
-  }
-
-  // hide id and button and indicator at once
-  private void hideId2() {
-    idCaptain.setVisible(false);
-    btnCollect2.setVisible(false);
-    crew2Indicator.setVisible(true);
-  }
-
-  // hide id and button and indicator at once
-  private void hideId3() {
-    idChef.setVisible(false);
-    btnCollect3.setVisible(false);
-    crew3Indicator.setVisible(true);
-  }
-
-  // hide id and button and indicator at once
-  private void hideId4() {
-    idEngineer.setVisible(false);
-    btnCollect4.setVisible(false);
-    crew4Indicator.setVisible(true);
-  }
-
-  private void showId1() {
-    idDoctor.setVisible(true);
-    btnCollect1.setVisible(true);
-    crew1Indicator.setVisible(false);
-  }
-
-  private void showId2() {
-    idCaptain.setVisible(true);
-    btnCollect2.setVisible(true);
-    crew2Indicator.setVisible(false);
-  }
-
-  private void showId3() {
-    idChef.setVisible(true);
-    btnCollect3.setVisible(true);
-    crew3Indicator.setVisible(false);
-  }
-
-  private void showId4() {
-    idEngineer.setVisible(true);
-    btnCollect4.setVisible(true);
-    crew4Indicator.setVisible(false);
-  }
-
-  // If collect button is pressed, id is corrected and state of idcollected changes
-  public void onCollect1() {
-    GameState.isDoctorCollected = true;
-    GameState.isIdCollected = true;
-    hideId1();
-    crew1Indicator.setVisible(false);
-    scene.requestFocus(); // Add this line
-  }
-
-  public void onCollect2() {
-    GameState.isCaptainCollected = true;
-    GameState.isIdCollected = true;
-    hideId2();
-    crew2Indicator.setVisible(false);
-    scene.requestFocus(); // Add this line
-  }
-
-  public void onCollect3() {
-    GameState.isChefCollected = true;
-    GameState.isIdCollected = true;
-    hideId3();
-    crew3Indicator.setVisible(false);
-    scene.requestFocus(); // Add this line
-  }
-
-  public void onCollect4() {
-    GameState.isEngineerCollected = true;
-    GameState.isIdCollected = true;
-    hideId4();
-    crew4Indicator.setVisible(false);
-    scene.requestFocus(); // Add this line
-  }
-
-  @FXML
-  public void onRiddle(MouseEvent evnet) throws IOException {
-    if (nextToButton) {
-      soundButttonClick();
-      GameState.isRiddleGiven = true;
-      App.setScene(AppUi.CHAT);
-      enterRoom();
-    }
-  }
-
-  // if the character collides the box, it will move to the map
+  /**
+   * If the character collides the box, it will move to the map.
+   *
+   * @param player player image
+   * @param exit exit where player can move to the map
+   */
   public void checkExit(ImageView player, Rectangle exit) {
     if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
       exit.setOpacity(1);
@@ -440,7 +371,12 @@ public class Room1Controller implements Initializable {
     }
   }
 
-  // Exit the loop as soon as a collision is detected
+  /**
+   * Exit the loop as soon as a collision is detected.
+   *
+   * @param player player image
+   * @param walls border that the player cannot move across
+   */
   public void checkCollision2(ImageView player, List<Rectangle> walls) {
     for (Rectangle wall : walls) {
       if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
@@ -469,7 +405,149 @@ public class Room1Controller implements Initializable {
     }
   }
 
-  // if the character collides with the mointor, button to the riddle chat scene appears
+  /** Prevent the player moves out of the window. */
+  public void squareBorder() {
+    double left = 0;
+    double right = scene.getWidth() - shapesize;
+    double top = 0;
+    double bottom = scene.getHeight() - shapesize;
+
+    // The player cannot move acorss the left border
+    if (player.getLayoutX() < left) {
+      player.setLayoutX(left);
+    }
+    // the player cannot  move across the right border
+    if (player.getLayoutX() > right) {
+      player.setLayoutX(right);
+    }
+    // the player cannot move across the top border
+    if (player.getLayoutY() < top) {
+      player.setLayoutY(top);
+    }
+    // the player cannot move across the bottom border
+    if (player.getLayoutY() > bottom) {
+      player.setLayoutY(bottom);
+    }
+  }
+
+  /** Hide id and button and indicator at once. */
+  private void hideId1() {
+    idDoctor.setVisible(false);
+    btnCollect1.setVisible(false);
+    crew1Indicator.setVisible(true);
+  }
+
+  /** Hide id and button and indicator at once. */
+  private void hideId2() {
+    idCaptain.setVisible(false);
+    btnCollect2.setVisible(false);
+    crew2Indicator.setVisible(true);
+  }
+
+  /** Hide id and button and indicator at once. */
+  private void hideId3() {
+    idChef.setVisible(false);
+    btnCollect3.setVisible(false);
+    crew3Indicator.setVisible(true);
+  }
+
+  /** Hide id and button and indicator at once. */
+  private void hideId4() {
+    idEngineer.setVisible(false);
+    btnCollect4.setVisible(false);
+    crew4Indicator.setVisible(true);
+  }
+
+  /** Show id and button and indicator at once. */
+  private void showId1() {
+    idDoctor.setVisible(true);
+    btnCollect1.setVisible(true);
+    crew1Indicator.setVisible(false);
+  }
+
+  /** Show id and button and indicator at once. */
+  private void showId2() {
+    idCaptain.setVisible(true);
+    btnCollect2.setVisible(true);
+    crew2Indicator.setVisible(false);
+  }
+
+  /** Show id and button and indicator at once. */
+  private void showId3() {
+    idChef.setVisible(true);
+    btnCollect3.setVisible(true);
+    crew3Indicator.setVisible(false);
+  }
+
+  /** Show id and button and indicator at once. */
+  private void showId4() {
+    idEngineer.setVisible(true);
+    btnCollect4.setVisible(true);
+    crew4Indicator.setVisible(false);
+  }
+
+  /** If collect button is pressed, id is collected and state of idcollected changes. */
+  @FXML
+  private void onCollect1() {
+    GameState.isDoctorCollected = true;
+    GameState.isIdCollected = true;
+    hideId1();
+    crew1Indicator.setVisible(false);
+    scene.requestFocus(); // Add this line
+  }
+
+  /** If collect button is pressed, id is collected and state of idcollected changes. */
+  @FXML
+  private void onCollect2() {
+    GameState.isCaptainCollected = true;
+    GameState.isIdCollected = true;
+    hideId2();
+    crew2Indicator.setVisible(false);
+    scene.requestFocus(); // Add this line
+  }
+
+  /** If collect button is pressed, id is collected and state of idcollected changes. */
+  @FXML
+  private void onCollect3() {
+    GameState.isChefCollected = true;
+    GameState.isIdCollected = true;
+    hideId3();
+    crew3Indicator.setVisible(false);
+    scene.requestFocus(); // Add this line
+  }
+
+  /** If collect button is pressed, id is collected and state of idcollected changes. */
+  @FXML
+  private void onCollect4() {
+    GameState.isEngineerCollected = true;
+    GameState.isIdCollected = true;
+    hideId4();
+    crew4Indicator.setVisible(false);
+    scene.requestFocus(); // Add this line
+  }
+
+  /**
+   * Change the scene to the riddle scene.
+   *
+   * @param evnet mouse is clicked
+   * @throws IOException if there the chat scene does not exist
+   */
+  @FXML
+  private void onRiddle(MouseEvent evnet) throws IOException {
+    if (nextToButton) {
+      soundButttonClick();
+      GameState.isRiddleGiven = true;
+      App.setScene(AppUi.CHAT);
+      enterRoom();
+    }
+  }
+
+  /**
+   * If the character collides with the mointor, button to the riddle chat scene appears.
+   *
+   * @param player the player image
+   * @param wall2 the monitor that shows click me button when the player touches it
+   */
   private void checkMonitor(ImageView player, Rectangle wall2) {
     if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
       blinkingRectangle.setOpacity(1);
@@ -489,20 +567,21 @@ public class Room1Controller implements Initializable {
     }
   }
 
-  // code for player movement using wasd keys
+  /** Enable player movement using wasd keys. */
   @FXML
-  public void movementSetup() {
+  private void setUpMovement() {
 
     scene.setOnKeyPressed(
         e -> {
-          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+          boolean wasMoving =
+              isWPressed.get() || isAPressed.get() || isSPressed.get() || isDPressed.get();
 
           if (e.getCode() == KeyCode.W) {
             if (walkAnimationPlaying == false) {
               player.setImage(lastPlayedWalk);
               walkAnimationPlaying = true;
             }
-            wPressed.set(true);
+            isWPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.A) {
@@ -511,8 +590,7 @@ public class Room1Controller implements Initializable {
               walkAnimationPlaying = true;
               lastPlayedWalk = player.getImage();
             }
-            aPressed.set(true);
-            System.out.println("left");
+            isAPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.S) {
@@ -520,7 +598,7 @@ public class Room1Controller implements Initializable {
               player.setImage(lastPlayedWalk);
               walkAnimationPlaying = true;
             }
-            sPressed.set(true);
+            isSPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.D) {
@@ -529,10 +607,11 @@ public class Room1Controller implements Initializable {
               walkAnimationPlaying = true;
               lastPlayedWalk = player.getImage();
             }
-            dPressed.set(true);
+            isDPressed.set(true);
           }
 
-          boolean isMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+          boolean isMoving =
+              isWPressed.get() || isAPressed.get() || isSPressed.get() || isDPressed.get();
 
           // If we started moving and weren't before, start the sound.
           if (isMoving && !wasMoving) {
@@ -542,65 +621,71 @@ public class Room1Controller implements Initializable {
 
     scene.setOnKeyReleased(
         e -> {
-          boolean wasMoving = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+          boolean wasMoving =
+              isWPressed.get() || isAPressed.get() || isSPressed.get() || isDPressed.get();
 
           if (e.getCode() == KeyCode.W) {
             if (player.getImage() == leftCharacterAnimation
-                && sPressed.get() == false
-                && aPressed.get() == false) {
+                && isSPressed.get() == false
+                && isAPressed.get() == false) {
               player.setImage(leftCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (sPressed.get() == true) {
+            } else if (isSPressed.get() == true) {
               player.setImage(lastPlayedWalk);
-            } else if (aPressed.get() == false
-                && dPressed.get() == false
-                && sPressed.get() == false) {
+            } else if (isAPressed.get() == false
+                && isDPressed.get() == false
+                && isDPressed.get() == false) {
               player.setImage(rightCharacterIdle);
               walkAnimationPlaying = false;
             }
-            wPressed.set(false);
+            isWPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.A) {
-            if (dPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+            if (isDPressed.get() == false
+                && isWPressed.get() == false
+                && isSPressed.get() == false) {
               player.setImage(leftCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (dPressed.get() == true) {
+            } else if (isDPressed.get() == true) {
               player.setImage(rightCharacterAnimation);
             }
 
-            aPressed.set(false);
+            isAPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.S) {
             if (player.getImage() == leftCharacterAnimation
-                && wPressed.get() == false
-                && aPressed.get() == false) {
+                && isWPressed.get() == false
+                && isAPressed.get() == false) {
               player.setImage(leftCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (wPressed.get() == true) {
+            } else if (isWPressed.get() == true) {
               player.setImage(lastPlayedWalk);
-            } else if (aPressed.get() == false
-                && dPressed.get() == false
-                && wPressed.get() == false) {
+            } else if (isAPressed.get() == false
+                && isDPressed.get() == false
+                && isWPressed.get() == false) {
               player.setImage(rightCharacterIdle);
               walkAnimationPlaying = false;
             }
-            sPressed.set(false);
+            isSPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.D) {
-            if (aPressed.get() == false && wPressed.get() == false && sPressed.get() == false) {
+            if (isAPressed.get() == false
+                && isWPressed.get() == false
+                && isSPressed.get() == false) {
               player.setImage(rightCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (aPressed.get() == true) {
+            } else if (isAPressed.get() == true) {
               player.setImage(leftCharacterAnimation);
             }
 
-            dPressed.set(false);
+            isDPressed.set(false);
           }
 
-          boolean isMovinng = wPressed.get() || aPressed.get() || sPressed.get() || dPressed.get();
+          boolean isMovinng =
+              isWPressed.get() || isAPressed.get() || isSPressed.get() || isDPressed.get();
 
           // If we stopped moving and were before, stop the sound.
           if (!isMovinng && wasMoving) {
@@ -615,43 +700,28 @@ public class Room1Controller implements Initializable {
         });
   }
 
-  // prevent the player moves out of the window
-  public void squareBorder() {
-    double left = 0;
-    double right = scene.getWidth() - shapesize;
-    double top = 0;
-    double bottom = scene.getHeight() - shapesize;
-
-    if (player.getLayoutX() < left) {
-      player.setLayoutX(left);
-    }
-
-    if (player.getLayoutX() > right) {
-      player.setLayoutX(right);
-    }
-
-    if (player.getLayoutY() < top) {
-      player.setLayoutY(top);
-    }
-
-    if (player.getLayoutY() > bottom) {
-      player.setLayoutY(bottom);
-    }
-  }
-
+  /**
+   * Change the scene to map.
+   *
+   * @param event button is clicked
+   */
   @FXML
-  private void back(ActionEvent event) {
+  private void onBack(ActionEvent event) {
     App.setScene(AppUi.PLAYER);
   }
 
-  // detect change in the game state difficulty in the intro scene
+  /** Detect change in the game state difficulty in the intro scene. */
   private void detectDifficulty() {
+    // Made a new timer which detects change in difficulty which is selected in the intro scene
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
         new TimerTask() {
           @Override
           public void run() {
+            // Whenever the selected difficulty changes, the labels in the header changes
             if (GameState.difficulty != null) {
+              // if the difficulty is medium, keeps eyes on the number of hints and change the label
+              // accordingly
               if (GameState.difficulty.equals("MEDIUM")) {
                 Platform.runLater(() -> updateLabels());
                 if (GameState.numOfHints == 0) {
@@ -667,7 +737,7 @@ public class Room1Controller implements Initializable {
         500);
   }
 
-  // Modify your setupAlertBlinking method as follows
+  /** Modify your setupAlertBlinking method as follows. */
   private void setupAlertBlinking() {
     alert.setVisible(true); // Initially show the alert label
     // Stop current playing media
@@ -692,7 +762,7 @@ public class Room1Controller implements Initializable {
     alertBlinkTimeline.play();
   }
 
-  // Add a method to stop the alert blinking
+  /** Add a method to stop the alert blinking. */
   private void stopAlertBlinking() {
     if (alertBlinkTimeline != null) {
       // Stop timeline and hide label
@@ -702,12 +772,14 @@ public class Room1Controller implements Initializable {
     }
   }
 
-  // update labels for difficulty and hints as the game progress
+  /** Update labels for difficulty and hints as the game progress. */
   private void updateLabels() {
+    // Change the difficulty label according to the selected difficulty
     difficultyLabel.setText(GameState.difficulty);
     if (GameState.difficulty == "EASY") {
       hintLabel.setText("UNLIMITED");
     } else if (GameState.difficulty == "MEDIUM") {
+      // Change label as the number of hints left changed
       hintLabel.setText(String.valueOf(GameState.numOfHints));
       hintLabel2.setText("HINTS");
       if (GameState.numOfHints == 1) {
@@ -718,56 +790,49 @@ public class Room1Controller implements Initializable {
     }
   }
 
-  // Detect if the character goes closer to costumes
-  AnimationTimer crewCollisionTimer =
+  /** Detect if the character goes closer to costumes. */
+  private AnimationTimer crewCollisionTimer =
       new AnimationTimer() {
         @Override
         public void handle(long now) {
           // if character near costume1 and not collected, show id card and hide indicator
           if (GameState.isRiddleResolved) {
             if (player.getBoundsInParent().intersects(crew1Collision.getBoundsInParent())) {
-              isCrew1Colliding = true;
               if (!GameState.isDoctorCollected) {
                 Platform.runLater(() -> showId1());
               }
             } else if (!GameState.isDoctorCollected) {
-              isCrew1Colliding = false;
               Platform.runLater(() -> hideId1());
             }
             // if character near costume2 and not collected, show id and hide indicator
             if (player.getBoundsInParent().intersects(crew2Collision.getBoundsInParent())) {
-              isCrew2Colliding = true;
               if (!GameState.isCaptainCollected) {
                 Platform.runLater(() -> showId2());
               }
             } else if (!GameState.isCaptainCollected) {
-              isCrew2Colliding = false;
               Platform.runLater(() -> hideId2());
             }
             // if character near costume3 and not collected, show id and hide indicator
             if (player.getBoundsInParent().intersects(crew3Collision.getBoundsInParent())) {
-              isCrew3Colliding = true;
               if (!GameState.isChefCollected) {
                 Platform.runLater(() -> showId3());
               }
             } else if (!GameState.isChefCollected) {
-              isCrew3Colliding = false;
               Platform.runLater(() -> hideId3());
             }
             // if character near costume4 and not collected, show id and hide indicator
             if (player.getBoundsInParent().intersects(crew4Collision.getBoundsInParent())) {
-              isCrew4Colliding = true;
               if (!GameState.isEngineerCollected) {
                 Platform.runLater(() -> showId4());
               }
             } else if (!GameState.isEngineerCollected) {
-              isCrew4Colliding = false;
               Platform.runLater(() -> hideId4());
             }
           }
         }
       };
 
+  /** Turn on the background sound. */
   @FXML
   private void soundButttonClick() {
     String soundEffect = "src/main/resources/sounds/button-click.mp3";
@@ -776,6 +841,7 @@ public class Room1Controller implements Initializable {
     mediaPlayer.setAutoPlay(true);
   }
 
+  /** Turn on and off the background sound depending on the current state. */
   @FXML
   private void toggleSound(MouseEvent event) {
     GameState.isSoundEnabled = !GameState.isSoundEnabled;
@@ -796,6 +862,7 @@ public class Room1Controller implements Initializable {
     soundOff.setVisible(!GameState.isSoundEnabled);
   }
 
+  /** Turn on the sound while the player is moving into the room. */
   @FXML
   private void enterRoom() {
     String soundEffect = "src/main/resources/sounds/enterReal.mp3";
@@ -804,20 +871,20 @@ public class Room1Controller implements Initializable {
     mediaPlayer.setAutoPlay(true);
   }
 
-  // game master animation
+  /** Move the game master image up and down. */
   @FXML
   private void animateRobot() {
     TranslateTransition translate = new TranslateTransition();
     translate.setNode(gameMaster);
-    translate.setDuration(Duration.millis(1000));
+    translate.setDuration(Duration.millis(1000)); // the robot moves every 1 seconds
     translate.setCycleCount(TranslateTransition.INDEFINITE);
     translate.setByX(0);
     translate.setByY(20);
-    translate.setAutoReverse(true);
+    translate.setAutoReverse(true); // automatically reverse after it moves up
     translate.play();
   }
 
-  // Revel indicators after the player resolves the riddle
+  /** Reveal indicators after the player resolves the riddle. */
   private void revealIndicator() {
     Timer indicatorTimer = new Timer(true);
     indicatorTimer.scheduleAtFixedRate(
@@ -836,7 +903,7 @@ public class Room1Controller implements Initializable {
         100);
   }
 
-  // show all indicators at once
+  /** Show all indicators at once. */
   private void showIndicators() {
     crew1Indicator.setVisible(true);
     crew2Indicator.setVisible(true);
@@ -844,50 +911,29 @@ public class Room1Controller implements Initializable {
     crew4Indicator.setVisible(true);
   }
 
-  /** When the close image is clicked, greeting disappears. */
-  @FXML
-  private void clickClose(MouseEvent e) {
-    greeting.setVisible(false);
-    greetingBox.setVisible(false);
-    close.setVisible(false);
-    isGreetingShown = false;
-    black.setVisible(false);
-  }
-
-  /** After the player close the greeting, the character can move. */
-  private void enablePlayerMovement() {
-    Timer greetingTimer = new Timer(true);
-    greetingTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            if (!isGreetingShown) {
-              movementSetup();
-              greetingTimer.cancel();
-            }
-          }
-        },
-        0,
-        100);
-  }
-
   /**
    * Move indicator up and down.
    *
-   * @param indicator
+   * @param indicator image of indicator
    */
   private void moveIndicator(ImageView indicator) {
     TranslateTransition translate = new TranslateTransition();
     translate.setNode(indicator);
     translate.setDuration(Duration.millis(1000));
     translate.setByY(-15);
-    translate.setCycleCount(TranslateTransition.INDEFINITE);
-    translate.setAutoReverse(true);
+    translate.setCycleCount(TranslateTransition.INDEFINITE); // indefinitely move
+    translate.setAutoReverse(true); // reverse after go up
     translate.play();
   }
 
+  /**
+   * Show buttons to restart the game or cancel.
+   *
+   * @param event mouse is clicked
+   * @throws IOException if the objects don't exist
+   */
   @FXML
-  private void restartClicked(ActionEvent event) throws IOException {
+  private void onRestartClicked(ActionEvent event) throws IOException {
     black2.setVisible(true);
     resetBox.setVisible(true);
     resetLabel.setVisible(true);
@@ -895,8 +941,14 @@ public class Room1Controller implements Initializable {
     resetCancel.setVisible(true);
   }
 
+  /**
+   * Back to the room1.
+   *
+   * @param event mouse is clicked
+   * @throws IOException if the objects don't exist
+   */
   @FXML
-  private void restartCanceled(ActionEvent event) throws IOException {
+  private void onRestartCanceled(ActionEvent event) throws IOException {
     black2.setVisible(false);
     resetBox.setVisible(false);
     resetLabel.setVisible(false);
@@ -904,8 +956,14 @@ public class Room1Controller implements Initializable {
     resetCancel.setVisible(false);
   }
 
+  /**
+   * Game is restarted.
+   *
+   * @param event mouse is clicked
+   * @throws IOException if the objects don't exist
+   */
   @FXML
-  private void reset(ActionEvent event) throws IOException {
+  private void onReset(ActionEvent event) throws IOException {
     try {
       GameState.resetGames();
     } catch (Exception e) {
@@ -913,6 +971,11 @@ public class Room1Controller implements Initializable {
     }
   }
 
+  /**
+   * Change the colour of button on hover
+   *
+   * @param e mouse is clicked
+   */
   @FXML
   private void enterCollect1(MouseEvent e) {
     btnCollect1.setStyle("-fx-background-color:grey; -fx-text-fill: white");
@@ -923,36 +986,67 @@ public class Room1Controller implements Initializable {
     btnCollect1.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
   }
 
+  /**
+   * Change the colour of button on hover
+   *
+   * @param e mouse is clicked
+   */
   @FXML
   private void enterCollect2(MouseEvent e) {
     btnCollect2.setStyle("-fx-background-color:grey; -fx-text-fill: white");
   }
 
+  /**
+   * Change the colour of button after the cursor leaves.
+   *
+   * @param e mouse is clicked
+   */
   @FXML
   private void exitCollect2(MouseEvent e) {
     btnCollect2.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
   }
 
+  /**
+   * Change the colour of button on hover.
+   *
+   * @param e mouse is clicked
+   */
   @FXML
   private void enterCollect3(MouseEvent e) {
     btnCollect3.setStyle("-fx-background-color:grey; -fx-text-fill: white");
   }
 
+  /**
+   * Change the colour of button after the cursor leaves.
+   *
+   * @param e mouse is clicked
+   */
   @FXML
   private void exitCollect3(MouseEvent e) {
     btnCollect3.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
   }
 
+  /**
+   * Change the colour of button on hover.
+   *
+   * @param e mouse is clicked
+   */
   @FXML
   private void enterCollect4(MouseEvent e) {
     btnCollect4.setStyle("-fx-background-color:grey; -fx-text-fill: white");
   }
 
+  /**
+   * Change the colour of button after the cursor leaves.
+   *
+   * @param e mouse is clicked
+   */
   @FXML
   private void exitCollect4(MouseEvent e) {
     btnCollect4.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
   }
 
+  /** Give 0.1second of delay when the player is moving. */
   private void simulateKeyPressAfterDelay() {
     Thread thread =
         new Thread(

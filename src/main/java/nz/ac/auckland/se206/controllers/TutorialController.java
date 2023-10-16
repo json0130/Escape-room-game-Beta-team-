@@ -541,6 +541,8 @@ public class TutorialController implements Initializable {
 
   @FXML
   private void exitSkip(MouseEvent e) {
-    skipButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white;-fx-border-width: 3px;");
+    skipButton.setStyle(
+        "-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color:"
+            + " white;-fx-border-width: 3px;");
   }
 }

@@ -8,22 +8,30 @@ import java.util.List;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.LetterGenerator;
 import nz.ac.auckland.se206.SceneManager.AppUi;
@@ -41,6 +49,9 @@ import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
  * well as animations for different props within the scene.
  */
 public class TileGameDeskController {
+
+  public static ObservableList<ChatBubble> chatBubbleListTileDesk =
+      FXCollections.observableArrayList();
 
   public static String riddleAnswer;
 
@@ -130,6 +141,8 @@ public class TileGameDeskController {
   @FXML private Button leaveComputerButton;
   @FXML private ImageView powerButton;
   @FXML private ImageView gameMaster;
+  @FXML private ScrollPane chatPaneOne;
+  @FXML private VBox chatContainerOne;
 
   private Timeline animationTimeline;
   @FXML public Pane aiWindowController;
@@ -181,6 +194,30 @@ public class TileGameDeskController {
     System.out.println(riddleAnswer);
 
     wordText.setText(riddleAnswer.substring(0, 3).toUpperCase());
+
+    ListChangeListener<ChatBubble> listener3 =
+        change -> {
+          Platform.runLater(
+              () -> {
+                chatContainerOne
+                    .getChildren()
+                    .addAll(
+                        chatBubbleListTileDesk
+                            .get(chatBubbleListTileDesk.size() - 1)
+                            .getBubbleBox());
+                chatContainerOne.setAlignment(Pos.TOP_RIGHT);
+                chatPaneOne.vvalueProperty().bind(chatContainerOne.heightProperty());
+                System.out.println(
+                    "Added: "
+                        + chatBubbleListTileDesk
+                            .get(chatBubbleListTileDesk.size() - 1)
+                            .getBubbleText()
+                            .getText()
+                        + " "
+                        + this.getClass().getSimpleName());
+              });
+        };
+    chatBubbleListTileDesk.addListener(listener3);
   }
 
   public void checkCollision2() {
