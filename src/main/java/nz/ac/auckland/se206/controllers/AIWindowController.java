@@ -7,25 +7,23 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.text.Font;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.gpt.ChatMessage;
@@ -116,6 +114,44 @@ public class AIWindowController {
     //     runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom2()));
     // App.greetingInRoom3 =
     //     runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom3()));
+
+    App.chatBubbleList.addListener(
+        new ListChangeListener<ChatBubble>() {
+          public void onChanged(Change<? extends ChatBubble> c) {
+            while (c.next()) {
+              if (c.wasPermutated()) {
+                // handle permutation
+              } else if (c.wasUpdated()) {
+                // handle update
+              } else {
+                for (ChatBubble removedItem : c.getRemoved()) {
+                  System.out.println("Removed: " + removedItem);
+                }
+                for (ChatBubble addedItem : c.getAddedSubList()) {
+                  Platform.runLater(
+                      () -> {
+                        chatContainer
+                            .getChildren()
+                            .addAll(
+                                App.chatBubbleList
+                                    .get(App.chatBubbleList.size() - 1)
+                                    .getBubbleBox());
+                        chatContainer.setAlignment(Pos.TOP_CENTER);
+                        chatPane.vvalueProperty().bind(chatContainer.heightProperty());
+                        System.out.println(
+                            "Added: "
+                                + App.chatBubbleList
+                                    .get(App.chatBubbleList.size() - 1)
+                                    .getBubbleText()
+                                    .getText()
+                                + " "
+                                + this.getClass().getSimpleName());
+                      });
+                }
+              }
+            }
+          }
+        });
   }
 
   /**
@@ -146,26 +182,30 @@ public class AIWindowController {
     //       chatTextArea.setText(App.aiWindow);
     //       chatTextArea.setScrollTop(Double.MAX_VALUE); // this will scroll to the bottom
     //     });
-    String messageToSend = msg.getContent();
-    Label message = new Label(messageToSend);
-    message.setWrapText(true);
-    message.setFont(Font.font("Arial", 15));
-    HBox hBox = new HBox();
-    if (msg.getRole().equals("user")) {
-      hBox.setAlignment(Pos.CENTER_RIGHT);
-      hBox.setPadding(new Insets(3, 4, 3, 4));
-      message.setStyle(
-          "-fx-background-color: lightblue; -fx-background-radius: 10;-fx-padding: 10,20,20,10;");
-    } else {
-      hBox.setAlignment(Pos.CENTER_LEFT);
-      hBox.setPadding(new Insets(3, 4, 3, 4));
-      message.setStyle(
-          "-fx-background-color: lightyellow; -fx-background-radius: 10;-fx-padding: 10,20,20,10;");
-    }
-    hBox.getChildren().addAll(message);
-    chatContainer.getChildren().addAll(hBox);
-    chatContainer.setAlignment(Pos.TOP_CENTER);
+    // String messageToSend = msg.getContent();
+    // Label message = new Label(messageToSend);
+    // message.setWrapText(true);
+    // message.setFont(Font.font("Arial", 15));
+    // HBox hBox = new HBox();
+    // if (msg.getRole().equals("user")) {
+    //   hBox.setAlignment(Pos.CENTER_RIGHT);
+    //   hBox.setPadding(new Insets(3, 4, 3, 4));
+    //   message.setStyle(
+    //       "-fx-background-color: lightblue; -fx-background-radius: 10;-fx-padding:
+    // 10,20,20,10;");
+    // } else {
+    //   hBox.setAlignment(Pos.CENTER_LEFT);
+    //   hBox.setPadding(new Insets(3, 4, 3, 4));
+    //   message.setStyle(
+    //       "-fx-background-color: lightyellow; -fx-background-radius: 10;-fx-padding:
+    // 10,20,20,10;");
+    // }
+    ChatBubble newMessage = new ChatBubble(msg);
     chatPane.vvalueProperty().bind(chatContainer.heightProperty());
+    App.chatBubbleList.add(newMessage);
+    System.out.println(
+        "Appended: "
+            + App.chatBubbleList.get(App.chatBubbleList.size() - 1).getBubbleText().getText());
   }
 
   /**
@@ -185,7 +225,10 @@ public class AIWindowController {
               ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
               Choice result = chatCompletionResult.getChoices().iterator().next();
               chatCompletionRequest.addMessage(result.getChatMessage());
-              Platform.runLater(()-> {appendChatMessage(result.getChatMessage());});
+              Platform.runLater(
+                  () -> {
+                    appendChatMessage(result.getChatMessage());
+                  });
               Platform.runLater(
                   () -> {
                     if (result.getChatMessage().getRole().equals("assistant")

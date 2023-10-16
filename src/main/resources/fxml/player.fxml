@@ -126,7 +126,7 @@
          </image>
       </ImageView>
       <Button fx:id="toggleSoundButton" layoutX="851.0" layoutY="69.0" mnemonicParsing="false" text="SETTING" visible="false" />
-      <ImageView fx:id="gameMaster" fitHeight="167.0" fitWidth="165.0" layoutX="978.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="gameMaster" fitHeight="167.0" fitWidth="165.0" layoutX="978.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../images/robotfloat.png" />
          </image>

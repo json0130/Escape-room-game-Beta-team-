@@ -6,9 +6,12 @@ import java.util.Random;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -34,6 +37,8 @@ public class App extends Application {
       "Hello! I'm EVA. Your personal AI Assistant. We're in a bit of an"
           + " emergency so if you have any questions on what you need to do, I'm here to help!"
           + " \n\n";
+  public static ObservableList<ChatBubble> chatBubbleList = FXCollections.observableArrayList();
+  public static VBox globalChatContainer = new VBox();
   public static String greetingInMap;
   public static String greetingInRoom1;
   public static String greetingInRoom2;
