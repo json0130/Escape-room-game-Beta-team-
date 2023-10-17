@@ -101,8 +101,6 @@ public class TileGameDeskController extends RoomController {
   @FXML private Button toggleSoundButton;
   @FXML private Pane alert;
   private boolean hasHappend = false;
-  // Add this variable to your class
-  private Timeline alertBlinkTimeline;
 
   private Tile tileOne = new Tile();
   private Tile tileTwo = new Tile();
@@ -226,6 +224,9 @@ public class TileGameDeskController extends RoomController {
     chatBubbleListTileDesk.addListener(listener3);
   }
 
+  /**
+   * Checks tto see if 30 seconds are up and if they are, play alert blinking as well as the sound.
+   */
   public void checkCollision2() {
     // Detect if the timer is 30 seconds left and start the alert blinking
     if (App.timerSeconds == 30) {
@@ -627,7 +628,7 @@ public class TileGameDeskController extends RoomController {
   }
 
   @FXML
-  private void clickedInfoButton() {
+  private void clickInfoButton() {
     tutorialScreen.setVisible(true);
     loadCaptchaButton.setVisible(true);
   }

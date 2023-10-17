@@ -64,6 +64,8 @@ public class WindowController {
 
     chatTextArea.setEditable(false);
     System.out.println(Room1Controller.riddleAnswer);
+
+    // If pane is made visible, update values inside the chat text area.
     aiPane
         .visibleProperty()
         .addListener(
@@ -85,6 +87,7 @@ public class WindowController {
               }
             });
 
+    // Timer to update chat text area.
     timer =
         new AnimationTimer() {
           @Override
@@ -93,6 +96,7 @@ public class WindowController {
             chatTextArea.setScrollTop(Double.MAX_VALUE);
           }
         };
+    // Sends message when enter is pressed.
     inputText.setOnKeyPressed(
         event -> {
           if (event.getCode() == KeyCode.ENTER) {
