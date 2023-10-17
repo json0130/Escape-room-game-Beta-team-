@@ -170,7 +170,7 @@ public class TileGameRoomController extends RoomController {
 
   @FXML private Pane aiWindowController;
 
-  TranslateTransition translate = new TranslateTransition();
+  private TranslateTransition translate = new TranslateTransition();
 
   private boolean isGreetingShown = true;
 
@@ -589,7 +589,7 @@ public class TileGameRoomController extends RoomController {
   }
 
   @FXML
-  private void back(ActionEvent event) throws IOException {
+  private void clickBack(ActionEvent event) throws IOException {
     App.setScene(AppUi.PLAYER);
   }
 
@@ -623,5 +623,74 @@ public class TileGameRoomController extends RoomController {
         },
         0,
         100);
+  }
+
+  @FXML
+  public void simulateKeyPressAfterDelay() {
+    // It released the key pressed when the player is leaving the scene
+    Thread thread =
+        new Thread(
+            () -> {
+              try {
+                Thread.sleep(50);
+                KeyEvent keyReleaseEventS =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
+                // S key is released when the scene changes
+                KeyEvent keyReleaseEventA =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
+                // A key is released when the scene changes
+                KeyEvent keyReleaseEventW =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
+                // W key is released when the scene changes
+                KeyEvent keyReleaseEventD =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
+                // D key is released when the scene changes
+                scene.fireEvent(keyReleaseEventA);
+                scene.fireEvent(keyReleaseEventD);
+                scene.fireEvent(keyReleaseEventW);
+                scene.fireEvent(keyReleaseEventS);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+            });
+
+    thread.start();
+  }
+
+  /**
+   * Show buttons to restart the game or cancel.
+   *
+   * @param event mouse is clicked
+   * @throws IOException if the objects don't exist
+   */
+  @FXML
+  private void clikedRestartLabel(ActionEvent event) throws IOException {
+    black2.setVisible(true);
+    resetBox.setVisible(true);
+    resetLabel.setVisible(true);
+    resetYes.setVisible(true);
+    resetCancel.setVisible(true);
+  }
+
+  @FXML
+  private void canceledRestart(ActionEvent event) throws IOException {
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
+  }
+
+  @FXML
+  private void clickedRestartButton(ActionEvent event) throws IOException {
+    try {
+      GameState.resetGames();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
   }
 }

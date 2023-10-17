@@ -32,7 +32,7 @@
          </font>
       </Label>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000097" height="58.0" layoutX="969.0" layoutY="557.0" stroke="BLACK" strokeType="INSIDE" width="192.0" />
-      <Button fx:id="resetButton" layoutX="969.0" layoutY="557.0" mnemonicParsing="false" onAction="#handleRestartButtonClick" prefHeight="58.0" prefWidth="192.0" style="-fx-background-color: transparent; -fx-border-color: white;" text="RESTART" textFill="WHITE">
+      <Button fx:id="resetButton" layoutX="969.0" layoutY="557.0" mnemonicParsing="false" onAction="#clikedRestartLabel" prefHeight="58.0" prefWidth="192.0" style="-fx-background-color: transparent; -fx-border-color: white;" text="RESTART" textFill="WHITE">
          <font>
             <Font name="Arial Bold Italic" size="29.0" />
          </font></Button>
@@ -42,7 +42,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="restartNo" layoutX="381.0" layoutY="442.0" mnemonicParsing="false" onAction="#handleRestartButtonCanceled" text="CANCEL" />
-      <Button fx:id="restartYes" layoutX="713.0" layoutY="442.0" mnemonicParsing="false" onAction="#handleResetEvent" text="RESTART" />
+      <Button fx:id="restartNo" layoutX="381.0" layoutY="442.0" mnemonicParsing="false" onAction="#canceledRestart" text="CANCEL" />
+      <Button fx:id="restartYes" layoutX="713.0" layoutY="442.0" mnemonicParsing="false" onAction="#clickedRestartButton" text="RESTART" />
    </children>
 </Pane>

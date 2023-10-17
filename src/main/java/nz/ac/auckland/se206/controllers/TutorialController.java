@@ -127,7 +127,7 @@ public class TutorialController implements Initializable {
       };
 
   @FXML
-  private void clickSkipTutorial(ActionEvent event) {
+  private void clickedSkipButton(ActionEvent event) {
     soundButttonClick();
     App.setScene(AppUi.ANIMATION);
     collisionTimer.stop();
@@ -142,7 +142,7 @@ public class TutorialController implements Initializable {
   }
 
   @FXML
-  private void runAnimations(ActionEvent event) {
+  private void startPlayingAnimations(ActionEvent event) {
     setRotate(c1, true, 360, 10);
     setRotate(c2, true, 180, 18);
     setRotate(c3, true, 145, 24);
@@ -333,13 +333,12 @@ public class TutorialController implements Initializable {
   }
 
   /**
-   * Play the rock animation which is the animation of the rocks falling down from the top of the
-   * screen.
-   *
-   * @param event The event
-   * @return void
-   * @throws Exception
-   */
+  * Play the rock animation which is used for tutorial game.
+  * 
+  * @param event The event
+  * @return void
+  * @throws Exception
+  */
   @FXML
   private void playRock() {
     setRotate(c1, true, 360, 10);

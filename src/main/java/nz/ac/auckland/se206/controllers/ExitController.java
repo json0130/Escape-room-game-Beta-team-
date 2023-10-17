@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -1212,5 +1214,151 @@ public class ExitController extends RoomController {
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
+  }
+
+  /**
+   * When the button is clicked, the player moves to the room.
+   *
+   * @param event mouse is clicked
+   */
+  @FXML
+  public void enterRoom() {
+    String soundEffect = "src/main/resources/sounds/enterReal.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
+  }
+
+  /** Game master becomes visible. */
+  @FXML
+  private void onGameMasterClick() {
+
+    aiWindowController.setVisible(true);
+    System.out.print("HI");
+  }
+
+  /**
+   * Turn on and off the background music.
+   *
+   * @param event mouse is clicked.
+   */
+  @FXML
+  public void toggleSound(MouseEvent event) {
+    GameState.isSoundEnabled = !GameState.isSoundEnabled;
+
+    double volume = GameState.isSoundEnabled ? 0.03 : 0;
+    if (App.mediaPlayer != null) {
+      App.mediaPlayer.setVolume(volume);
+    }
+
+    if (App.alertSoundPlayer != null) {
+      // If an Alert Sound Player exists, adjust its volume as well.
+      App.alertSoundPlayer.setVolume(volume);
+    }
+
+    soundOn.setVisible(GameState.isSoundEnabled);
+    soundOff.setVisible(!GameState.isSoundEnabled);
+  }
+
+  /**
+   * The game master will move up and down.
+   *
+   * @param event mouse is clicked
+   */
+  @FXML
+  private void animateRobot() {
+    TranslateTransition translate = new TranslateTransition();
+    translate.setNode(gameMaster);
+    translate.setDuration(Duration.millis(1000)); // robot moves every 1 second
+    translate.setCycleCount(TranslateTransition.INDEFINITE); // robot continuously moves
+    translate.setByX(0);
+    translate.setByY(20);
+    translate.setAutoReverse(true); // robot moves back to its original position
+    translate.play();
+  }
+
+  /**
+   * Game master becomes visible.
+   *
+   * @param event mouse is clicked
+   */
+  @FXML
+  private void clickGameMaster(MouseEvent event) {
+    aiWindowController.setVisible(true);
+    System.out.print("HI");
+  }
+
+  /**
+   * Show buttons to restart the game or cancel.
+   *
+   * @param event mouse is clicked
+   * @throws IOException if the objects don't exist
+   */
+  @FXML
+  private void clikedRestartLabel(ActionEvent event) throws IOException {
+    black2.setVisible(true);
+    resetBox.setVisible(true);
+    resetLabel.setVisible(true);
+    resetYes.setVisible(true);
+    resetCancel.setVisible(true);
+  }
+
+  /**
+   * Cancel the restart when cancel button is clicked
+   *
+   * @param event mouse is clicked
+   * @throws IOException if the objects don't exist
+   */
+  @FXML
+  private void canceledRestart(ActionEvent event) throws IOException {
+    black2.setVisible(false);
+    resetBox.setVisible(false);
+    resetLabel.setVisible(false);
+    resetYes.setVisible(false);
+    resetCancel.setVisible(false);
+  }
+
+  @FXML
+  private void clickedRestartButton(ActionEvent event) throws IOException {
+    try {
+      GameState.resetGames();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
+  }
+
+  @FXML
+  public void simulateKeyPressAfterDelay() {
+    Thread thread =
+        new Thread(
+            () -> {
+              try {
+                Thread.sleep(50); // Delay of 0.1 seconds
+                KeyEvent keyReleaseEventS =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
+
+                KeyEvent keyReleaseEventA =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
+
+                KeyEvent keyReleaseEventW =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
+
+                KeyEvent keyReleaseEventD =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
+
+                scene.fireEvent(keyReleaseEventA);
+                scene.fireEvent(keyReleaseEventD);
+                scene.fireEvent(keyReleaseEventW);
+                scene.fireEvent(keyReleaseEventS);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+            });
+
+    thread.start();
   }
 }

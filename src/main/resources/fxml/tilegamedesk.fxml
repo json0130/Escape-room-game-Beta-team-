@@ -144,7 +144,7 @@
          </font>
       </Label>
       <fx:include layoutX="699.0" layoutY="412.0" source="countdowntimer.fxml" />
-      <Button fx:id="puzzleInfoButton" layoutX="820.0" layoutY="460.0" mnemonicParsing="false" onAction="#onpuzzleInfoButtonClick" text="INFO" />
+      <Button fx:id="puzzleInfoButton" layoutX="803.0" layoutY="460.0" mnemonicParsing="false" onAction="#clickedInfoButton" text="INFO" />
       <ImageView fx:id="smallScreenOff" fitHeight="535.0" fitWidth="282.0" layoutX="674.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../images/SmallScreenOffImage.png" />

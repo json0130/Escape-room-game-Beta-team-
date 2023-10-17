@@ -1,7 +1,6 @@
 package nz.ac.auckland.se206.gpt;
 
 import java.io.IOException;
-
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.controllers.Room1Controller;
 
@@ -47,7 +46,6 @@ public class GptPromptEngineering {
     String user = "The user said " + message;
     // Depending on the difficulty the player chose, hint availability differes
     String answer = "";
-
     if (message.toLowerCase().contains(Room1Controller.riddleAnswer)) {
       return message
           + "If the user is guessing the answer and you think it's the valid answer, start your"

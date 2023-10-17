@@ -135,24 +135,24 @@
          </children>
       </Pane>
       <Rectangle fx:id="black2" arcHeight="5.0" arcWidth="5.0" fill="#00000081" height="619.0" layoutX="-5.0" layoutY="46.0" stroke="BLACK" strokeType="INSIDE" width="1213.0" />
-      <Button fx:id="resetButton" layoutX="1015.0" layoutY="9.0" mnemonicParsing="false" onAction="#handleRestartButtonClick" style="-fx-background-color: transparent;" text="RESTART" textFill="WHITE">
-         <font>
-            <Font name="Arial Bold Italic" size="20.0" />
-         </font>
-      </Button>
-      <Rectangle fx:id="resetBox" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="279.0" layoutX="332.0" layoutY="147.0" stroke="BLACK" strokeType="INSIDE" width="519.0" />
       <ImageView fx:id="player" fitHeight="80.0" fitWidth="80.0" layoutX="281.0" layoutY="237.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/gameCharacterArtRight.png" />
          </image>
       </ImageView>
+      <Button fx:id="resetButton" layoutX="1015.0" layoutY="9.0" mnemonicParsing="false" onAction="#clikedRestartLabel" style="-fx-background-color: transparent;" text="RESTART" textFill="WHITE">
+         <font>
+            <Font name="Arial Bold Italic" size="20.0" />
+         </font>
+      </Button>
+      <Rectangle fx:id="resetBox" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="279.0" layoutX="332.0" layoutY="147.0" stroke="BLACK" strokeType="INSIDE" width="519.0" />
       <Label fx:id="resetLabel" alignment="TOP_CENTER" layoutX="358.0" layoutY="211.0" prefHeight="99.0" prefWidth="464.0" text="DO YOU REALLY WANT TO &#10;RESTART THE GAME?">
          <font>
             <Font size="27.0" />
          </font>
       </Label>
-      <Button fx:id="resetYes" layoutX="715.0" layoutY="359.0" mnemonicParsing="false" onAction="#handleResetEvent" text="YES" />
-      <Button fx:id="resetCancel" layoutX="431.0" layoutY="359.0" mnemonicParsing="false" onAction="#handleRestartButtonCanceled" text="CANCEL" />
+      <Button fx:id="resetYes" layoutX="715.0" layoutY="359.0" mnemonicParsing="false" onAction="#clickedRestartButton" text="YES" />
+      <Button fx:id="resetCancel" layoutX="431.0" layoutY="359.0" mnemonicParsing="false" onAction="#canceledRestart" text="CANCEL" />
       <Label fx:id="playerLabel" layoutX="293.0" layoutY="199.0" text="PLAYER" textFill="WHITE">
          <font>
             <Font size="23.0" />
