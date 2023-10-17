@@ -107,7 +107,7 @@ public class TutorialController implements Initializable {
       };
 
   //  code for character movement using wasd movement
-  private AnimationTimer timer =
+  private AnimationTimer keyboardTimer =
       new AnimationTimer() {
         @Override
         public void handle(long now) {
@@ -136,7 +136,7 @@ public class TutorialController implements Initializable {
     soundButttonClick();
     App.setScene(AppUi.ANIMATION);
     collisionTimer.stop();
-    timer.stop();
+    keyboardTimer.stop();
 
     // Stop the meteor sound if it's playing
     if (meteorSoundPlayer != null) {
@@ -291,7 +291,7 @@ public class TutorialController implements Initializable {
     sentences = parseSentences(paragraph);
 
     shapesize = player.getFitHeight();
-    playerMove();
+    playerKeyboardMovement();
 
     rocks.add(r1);
     rocks.add(r2);
@@ -330,9 +330,9 @@ public class TutorialController implements Initializable {
     keyPressed.addListener(
         ((observable, wasKeyPressed, isKeyPressed) -> {
           if (!wasKeyPressed) {
-            timer.start();
+            keyboardTimer.start();
           } else {
-            timer.stop();
+            keyboardTimer.stop();
           }
         }));
   }
@@ -363,7 +363,7 @@ public class TutorialController implements Initializable {
    * @throws Exception if the player collides with any of the rocks
    */
   @FXML
-  public void checkCollision(ImageView player, List<ImageView> rocks) {
+  private void checkCollision(ImageView player, List<ImageView> rocks) {
     // Check if the player collides with any of the rocks
     if (!collisionDetected) {
       for (ImageView rock : rocks) {
@@ -397,12 +397,12 @@ public class TutorialController implements Initializable {
    * @param c3 The finish line
    * @throws Exception if the player collides with the finish line
    */
-  public void checkFinish(ImageView player, Circle c3) {
+  private void checkFinish(ImageView player, Circle c3) {
     // Check if the player collides with the finish line .
     if (player.getBoundsInParent().intersects(c3.getBoundsInParent())) {
       App.setScene(AppUi.ANIMATION);
       collisionTimer.stop();
-      timer.stop();
+      keyboardTimer.stop();
       // Stop the meteor sound if it's playing
       if (meteorSoundPlayer != null) {
         meteorSoundPlayer.stop();
@@ -417,7 +417,7 @@ public class TutorialController implements Initializable {
    * @param player
    * @throws Exception if the player collides with the box
    */
-  public void checkCollision1(ImageView player, Rectangle box) {
+  private void checkCollision1(ImageView player, Rectangle box) {
     // Check if the player collides with the box
     if (!isInstructionDone) {
       if (player.getBoundsInParent().intersects(box.getBoundsInParent())) {
@@ -443,7 +443,7 @@ public class TutorialController implements Initializable {
    * @throws Exception if the player collides with the boundaries of the scene
    */
   @FXML
-  public void playerMove() {
+  private void playerKeyboardMovement() {
     // If key is pressed, set the boolean to true. If key is released, set the boolean to false.
     scene.setOnKeyPressed(
         e -> {
@@ -492,7 +492,7 @@ public class TutorialController implements Initializable {
   * @throws Exception if the player collides with the boundaries of the scene
   */
   @FXML 
-  public void squareBorder() {
+  private void squareBorder() {
     // Set the boundaries of the scene
     double left = 0;
     double right = scene.getWidth() - shapesize;
