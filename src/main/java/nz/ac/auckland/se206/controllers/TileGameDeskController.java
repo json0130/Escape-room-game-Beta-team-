@@ -278,7 +278,7 @@ public class TileGameDeskController {
 
   private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
     chatCompletionRequest.addMessage(msg);
-    // Call gpt and generate respond 
+    // Call gpt and generate respond
     try {
       ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
       Choice result = chatCompletionResult.getChoices().iterator().next();
@@ -596,7 +596,7 @@ public class TileGameDeskController {
 
   @FXML
   private void disableImages() {
-    // All the images are not visible 
+    // All the images are not visible
     imageOne.setVisible(false);
     imageTwo.setVisible(false);
     imageThree.setVisible(false);
@@ -694,19 +694,5 @@ public class TileGameDeskController {
 
     soundOn.setVisible(GameState.isSoundEnabled);
     soundOff.setVisible(!GameState.isSoundEnabled);
-  }
-
-  // game master animation
-  @FXML
-  private void animateRobot() {
-    TranslateTransition translate = new TranslateTransition();
-    translate.setNode(gameMaster);
-    translate.setDuration(Duration.millis(1000)); // robot moves every one second
-    translate.setCycleCount(TranslateTransition.INDEFINITE); // robot moves continuously
-    translate.setByX(0);
-    translate.setByY(20);
-    translate.setAutoReverse(true); // robot moves back to the original position
-
-    translate.play();
   }
 }

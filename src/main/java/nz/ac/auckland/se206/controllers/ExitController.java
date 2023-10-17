@@ -1,13 +1,10 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
@@ -24,7 +21,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -34,7 +30,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -48,7 +43,7 @@ import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
-public class ExitController implements Initializable {
+public class ExitController extends RoomController {
   public static ObservableList<ChatBubble> chatBubbleListExit = FXCollections.observableArrayList();
 
   private BooleanProperty wKeyPressed = new SimpleBooleanProperty();
@@ -550,27 +545,6 @@ public class ExitController implements Initializable {
     }
   }
 
-  /** Modify your setupAlertBlinking method as follows. */
-  private void setupAlertBlinking() {
-    alert.setVisible(true); // Initially show the alert label
-
-    // Set up the blinking animation for the alert label
-    alertBlinkTimeline =
-        new Timeline(
-            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
-            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
-    alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
-    alertBlinkTimeline.play();
-  }
-
-  /** Add a method to stop the alert blinking. */
-  private void stopAlertBlinking() {
-    if (alertBlinkTimeline != null) {
-      alertBlinkTimeline.stop();
-      alert.setVisible(false);
-    }
-  }
-
   /** Check if the id card is touching the id pad or not. */
   private void checkId(ImageView player, Rectangle id) {
     if (player.getBoundsInParent().intersects(id.getBoundsInParent())) {
@@ -611,31 +585,6 @@ public class ExitController implements Initializable {
           imageView.setLayoutX(originalX);
           imageView.setLayoutY(originalY);
         });
-  }
-
-  /** Detect change in gamestate difficulty which is seleced in intro scene. */
-  private void detectDifficulty() {
-    Timer labelTimer = new Timer(true);
-    labelTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            if (GameState.difficulty != null) {
-              // if the difficulty is medium, keep detecting the number of hints until it reaches to
-              // 0.
-              if (GameState.difficulty == "MEDIUM") {
-                Platform.runLater(() -> updateLabels());
-                if (GameState.numOfHints == 0) {
-                  labelTimer.cancel();
-                }
-              } else {
-                Platform.runLater(() -> updateLabels());
-              }
-            }
-          }
-        },
-        0,
-        500);
   }
 
   /** If the player moves closer to the computer, button for keypad appears. */
@@ -1123,25 +1072,6 @@ public class ExitController implements Initializable {
     App.alertSoundPlayer.stop();
   }
 
-  /** Update the labels of hint and difficulty as the game progresses. */
-  private void updateLabels() {
-    difficultyLabel.setText(GameState.difficulty);
-    // Depending on the level that is selected in the intro page, proper texts are shown in the
-    // header
-    if (GameState.difficulty == "EASY") {
-      hintLabel.setText("UNLIMITED");
-      // For the medium difficulty, changing the number of hint left
-    } else if (GameState.difficulty == "MEDIUM") {
-      hintLabel.setText(String.valueOf(GameState.numOfHints));
-      hintLabel2.setText("HINTS");
-      if (GameState.numOfHints == 1) {
-        hintLabel2.setText("HINT");
-      }
-    } else {
-      hintLabel.setText("NO");
-    }
-  }
-
   /** Background image is changed after the correct passcode is typed. */
   private void changeOpacity() {
     // Create a FadeTransition for background
@@ -1260,44 +1190,12 @@ public class ExitController implements Initializable {
     mediaPlayer.setAutoPlay(true);
   }
 
-  /** Sound effect is played when the player enters the room. */
-  @FXML
-  private void enterRoom() {
-    String soundEffect = "src/main/resources/sounds/enterReal.mp3";
-    Media media = new Media(new File(soundEffect).toURI().toString());
-    MediaPlayer mediaPlayer = new MediaPlayer(media);
-    mediaPlayer.setAutoPlay(true);
-  }
-
   /** Game master becomes visible. */
   @FXML
   private void onGameMasterClick() {
 
     aiWindowController.setVisible(true);
     System.out.print("HI");
-  }
-
-  /**
-   * Turn on and off the background music.
-   *
-   * @param event mouse is clicked.
-   */
-  @FXML
-  private void toggleSound(MouseEvent event) {
-    GameState.isSoundEnabled = !GameState.isSoundEnabled;
-
-    double volume = GameState.isSoundEnabled ? 0.03 : 0;
-    if (App.mediaPlayer != null) {
-      App.mediaPlayer.setVolume(volume);
-    }
-
-    if (App.alertSoundPlayer != null) {
-      // If an Alert Sound Player exists, adjust its volume as well.
-      App.alertSoundPlayer.setVolume(volume);
-    }
-
-    soundOn.setVisible(GameState.isSoundEnabled);
-    soundOff.setVisible(!GameState.isSoundEnabled);
   }
 
   /** Move game master robot up and down. */
@@ -1322,79 +1220,5 @@ public class ExitController implements Initializable {
   private void clickGameMaster(MouseEvent event) {
     aiWindowController.setVisible(true);
     System.out.print("HI");
-  }
-
-  /**
-   * Show buttons to restart the game or cancel.
-   *
-   * @param event mouse is clicked
-   * @throws IOException if the objects don't exist
-   */
-  @FXML
-  private void handleRestartButtonClick(ActionEvent event) throws IOException {
-    black2.setVisible(true);
-    resetBox.setVisible(true);
-    resetLabel.setVisible(true);
-    resetYes.setVisible(true);
-    resetCancel.setVisible(true);
-  }
-
-  /**
-   * Cancel the restart when cancel button is clicked
-   *
-   * @param event mouse is clicked
-   * @throws IOException if the objects don't exist
-   */
-  @FXML
-  private void handleRestartButtonCanceled(ActionEvent event) throws IOException {
-    black2.setVisible(false);
-    resetBox.setVisible(false);
-    resetLabel.setVisible(false);
-    resetYes.setVisible(false);
-    resetCancel.setVisible(false);
-  }
-
-  @FXML
-  private void handleResetEvent(ActionEvent event) throws IOException {
-    try {
-      GameState.resetGames();
-    } catch (Exception e) {
-      // TODO: handle exception
-    }
-  }
-
-  @FXML
-  private void simulateKeyPressAfterDelay() {
-    Thread thread =
-        new Thread(
-            () -> {
-              try {
-                Thread.sleep(50); // Delay of 0.1 seconds
-                KeyEvent keyReleaseEventS =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
-
-                KeyEvent keyReleaseEventA =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
-
-                KeyEvent keyReleaseEventW =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
-
-                KeyEvent keyReleaseEventD =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
-
-                scene.fireEvent(keyReleaseEventA);
-                scene.fireEvent(keyReleaseEventD);
-                scene.fireEvent(keyReleaseEventW);
-                scene.fireEvent(keyReleaseEventS);
-              } catch (InterruptedException e) {
-                e.printStackTrace();
-              }
-            });
-
-    thread.start();
   }
 }

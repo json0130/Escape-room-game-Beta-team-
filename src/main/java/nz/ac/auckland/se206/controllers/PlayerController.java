@@ -9,10 +9,8 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -22,7 +20,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -32,8 +29,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -45,7 +40,7 @@ import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
-public class PlayerController implements Initializable {
+public class PlayerController extends RoomController {
   public static boolean hintContained = false;
   public static boolean answerContained = false;
   public static ObservableList<ChatBubble> chatBubbleListPlayer =
@@ -321,41 +316,6 @@ public class PlayerController implements Initializable {
     player.setLayoutY(200);
   }
 
-  // Modify your setupAlertBlinking method as follows
-  private void setupAlertBlinking() {
-    alert.setVisible(true); // Initially show the alert label
-    // Stop current playing media
-    App.mediaPlayer.stop();
-    // Check if sound is enabled before setting volume and playing.
-    if (GameState.isSoundEnabled) {
-      App.alertSoundPlayer.setVolume(0.03);
-    } else {
-      App.alertSoundPlayer.setVolume(0.0);
-    }
-    App.alertSoundPlayer.setAutoPlay(true);
-    App.alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-    App.alertSoundPlayer.play();
-
-    // Set up the blinking animation for the alert label
-    alertBlinkTimeline =
-        new Timeline(
-            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
-            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
-
-    alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
-    alertBlinkTimeline.play();
-  }
-
-  @FXML
-  private void stopAlertBlinking() {
-    // Add a method to stop the alert blinking
-    if (alertBlinkTimeline != null) {
-      // Stop timeline and hide label
-      alertBlinkTimeline.stop();
-      App.alertSoundPlayer.stop();
-    }
-  }
-
   /**
    * When the player is having collisions with room1 then it will go to the room1.
    *
@@ -487,100 +447,6 @@ public class PlayerController implements Initializable {
   }
 
   /**
-   * When the go back button is clicked, the player will go back to the intro page.
-   *
-   * @param event when the go back button is clicked
-   * @throws IOException
-   */
-  @FXML
-  public void playerMove() {
-    // code for enabling palyer to move using wasd keys
-    scene.setOnKeyPressed(
-        e -> {
-          boolean wasMoving =
-              isWKeyPressed.get()
-                  || isAKeyPressed.get()
-                  || isSKeyPressed.get()
-                  || isDKeyPressed.get();
-
-          if (e.getCode() == KeyCode.W) {
-            isWKeyPressed.set(true);
-          }
-
-          if (e.getCode() == KeyCode.A) {
-            isAKeyPressed.set(true);
-          }
-
-          if (e.getCode() == KeyCode.S) {
-            isSKeyPressed.set(true);
-          }
-
-          if (e.getCode() == KeyCode.D) {
-            isDKeyPressed.set(true);
-          }
-
-          boolean isMoving =
-              isWKeyPressed.get()
-                  || isAKeyPressed.get()
-                  || isSKeyPressed.get()
-                  || isDKeyPressed.get();
-
-          // If we started moving and weren't before, start the sound.
-          if (isMoving && !wasMoving) {
-            walkingMediaPlayer.play();
-          }
-        });
-
-    scene.setOnKeyReleased(
-        e -> {
-          boolean wasMoving =
-              isWKeyPressed.get()
-                  || isAKeyPressed.get()
-                  || isSKeyPressed.get()
-                  || isDKeyPressed.get();
-
-          if (e.getCode() == KeyCode.W) {
-            isWKeyPressed.set(false);
-          }
-
-          if (e.getCode() == KeyCode.A) {
-            isAKeyPressed.set(false);
-          }
-
-          if (e.getCode() == KeyCode.S) {
-            isSKeyPressed.set(false);
-          }
-
-          if (e.getCode() == KeyCode.D) {
-            isDKeyPressed.set(false);
-          }
-
-          // Check if we're still moving
-          boolean isMovinng =
-              isWKeyPressed.get()
-                  || isAKeyPressed.get()
-                  || isSKeyPressed.get()
-                  || isDKeyPressed.get();
-
-          // If we stopped moving and were before, stop the sound.
-          if (!isMovinng && wasMoving) {
-            PauseTransition pause = new PauseTransition(Duration.seconds(0.3));
-            pause.setOnFinished(
-                event -> {
-                  walkingMediaPlayer.stop();
-                  try {
-                    // This line will reset audio clip from start when stopped
-                    walkingMediaPlayer.seek(Duration.ZERO);
-                  } catch (Exception ex) {
-                    System.out.println("Error resetting audio: " + ex.getMessage());
-                  }
-                });
-            pause.play();
-          }
-        });
-  }
-
-  /**
    * When the player is touching the border then it will keep the player to be in the position.
    *
    * @param event when the player is touching the border
@@ -651,35 +517,6 @@ public class PlayerController implements Initializable {
         },
         0,
         500);
-  }
-
-  private void updateLabels() {
-    // update the header labels as the hint decreases
-    difficultyLabel.setText(GameState.difficulty);
-    if (GameState.difficulty == "EASY") {
-      hintLabel.setText("UNLIMITED");
-    } else if (GameState.difficulty == "MEDIUM") {
-      hintLabel.setText(String.valueOf(GameState.numOfHints));
-      hintLabel2.setText("HINTS");
-      if (GameState.numOfHints == 1) {
-        hintLabel2.setText("HINT");
-      }
-    } else {
-      hintLabel.setText("NO");
-    }
-  }
-
-  @FXML
-  private void animateRobot() {
-    // game master robot moves up and down
-    TranslateTransition translate = new TranslateTransition();
-    translate.setNode(gameMaster);
-    translate.setDuration(Duration.millis(1000));
-    translate.setCycleCount(TranslateTransition.INDEFINITE);
-    translate.setByX(0);
-    translate.setByY(20);
-    translate.setAutoReverse(true);
-    translate.play();
   }
 
   // code for player movement using wasd keys
@@ -824,100 +661,5 @@ public class PlayerController implements Initializable {
             }
           }
         });
-  }
-
-  @FXML
-  private void enterRoom() {
-    String soundEffect = "src/main/resources/sounds/enterReal.mp3";
-    Media media = new Media(new File(soundEffect).toURI().toString());
-    MediaPlayer mediaPlayer = new MediaPlayer(media);
-    mediaPlayer.setAutoPlay(true);
-  }
-
-  @FXML
-  private void toggleSound(MouseEvent event) {
-    GameState.isSoundEnabled = !GameState.isSoundEnabled;
-
-    double volume = GameState.isSoundEnabled ? 0.03 : 0;
-    if (App.mediaPlayer != null) {
-      App.mediaPlayer.setVolume(volume);
-    }
-
-    if (App.alertSoundPlayer != null) {
-      // If an Alert Sound Player exists, adjust its volume as well.
-      App.alertSoundPlayer.setVolume(volume);
-    }
-
-    soundOn.setVisible(GameState.isSoundEnabled);
-    soundOff.setVisible(!GameState.isSoundEnabled);
-  }
-
-  /**
-   * Show buttons to restart the game or cancel.
-   *
-   * @param event mouse is clicked
-   * @throws IOException if the objects don't exist
-   */
-  @FXML
-  private void handleRestartButtonClick(ActionEvent event) throws IOException {
-    black2.setVisible(true);
-    resetBox.setVisible(true);
-    resetLabel.setVisible(true);
-    resetYes.setVisible(true);
-    resetCancel.setVisible(true);
-  }
-
-  @FXML
-  private void handleRestartButtonCanceled(ActionEvent event) throws IOException {
-    black2.setVisible(false);
-    resetBox.setVisible(false);
-    resetLabel.setVisible(false);
-    resetYes.setVisible(false);
-    resetCancel.setVisible(false);
-  }
-
-  @FXML
-  private void handleResetEvent(ActionEvent event) throws IOException {
-    try {
-      GameState.resetGames();
-    } catch (Exception e) {
-      // TODO: handle exception
-    }
-  }
-
-  @FXML
-  private void simulateKeyPressAfterDelay() {
-    Thread thread =
-        new Thread(
-            () -> {
-              try {
-                Thread.sleep(50); // Delay of 0.1 seconds
-                // s key is released when scene changes
-                KeyEvent keyReleaseEventS =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
-                // a key is released when scene changes
-                KeyEvent keyReleaseEventA =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
-                // w key is released when scene changes
-                KeyEvent keyReleaseEventW =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
-                // d key is released when scene changes
-                KeyEvent keyReleaseEventD =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
-
-                scene.fireEvent(keyReleaseEventA);
-                scene.fireEvent(keyReleaseEventD);
-                scene.fireEvent(keyReleaseEventW);
-                scene.fireEvent(keyReleaseEventS);
-              } catch (InterruptedException e) {
-                e.printStackTrace();
-              }
-            });
-
-    thread.start();
   }
 }
