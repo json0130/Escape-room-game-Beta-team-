@@ -223,6 +223,114 @@ public class ExitController extends RoomController {
         }
       };
 
+  /** Check if correct id cards are tagged on the pad. */
+  private AnimationTimer collisionTimer =
+      new AnimationTimer() {
+        @Override
+        public void handle(long timeStamp) {
+          checkCollision(idCaptain, idScanner);
+          checkCollision(idChef, idScanner);
+          checkCollision(idDoctor, idScanner);
+          checkCollision(idEngineer, idScanner);
+        }
+
+        /**
+         * Detect collision between two objects.
+         *
+         * @param node1 id cards
+         * @param node2 id scanner
+         */
+        private void checkCollision(Node node1, Node node2) {
+          if (node1.getBoundsInParent().intersects(node2.getBoundsInParent())) {
+            // if the anwer is captain, idcaptain give green light, others give red
+            if (Room1Controller.riddleAnswer == "captain") {
+              if (node1 == idCaptain) {
+                light.setFill(Color.GREEN);
+                GameState.isGameFinished = true;
+                soundCorrectCard();
+                GameState.isIdChecked = true;
+                ids.setVisible(false);
+                idCaptain.setVisible(false);
+                idChef.setVisible(false);
+                idDoctor.setVisible(false);
+                idEngineer.setVisible(false);
+                exit2.setVisible(false);
+                idCardList.setVisible(false);
+                endingMediaChange();
+                changeOpacity2();
+              } else {
+                // The answer is wrong, so give red light
+                soundIncorrect();
+                light.setFill(Color.RED);
+              }
+              // only chef id gives green light, others give red
+            } else if (Room1Controller.riddleAnswer == "chef") {
+              if (node1 == idChef) {
+                light.setFill(Color.GREEN);
+                GameState.isGameFinished = true;
+                soundCorrectCard();
+                GameState.isIdChecked = true;
+                ids.setVisible(false);
+                idCaptain.setVisible(false);
+                idChef.setVisible(false);
+                idDoctor.setVisible(false);
+                idEngineer.setVisible(false);
+                exit2.setVisible(false);
+                idCardList.setVisible(false);
+                endingMediaChange();
+                changeOpacity2();
+              } else {
+                // The answer is wrong, so give red light
+                soundIncorrect();
+                light.setFill(Color.RED);
+              }
+              // only doctor gives green light, others give red
+            } else if (Room1Controller.riddleAnswer == "doctor") {
+              if (node1 == idDoctor) {
+                light.setFill(Color.GREEN);
+                GameState.isGameFinished = true;
+                soundCorrectCard();
+                GameState.isIdChecked = true;
+                ids.setVisible(false);
+                idCaptain.setVisible(false);
+                idChef.setVisible(false);
+                idDoctor.setVisible(false);
+                idEngineer.setVisible(false);
+                exit2.setVisible(false);
+                idCardList.setVisible(false);
+                endingMediaChange();
+                changeOpacity2();
+              } else {
+                // The answer is wrong, so give red light
+                soundIncorrect();
+                light.setFill(Color.RED);
+              }
+              // only engineer gives green light, others give red
+            } else if (Room1Controller.riddleAnswer == "engineer") {
+              if (node1 == idEngineer) {
+                light.setFill(Color.GREEN);
+                GameState.isGameFinished = true;
+                soundCorrectCard();
+                GameState.isIdChecked = true;
+                ids.setVisible(false);
+                idCaptain.setVisible(false);
+                idChef.setVisible(false);
+                idDoctor.setVisible(false);
+                idEngineer.setVisible(false);
+                exit2.setVisible(false);
+                idCardList.setVisible(false);
+                endingMediaChange();
+                changeOpacity2();
+              } else {
+                // The answer is wrong, so give red light
+                soundIncorrect();
+                light.setFill(Color.RED);
+              }
+            }
+          }
+        }
+      };
+
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     background.setOpacity(1);
@@ -331,9 +439,10 @@ public class ExitController extends RoomController {
   }
 
   /**
-   * When the button is clicked, the player moves to the room.
+   * When player enters the room, the sound is played.
    *
-   * @param event mouse is clicked
+   * @param event when player enters the room
+   * @throws IOException if the sound cannot be played
    */
   @FXML
   public void enterRoom() {
@@ -1053,114 +1162,6 @@ public class ExitController extends RoomController {
       }
     }
   }
-
-  /** Check if correct id cards are tagged on the pad. */
-  private AnimationTimer collisionTimer =
-      new AnimationTimer() {
-        @Override
-        public void handle(long timeStamp) {
-          checkCollision(idCaptain, idScanner);
-          checkCollision(idChef, idScanner);
-          checkCollision(idDoctor, idScanner);
-          checkCollision(idEngineer, idScanner);
-        }
-
-        /**
-         * Detect collision between two objects.
-         *
-         * @param node1 id cards
-         * @param node2 id scanner
-         */
-        private void checkCollision(Node node1, Node node2) {
-          if (node1.getBoundsInParent().intersects(node2.getBoundsInParent())) {
-            // if the anwer is captain, idcaptain give green light, others give red
-            if (Room1Controller.riddleAnswer == "captain") {
-              if (node1 == idCaptain) {
-                light.setFill(Color.GREEN);
-                GameState.isGameFinished = true;
-                soundCorrectCard();
-                GameState.isIdChecked = true;
-                ids.setVisible(false);
-                idCaptain.setVisible(false);
-                idChef.setVisible(false);
-                idDoctor.setVisible(false);
-                idEngineer.setVisible(false);
-                exit2.setVisible(false);
-                idCardList.setVisible(false);
-                endingMediaChange();
-                changeOpacity2();
-              } else {
-                // The answer is wrong, so give red light
-                soundIncorrect();
-                light.setFill(Color.RED);
-              }
-              // only chef id gives green light, others give red
-            } else if (Room1Controller.riddleAnswer == "chef") {
-              if (node1 == idChef) {
-                light.setFill(Color.GREEN);
-                GameState.isGameFinished = true;
-                soundCorrectCard();
-                GameState.isIdChecked = true;
-                ids.setVisible(false);
-                idCaptain.setVisible(false);
-                idChef.setVisible(false);
-                idDoctor.setVisible(false);
-                idEngineer.setVisible(false);
-                exit2.setVisible(false);
-                idCardList.setVisible(false);
-                endingMediaChange();
-                changeOpacity2();
-              } else {
-                // The answer is wrong, so give red light
-                soundIncorrect();
-                light.setFill(Color.RED);
-              }
-              // only doctor gives green light, others give red
-            } else if (Room1Controller.riddleAnswer == "doctor") {
-              if (node1 == idDoctor) {
-                light.setFill(Color.GREEN);
-                GameState.isGameFinished = true;
-                soundCorrectCard();
-                GameState.isIdChecked = true;
-                ids.setVisible(false);
-                idCaptain.setVisible(false);
-                idChef.setVisible(false);
-                idDoctor.setVisible(false);
-                idEngineer.setVisible(false);
-                exit2.setVisible(false);
-                idCardList.setVisible(false);
-                endingMediaChange();
-                changeOpacity2();
-              } else {
-                // The answer is wrong, so give red light
-                soundIncorrect();
-                light.setFill(Color.RED);
-              }
-              // only engineer gives green light, others give red
-            } else if (Room1Controller.riddleAnswer == "engineer") {
-              if (node1 == idEngineer) {
-                light.setFill(Color.GREEN);
-                GameState.isGameFinished = true;
-                soundCorrectCard();
-                GameState.isIdChecked = true;
-                ids.setVisible(false);
-                idCaptain.setVisible(false);
-                idChef.setVisible(false);
-                idDoctor.setVisible(false);
-                idEngineer.setVisible(false);
-                exit2.setVisible(false);
-                idCardList.setVisible(false);
-                endingMediaChange();
-                changeOpacity2();
-              } else {
-                // The answer is wrong, so give red light
-                soundIncorrect();
-                light.setFill(Color.RED);
-              }
-            }
-          }
-        }
-      };
 
   /** Change the background music when 3 seconds are left. */
   private void endingMediaChange() {
