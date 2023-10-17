@@ -11,7 +11,6 @@ import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
@@ -54,7 +53,6 @@ public class TileGameRoomController extends RoomController {
 
   private BooleanBinding keyPressed = up.or(left).or(down).or(right);
   private int movementVariable = 5;
-  private double shapesize;
 
   private List<Rectangle> walls = new ArrayList<>();
 
@@ -160,8 +158,6 @@ public class TileGameRoomController extends RoomController {
           false);
 
   private Boolean walkAnimationPlaying = false;
-  private Timeline alertBlinkTimeline;
-
   private boolean nextToButton = false;
   @FXML private Button btnRoom1;
   @FXML private Button button;
@@ -332,8 +328,7 @@ public class TileGameRoomController extends RoomController {
    * Check if the player is colliding with any of the walls.
    *
    * @param player the player
-   * @param walls the walls
-   * @return true if the player is colliding with any of the walls, false otherwise
+   * @param walls A list of the walls
    */
   @FXML
   public void checkCollision2(ImageView player, List<Rectangle> walls) {
@@ -394,7 +389,10 @@ public class TileGameRoomController extends RoomController {
     }
   }
 
-  // code for player movement using wasd keys
+  /**
+   * code for player movement using wasd keys. This method also plays the animations which are gifs
+   * that switch in and out depending on what keys the player has pressed.
+   */
   @FXML
   public void movingSetup() {
     scene.setOnKeyPressed(
@@ -546,9 +544,8 @@ public class TileGameRoomController extends RoomController {
   }
 
   /**
-   * Handles the click event on the door.
+   * Method to allow player to enter the tile game scene.
    *
-   * @param event the mouse event
    * @throws IOException if the game cannot be reset
    */
   @FXML
@@ -563,7 +560,7 @@ public class TileGameRoomController extends RoomController {
     }
   }
 
-  // detect change in game state difficulty which is selected in the intro scene
+  /* detect change in game state difficulty which is selected in the intro scene*/
   public void detectDifficulty() {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
@@ -586,11 +583,6 @@ public class TileGameRoomController extends RoomController {
         },
         0,
         500);
-  }
-
-  @FXML
-  private void clickBack(ActionEvent event) throws IOException {
-    App.setScene(AppUi.PLAYER);
   }
 
   // exclamation mark for monitor animation
@@ -625,6 +617,10 @@ public class TileGameRoomController extends RoomController {
         100);
   }
 
+  /**
+   * Releases W A S D keys using the keyReleased KeyEvent. This method is triggered when player is
+   * leaving a room that isnt the main room.
+   */
   @FXML
   public void simulateKeyPressAfterDelay() {
     // It released the key pressed when the player is leaving the scene
@@ -668,7 +664,7 @@ public class TileGameRoomController extends RoomController {
    * @throws IOException if the objects don't exist
    */
   @FXML
-  private void clikedRestartLabel(ActionEvent event) throws IOException {
+  private void clickRestartLabel(ActionEvent event) throws IOException {
     black2.setVisible(true);
     resetBox.setVisible(true);
     resetLabel.setVisible(true);
@@ -677,7 +673,7 @@ public class TileGameRoomController extends RoomController {
   }
 
   @FXML
-  private void canceledRestart(ActionEvent event) throws IOException {
+  private void cancelRestart(ActionEvent event) throws IOException {
     black2.setVisible(false);
     resetBox.setVisible(false);
     resetLabel.setVisible(false);
@@ -686,7 +682,7 @@ public class TileGameRoomController extends RoomController {
   }
 
   @FXML
-  private void clickedRestartButton(ActionEvent event) throws IOException {
+  private void clickRestartButton(ActionEvent event) throws IOException {
     try {
       GameState.resetGames();
     } catch (Exception e) {
