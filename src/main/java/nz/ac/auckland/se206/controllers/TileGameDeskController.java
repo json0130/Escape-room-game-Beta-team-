@@ -150,7 +150,7 @@ public class TileGameDeskController {
   /**
    * Initializes the room view, it is called when the room loads.
    *
-   * @throws ApiProxyException
+   * @throws IOException if the file is not found
    */
   public void initialize() throws ApiProxyException {
     App.timerSeconds = 120;
@@ -408,8 +408,8 @@ public class TileGameDeskController {
       currentTile.getLeftTile().setCurrentImage(currentTile.getImage());
       currentTile.getLeftTile().setLetter(currentTile.getLetter());
       currentTile.getLeftTile().setFreeSlot(false);
-      currentTile.getLeftTile().getImage().setLayoutX(currentTile.getLeftTile().getXCoordinates());
-      currentTile.getLeftTile().getImage().setLayoutY(currentTile.getLeftTile().getYCoordinates());
+      currentTile.getLeftTile().getImage().setLayoutX(currentTile.getLeftTile().getxCoordinates());
+      currentTile.getLeftTile().getImage().setLayoutY(currentTile.getLeftTile().getyCoordinates());
 
       clearTile(currentTile);
       System.out.println("Moved Left");
@@ -422,11 +422,11 @@ public class TileGameDeskController {
       currentTile
           .getRightTile()
           .getImage()
-          .setLayoutX(currentTile.getRightTile().getXCoordinates());
+          .setLayoutX(currentTile.getRightTile().getxCoordinates());
       currentTile
           .getRightTile()
           .getImage()
-          .setLayoutY(currentTile.getRightTile().getYCoordinates());
+          .setLayoutY(currentTile.getRightTile().getyCoordinates());
 
       clearTile(currentTile);
       System.out.println("Moved Right");
@@ -440,11 +440,11 @@ public class TileGameDeskController {
       currentTile
           .getBottomTile()
           .getImage()
-          .setLayoutX(currentTile.getBottomTile().getXCoordinates());
+          .setLayoutX(currentTile.getBottomTile().getxCoordinates());
       currentTile
           .getBottomTile()
           .getImage()
-          .setLayoutY(currentTile.getBottomTile().getYCoordinates());
+          .setLayoutY(currentTile.getBottomTile().getyCoordinates());
 
       clearTile(currentTile);
       System.out.println("Moved Bottom");
@@ -454,8 +454,8 @@ public class TileGameDeskController {
       currentTile.getTopTile().setCurrentImage(currentTile.getImage());
       currentTile.getTopTile().setLetter(currentTile.getLetter());
       currentTile.getTopTile().setFreeSlot(false);
-      currentTile.getTopTile().getImage().setLayoutX(currentTile.getTopTile().getXCoordinates());
-      currentTile.getTopTile().getImage().setLayoutY(currentTile.getTopTile().getYCoordinates());
+      currentTile.getTopTile().getImage().setLayoutX(currentTile.getTopTile().getxCoordinates());
+      currentTile.getTopTile().getImage().setLayoutY(currentTile.getTopTile().getyCoordinates());
 
       clearTile(currentTile);
       soundTileClick();

@@ -1,5 +1,7 @@
 package nz.ac.auckland.se206.gpt;
 
+import java.io.IOException;
+
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.controllers.Room1Controller;
 
@@ -20,6 +22,12 @@ public class GptPromptEngineering {
         + " speech marks or a full stop or any other text in your answer.";
   }
 
+  /**
+   * Generates a GPT prompt engineering string for a riddle with the given word.
+   *
+   * @param wordToGuess the word to be guessed in the riddle
+   * @return the generated prompt engineering string
+   */
   public static String riddleAi(String answer) {
 
     return "Your name is 'WALL-E' and you are the game maser in a starship escape room game."
@@ -28,6 +36,12 @@ public class GptPromptEngineering {
         + " in 50 words. Do not include the answer in your prompt.";
   }
 
+  /**
+   * Generates a GPT prompt engineering string for a riddle with the given word.
+   *
+   * @param wordToGuess the word to be guessed in the riddle
+   * @return the generated prompt engineering string
+   */
   public static String checkRiddleAnswer(String message) {
     // Inform gpt about what the user just said
     String user = "The user said " + message;
@@ -71,6 +85,12 @@ public class GptPromptEngineering {
     return user + answer;
   }
 
+  /**
+   * Generates a GPT prompt engineering string for a riddle with the given word.
+   *
+   * @param wordToGuess the word to be guessed in the riddle
+   * @return the generated prompt engineering string
+   */
   public static String greeting() {
     // Prompt gpt to introduce itself and the rooms where player needs to visit to escape
     return "Your name is 'EVA' and you are the game master of Starship Escape 1. You were designed"
@@ -83,24 +103,49 @@ public class GptPromptEngineering {
         + " words.";
   }
 
+  /**
+   * Generates a GPT prompt engineering string for a riddle with the given word.
+   *
+   * @param wordToGuess the word to be guessed in the riddle
+   * @return the generated prompt engineering string
+   */
   public static String greetingRoom1() {
     return "Now the player is in the closet room where spacesuits are hanging on the wall. Players"
         + " can collect id cards which is required to escape the starship."
         + " Tell the player to move around the room and collect an id card in less than 50 words. ";
   }
 
+  /**
+   * Generates a GPT prompt engineering string for a riddle with the given word.
+   *
+   * @param wordToGuess the word to be guessed in the riddle
+   * @return the generated prompt engineering string
+   */
   public static String greetingRoom2() {
     return "Now the player is in the computer room. Players need to get a passcode which is"
         + " required to escape the starship. Tell the player to move around the room and get"
         + " the passcode in less than 50 words.";
   }
 
+  /**
+   * Generates a GPT prompt engineering string for a riddle with the given word.
+   *
+   * @param wordToGuess the word to be guessed in the riddle
+   * @return the generated prompt engineering string
+   */
   public static String greetingRoom3() {
     return "Now the player is in the control room. Players can escape the starship through this"
         + " room using the passcode and id card. Introduce this room to the player in less"
         + " than 50 words.";
   }
 
+  /**
+   * Generates a GPT prompt engineering string for a riddle with the given word.
+   *
+   * @param wordToGuess the word to be guessed in the riddle
+   * @return the generated prompt engineering string
+   * @throws IOException
+   */
   public static String settingEasy(String message) {
     // check the player's progress and prepare proper hint
     String hint = "";
@@ -196,7 +241,6 @@ public class GptPromptEngineering {
             + message
             + "and do not give a hint.Most importantly make your response simple and consise like 1"
             + " or 2 sentences. Do not include any extra";
-
     return intro;
   }
 
@@ -306,6 +350,13 @@ public class GptPromptEngineering {
     return intro;
   }
 
+  /**
+   * Generates a GPT prompt engineering string for a riddle with the given word.
+   *
+   * @param wordToGuess the word to be guessed in the riddle
+   * @return the generated prompt engineering string
+   * @throws IOException
+   */
   public static String settingHard(String message) {
     // Return the message explains the current situation but cannot provide hint to the user
     return "The user said"

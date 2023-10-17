@@ -39,13 +39,17 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
+/** Controller for the tutorial scene */
 public class TutorialController implements Initializable {
-  private BooleanProperty wKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty aKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty sKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty dKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty isWKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty isAKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty isSKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty isDKeyPressed = new SimpleBooleanProperty();
 
-  private BooleanBinding keyPressed = wKeyPressed.or(aKeyPressed).or(sKeyPressed).or(dKeyPressed);
+  private BooleanBinding keyPressed = isWKeyPressed
+    .or(isAKeyPressed)
+    .or(isSKeyPressed)
+    .or(isDKeyPressed);
 
   private int movementVariable = 5;
   private double shapesize;
@@ -109,16 +113,16 @@ public class TutorialController implements Initializable {
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
 
-          if (wKeyPressed.get()) {
+          if (isWKeyPressed.get()) {
             player.setLayoutY(player.getLayoutY() - movementVariable);
           }
-          if (aKeyPressed.get()) {
+          if (isAKeyPressed.get()) {
             player.setLayoutX(player.getLayoutX() - movementVariable);
           }
-          if (sKeyPressed.get()) {
+          if (isSKeyPressed.get()) {
             player.setLayoutY(player.getLayoutY() + movementVariable);
           }
-          if (dKeyPressed.get()) {
+          if (isDKeyPressed.get()) {
             player.setLayoutX(player.getLayoutX() + movementVariable);
           }
           squareBorder();
@@ -332,9 +336,11 @@ public class TutorialController implements Initializable {
   }
 
   /**
-   * Play the rock animation
-   *
+   * Play the rock animation which is the animation of the rocks falling down from the top of the screen.
+   * 
    * @param event The event
+   * @return void
+   * @throws Exception
    */
   @FXML
   private void playRock() {
@@ -349,12 +355,13 @@ public class TutorialController implements Initializable {
     setMovement(r4, false, 3, -900, 0, 5);
   }
 
-
   /**
    * Check if the player collides with any of the rocks
    *
    * @param player The player
    * @param rocks The rocks
+   * @return void
+   * @throws Exception
    */
   @FXML
   public void checkCollision(ImageView player, List<ImageView> rocks) {
@@ -418,7 +425,6 @@ public class TutorialController implements Initializable {
         player.setLayoutY(previousY);
       }
     }
-
     // Initialize sound images based on the initial isSoundEnabled state
     if (GameState.isSoundEnabled) {
       soundOn.setVisible(true);
@@ -433,6 +439,14 @@ public class TutorialController implements Initializable {
    * Set the movement of the player
    *
    * @param player The player
+   * @param isWKeyPressed The boolean for the W key
+   * @param isAKeyPressed The boolean for the A key
+   * @param isSKeyPressed The boolean for the S key
+   * @param isDKeyPressed The boolean for the D key
+   * @param keyPressed The boolean for any key
+   * @param movementVariable The movement variable
+   * @param shapesize The size of the player
+   * @throws Exception if the player collides with the boundaries of the scene
    */
   @FXML
   public void playerMove() {
@@ -440,19 +454,19 @@ public class TutorialController implements Initializable {
     scene.setOnKeyPressed(
         e -> {
           if (e.getCode() == KeyCode.W) {
-            wKeyPressed.set(true);
+            isWKeyPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.A) {
-            aKeyPressed.set(true);
+            isAKeyPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.S) {
-            sKeyPressed.set(true);
+            isSKeyPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.D) {
-            dKeyPressed.set(true);
+            isDKeyPressed.set(true);
           }
         });
 
@@ -460,19 +474,19 @@ public class TutorialController implements Initializable {
     scene.setOnKeyReleased(
         e -> {
           if (e.getCode() == KeyCode.W) {
-            wKeyPressed.set(false);
+            isWKeyPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.A) {
-            aKeyPressed.set(false);
+            isAKeyPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.S) {
-            sKeyPressed.set(false);
+            isSKeyPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.D) {
-            dKeyPressed.set(false);
+            isDKeyPressed.set(false);
           }
         });
   }

@@ -30,6 +30,7 @@ import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 
+/** Controller for the intro scene */
 public class IntroController implements Initializable {
   @FXML private Button minB2;
   @FXML private Button minB4;
@@ -122,11 +123,11 @@ public class IntroController implements Initializable {
   }
 
   /**
-   * Check if the spaceship collides with the rock
+   * Check if the sound is enabled or disabled
    *
-   * @param spaceship the spaceship
-   * @param rock the rock
-   * @return true if the spaceship collides with the rock
+   * @param soundOn the soundOn image
+   * @param soundOff the soundOff image
+   * @return true if the sound is enabled
    */
   @FXML
   public void checkCollision2() {
@@ -196,7 +197,6 @@ public class IntroController implements Initializable {
   private void handleMinuteButtonClicked(ActionEvent events) {
     // If the user clicks the minute button then the start button will be visible.
     soundButttonClick();
-
     Button clickedButton = (Button) events.getSource();
 
     switch (clickedButton.getId()) {

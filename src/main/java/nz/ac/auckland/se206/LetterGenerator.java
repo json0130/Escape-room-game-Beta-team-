@@ -4,8 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/** Generates a list of 8 random letters, 3 vowels and 5 consonants. */
 public class LetterGenerator {
 
+  /**
+   * Generates a list of 8 random letters, 3 vowels and 5 consonants.
+   *
+   * @return a list of 8 random letters, 3 vowels and 5 consonants.
+   */
   public List<String> generateCombinedList() {
     List<String> vowelsList = generateVowels();
     List<String> consonantsList = generateConsonants();
@@ -13,7 +19,11 @@ public class LetterGenerator {
     return combineLists(consonantsList, vowelsList);
   }
 
-  // Get a string of letters and store letters in an array
+  /**
+   * Generates a list of 8 random letters, 3 vowels and 5 consonants.
+   *
+   * @return a list of 8 random letters, 3 vowels and 5 consonants.
+   */
   public String letterListToString(List<String> letterList) {
     return letterList.get(0)
         + ", "
