@@ -48,6 +48,7 @@ import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
+/** Controller class for the room1. */
 public class Room1Controller implements Initializable {
   public static ObservableList<ChatBubble> chatBubbleListRoom1 =
       FXCollections.observableArrayList();
@@ -265,10 +266,10 @@ public class Room1Controller implements Initializable {
       };
 
   /**
-   * Move the indicator randomly.
+   * Set the initial state of file as following.
    *
-   * @param indicator the indicator image
-   * @return true if the spaceship collides with the rock, false otherwise
+   * @param url the address of the current app
+   * @param resource anything imported into the file
    */
   @FXML
   public void initialize(URL url, ResourceBundle resource) {
@@ -861,9 +862,9 @@ public class Room1Controller implements Initializable {
     soundOff.setVisible(!GameState.isSoundEnabled);
   }
 
+  /** Turn on the sound while the player is moving into the room. */
   @FXML
   private void enterRoom() {
-    /** Turn on the sound while the player is moving into the room. */
     String soundEffect = "src/main/resources/sounds/enterReal.mp3";
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
@@ -888,14 +889,9 @@ public class Room1Controller implements Initializable {
     translate.play();
   }
 
-  /**
-   * Reveal indicators after the player resolves the riddle.
-   *
-   * @param event mouse is clicked
-   */
+  /** Reveal indicators after the player resolves the riddle. */
   @FXML
   private void revealIndicator() {
-    /** Reveal indicators after the player resolves the riddle. */
     Timer indicatorTimer = new Timer(true);
     indicatorTimer.scheduleAtFixedRate(
         new TimerTask() {
@@ -913,8 +909,8 @@ public class Room1Controller implements Initializable {
         100);
   }
 
+  /** Show all indicators at once. */
   private void showIndicators() {
-    /** Show all indicators at once. */
     crew1Indicator.setVisible(true);
     crew2Indicator.setVisible(true);
     crew3Indicator.setVisible(true);
@@ -982,7 +978,7 @@ public class Room1Controller implements Initializable {
   }
 
   /**
-   * Change the colour of button on hover
+   * Change the colour of button on hover.
    *
    * @param e mouse is clicked
    */

@@ -48,6 +48,7 @@ import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
+/** Controller class for the room3 view. */
 public class ExitController implements Initializable {
   public static ObservableList<ChatBubble> chatBubbleListExit = FXCollections.observableArrayList();
 
@@ -599,7 +600,7 @@ public class ExitController implements Initializable {
   }
 
   /**
-   * Make the id Cards to be draggable
+   * Make the id Cards to be draggable.
    *
    * @param originalX It is the original x coordinate of the id cards.
    * @param originalY It is the original y coordinate of the id cards.
@@ -1346,7 +1347,7 @@ public class ExitController implements Initializable {
   }
 
   /**
-   * Game master becomes visible.
+   * Game master becomes visible when the button is clicked.
    *
    * @param event mouse is clicked
    */
@@ -1372,7 +1373,7 @@ public class ExitController implements Initializable {
   }
 
   /**
-   * Cancel the restart when cancel button is clicked
+   * Cancel the restart when cancel button is clicked.
    *
    * @param event mouse is clicked
    * @throws IOException if the objects don't exist
