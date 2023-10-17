@@ -278,7 +278,7 @@ public class TileGameDeskController {
 
   private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
     chatCompletionRequest.addMessage(msg);
-    // Call gpt and generate respond 
+    // Call gpt and generate respond
     try {
       ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
       Choice result = chatCompletionResult.getChoices().iterator().next();
@@ -377,11 +377,7 @@ public class TileGameDeskController {
 
   @FXML
   private void refactorImage(
-      ImageView imageView,
-      double xCoordinatesOfPoint,
-      double yCoordinatesOfPoint,
-      String letter,
-      InputStream path) {
+      ImageView imageView, double horizontal, double vertical, String letter, InputStream path) {
     // generate new image in the path
     Image imageFile = new Image(path);
     imageView.setImage(imageFile);
@@ -390,8 +386,8 @@ public class TileGameDeskController {
     imageView.setFitHeight(130);
     imageView.setId(letter);
     // place the images in the correct position
-    imageView.setLayoutY(yCoordinatesOfPoint);
-    imageView.setLayoutX(xCoordinatesOfPoint);
+    imageView.setLayoutY(vertical);
+    imageView.setLayoutX(horizontal);
   }
 
   @FXML
@@ -596,7 +592,7 @@ public class TileGameDeskController {
 
   @FXML
   private void disableImages() {
-    // All the images are not visible 
+    // All the images are not visible
     imageOne.setVisible(false);
     imageTwo.setVisible(false);
     imageThree.setVisible(false);

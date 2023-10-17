@@ -25,6 +25,7 @@ public class LetterGenerator {
    * @return a list of 8 random letters, 3 vowels and 5 consonants.
    */
   public String letterListToString(List<String> letterList) {
+    // Get a list of letters and separate them using commas into a string
     return letterList.get(0)
         + ", "
         + letterList.get(1)
