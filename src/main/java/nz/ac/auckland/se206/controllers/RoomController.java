@@ -7,7 +7,6 @@ import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -36,41 +35,39 @@ abstract class RoomController implements javafx.fxml.Initializable {
   public static ObservableList<ChatBubble> chatBubbleListTileRoom =
       FXCollections.observableArrayList();
 
-  public BooleanProperty wKeyPressed = new SimpleBooleanProperty();
-  public BooleanProperty aKeyPressed = new SimpleBooleanProperty();
-  public BooleanProperty sKeyPressed = new SimpleBooleanProperty();
-  public BooleanProperty dKeyPressed = new SimpleBooleanProperty();
+  public BooleanProperty directionUp = new SimpleBooleanProperty();
+  public BooleanProperty directionLeft = new SimpleBooleanProperty();
+  public BooleanProperty directionDown = new SimpleBooleanProperty();
+  public BooleanProperty directionRight = new SimpleBooleanProperty();
 
   public int movementVariable = 5;
   public double shapesize;
 
-  @FXML public ImageView player;
-  @FXML public Pane scene;
-  @FXML public Pane alert;
+  @FXML private ImageView player;
+  @FXML private Pane scene;
+  @FXML private Pane alert;
 
   public double previousX;
   public double previousY;
 
-  @FXML public Label difficultyLabel;
-  @FXML public Label hintLabel;
-  @FXML public Label hintLabel2;
+  @FXML private Label difficultyLabel;
+  @FXML private Label hintLabel;
+  @FXML private Label hintLabel2;
 
-  @FXML public Rectangle blinkingRectangle;
-  @FXML public ImageView soundOn;
-  @FXML public ImageView soundOff;
+  @FXML private Rectangle blinkingRectangle;
+  @FXML private ImageView soundOn;
+  @FXML private ImageView soundOff;
 
-  @FXML public Rectangle black2;
-  @FXML public Rectangle resetBox;
-  @FXML public Label resetLabel;
-  @FXML public Button resetYes;
-  @FXML public Button resetCancel;
+  @FXML private Rectangle black2;
+  @FXML private Rectangle resetBox;
+  @FXML private Label resetLabel;
+  @FXML private Button resetYes;
+  @FXML private Button resetCancel;
 
-  public boolean hasHappend = false;
-
-  public MediaPlayer walkingMediaPlayer;
+  private MediaPlayer walkingMediaPlayer;
 
   @FXML
-  public Image rightCharacterAnimation =
+  private Image rightCharacterAnimation =
       new Image(
           new File("src/main/resources/images/walkingRight.gif").toURI().toString(),
           171,
@@ -79,7 +76,7 @@ abstract class RoomController implements javafx.fxml.Initializable {
           false);
 
   @FXML
-  public Image leftCharacterAnimation =
+  private Image leftCharacterAnimation =
       new Image(
           new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
           171,
@@ -88,7 +85,7 @@ abstract class RoomController implements javafx.fxml.Initializable {
           false);
 
   @FXML
-  public Image leftCharacterIdle =
+  private Image leftCharacterIdle =
       new Image(
           new File("src/main/resources/images/gameCharacterArtLeft.png").toURI().toString(),
           171,
@@ -97,7 +94,7 @@ abstract class RoomController implements javafx.fxml.Initializable {
           false);
 
   @FXML
-  public Image rightCharacterIdle =
+  private Image rightCharacterIdle =
       new Image(
           new File("src/main/resources/images/gameCharacterArtRight.png").toURI().toString(),
           171,
@@ -106,7 +103,7 @@ abstract class RoomController implements javafx.fxml.Initializable {
           false);
 
   @FXML
-  public Image lastPlayedWalk =
+  private Image lastPlayedWalk =
       new Image(
           new File("src/main/resources/images/walkingLeft.gif").toURI().toString(),
           171,
@@ -117,14 +114,12 @@ abstract class RoomController implements javafx.fxml.Initializable {
   public Boolean walkAnimationPlaying = false;
   public Timeline alertBlinkTimeline;
 
-  @FXML public Button btnRoom1;
-  @FXML public Button button;
-  @FXML public ImageView exclamationMark;
-  @FXML public ImageView gameMaster;
+  @FXML private Button btnRoom1;
+  @FXML private Button button;
+  @FXML private ImageView exclamationMark;
+  @FXML private ImageView gameMaster;
 
-  @FXML public Pane aiWindowController;
-
-  TranslateTransition translate = new TranslateTransition();
+  @FXML private Pane aiWindowController;
 
   public AnimationTimer timer =
       new AnimationTimer() {
@@ -134,51 +129,21 @@ abstract class RoomController implements javafx.fxml.Initializable {
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
 
-          if (wKeyPressed.get()) {
+          if (directionUp.get()) {
             player.setLayoutY(player.getLayoutY() - movementVariable);
           }
-          if (aKeyPressed.get()) {
+          if (directionLeft.get()) {
             player.setLayoutX(player.getLayoutX() - movementVariable);
           }
-          if (sKeyPressed.get()) {
+          if (directionDown.get()) {
             player.setLayoutY(player.getLayoutY() + movementVariable);
           }
-          if (dKeyPressed.get()) {
+          if (directionRight.get()) {
             player.setLayoutX(player.getLayoutX() + movementVariable);
           }
           squareBorder();
         }
       };
-
-  // public void checkCollision2(ImageView player, List<Rectangle> walls) {
-  //   for (Rectangle wall : walls) {
-  //     if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
-  //       player.setLayoutX(previousX); // Restore the player's previous X position
-  //       player.setLayoutY(previousY); // Restore the player's previous Y position
-  //       // Exit the loop as soon as a collision is detected
-  //     }
-  //   }
-  //   // Detect if the timer is 30 seconds left and start the alert blinking
-  //   if (App.timerSeconds == 30) {
-  //     if (!hasHappend) {
-  //       System.out.println("30 seconds left");
-  //       hasHappend = true;
-  //       setupAlertBlinking();
-  //     }
-  //   } else if (App.timerSeconds == 0) {
-  //     // Stop the alert blinking when the timer reaches 0
-  //     stopAlertBlinking();
-  //   }
-
-  //   // Initialize sound images based on the initial isSoundEnabled state
-  //   if (GameState.isSoundEnabled) {
-  //     soundOn.setVisible(true);
-  //     soundOff.setVisible(false);
-  //   } else {
-  //     soundOn.setVisible(false);
-  //     soundOff.setVisible(true);
-  //   }
-  // }
 
   // Modify your setupAlertBlinking method as follows
   public void setupAlertBlinking() {
@@ -220,14 +185,14 @@ abstract class RoomController implements javafx.fxml.Initializable {
     scene.setOnKeyPressed(
         e -> {
           boolean wasMoving =
-              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+              directionUp.get() || directionLeft.get() || directionDown.get() || directionRight.get();
           // when w key is pressed, player moves up
           if (e.getCode() == KeyCode.W) {
             if (walkAnimationPlaying == false) {
               player.setImage(lastPlayedWalk);
               walkAnimationPlaying = true;
             }
-            wKeyPressed.set(true);
+            directionUp.set(true);
           }
           // when a key is pressed, player moves left
           if (e.getCode() == KeyCode.A) {
@@ -236,7 +201,7 @@ abstract class RoomController implements javafx.fxml.Initializable {
               walkAnimationPlaying = true;
               lastPlayedWalk = player.getImage();
             }
-            aKeyPressed.set(true);
+            directionLeft.set(true);
           }
           // when s key is pressed, player moves down
           if (e.getCode() == KeyCode.S) {
@@ -244,7 +209,7 @@ abstract class RoomController implements javafx.fxml.Initializable {
               player.setImage(lastPlayedWalk);
               walkAnimationPlaying = true;
             }
-            sKeyPressed.set(true);
+            directionDown.set(true);
           }
           // when d key is pressed, player moves right
           if (e.getCode() == KeyCode.D) {
@@ -253,11 +218,11 @@ abstract class RoomController implements javafx.fxml.Initializable {
               walkAnimationPlaying = true;
               lastPlayedWalk = player.getImage();
             }
-            dKeyPressed.set(true);
+            directionRight.set(true);
           }
 
           boolean isMoving =
-              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+              directionUp.get() || directionLeft.get() || directionDown.get() || directionRight.get();
 
           // If we started moving and weren't before, start the sound.
           if (isMoving && !wasMoving) {
@@ -268,70 +233,70 @@ abstract class RoomController implements javafx.fxml.Initializable {
     scene.setOnKeyReleased(
         e -> {
           boolean wasMoving =
-              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+              directionUp.get() || directionLeft.get() || directionDown.get() || directionRight.get();
           // when w key is released, the player stops at its current position
           if (e.getCode() == KeyCode.W) {
             if (player.getImage() == leftCharacterAnimation
-                && sKeyPressed.get() == false
-                && aKeyPressed.get() == false) {
+                && directionDown.get() == false
+                && directionLeft.get() == false) {
               player.setImage(leftCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (sKeyPressed.get() == true) {
+            } else if (directionDown.get() == true) {
               player.setImage(lastPlayedWalk);
-            } else if (aKeyPressed.get() == false
-                && dKeyPressed.get() == false
-                && sKeyPressed.get() == false) {
+            } else if (directionLeft.get() == false
+                && directionRight.get() == false
+                && directionDown.get() == false) {
               player.setImage(rightCharacterIdle);
               walkAnimationPlaying = false;
             }
-            wKeyPressed.set(false);
+            directionUp.set(false);
           }
           // when a key is released, the player stops at its current position
           if (e.getCode() == KeyCode.A) {
-            if (dKeyPressed.get() == false
-                && wKeyPressed.get() == false
-                && sKeyPressed.get() == false) {
+            if (directionRight.get() == false
+                && directionUp.get() == false
+                && directionDown.get() == false) {
               player.setImage(leftCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (dKeyPressed.get() == true) {
+            } else if (directionRight.get() == true) {
               player.setImage(rightCharacterAnimation);
             }
 
-            aKeyPressed.set(false);
+            directionLeft.set(false);
           }
           // when s key is released, the player stops at its current position
           if (e.getCode() == KeyCode.S) {
             if (player.getImage() == leftCharacterAnimation
-                && wKeyPressed.get() == false
-                && aKeyPressed.get() == false) {
+                && directionUp.get() == false
+                && directionLeft.get() == false) {
               player.setImage(leftCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (wKeyPressed.get() == true) {
+            } else if (directionUp.get() == true) {
               player.setImage(lastPlayedWalk);
-            } else if (aKeyPressed.get() == false
-                && dKeyPressed.get() == false
-                && wKeyPressed.get() == false) {
+            } else if (directionLeft.get() == false
+                && directionRight.get() == false
+                && directionUp.get() == false) {
               player.setImage(rightCharacterIdle);
               walkAnimationPlaying = false;
             }
-            sKeyPressed.set(false);
+            directionDown.set(false);
           }
           // when d key is released, the player stops at its current position
           if (e.getCode() == KeyCode.D) {
-            if (aKeyPressed.get() == false
-                && wKeyPressed.get() == false
-                && sKeyPressed.get() == false) {
+            if (directionLeft.get() == false
+                && directionUp.get() == false
+                && directionDown.get() == false) {
               player.setImage(rightCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (aKeyPressed.get() == true) {
+            } else if (directionLeft.get() == true) {
               player.setImage(leftCharacterAnimation);
             }
 
-            dKeyPressed.set(false);
+            directionRight.set(false);
           }
 
           boolean isMovinng =
-              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+              directionUp.get() || directionLeft.get() || directionDown.get() || directionRight.get();
 
           // If we stopped moving and were before, stop the sound.
           if (!isMovinng && wasMoving) {
