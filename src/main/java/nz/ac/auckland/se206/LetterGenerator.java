@@ -13,6 +13,7 @@ public class LetterGenerator {
     return combineLists(consonantsList, vowelsList);
   }
 
+  // Get a string of letters and store letters in an array
   public String letterListToString(List<String> letterList) {
     return letterList.get(0)
         + ", "
@@ -38,11 +39,11 @@ public class LetterGenerator {
     List<String> vowelsList = new ArrayList<String>();
     Random rand = new Random();
     int characterValue;
-
+    // Until there is less than 3 vowels, randomly select letters
     while (vowelsList.size() < 3) {
       characterValue = rand.nextInt(4) + 1;
-
       switch (characterValue) {
+          // add a if theres is no a
         case 1:
           if (vowelsList.contains("A")) {
             break;
@@ -50,24 +51,28 @@ public class LetterGenerator {
             vowelsList.add("A");
             break;
           }
+          // add e if there is no e
         case 2:
           if (vowelsList.contains("E")) {
             break;
           }
           vowelsList.add("E");
           break;
+          // add i if there is no i
         case 3:
           if (vowelsList.contains("I")) {
             break;
           }
           vowelsList.add("I");
           break;
+          // add o if there is no o
         case 4:
           if (vowelsList.contains("O")) {
             break;
           }
           vowelsList.add("O");
           break;
+          // add u if there is no u
         case 5:
           if (vowelsList.contains("U")) {
             break;

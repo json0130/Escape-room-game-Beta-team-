@@ -278,7 +278,7 @@ public class TileGameDeskController {
 
   private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
     chatCompletionRequest.addMessage(msg);
-
+    // Call gpt and generate respond 
     try {
       ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
       Choice result = chatCompletionResult.getChoices().iterator().next();
@@ -362,6 +362,7 @@ public class TileGameDeskController {
   @FXML
   private List<ImageView> imagesListCreator() {
     List<ImageView> imagesList = new ArrayList<ImageView>();
+    // 8 images representing 8 letters are stored together
     imagesList.add(imageOne);
     imagesList.add(imageTwo);
     imagesList.add(imageThree);
@@ -377,20 +378,20 @@ public class TileGameDeskController {
   @FXML
   private void refactorImage(
       ImageView imageView,
-      double xCoordinates,
-      double yCoordinates,
+      double xCoordinatesOfPoint,
+      double yCoordinatesOfPoint,
       String letter,
       InputStream path) {
-
+    // generate new image in the path
     Image imageFile = new Image(path);
     imageView.setImage(imageFile);
-
+    // set dimensiion of images
     imageView.setFitWidth(130);
     imageView.setFitHeight(130);
     imageView.setId(letter);
-
-    imageView.setLayoutY(yCoordinates);
-    imageView.setLayoutX(xCoordinates);
+    // place the images in the correct position
+    imageView.setLayoutY(yCoordinatesOfPoint);
+    imageView.setLayoutX(xCoordinatesOfPoint);
   }
 
   @FXML
@@ -530,12 +531,14 @@ public class TileGameDeskController {
 
   private void checkIfWon() {
     if (riddleAnswer != null) {
+      // store each letter in target word
       String firstChar = String.valueOf(riddleAnswer.charAt(0));
       String secondChar = String.valueOf(riddleAnswer.charAt(1));
       String thirdChar = String.valueOf(riddleAnswer.charAt(2));
       System.out.println(tileFour.getLetter() + tileFive.getLetter() + tileSix.getLetter());
       System.out.println(
           firstChar.toUpperCase() + secondChar.toUpperCase() + thirdChar.toUpperCase());
+      // check if the middle line matches with the three letters
       if (tileFour.getLetter() != null
           && tileFive.getLetter() != null
           && tileSix.getLetter() != null
@@ -543,7 +546,7 @@ public class TileGameDeskController {
           && tileFive.getLetter().equalsIgnoreCase(secondChar)
           && tileSix.getLetter().equalsIgnoreCase(thirdChar)) {
         System.out.println("done");
-
+        // Show the monitor screen
         disableImages();
         GameState.isPuzzleSolved = true;
         showHomeScreen();
@@ -562,8 +565,8 @@ public class TileGameDeskController {
   @FXML
   private void animateIndicator(boolean rotated) {
     translate.setNode(indicatorTriangle);
-    translate.setDuration(Duration.millis(1000));
-    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setDuration(Duration.millis(1000)); // animation repeats every 1 second
+    translate.setCycleCount(TranslateTransition.INDEFINITE); // animation continuously goes
 
     if (rotated) {
       translate.setByY(0);
@@ -572,7 +575,7 @@ public class TileGameDeskController {
       translate.setByX(0);
       translate.setByY(20);
     }
-    translate.setAutoReverse(true);
+    translate.setAutoReverse(true); // animation moves back to its original position
     translate.play();
   }
 
@@ -593,6 +596,7 @@ public class TileGameDeskController {
 
   @FXML
   private void disableImages() {
+    // All the images are not visible 
     imageOne.setVisible(false);
     imageTwo.setVisible(false);
     imageThree.setVisible(false);
@@ -616,10 +620,12 @@ public class TileGameDeskController {
 
   @FXML
   private void onPasscodeFileClick() {
+    // Passcode file is shown on click
     int currentPasscode = App.passcode;
     String stringPasscode = Integer.toString(currentPasscode);
     computerPasscodeLabel.setText(stringPasscode);
     passcodePane.setVisible(true);
+    // Game state changes as the file is shown to the user
     GameState.foundPasscode = true;
 
     System.out.println("DONE1");
@@ -695,11 +701,11 @@ public class TileGameDeskController {
   private void animateRobot() {
     TranslateTransition translate = new TranslateTransition();
     translate.setNode(gameMaster);
-    translate.setDuration(Duration.millis(1000));
-    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setDuration(Duration.millis(1000)); // robot moves every one second
+    translate.setCycleCount(TranslateTransition.INDEFINITE); // robot moves continuously
     translate.setByX(0);
     translate.setByY(20);
-    translate.setAutoReverse(true);
+    translate.setAutoReverse(true); // robot moves back to the original position
 
     translate.play();
   }
