@@ -9,11 +9,17 @@ import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
 
+/** The controller for the countdown timer that appears in all scenes. */
 public class CountdownTimerController {
 
   @FXML private Label countdownLabel;
   @FXML private Timeline countdownTimeline;
 
+  /**
+   * initializes the countdown timer that appears on all scenes.
+   *
+   * @throws ApiProxyException if the file is not found
+   */
   @FXML
   public void initialize() throws ApiProxyException {
     updateCountdownLabel();
