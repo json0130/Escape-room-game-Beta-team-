@@ -1350,7 +1350,7 @@ public class ExitController implements Initializable {
    * @throws IOException if the objects don't exist
    */
   @FXML
-  private void handleRestartButtonClick(ActionEvent event) throws IOException {
+  private void clikedRestartLabel(ActionEvent event) throws IOException {
     black2.setVisible(true);
     resetBox.setVisible(true);
     resetLabel.setVisible(true);
@@ -1365,7 +1365,7 @@ public class ExitController implements Initializable {
    * @throws IOException if the objects don't exist
    */
   @FXML
-  private void handleRestartButtonCanceled(ActionEvent event) throws IOException {
+  private void canceledRestart(ActionEvent event) throws IOException {
     black2.setVisible(false);
     resetBox.setVisible(false);
     resetLabel.setVisible(false);
@@ -1374,7 +1374,7 @@ public class ExitController implements Initializable {
   }
 
   @FXML
-  private void handleResetEvent(ActionEvent event) throws IOException {
+  private void clickedRestartButton(ActionEvent event) throws IOException {
     try {
       GameState.resetGames();
     } catch (Exception e) {

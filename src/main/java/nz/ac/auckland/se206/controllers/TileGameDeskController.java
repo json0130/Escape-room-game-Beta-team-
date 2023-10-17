@@ -116,7 +116,6 @@ public class TileGameDeskController {
   @FXML private ImageView welcomeScreen;
   @FXML private ImageView bigScreenOff;
   @FXML private ImageView smallScreenOff;
-  // @FXML private Rectangle powerButton;
   @FXML private Text wordText;
   @FXML private Button releaseAirLockButton;
   @FXML private Label crewMemberName;
@@ -145,7 +144,7 @@ public class TileGameDeskController {
   @FXML private VBox chatContainerOne;
 
   private Timeline animationTimeline;
-  @FXML public Pane aiWindowController;
+  @FXML private Pane aiWindowController;
 
   /**
    * Initializes the room view, it is called when the room loads.
@@ -659,7 +658,7 @@ public class TileGameDeskController {
   }
 
   @FXML
-  private void onpuzzleInfoButtonClick() {
+  private void clickedInfoButton() {
     tutorialScreen.setVisible(true);
     loadCaptchaButton.setVisible(true);
   }

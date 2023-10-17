@@ -142,7 +142,7 @@ public class IntroController implements Initializable {
   }
 
   @FXML
-  private void handleLevelButtonClicked(ActionEvent events) {
+  private void onClickLevel(ActionEvent events) {
     // If the user clicks the level button then the time buttons will be visible.
     soundButttonClick();
 
@@ -194,7 +194,7 @@ public class IntroController implements Initializable {
   }
 
   @FXML
-  private void handleMinuteButtonClicked(ActionEvent events) {
+  private void onClickTime(ActionEvent events) {
     // If the user clicks the minute button then the start button will be visible.
     soundButttonClick();
     Button clickedButton = (Button) events.getSource();
@@ -223,7 +223,7 @@ public class IntroController implements Initializable {
     minB2.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
     minB4.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
     minB6.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
-    clickedButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-text-fill: dark blue;");
+    clickedButton.setStyle("-fx-background-color: grey; -fx-text-fill: dark blue;");
     isTimeSelected = true;
 
     if (isLevelSelected && isTimeSelected) {
@@ -239,7 +239,7 @@ public class IntroController implements Initializable {
   }
 
   @FXML
-  private void startButtonClicked(ActionEvent event) {
+  private void onClickStart(ActionEvent event) {
     // If level and time is selected then the start button will be visible and allow the user to
     // start the game.
     soundButttonClick();
@@ -264,7 +264,7 @@ public class IntroController implements Initializable {
   }
 
   @FXML
-  private void handleCloseAction() {
+  private void onClickClose() {
     // If the user clicks the close button then the start button will be visible again.
     startButton.setDisable(false);
     startButton.setVisible(true);
@@ -285,7 +285,7 @@ public class IntroController implements Initializable {
   }
 
   @FXML
-  private void startAnimation(ActionEvent events) {
+  private void clickAnimations(ActionEvent events) {
     GameState.isGameStarted = true;
     soundButttonClick();
     if (!animationStarted) {

@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -29,6 +31,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
+import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 
 /** Controller for the ending scene */
@@ -38,7 +41,6 @@ public class EndController implements Initializable {
   @FXML private Label lose;
   @FXML private Label lose1;
   @FXML private Pane scene;
-  @FXML private Button button;
   @FXML private Button start;
   @FXML private ImageView e1;
   @FXML private ImageView background;
@@ -51,12 +53,6 @@ public class EndController implements Initializable {
   @FXML private Button restartYes;
   @FXML private Button restartNo;
   @FXML private Button resetButton;
-
-  @FXML private Rectangle restartBackground1;
-  @FXML private Label restartLabel1;
-  @FXML private Button restartYes1;
-  @FXML private Button restartNo1;
-  @FXML private Button resetButton1;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -75,12 +71,14 @@ public class EndController implements Initializable {
                   restartLabel.setVisible(false);
                   restartNo.setVisible(false);
                   restartYes.setVisible(false);
+
                   String musicFile;
                   musicFile = "src/main/resources/sounds/final.mp3";
                   App.musicType = "final";
                   Media media = new Media(new File(musicFile).toURI().toString());
                   App.mediaPlayer.stop();
                   App.mediaPlayer = new MediaPlayer(media);
+
                   if (GameState.isSoundEnabled){
                     App.mediaPlayer.setVolume(0.3);
                   } else {
@@ -243,7 +241,7 @@ public class EndController implements Initializable {
    * @throws IOException if the objects don't exist
    */
   @FXML
-  private void handleRestartButtonClick(ActionEvent event) throws IOException {
+  private void clikedRestartLabel(ActionEvent event) throws IOException {
     resetButton.setVisible(false);
     restartLabel.setVisible(true);
     restartNo.setVisible(true);
@@ -252,7 +250,7 @@ public class EndController implements Initializable {
   }
 
   @FXML
-  private void handleRestartButtonCanceled(ActionEvent event) throws IOException {
+  private void canceledRestart(ActionEvent event) throws IOException {
     resetButton.setVisible(true);
     restartLabel.setVisible(false);
     restartNo.setVisible(false);
@@ -261,7 +259,7 @@ public class EndController implements Initializable {
   }
 
   @FXML
-  private void handleResetEvent(ActionEvent event) throws IOException {
+  private void clickedRestartButton(ActionEvent event) throws IOException {
     try {
       GameState.resetGames();
     } catch (Exception e) {

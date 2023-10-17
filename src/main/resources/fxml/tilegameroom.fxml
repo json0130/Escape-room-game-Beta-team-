@@ -53,7 +53,7 @@
             <Rectangle fx:id="wall17" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="35.0" layoutX="770.0" layoutY="436.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="31.0" />
             <Rectangle fx:id="wall19" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="35.0" layoutX="819.0" layoutY="513.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="31.0" />
             <Rectangle fx:id="wall15" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="25.0" layoutX="700.0" layoutY="369.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="31.0" />
-            <Button fx:id="button" mnemonicParsing="false" onAction="#back" opacity="0.0" text="Button" />
+            <Button fx:id="button" mnemonicParsing="false" onAction="#clickBack" opacity="0.0" text="Button" />
             <Rectangle fx:id="blinkingRectangle" arcHeight="5.0" arcWidth="5.0" fill="#003cff00" height="78.0" layoutX="417.0" layoutY="158.0" onMouseClicked="#onTileGameButtonClick" stroke="#3df1ff" strokeType="INSIDE" strokeWidth="3.0" width="131.0" />
             <Label fx:id="clickButton" layoutX="444.0" layoutY="182.0" onMouseClicked="#onTileGameButtonClick" prefHeight="25.0" prefWidth="93.0" text="Click Me">
                <font>
@@ -65,7 +65,6 @@
                   <Image url="@../images/exclamation-mark.png" />
                </image>
             </ImageView>
-            <Button fx:id="button" layoutX="14.0" layoutY="296.0" mnemonicParsing="false" onAction="#back" opacity="0.0" text="Button" />
             <Polygon fill="WHITE" layoutX="483.0" layoutY="585.0" points="-50.0, 40.0, 50.0, 40.0, -1.333343505859375, 51.66668701171875" stroke="WHITE" strokeType="INSIDE" />
          </children>
       </Pane>
@@ -108,7 +107,7 @@
          </image>
       </ImageView>
       <Button fx:id="toggleSoundButton" layoutX="861.0" layoutY="79.0" mnemonicParsing="false" text="SETTING" visible="false" />
-      <Button fx:id="resetButton" layoutX="1024.0" layoutY="8.0" mnemonicParsing="false" onAction="#handleRestartButtonClick" style="-fx-background-color: transparent;" text="RESTART" textFill="WHITE">
+      <Button fx:id="resetButton" layoutX="1024.0" layoutY="8.0" mnemonicParsing="false" onAction="#clikedRestartLabel" style="-fx-background-color: transparent;" text="RESTART" textFill="WHITE">
          <font>
             <Font name="Arial Bold Italic" size="20.0" />
          </font>
@@ -120,7 +119,7 @@
             <Font size="27.0" />
          </font>
       </Label>
-      <Button fx:id="resetYes" layoutX="725.0" layoutY="369.0" mnemonicParsing="false" onAction="#handleResetEvent" text="YES" />
-      <Button fx:id="resetCancel" layoutX="441.0" layoutY="369.0" mnemonicParsing="false" onAction="#handleRestartButtonCanceled" text="CANCEL" />
+      <Button fx:id="resetYes" layoutX="725.0" layoutY="369.0" mnemonicParsing="false" onAction="#clickedRestartButton" text="YES" />
+      <Button fx:id="resetCancel" layoutX="441.0" layoutY="369.0" mnemonicParsing="false" onAction="#canceledRestart" text="CANCEL" />
    </children>
 </AnchorPane>

@@ -171,7 +171,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
   @FXML private Pane aiWindowController;
 
-  TranslateTransition translate = new TranslateTransition();
+  private TranslateTransition translate = new TranslateTransition();
 
   private boolean isGreetingShown = true;
 
@@ -685,7 +685,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   }
 
   @FXML
-  private void back(ActionEvent event) throws IOException {
+  private void clickBack(ActionEvent event) throws IOException {
     App.setScene(AppUi.PLAYER);
   }
 
@@ -804,7 +804,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
    * @throws IOException if the objects don't exist
    */
   @FXML
-  private void handleRestartButtonClick(ActionEvent event) throws IOException {
+  private void clikedRestartLabel(ActionEvent event) throws IOException {
     black2.setVisible(true);
     resetBox.setVisible(true);
     resetLabel.setVisible(true);
@@ -813,7 +813,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   }
 
   @FXML
-  private void handleRestartButtonCanceled(ActionEvent event) throws IOException {
+  private void canceledRestart(ActionEvent event) throws IOException {
     black2.setVisible(false);
     resetBox.setVisible(false);
     resetLabel.setVisible(false);
@@ -822,7 +822,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   }
 
   @FXML
-  private void handleResetEvent(ActionEvent event) throws IOException {
+  private void clickedRestartButton(ActionEvent event) throws IOException {
     try {
       GameState.resetGames();
     } catch (Exception e) {

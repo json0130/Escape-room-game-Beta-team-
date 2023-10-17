@@ -137,7 +137,7 @@ public class App extends Application {
     mediaPlayer = new MediaPlayer(media);
     // Set the cycle count to loop indefinitely
     mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-    mediaPlayer.setVolume(0.05);
+    mediaPlayer.setVolume(0.1);
     mediaPlayer.setAutoPlay(true);
 
     String alertFile;

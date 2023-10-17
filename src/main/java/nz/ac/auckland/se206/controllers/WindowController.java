@@ -18,7 +18,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
@@ -31,7 +30,7 @@ import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
 
 /** Controller class for the chat view. */
 public class WindowController {
-  @FXML public TextArea chatTextArea;
+  @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
   @FXML private Button sendButton;
   @FXML private ImageView robotBase;
@@ -112,13 +111,6 @@ public class WindowController {
       App.hasGreeting = true;
       runGpt(new ChatMessage("user", GptPromptEngineering.greeting()), true);
     }
-
-    // App.greetingInRoom1 =
-    //     runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom1()));
-    // App.greetingInRoom2 =
-    //     runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom2()));
-    // App.greetingInRoom3 =
-    //     runGptWithoutPrinting(new ChatMessage("user", GptPromptEngineering.greetingRoom3()));
   }
 
   /**
@@ -187,26 +179,6 @@ public class WindowController {
     gptThread.setDaemon(true);
     gptThread.start();
     return msg;
-  }
-
-  /**
-   * Runs the GPT model with a given chat message.
-   *
-   * @param msg the chat message to process
-   * @return the response chat message
-   * @throws ApiProxyException if there is an error communicating with the API proxy
-   */
-  private String runGptWithoutPrinting(ChatMessage msg) {
-    App.chatCompletionRequest.addMessage(msg);
-    try {
-      ChatCompletionResult chatCompletionResult = App.chatCompletionRequest.execute();
-      Choice result = chatCompletionResult.getChoices().iterator().next();
-      App.chatCompletionRequest.addMessage(result.getChatMessage());
-      return result.getChatMessage().getContent();
-    } catch (ApiProxyException e) {
-      e.printStackTrace();
-      return null;
-    }
   }
 
   /**
@@ -292,23 +264,11 @@ public class WindowController {
           PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(2));
           delay.setOnFinished(
               event1 -> {
-                robotIdle();
+                robotBase.setVisible(true);
+                robotReply.setVisible(false);
+                robotThink.setVisible(false);
               });
           delay.play();
         });
-  }
-
-  @FXML
-  private void robotIdle() {
-    robotBase.setVisible(true);
-    robotReply.setVisible(false);
-    robotThink.setVisible(false);
-  }
-
-  @FXML
-  public void setPaneVisible() {
-    if (aiPane.isVisible() == false) {
-      aiPane.setVisible(true);
-    }
   }
 }

@@ -133,7 +133,7 @@ public class PlayerController implements Initializable {
   @FXML private boolean hasHappened = false;
 
   @FXML private Timeline alertBlinkTimeline;
-  @FXML public Pane aiWindowController;
+  @FXML private Pane aiWindowController;
 
   @FXML private MediaPlayer walkingMediaPlayer;
 
@@ -867,7 +867,7 @@ public class PlayerController implements Initializable {
    * @throws IOException if the objects don't exist
    */
   @FXML
-  private void handleRestartButtonClick(ActionEvent event) throws IOException {
+  private void clikedRestartLabel(ActionEvent event) throws IOException {
     black2.setVisible(true);
     resetBox.setVisible(true);
     resetLabel.setVisible(true);
@@ -876,7 +876,7 @@ public class PlayerController implements Initializable {
   }
 
   @FXML
-  private void handleRestartButtonCanceled(ActionEvent event) throws IOException {
+  private void canceledRestart(ActionEvent event) throws IOException {
     black2.setVisible(false);
     resetBox.setVisible(false);
     resetLabel.setVisible(false);
@@ -885,7 +885,7 @@ public class PlayerController implements Initializable {
   }
 
   @FXML
-  private void handleResetEvent(ActionEvent event) throws IOException {
+  private void clickedRestartButton(ActionEvent event) throws IOException {
     try {
       GameState.resetGames();
     } catch (Exception e) {
