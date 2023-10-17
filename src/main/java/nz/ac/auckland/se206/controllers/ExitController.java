@@ -440,9 +440,6 @@ public class ExitController extends RoomController {
 
   /**
    * When player enters the room, the sound is played.
-   *
-   * @param event when player enters the room
-   * @throws IOException if the sound cannot be played
    */
   @FXML
   public void enterRoom() {
