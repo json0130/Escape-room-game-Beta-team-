@@ -113,12 +113,12 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="idLabel" layoutX="376.0" layoutY="356.0" text="Tag ID" textFill="WHITE">
+      <Label fx:id="idLabel" layoutX="376.0" layoutY="356.0" onMouseClicked="#clickIdScanner" text="Tag ID" textFill="WHITE">
          <font>
             <Font name="Arial" size="21.0" />
          </font>
       </Label>
-      <Rectangle fx:id="light" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="25.0" layoutX="433.0" layoutY="332.0" stroke="BLACK" strokeType="INSIDE" width="12.0" />
+      <Rectangle fx:id="light" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="25.0" layoutX="433.0" layoutY="332.0" onMouseClicked="#clickIdScanner" stroke="BLACK" strokeType="INSIDE" width="12.0" />
       <Rectangle fx:id="ids" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="460.0" layoutX="657.0" layoutY="99.0" stroke="#fffdfd" strokeType="INSIDE" width="237.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#062643" height="50.0" stroke="#062643" strokeType="INSIDE" width="1200.0" />
       <Label fx:id="difficultyLabel" alignment="CENTER" layoutX="258.0" layoutY="8.0" prefHeight="37.0" prefWidth="277.0" text="DIFFICULTY" textFill="WHITE">
