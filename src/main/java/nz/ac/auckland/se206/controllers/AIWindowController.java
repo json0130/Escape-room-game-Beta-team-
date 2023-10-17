@@ -18,6 +18,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
@@ -29,7 +30,7 @@ import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
 
 /** Controller class for the chat view. */
-public class AiWindowController {
+public class AIWindowController {
   @FXML public TextArea chatTextArea;
   @FXML private TextField inputText;
   @FXML private Button sendButton;
