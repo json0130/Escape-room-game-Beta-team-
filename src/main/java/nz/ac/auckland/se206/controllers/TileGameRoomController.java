@@ -10,7 +10,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
@@ -44,7 +43,7 @@ import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
 /** Controller class for the room view. */
-public class TileGameRoomController implements javafx.fxml.Initializable {
+public class TileGameRoomController extends RoomController {
   public static ObservableList<ChatBubble> chatBubbleListTileRoom =
       FXCollections.observableArrayList();
 
@@ -337,7 +336,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
    * @return true if the player is colliding with any of the walls, false otherwise
    */
   @FXML
-  private void checkCollision2(ImageView player, List<Rectangle> walls) {
+  public void checkCollision2(ImageView player, List<Rectangle> walls) {
     for (Rectangle wall : walls) {
       if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
         player.setLayoutX(previousX); // Restore the player's previous X position
@@ -364,46 +363,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     } else {
       soundOn.setVisible(false);
       soundOff.setVisible(true);
-    }
-  }
-
-  /**
-   * Toggle the sound on and off.
-   *
-   * @param event the mouse event
-   */
-  @FXML
-  private void setupAlertBlinking() {
-    // Modify your setupAlertBlinking method as follows
-    alert.setVisible(true); // Initially show the alert label
-    App.mediaPlayer.stop();
-    // Check if sound is enabled before setting volume and playing.
-    if (GameState.isSoundEnabled) {
-      App.alertSoundPlayer.setVolume(0.03);
-    } else {
-      App.alertSoundPlayer.setVolume(0.0);
-    }
-    App.alertSoundPlayer.setAutoPlay(true);
-    App.alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-    App.alertSoundPlayer.play();
-
-    // Set up the blinking animation for the alert label
-    alertBlinkTimeline =
-        new Timeline(
-            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
-            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
-
-    alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
-    alertBlinkTimeline.play();
-  }
-
-  private void stopAlertBlinking() {
-    // Add a method to stop the alert blinking
-    if (alertBlinkTimeline != null) {
-      // Stop timeline and hide label
-      alertBlinkTimeline.stop();
-      alert.setVisible(false);
-      App.alertSoundPlayer.stop();
     }
   }
 
@@ -555,30 +514,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
         });
   }
 
-  private void squareBorder() {
-    // prevent the player moves out of the window
-    double left = 0;
-    double right = scene.getWidth() - shapesize;
-    double top = 0;
-    double bottom = scene.getHeight() - shapesize;
-
-    if (player.getLayoutX() < left) {
-      player.setLayoutX(left);
-    }
-
-    if (player.getLayoutX() > right) {
-      player.setLayoutX(right);
-    }
-
-    if (player.getLayoutY() < top) {
-      player.setLayoutY(top);
-    }
-
-    if (player.getLayoutY() > bottom) {
-      player.setLayoutY(bottom);
-    }
-  }
-
   /**
    * Handles the key pressed event.
    *
@@ -653,24 +588,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
         500);
   }
 
-  // labels for hint and difficulty updates as the game progress
-  private void updateLabels() {
-    difficultyLabel.setText(GameState.difficulty);
-    // depending on the difficulty chosen in the intro, change the label in the header
-    if (GameState.difficulty == "EASY") {
-      hintLabel.setText("UNLIMITED");
-      // for the medium difficulty, number of hints is reflected in the header
-    } else if (GameState.difficulty == "MEDIUM") {
-      hintLabel.setText(String.valueOf(GameState.numOfHints));
-      hintLabel2.setText("HINTS");
-      if (GameState.numOfHints == 1) {
-        hintLabel2.setText("HINT");
-      }
-    } else {
-      hintLabel.setText("NO");
-    }
-  }
-
   @FXML
   private void back(ActionEvent event) throws IOException {
     App.setScene(AppUi.PLAYER);
@@ -685,46 +602,6 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
     translate.setByX(0);
     translate.setByY(20);
     translate.setAutoReverse(true); // the exclamation mark returns to its original position
-    translate.play();
-  }
-
-  @FXML
-  private void toggleSound(MouseEvent event) {
-    GameState.isSoundEnabled = !GameState.isSoundEnabled;
-
-    double volume = GameState.isSoundEnabled ? 0.03 : 0;
-    if (App.mediaPlayer != null) {
-      App.mediaPlayer.setVolume(volume);
-    }
-
-    if (App.alertSoundPlayer != null) {
-      // If an Alert Sound Player exists, adjust its volume as well.
-      App.alertSoundPlayer.setVolume(volume);
-    }
-
-    soundOn.setVisible(GameState.isSoundEnabled);
-    soundOff.setVisible(!GameState.isSoundEnabled);
-  }
-
-  @FXML
-  private void enterRoom() {
-    String soundEffect = "src/main/resources/sounds/enterReal.mp3";
-    Media media = new Media(new File(soundEffect).toURI().toString());
-    MediaPlayer mediaPlayer = new MediaPlayer(media);
-    mediaPlayer.setAutoPlay(true);
-  }
-
-  // game master robot animation
-  @FXML
-  private void animateRobot() {
-    TranslateTransition translate = new TranslateTransition();
-    translate.setNode(gameMaster);
-    translate.setDuration(Duration.millis(1000)); // the robot moves every 1 second
-    translate.setCycleCount(TranslateTransition.INDEFINITE); // the robot continuously moves
-    translate.setByX(0);
-    translate.setByY(20);
-    translate.setAutoReverse(true); // the robot moves back to its original position
-
     translate.play();
   }
 
@@ -746,74 +623,5 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
         },
         0,
         100);
-  }
-
-  @FXML
-  private void simulateKeyPressAfterDelay() {
-    // It released the key pressed when the player is leaving the scene
-    Thread thread =
-        new Thread(
-            () -> {
-              try {
-                Thread.sleep(50);
-                KeyEvent keyReleaseEventS =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
-                // S key is released when the scene changes
-                KeyEvent keyReleaseEventA =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
-                // A key is released when the scene changes
-                KeyEvent keyReleaseEventW =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
-                // W key is released when the scene changes
-                KeyEvent keyReleaseEventD =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
-                // D key is released when the scene changes
-                scene.fireEvent(keyReleaseEventA);
-                scene.fireEvent(keyReleaseEventD);
-                scene.fireEvent(keyReleaseEventW);
-                scene.fireEvent(keyReleaseEventS);
-              } catch (InterruptedException e) {
-                e.printStackTrace();
-              }
-            });
-
-    thread.start();
-  }
-
-  /**
-   * Show buttons to restart the game or cancel.
-   *
-   * @param event mouse is clicked
-   * @throws IOException if the objects don't exist
-   */
-  @FXML
-  private void handleRestartButtonClick(ActionEvent event) throws IOException {
-    black2.setVisible(true);
-    resetBox.setVisible(true);
-    resetLabel.setVisible(true);
-    resetYes.setVisible(true);
-    resetCancel.setVisible(true);
-  }
-
-  @FXML
-  private void handleRestartButtonCanceled(ActionEvent event) throws IOException {
-    black2.setVisible(false);
-    resetBox.setVisible(false);
-    resetLabel.setVisible(false);
-    resetYes.setVisible(false);
-    resetCancel.setVisible(false);
-  }
-
-  @FXML
-  private void handleResetEvent(ActionEvent event) throws IOException {
-    try {
-      GameState.resetGames();
-    } catch (Exception e) {
-      // TODO: handle exception
-    }
   }
 }
