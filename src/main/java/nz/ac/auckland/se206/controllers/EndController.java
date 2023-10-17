@@ -50,8 +50,13 @@ public class EndController implements Initializable {
   @FXML private Label restartLabel;
   @FXML private Button restartYes;
   @FXML private Button restartNo;
-
   @FXML private Button resetButton;
+
+  @FXML private Rectangle restartBackground1;
+  @FXML private Label restartLabel1;
+  @FXML private Button restartYes1;
+  @FXML private Button restartNo1;
+  @FXML private Button resetButton1;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -65,13 +70,22 @@ public class EndController implements Initializable {
                   // Schedule the endingAnimation to run after the scene is shown
                   Platform.runLater(this::endingAnimation);
                   youWin.setVisible(false);
+                  resetButton.setVisible(true);
+                  restartBackground.setVisible(false);
+                  restartLabel.setVisible(false);
+                  restartNo.setVisible(false);
+                  restartYes.setVisible(false);
                   String musicFile;
                   musicFile = "src/main/resources/sounds/final.mp3";
                   App.musicType = "final";
                   Media media = new Media(new File(musicFile).toURI().toString());
                   App.mediaPlayer.stop();
                   App.mediaPlayer = new MediaPlayer(media);
-                  App.mediaPlayer.setVolume(0.3);
+                  if (GameState.isSoundEnabled){
+                    App.mediaPlayer.setVolume(0.3);
+                  } else {
+                    App.mediaPlayer.setVolume(0.0);
+                  }
                   App.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
                   App.mediaPlayer.setAutoPlay(true);
                   App.mediaPlayer.play();
@@ -192,14 +206,8 @@ public class EndController implements Initializable {
     spaceshipPathTransition.setOnFinished(
         event -> {
           youWin.setVisible(true);
-          resetButton.setVisible(true);
-          App.mediaPlayer.setVolume(0.3);
-          resetButton.setVisible(true);
-          restartLabel.setOpacity(1);
-          restartNo.setOpacity(1);
-          restartYes.setOpacity(1);
-          restartBackground.setOpacity(1);
           winTextToSpeech();
+          resetButton.setVisible(true);
         });
   }
 
