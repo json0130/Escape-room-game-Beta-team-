@@ -3,8 +3,10 @@ package nz.ac.auckland.se206.controllers;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
@@ -21,7 +23,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -48,7 +49,7 @@ import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
  * responses, setting up the tiles, the movement of the tiles and the win condition of the game as
  * well as animations for different props within the scene.
  */
-public class TileGameDeskController {
+public class TileGameDeskController extends RoomController {
 
   public static ObservableList<ChatBubble> chatBubbleListTileDesk =
       FXCollections.observableArrayList();
@@ -152,7 +153,8 @@ public class TileGameDeskController {
    *
    * @throws ApiProxyException
    */
-  public void initialize() throws ApiProxyException {
+  @Override
+  public void initialize(URL url, ResourceBundle resourceBundle) {
     App.timerSeconds = 120;
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
@@ -188,9 +190,14 @@ public class TileGameDeskController {
     chatCompletionRequest =
         new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.4).setMaxTokens(100);
 
-    riddleAnswer =
-        runGpt(new ChatMessage("user", GptPromptEngineering.getRiddleAnswer(lettersForInput)))
-            .getContent();
+    try {
+      riddleAnswer =
+          runGpt(new ChatMessage("user", GptPromptEngineering.getRiddleAnswer(lettersForInput)))
+              .getContent();
+    } catch (ApiProxyException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     System.out.println(riddleAnswer);
 
     wordText.setText(riddleAnswer.substring(0, 3).toUpperCase());
@@ -239,40 +246,6 @@ public class TileGameDeskController {
     } else {
       soundOn.setVisible(false);
       soundOff.setVisible(true);
-    }
-  }
-
-  // Modify your setupAlertBlinking method as follows
-  private void setupAlertBlinking() {
-    alert.setVisible(true); // Initially show the alert label
-    // Stop current playing media
-    App.mediaPlayer.stop();
-    // Check if sound is enabled before setting volume and playing.
-    if (GameState.isSoundEnabled) {
-      App.alertSoundPlayer.setVolume(0.01);
-    } else {
-      App.alertSoundPlayer.setVolume(0.0);
-    }
-    App.alertSoundPlayer.setAutoPlay(true);
-    App.alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-    App.alertSoundPlayer.play();
-
-    // Set up the blinking animation for the alert label
-    alertBlinkTimeline =
-        new Timeline(
-            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
-            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
-    alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
-    alertBlinkTimeline.play();
-  }
-
-  // Add a method to stop the alert blinking
-  private void stopAlertBlinking() {
-    if (alertBlinkTimeline != null) {
-      // Stop timeline and hide label
-      alertBlinkTimeline.stop();
-      alert.setVisible(false);
-      App.alertSoundPlayer.stop();
     }
   }
 
@@ -676,23 +649,5 @@ public class TileGameDeskController {
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
-  }
-
-  @FXML
-  private void toggleSound(MouseEvent event) {
-    GameState.isSoundEnabled = !GameState.isSoundEnabled;
-
-    double volume = GameState.isSoundEnabled ? 0.03 : 0;
-    if (App.mediaPlayer != null) {
-      App.mediaPlayer.setVolume(volume);
-    }
-
-    if (App.alertSoundPlayer != null) {
-      // If an Alert Sound Player exists, adjust its volume as well.
-      App.alertSoundPlayer.setVolume(volume);
-    }
-
-    soundOn.setVisible(GameState.isSoundEnabled);
-    soundOff.setVisible(!GameState.isSoundEnabled);
   }
 }
