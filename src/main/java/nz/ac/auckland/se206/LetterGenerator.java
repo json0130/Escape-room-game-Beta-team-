@@ -25,6 +25,7 @@ public class LetterGenerator {
    * @return a list of 8 random letters, 3 vowels and 5 consonants.
    */
   public String letterListToString(List<String> letterList) {
+    // Get a list of letters and separate them using commas into a string
     return letterList.get(0)
         + ", "
         + letterList.get(1)
@@ -53,7 +54,7 @@ public class LetterGenerator {
     while (vowelsList.size() < 3) {
       characterValue = rand.nextInt(4) + 1;
       switch (characterValue) {
-        // add a if theres is no a
+          // add a if theres is no a
         case 1:
           if (vowelsList.contains("A")) {
             break;
@@ -61,28 +62,28 @@ public class LetterGenerator {
             vowelsList.add("A");
             break;
           }
-        // add e if there is no e
+          // add e if there is no e
         case 2:
           if (vowelsList.contains("E")) {
             break;
           }
           vowelsList.add("E");
           break;
-        // add i if there is no i
+          // add i if there is no i
         case 3:
           if (vowelsList.contains("I")) {
             break;
           }
           vowelsList.add("I");
           break;
-        // add o if there is no o
+          // add o if there is no o
         case 4:
           if (vowelsList.contains("O")) {
             break;
           }
           vowelsList.add("O");
           break;
-        // add u if there is no u
+          // add u if there is no u
         case 5:
           if (vowelsList.contains("U")) {
             break;

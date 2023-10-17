@@ -6,8 +6,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
@@ -24,7 +22,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -48,15 +45,16 @@ import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
-public class ExitController implements Initializable {
+public class ExitController extends RoomController {
   public static ObservableList<ChatBubble> chatBubbleListExit = FXCollections.observableArrayList();
 
-  private BooleanProperty wKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty aKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty sKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty dKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty directionUp = new SimpleBooleanProperty();
+  private BooleanProperty directionLeft = new SimpleBooleanProperty();
+  private BooleanProperty directionDown = new SimpleBooleanProperty();
+  private BooleanProperty directionRight = new SimpleBooleanProperty();
 
-  private BooleanBinding keyPressed = wKeyPressed.or(aKeyPressed).or(sKeyPressed).or(dKeyPressed);
+  private BooleanBinding keyPressed =
+      directionUp.or(directionLeft).or(directionDown).or(directionRight);
   private int movementVariable = 5;
   private double shapesize;
 
@@ -211,16 +209,16 @@ public class ExitController implements Initializable {
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
 
-          if (wKeyPressed.get()) {
+          if (directionUp.get()) {
             player.setLayoutY(player.getLayoutY() - movementVariable);
           }
-          if (aKeyPressed.get()) {
+          if (directionLeft.get()) {
             player.setLayoutX(player.getLayoutX() - movementVariable);
           }
-          if (sKeyPressed.get()) {
+          if (directionDown.get()) {
             player.setLayoutY(player.getLayoutY() + movementVariable);
           }
-          if (dKeyPressed.get()) {
+          if (directionRight.get()) {
             player.setLayoutX(player.getLayoutX() + movementVariable);
           }
           squareBorder();
@@ -377,7 +375,7 @@ public class ExitController implements Initializable {
 
   /**
    * If the button is clicked, the sound is toggled.
-   * 
+   *
    * @param event mouse is clicked
    * @throws IOException if the sound cannot be toggled
    */
@@ -388,7 +386,10 @@ public class ExitController implements Initializable {
     scene.setOnKeyPressed(
         e -> {
           boolean wasMoving =
-              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+              directionUp.get()
+                  || directionLeft.get()
+                  || directionDown.get()
+                  || directionRight.get();
 
           if (keyboardControlEnabled) {
             // player moves up
@@ -397,7 +398,7 @@ public class ExitController implements Initializable {
                 player.setImage(lastPlayedWalk);
                 walkAnimationPlaying = true;
               }
-              wKeyPressed.set(true);
+              directionUp.set(true);
             }
 
             // player moves left
@@ -407,7 +408,7 @@ public class ExitController implements Initializable {
                 walkAnimationPlaying = true;
                 lastPlayedWalk = player.getImage();
               }
-              aKeyPressed.set(true);
+              directionLeft.set(true);
             }
 
             // player moves down
@@ -416,7 +417,7 @@ public class ExitController implements Initializable {
                 player.setImage(lastPlayedWalk);
                 walkAnimationPlaying = true;
               }
-              sKeyPressed.set(true);
+              directionDown.set(true);
             }
 
             // player moves right
@@ -426,10 +427,13 @@ public class ExitController implements Initializable {
                 walkAnimationPlaying = true;
                 lastPlayedWalk = player.getImage();
               }
-              dKeyPressed.set(true);
+              directionRight.set(true);
             }
             boolean isMoving =
-                wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+                directionUp.get()
+                    || directionLeft.get()
+                    || directionDown.get()
+                    || directionRight.get();
 
             // If we started moving and weren't before, start the sound.
             if (isMoving && !wasMoving) {
@@ -442,75 +446,81 @@ public class ExitController implements Initializable {
     scene.setOnKeyReleased(
         e -> {
           boolean wasMoving =
-              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+              directionUp.get()
+                  || directionLeft.get()
+                  || directionDown.get()
+                  || directionRight.get();
 
           if (keyboardControlEnabled) {
             // If the player was moving up, image changes
             if (e.getCode() == KeyCode.W) {
               if (player.getImage() == leftCharacterAnimation
-                  && sKeyPressed.get() == false
-                  && aKeyPressed.get() == false) {
+                  && directionDown.get() == false
+                  && directionLeft.get() == false) {
                 player.setImage(leftCharacterIdle);
                 walkAnimationPlaying = false;
-              } else if (sKeyPressed.get() == true) {
+              } else if (directionDown.get() == true) {
                 player.setImage(lastPlayedWalk);
-              } else if (aKeyPressed.get() == false
-                  && dKeyPressed.get() == false
-                  && sKeyPressed.get() == false) {
+              } else if (directionLeft.get() == false
+                  && directionRight.get() == false
+                  && directionDown.get() == false) {
                 player.setImage(rightCharacterIdle);
                 walkAnimationPlaying = false;
               }
-              wKeyPressed.set(false);
+              directionUp.set(false);
             }
 
             // If the player was moving left, image changes
             if (e.getCode() == KeyCode.A) {
-              if (dKeyPressed.get() == false
-                  && wKeyPressed.get() == false
-                  && sKeyPressed.get() == false) {
+              if (directionRight.get() == false
+                  && directionUp.get() == false
+                  && directionDown.get() == false) {
                 player.setImage(leftCharacterIdle);
                 walkAnimationPlaying = false;
-              } else if (dKeyPressed.get() == true) {
+              } else if (directionRight.get() == true) {
                 player.setImage(rightCharacterAnimation);
               }
 
-              aKeyPressed.set(false);
+              directionLeft.set(false);
             }
 
             // If the player was moving down, image changes
             if (e.getCode() == KeyCode.S) {
               if (player.getImage() == leftCharacterAnimation
-                  && wKeyPressed.get() == false
-                  && aKeyPressed.get() == false) {
+                  && directionUp.get() == false
+                  && directionLeft.get() == false) {
                 player.setImage(leftCharacterIdle);
                 walkAnimationPlaying = false;
-              } else if (wKeyPressed.get() == true) {
+              } else if (directionUp.get() == true) {
                 player.setImage(lastPlayedWalk);
-              } else if (aKeyPressed.get() == false
-                  && dKeyPressed.get() == false
-                  && wKeyPressed.get() == false) {
+              } else if (directionLeft.get() == false
+                  && directionRight.get() == false
+                  && directionUp.get() == false) {
                 player.setImage(rightCharacterIdle);
                 walkAnimationPlaying = false;
               }
-              sKeyPressed.set(false);
+              directionDown.set(false);
             }
 
             // If the player was moving right, image changes
             if (e.getCode() == KeyCode.D) {
-              if (aKeyPressed.get() == false
-                  && wKeyPressed.get() == false
-                  && sKeyPressed.get() == false) {
+              if (directionLeft.get() == false
+                  && directionUp.get() == false
+                  && directionDown.get() == false) {
                 player.setImage(rightCharacterIdle);
                 walkAnimationPlaying = false;
-              } else if (aKeyPressed.get() == true) {
+              } else if (directionLeft.get() == true) {
                 player.setImage(leftCharacterAnimation);
               }
 
-              dKeyPressed.set(false);
+              directionRight.set(false);
             }
 
             boolean isMovinng =
-                wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+                directionUp.get()
+                    || directionLeft.get()
+                    || directionDown.get()
+                    || directionRight.get();
 
             // If we stopped moving and were before, stop the sound.
             if (!isMovinng && wasMoving) {
@@ -555,27 +565,6 @@ public class ExitController implements Initializable {
     }
   }
 
-  /** Modify your setupAlertBlinking method as follows. */
-  private void setupAlertBlinking() {
-    alert.setVisible(true); // Initially show the alert label
-
-    // Set up the blinking animation for the alert label
-    alertBlinkTimeline =
-        new Timeline(
-            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
-            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
-    alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
-    alertBlinkTimeline.play();
-  }
-
-  /** Add a method to stop the alert blinking. */
-  private void stopAlertBlinking() {
-    if (alertBlinkTimeline != null) {
-      alertBlinkTimeline.stop();
-      alert.setVisible(false);
-    }
-  }
-
   /** Check if the id card is touching the id pad or not. */
   private void checkId(ImageView player, Rectangle id) {
     if (player.getBoundsInParent().intersects(id.getBoundsInParent())) {
@@ -586,7 +575,7 @@ public class ExitController implements Initializable {
   }
 
   /**
-   * Make the id Cards to be draggable
+   * Make the id Cards to be draggable.
    *
    * @param originalX It is the original x coordinate of the id cards.
    * @param originalY It is the original y coordinate of the id cards.
@@ -622,31 +611,6 @@ public class ExitController implements Initializable {
           imageView.setLayoutX(originalX);
           imageView.setLayoutY(originalY);
         });
-  }
-
-  /** Detect change in gamestate difficulty which is seleced in intro scene. */
-  private void detectDifficulty() {
-    Timer labelTimer = new Timer(true);
-    labelTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            if (GameState.difficulty != null) {
-              // if the difficulty is medium, keep detecting the number of hints until it reaches to
-              // 0.
-              if (GameState.difficulty == "MEDIUM") {
-                Platform.runLater(() -> updateLabels());
-                if (GameState.numOfHints == 0) {
-                  labelTimer.cancel();
-                }
-              } else {
-                Platform.runLater(() -> updateLabels());
-              }
-            }
-          }
-        },
-        0,
-        500);
   }
 
   /** If the player moves closer to the computer, button for keypad appears. */
@@ -1134,25 +1098,6 @@ public class ExitController implements Initializable {
     App.alertSoundPlayer.stop();
   }
 
-  /** Update the labels of hint and difficulty as the game progresses. */
-  private void updateLabels() {
-    difficultyLabel.setText(GameState.difficulty);
-    // Depending on the level that is selected in the intro page, proper texts are shown in the
-    // header
-    if (GameState.difficulty == "EASY") {
-      hintLabel.setText("UNLIMITED");
-      // For the medium difficulty, changing the number of hint left
-    } else if (GameState.difficulty == "MEDIUM") {
-      hintLabel.setText(String.valueOf(GameState.numOfHints));
-      hintLabel2.setText("HINTS");
-      if (GameState.numOfHints == 1) {
-        hintLabel2.setText("HINT");
-      }
-    } else {
-      hintLabel.setText("NO");
-    }
-  }
-
   /** Background image is changed after the correct passcode is typed. */
   private void changeOpacity() {
     // Create a FadeTransition for background
@@ -1277,7 +1222,7 @@ public class ExitController implements Initializable {
    * @param event mouse is clicked
    */
   @FXML
-  private void enterRoom() {
+  public void enterRoom() {
     String soundEffect = "src/main/resources/sounds/enterReal.mp3";
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
@@ -1298,7 +1243,7 @@ public class ExitController implements Initializable {
    * @param event mouse is clicked.
    */
   @FXML
-  private void toggleSound(MouseEvent event) {
+  public void toggleSound(MouseEvent event) {
     GameState.isSoundEnabled = !GameState.isSoundEnabled;
 
     double volume = GameState.isSoundEnabled ? 0.03 : 0;
@@ -1383,7 +1328,7 @@ public class ExitController implements Initializable {
   }
 
   @FXML
-  private void simulateKeyPressAfterDelay() {
+  public void simulateKeyPressAfterDelay() {
     Thread thread =
         new Thread(
             () -> {

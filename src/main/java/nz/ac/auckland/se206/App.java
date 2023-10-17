@@ -99,7 +99,6 @@ public class App extends Application {
       passcode = r.nextInt((9999 - 1000) + 1) + 1000;
       GameState.password = String.valueOf(passcode);
 
-      SceneManager.addScene(AppUi.HELPERCHAT, loadFxml("helperchat"));
       SceneManager.addScene(AppUi.ROOM1, loadFxml("room1"));
       SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
       SceneManager.addScene(AppUi.PLAYER, loadFxml("player"));
@@ -149,7 +148,6 @@ public class App extends Application {
     alertSoundPlayer.setVolume(0.3);
 
     SceneManager.addScene(AppUi.AIWINDOW, loadFxml("aiwindow"));
-    SceneManager.addScene(AppUi.HELPERCHAT, loadFxml("helperchat"));
     SceneManager.addScene(AppUi.ROOM1, loadFxml("room1"));
     SceneManager.addScene(AppUi.CHAT, loadFxml("chat"));
     SceneManager.addScene(AppUi.PLAYER, loadFxml("player"));

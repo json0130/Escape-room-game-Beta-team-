@@ -11,7 +11,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
@@ -25,7 +24,6 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -35,7 +33,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -48,17 +45,17 @@ import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
-public class Room1Controller implements Initializable {
+public class Room1Controller extends RoomController {
   public static ObservableList<ChatBubble> chatBubbleListRoom1 =
       FXCollections.observableArrayList();
   public static String riddleAnswer;
 
-  private BooleanProperty wKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty aKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty sKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty dKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty up = new SimpleBooleanProperty();
+  private BooleanProperty left = new SimpleBooleanProperty();
+  private BooleanProperty down = new SimpleBooleanProperty();
+  private BooleanProperty right = new SimpleBooleanProperty();
 
-  private BooleanBinding keyPressed = wKeyPressed.or(aKeyPressed).or(sKeyPressed).or(dKeyPressed);
+  private BooleanBinding keyPressed = up.or(left).or(down).or(right);
   private int movementVariable = 5;
   private double shapesize;
 
@@ -206,16 +203,16 @@ public class Room1Controller implements Initializable {
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
 
-          if (wKeyPressed.get()) {
+          if (up.get()) {
             player.setLayoutY(player.getLayoutY() - movementVariable);
           }
-          if (aKeyPressed.get()) {
+          if (left.get()) {
             player.setLayoutX(player.getLayoutX() - movementVariable);
           }
-          if (sKeyPressed.get()) {
+          if (down.get()) {
             player.setLayoutY(player.getLayoutY() + movementVariable);
           }
-          if (dKeyPressed.get()) {
+          if (right.get()) {
             player.setLayoutX(player.getLayoutX() + movementVariable);
           }
           squareBorder();
@@ -265,10 +262,10 @@ public class Room1Controller implements Initializable {
       };
 
   /**
-   * Move the indicator randomly.
+   * Set the initial state of file as following.
    *
-   * @param indicator the indicator image
-   * @return true if the spaceship collides with the rock, false otherwise
+   * @param url the address of the current app
+   * @param resource anything imported into the file
    */
   @FXML
   public void initialize(URL url, ResourceBundle resource) {
@@ -427,7 +424,7 @@ public class Room1Controller implements Initializable {
    * @param walls border that the player cannot move across
    */
   @FXML
-  private void checkCollision2(ImageView player, List<Rectangle> walls) {
+  public void checkCollision2(ImageView player, List<Rectangle> walls) {
     for (Rectangle wall : walls) {
       if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
         player.setLayoutX(previousX); // Restore the player's previous X position
@@ -457,7 +454,7 @@ public class Room1Controller implements Initializable {
 
   /** Prevent the player moves out of the window. */
   @FXML
-  private void squareBorder() {
+  public void squareBorder() {
     double left = 0;
     double right = scene.getWidth() - shapesize;
     double top = 0;
@@ -624,15 +621,14 @@ public class Room1Controller implements Initializable {
   private void setUpMovement() {
     scene.setOnKeyPressed(
         e -> {
-          boolean wasMoving =
-              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+          boolean wasMoving = up.get() || left.get() || down.get() || right.get();
           // When the w key is pressed, it moves up
           if (e.getCode() == KeyCode.W) {
             if (walkAnimationPlaying == false) {
               player.setImage(lastPlayedWalk);
               walkAnimationPlaying = true;
             }
-            wKeyPressed.set(true);
+            up.set(true);
           }
           // when the a key is pressed, it moves left
           if (e.getCode() == KeyCode.A) {
@@ -641,7 +637,7 @@ public class Room1Controller implements Initializable {
               walkAnimationPlaying = true;
               lastPlayedWalk = player.getImage();
             }
-            aKeyPressed.set(true);
+            left.set(true);
           }
           // when the s key is pressed, it moves down
           if (e.getCode() == KeyCode.S) {
@@ -649,7 +645,7 @@ public class Room1Controller implements Initializable {
               player.setImage(lastPlayedWalk);
               walkAnimationPlaying = true;
             }
-            sKeyPressed.set(true);
+            down.set(true);
           }
           // when the d key is pressed, it moves right
           if (e.getCode() == KeyCode.D) {
@@ -658,11 +654,10 @@ public class Room1Controller implements Initializable {
               walkAnimationPlaying = true;
               lastPlayedWalk = player.getImage();
             }
-            dKeyPressed.set(true);
+            right.set(true);
           }
 
-          boolean isMoving =
-              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+          boolean isMoving = up.get() || left.get() || down.get() || right.get();
 
           // If we started moving and weren't before, start the sound.
           if (isMoving && !wasMoving) {
@@ -672,71 +667,61 @@ public class Room1Controller implements Initializable {
 
     scene.setOnKeyReleased(
         e -> {
-          boolean wasMoving =
-              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+          boolean wasMoving = up.get() || left.get() || down.get() || right.get();
           // if the w key is released, it stops at its current position
           if (e.getCode() == KeyCode.W) {
             if (player.getImage() == leftCharacterAnimation
-                && sKeyPressed.get() == false
-                && aKeyPressed.get() == false) {
+                && down.get() == false
+                && left.get() == false) {
               player.setImage(leftCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (sKeyPressed.get() == true) {
+            } else if (down.get() == true) {
               player.setImage(lastPlayedWalk);
-            } else if (aKeyPressed.get() == false
-                && dKeyPressed.get() == false
-                && dKeyPressed.get() == false) {
+            } else if (left.get() == false && right.get() == false && right.get() == false) {
               player.setImage(rightCharacterIdle);
               walkAnimationPlaying = false;
             }
-            wKeyPressed.set(false);
+            up.set(false);
           }
           // if a key is released, the plaer stops at its current position
           if (e.getCode() == KeyCode.A) {
-            if (dKeyPressed.get() == false
-                && wKeyPressed.get() == false
-                && sKeyPressed.get() == false) {
+            if (right.get() == false && up.get() == false && down.get() == false) {
               player.setImage(leftCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (dKeyPressed.get() == true) {
+            } else if (right.get() == true) {
               player.setImage(rightCharacterAnimation);
             }
 
-            aKeyPressed.set(false);
+            left.set(false);
           }
           // if s key is released, the player stops at its current position
           if (e.getCode() == KeyCode.S) {
             if (player.getImage() == leftCharacterAnimation
-                && wKeyPressed.get() == false
-                && aKeyPressed.get() == false) {
+                && up.get() == false
+                && left.get() == false) {
               player.setImage(leftCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (wKeyPressed.get() == true) {
+            } else if (up.get() == true) {
               player.setImage(lastPlayedWalk);
-            } else if (aKeyPressed.get() == false
-                && dKeyPressed.get() == false
-                && wKeyPressed.get() == false) {
+            } else if (left.get() == false && right.get() == false && up.get() == false) {
               player.setImage(rightCharacterIdle);
               walkAnimationPlaying = false;
             }
-            sKeyPressed.set(false);
+            down.set(false);
           }
           // if d key is released, the player stops at its current position
           if (e.getCode() == KeyCode.D) {
-            if (aKeyPressed.get() == false
-                && wKeyPressed.get() == false
-                && sKeyPressed.get() == false) {
+            if (left.get() == false && up.get() == false && down.get() == false) {
               player.setImage(rightCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (aKeyPressed.get() == true) {
+            } else if (left.get() == true) {
               player.setImage(leftCharacterAnimation);
             }
 
-            dKeyPressed.set(false);
+            right.set(false);
           }
 
-          boolean isMovinng =
-              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+          boolean isMovinng = up.get() || left.get() || down.get() || right.get();
 
           // If we stopped moving and were before, stop the sound.
           if (!isMovinng && wasMoving) {
@@ -761,88 +746,6 @@ public class Room1Controller implements Initializable {
     App.setScene(AppUi.PLAYER);
   }
 
-  /** Detect change in the game state difficulty in the intro scene. */
-  @FXML
-  private void detectDifficulty() {
-    // Made a new timer which detects change in difficulty which is selected in the intro scene
-    Timer labelTimer = new Timer(true);
-    labelTimer.scheduleAtFixedRate(
-        new TimerTask() {
-          @Override
-          public void run() {
-            // Whenever the selected difficulty changes, the labels in the header changes
-            if (GameState.difficulty != null) {
-              // if the difficulty is medium, keeps eyes on the number of hints and change the label
-              // accordingly
-              if (GameState.difficulty.equals("MEDIUM")) {
-                Platform.runLater(() -> updateLabels());
-                if (GameState.numOfHints == 0) {
-                  labelTimer.cancel();
-                }
-              } else {
-                Platform.runLater(() -> updateLabels());
-              }
-            }
-          }
-        },
-        0,
-        500);
-  }
-
-  /** Modify your setupAlertBlinking method as follows. */
-  @FXML
-  private void setupAlertBlinking() {
-    alert.setVisible(true); // Initially show the alert label
-    // Stop current playing media
-    App.mediaPlayer.stop();
-    // Check if sound is enabled before setting volume and playing.
-    if (GameState.isSoundEnabled) {
-      App.alertSoundPlayer.setVolume(0.03);
-    } else {
-      App.alertSoundPlayer.setVolume(0.0);
-    }
-    App.alertSoundPlayer.setAutoPlay(true);
-    App.alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-    App.alertSoundPlayer.play();
-
-    // Set up the blinking animation for the alert label
-    alertBlinkTimeline =
-        new Timeline(
-            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
-            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
-
-    alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
-    alertBlinkTimeline.play();
-  }
-
-  /** Add a method to stop the alert blinking. */
-  private void stopAlertBlinking() {
-    if (alertBlinkTimeline != null) {
-      // Stop timeline and hide label
-      alertBlinkTimeline.stop();
-      alert.setVisible(false);
-      App.alertSoundPlayer.stop();
-    }
-  }
-
-  /** Update labels for difficulty and hints as the game progress. */
-  private void updateLabels() {
-    // Change the difficulty label according to the selected difficulty
-    difficultyLabel.setText(GameState.difficulty);
-    if (GameState.difficulty == "EASY") {
-      hintLabel.setText("UNLIMITED");
-    } else if (GameState.difficulty == "MEDIUM") {
-      // Change label as the number of hints left changed
-      hintLabel.setText(String.valueOf(GameState.numOfHints));
-      hintLabel2.setText("HINTS");
-      if (GameState.numOfHints == 1) {
-        hintLabel2.setText("HINT");
-      }
-    } else {
-      hintLabel.setText("NO");
-    }
-  }
-
   /** Turn on the background sound. */
   @FXML
   private void soundButttonClick() {
@@ -852,62 +755,9 @@ public class Room1Controller implements Initializable {
     mediaPlayer.setAutoPlay(true);
   }
 
-  /** Turn on and off the background sound depending on the current state. */
-  @FXML
-  private void toggleSound(MouseEvent event) {
-    GameState.isSoundEnabled = !GameState.isSoundEnabled;
-
-    double volume = GameState.isSoundEnabled ? 0.03 : 0;
-    double volume1 = GameState.isSoundEnabled ? 0.01 : 0;
-
-    if (App.mediaPlayer != null) {
-      App.mediaPlayer.setVolume(volume);
-    }
-
-    if (App.alertSoundPlayer != null) {
-      // If an Alert Sound Player exists, adjust its volume as well.
-      App.alertSoundPlayer.setVolume(volume1);
-    }
-
-    soundOn.setVisible(GameState.isSoundEnabled);
-    soundOff.setVisible(!GameState.isSoundEnabled);
-  }
-
-  @FXML
-  private void enterRoom() {
-    /** Turn on the sound while the player is moving into the room. */
-    String soundEffect = "src/main/resources/sounds/enterReal.mp3";
-    Media media = new Media(new File(soundEffect).toURI().toString());
-    MediaPlayer mediaPlayer = new MediaPlayer(media);
-    mediaPlayer.setAutoPlay(true);
-  }
-
-  /**
-   * Animate the game master image.
-   *
-   * @param event mouse is clicked
-   */
-  @FXML
-  private void animateRobot() {
-    /** Move the game master image up and down. */
-    TranslateTransition translate = new TranslateTransition();
-    translate.setNode(gameMaster);
-    translate.setDuration(Duration.millis(1000)); // the robot moves every 1 seconds
-    translate.setCycleCount(TranslateTransition.INDEFINITE);
-    translate.setByX(0);
-    translate.setByY(20);
-    translate.setAutoReverse(true); // automatically reverse after it moves up
-    translate.play();
-  }
-
-  /**
-   * Reveal indicators after the player resolves the riddle.
-   *
-   * @param event mouse is clicked
-   */
+  /** Reveal indicators after the player resolves the riddle. */
   @FXML
   private void revealIndicator() {
-    /** Reveal indicators after the player resolves the riddle. */
     Timer indicatorTimer = new Timer(true);
     indicatorTimer.scheduleAtFixedRate(
         new TimerTask() {
@@ -925,8 +775,8 @@ public class Room1Controller implements Initializable {
         100);
   }
 
+  /** Show all indicators at once. */
   private void showIndicators() {
-    /** Show all indicators at once. */
     crew1Indicator.setVisible(true);
     crew2Indicator.setVisible(true);
     crew3Indicator.setVisible(true);
@@ -994,7 +844,7 @@ public class Room1Controller implements Initializable {
   }
 
   /**
-   * Change the colour of button on hover
+   * Change the colour of button on hover.
    *
    * @param e mouse is clicked
    */
@@ -1015,7 +865,7 @@ public class Room1Controller implements Initializable {
 
   /**
    * Change the colour of button on hover.
-   * 
+   *
    * @param e mouse is clicked
    */
   @FXML
@@ -1071,40 +921,5 @@ public class Room1Controller implements Initializable {
   @FXML
   private void exitCollect4(MouseEvent e) {
     btnCollect4.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
-  }
-
-  /** Give 0.1second of delay when the player is moving. */
-  private void simulateKeyPressAfterDelay() {
-    Thread thread =
-        new Thread(
-            () -> {
-              try {
-                Thread.sleep(50); // Delay of 0.1 seconds
-                KeyEvent keyReleaseEventS =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
-
-                KeyEvent keyReleaseEventA =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
-
-                KeyEvent keyReleaseEventW =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
-
-                KeyEvent keyReleaseEventD =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
-
-                scene.fireEvent(keyReleaseEventA);
-                scene.fireEvent(keyReleaseEventD);
-                scene.fireEvent(keyReleaseEventW);
-                scene.fireEvent(keyReleaseEventS);
-              } catch (InterruptedException e) {
-                e.printStackTrace();
-              }
-            });
-
-    thread.start();
   }
 }

@@ -21,6 +21,7 @@ public class Tile {
       String letter,
       double imageViewHorizontalCoordinates,
       double imageViewVerticalCoordinates) {
+    // Get 5 parameters and set the variables in the class
     this.currentImage = currentImage;
     this.freeSlot = freeSlot;
     this.letter = letter;

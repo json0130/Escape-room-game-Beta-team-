@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -31,7 +29,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
-import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 
 /** Controller for the ending scene */
@@ -79,7 +76,7 @@ public class EndController implements Initializable {
                   App.mediaPlayer.stop();
                   App.mediaPlayer = new MediaPlayer(media);
 
-                  if (GameState.isSoundEnabled){
+                  if (GameState.isSoundEnabled) {
                     App.mediaPlayer.setVolume(0.3);
                   } else {
                     App.mediaPlayer.setVolume(0.0);

@@ -3,8 +3,10 @@ package nz.ac.auckland.se206.controllers;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
@@ -21,7 +23,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -48,7 +49,7 @@ import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
  * responses, setting up the tiles, the movement of the tiles and the win condition of the game as
  * well as animations for different props within the scene.
  */
-public class TileGameDeskController {
+public class TileGameDeskController extends RoomController {
 
   public static ObservableList<ChatBubble> chatBubbleListTileDesk =
       FXCollections.observableArrayList();
@@ -151,7 +152,8 @@ public class TileGameDeskController {
    *
    * @throws IOException if the file is not found
    */
-  public void initialize() throws ApiProxyException {
+  @Override
+  public void initialize(URL url, ResourceBundle resourceBundle) {
     App.timerSeconds = 120;
     // Add an event handler to the Toggle Sound button
     toggleSoundButton.setOnMouseClicked(this::toggleSound);
@@ -187,9 +189,14 @@ public class TileGameDeskController {
     chatCompletionRequest =
         new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.4).setMaxTokens(100);
 
-    riddleAnswer =
-        runGpt(new ChatMessage("user", GptPromptEngineering.getRiddleAnswer(lettersForInput)))
-            .getContent();
+    try {
+      riddleAnswer =
+          runGpt(new ChatMessage("user", GptPromptEngineering.getRiddleAnswer(lettersForInput)))
+              .getContent();
+    } catch (ApiProxyException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     System.out.println(riddleAnswer);
 
     wordText.setText(riddleAnswer.substring(0, 3).toUpperCase());
@@ -241,43 +248,9 @@ public class TileGameDeskController {
     }
   }
 
-  // Modify your setupAlertBlinking method as follows
-  private void setupAlertBlinking() {
-    alert.setVisible(true); // Initially show the alert label
-    // Stop current playing media
-    App.mediaPlayer.stop();
-    // Check if sound is enabled before setting volume and playing.
-    if (GameState.isSoundEnabled) {
-      App.alertSoundPlayer.setVolume(0.01);
-    } else {
-      App.alertSoundPlayer.setVolume(0.0);
-    }
-    App.alertSoundPlayer.setAutoPlay(true);
-    App.alertSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-    App.alertSoundPlayer.play();
-
-    // Set up the blinking animation for the alert label
-    alertBlinkTimeline =
-        new Timeline(
-            new KeyFrame(Duration.seconds(0.5), e -> alert.setVisible(true)),
-            new KeyFrame(Duration.seconds(1), e -> alert.setVisible(false)));
-    alertBlinkTimeline.setCycleCount(Timeline.INDEFINITE);
-    alertBlinkTimeline.play();
-  }
-
-  // Add a method to stop the alert blinking
-  private void stopAlertBlinking() {
-    if (alertBlinkTimeline != null) {
-      // Stop timeline and hide label
-      alertBlinkTimeline.stop();
-      alert.setVisible(false);
-      App.alertSoundPlayer.stop();
-    }
-  }
-
   private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
     chatCompletionRequest.addMessage(msg);
-    // Call gpt and generate respond 
+    // Call gpt and generate respond
     try {
       ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
       Choice result = chatCompletionResult.getChoices().iterator().next();
@@ -376,11 +349,7 @@ public class TileGameDeskController {
 
   @FXML
   private void refactorImage(
-      ImageView imageView,
-      double xCoordinatesOfPoint,
-      double yCoordinatesOfPoint,
-      String letter,
-      InputStream path) {
+      ImageView imageView, double horizontal, double vertical, String letter, InputStream path) {
     // generate new image in the path
     Image imageFile = new Image(path);
     imageView.setImage(imageFile);
@@ -389,8 +358,8 @@ public class TileGameDeskController {
     imageView.setFitHeight(130);
     imageView.setId(letter);
     // place the images in the correct position
-    imageView.setLayoutY(yCoordinatesOfPoint);
-    imageView.setLayoutX(xCoordinatesOfPoint);
+    imageView.setLayoutY(vertical);
+    imageView.setLayoutX(horizontal);
   }
 
   @FXML
@@ -595,7 +564,7 @@ public class TileGameDeskController {
 
   @FXML
   private void disableImages() {
-    // All the images are not visible 
+    // All the images are not visible
     imageOne.setVisible(false);
     imageTwo.setVisible(false);
     imageThree.setVisible(false);
@@ -675,37 +644,5 @@ public class TileGameDeskController {
     Media media = new Media(new File(soundEffect).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setAutoPlay(true);
-  }
-
-  @FXML
-  private void toggleSound(MouseEvent event) {
-    GameState.isSoundEnabled = !GameState.isSoundEnabled;
-
-    double volume = GameState.isSoundEnabled ? 0.03 : 0;
-    if (App.mediaPlayer != null) {
-      App.mediaPlayer.setVolume(volume);
-    }
-
-    if (App.alertSoundPlayer != null) {
-      // If an Alert Sound Player exists, adjust its volume as well.
-      App.alertSoundPlayer.setVolume(volume);
-    }
-
-    soundOn.setVisible(GameState.isSoundEnabled);
-    soundOff.setVisible(!GameState.isSoundEnabled);
-  }
-
-  // game master animation
-  @FXML
-  private void animateRobot() {
-    TranslateTransition translate = new TranslateTransition();
-    translate.setNode(gameMaster);
-    translate.setDuration(Duration.millis(1000)); // robot moves every one second
-    translate.setCycleCount(TranslateTransition.INDEFINITE); // robot moves continuously
-    translate.setByX(0);
-    translate.setByY(20);
-    translate.setAutoReverse(true); // robot moves back to the original position
-
-    translate.play();
   }
 }

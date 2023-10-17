@@ -119,6 +119,7 @@ public class WindowController {
    * @param msg the chat message to append
    */
   private void appendChatMessage(ChatMessage msg, Boolean isGreeting) {
+    // Store chat messages in every rooms with chat window
     ChatBubble newMessage1 = new ChatBubble(msg, isGreeting);
     ChatBubble newMessage2 = new ChatBubble(msg, isGreeting);
     ChatBubble newMessage3 = new ChatBubble(msg, isGreeting);
@@ -126,6 +127,7 @@ public class WindowController {
     ChatBubble newMessage5 = new ChatBubble(msg, isGreeting);
     ChatBubble newMessage6 = new ChatBubble(msg, isGreeting);
 
+    // Append the same message in every chat window to synch chat history
     App.chatBubbleList.add(newMessage1);
     PlayerController.chatBubbleListPlayer.add(newMessage2);
     Room1Controller.chatBubbleListRoom1.add(newMessage3);
@@ -148,6 +150,7 @@ public class WindowController {
    * @throws ApiProxyException if there is an error communicating with the API proxy
    */
   private ChatMessage runGpt(ChatMessage msg, Boolean isGreeting) throws ApiProxyException {
+    // Task to run gpt in multithread to prevent gui freezing
     Task<ChatMessage> runningGptTask =
         new Task<ChatMessage>() {
           @Override
@@ -157,10 +160,12 @@ public class WindowController {
               ChatCompletionResult chatCompletionResult = App.chatCompletionRequest.execute();
               Choice result = chatCompletionResult.getChoices().iterator().next();
               App.chatCompletionRequest.addMessage(result.getChatMessage());
+              // Append the message into v box
               Platform.runLater(
                   () -> {
                     appendChatMessage(result.getChatMessage(), isGreeting);
                   });
+              // Check if the user is asking for hint or not
               Platform.runLater(
                   () -> {
                     if (result.getChatMessage().getRole().equals("assistant")
@@ -175,6 +180,7 @@ public class WindowController {
             }
           }
         };
+    // run the task in multithread
     Thread gptThread = new Thread(runningGptTask);
     gptThread.setDaemon(true);
     gptThread.start();
