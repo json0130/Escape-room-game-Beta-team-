@@ -62,8 +62,6 @@ public class TileGameRoomController extends RoomController {
 
   private double previousX;
   private double previousY;
-  private double shapesize;
-
   @FXML private Label difficultyLabel;
   @FXML private Label hintLabel;
   @FXML private Label hintLabel2;
@@ -250,7 +248,7 @@ public class TileGameRoomController extends RoomController {
     alert.setVisible(false); // Initially hide the alert label
     aiWindowController.setVisible(true);
 
-    shapesize = player.getFitWidth();
+    player.getFitWidth();
     movingSetup();
 
     collisionTimer.start();
@@ -561,7 +559,7 @@ public class TileGameRoomController extends RoomController {
     }
   }
 
-  /* detect change in game state difficulty which is selected in the intro scene*/
+  /** detect change in game state difficulty which is selected in the intro scene */
   public void detectDifficulty() {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(
@@ -665,7 +663,7 @@ public class TileGameRoomController extends RoomController {
    * @throws IOException if the objects don't exist
    */
   @FXML
-  private void clickRestartLabel(ActionEvent event) throws IOException {
+  private void onRestartLabelClick(ActionEvent event) throws IOException {
     black2.setVisible(true);
     resetBox.setVisible(true);
     resetLabel.setVisible(true);
@@ -674,7 +672,7 @@ public class TileGameRoomController extends RoomController {
   }
 
   @FXML
-  private void cancelRestart(ActionEvent event) throws IOException {
+  private void onCancelRestartClick(ActionEvent event) throws IOException {
     black2.setVisible(false);
     resetBox.setVisible(false);
     resetLabel.setVisible(false);
@@ -683,7 +681,7 @@ public class TileGameRoomController extends RoomController {
   }
 
   @FXML
-  private void clickRestartButton(ActionEvent event) throws IOException {
+  private void onRestartButtonClick(ActionEvent event) throws IOException {
     try {
       GameState.resetGames();
     } catch (Exception e) {

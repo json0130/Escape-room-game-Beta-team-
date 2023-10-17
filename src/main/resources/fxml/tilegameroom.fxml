@@ -106,7 +106,7 @@
          </image>
       </ImageView>
       <Button fx:id="toggleSoundButton" layoutX="861.0" layoutY="79.0" mnemonicParsing="false" text="SETTING" visible="false" />
-      <Button fx:id="resetButton" layoutX="1024.0" layoutY="8.0" mnemonicParsing="false" onAction="#clickRestartLabel" style="-fx-background-color: transparent;" text="RESTART" textFill="WHITE">
+      <Button fx:id="resetButton" layoutX="1024.0" layoutY="8.0" mnemonicParsing="false" onAction="#onRestartLabelClick" style="-fx-background-color: transparent;" text="RESTART" textFill="WHITE">
          <font>
             <Font name="Arial Bold Italic" size="20.0" />
          </font>
@@ -118,7 +118,7 @@
             <Font size="27.0" />
          </font>
       </Label>
-      <Button fx:id="resetYes" layoutX="725.0" layoutY="369.0" mnemonicParsing="false" onAction="#clickRestartButton" text="YES" />
-      <Button fx:id="resetCancel" layoutX="441.0" layoutY="369.0" mnemonicParsing="false" onAction="#cancelRestart" text="CANCEL" />
+      <Button fx:id="resetYes" layoutX="725.0" layoutY="369.0" mnemonicParsing="false" onAction="#onRestartButtonClick" text="YES" />
+      <Button fx:id="resetCancel" layoutX="441.0" layoutY="369.0" mnemonicParsing="false" onAction="#onCancelRestartClick" text="CANCEL" />
    </children>
 </AnchorPane>
