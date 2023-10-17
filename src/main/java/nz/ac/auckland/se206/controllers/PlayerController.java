@@ -388,7 +388,7 @@ public class PlayerController extends RoomController {
   }
 
   /**
-   * When the go back button is clicked, the player will go back to the intro page.
+   * When the player collides with the room3 box, scene changes to room3.
    *
    * @param event when the go back button is clicked
    * @throws IOException if an input or output exception occurred
@@ -421,7 +421,7 @@ public class PlayerController extends RoomController {
   }
 
   /**
-   * When the go back button is clicked, the player will go back to the intro page.
+   * Prevent the player move across the walls.
    *
    * @param event when the go back button is clicked
    * @throws IOException if an input or output exception occurred
@@ -455,12 +455,7 @@ public class PlayerController extends RoomController {
     }
   }
 
-  /**
-   * When the player is touching the border then it will keep the player to be in the position.
-   *
-   * @param event when the player is touching the border
-   * @throws IOException if an input or output exception occurred
-   */
+  /** Prevent the player moves outside of the window. */
   @FXML
   public void squareBorder() {
     // Border that the player cannot move outof the window.
@@ -693,6 +688,11 @@ public class PlayerController extends RoomController {
     mediaPlayer.setAutoPlay(true);
   }
 
+  /**
+   * Turn on and off the background music.
+   *
+   * @param event mouse is clicked
+   */
   @FXML
   public void toggleSound(MouseEvent event) {
     GameState.isSoundEnabled = !GameState.isSoundEnabled;
@@ -726,6 +726,12 @@ public class PlayerController extends RoomController {
     resetCancel.setVisible(true);
   }
 
+  /**
+   * Restart is canceled and return to the game.
+   *
+   * @param event button is clicked
+   * @throws IOException if the objects don't exist
+   */
   @FXML
   private void onClickCancel(ActionEvent event) throws IOException {
     black2.setVisible(false);
@@ -735,6 +741,12 @@ public class PlayerController extends RoomController {
     resetCancel.setVisible(false);
   }
 
+  /**
+   * Restart is processed when the button is clilcked.
+   *
+   * @param event button is clicked
+   * @throws IOException if objects don't exist
+   */
   @FXML
   private void onClickReset(ActionEvent event) throws IOException {
     try {

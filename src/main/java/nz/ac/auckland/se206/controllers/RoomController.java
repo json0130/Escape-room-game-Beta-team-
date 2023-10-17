@@ -4,14 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -27,28 +24,21 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
-import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 
 /** Controller class for the room view. */
 abstract class RoomController implements javafx.fxml.Initializable {
-  public static ObservableList<ChatBubble> chatBubbleListTileRoom =
-      FXCollections.observableArrayList();
 
-  public BooleanProperty directionUp = new SimpleBooleanProperty();
-  public BooleanProperty directionLeft = new SimpleBooleanProperty();
-  public BooleanProperty directionDown = new SimpleBooleanProperty();
-  public BooleanProperty directionRight = new SimpleBooleanProperty();
+  private BooleanProperty directionUp = new SimpleBooleanProperty();
+  private BooleanProperty directionLeft = new SimpleBooleanProperty();
+  private BooleanProperty directionDown = new SimpleBooleanProperty();
+  private BooleanProperty directionRight = new SimpleBooleanProperty();
 
-  public int movementVariable = 5;
-  public double shapesize;
+  private double shapesize;
 
   @FXML private ImageView player;
   @FXML private Pane scene;
   @FXML private Pane alert;
-
-  public double previousX;
-  public double previousY;
 
   @FXML private Label difficultyLabel;
   @FXML private Label hintLabel;
@@ -111,8 +101,8 @@ abstract class RoomController implements javafx.fxml.Initializable {
           false,
           false);
 
-  public Boolean walkAnimationPlaying = false;
-  public Timeline alertBlinkTimeline;
+  private Boolean walkAnimationPlaying = false;
+  private Timeline alertBlinkTimeline;
 
   @FXML private Button btnRoom1;
   @FXML private Button button;
@@ -121,29 +111,29 @@ abstract class RoomController implements javafx.fxml.Initializable {
 
   @FXML private Pane aiWindowController;
 
-  public AnimationTimer timer =
-      new AnimationTimer() {
-        @Override
-        public void handle(long now) {
+  // private AnimationTimer timer =
+  //     new AnimationTimer() {
+  //       @Override
+  //       public void handle(long now) {
 
-          previousX = player.getLayoutX(); // Update previousX
-          previousY = player.getLayoutY(); // Update previousY
+  //         previousX = player.getLayoutX(); // Update previousX
+  //         previousY = player.getLayoutY(); // Update previousY
 
-          if (directionUp.get()) {
-            player.setLayoutY(player.getLayoutY() - movementVariable);
-          }
-          if (directionLeft.get()) {
-            player.setLayoutX(player.getLayoutX() - movementVariable);
-          }
-          if (directionDown.get()) {
-            player.setLayoutY(player.getLayoutY() + movementVariable);
-          }
-          if (directionRight.get()) {
-            player.setLayoutX(player.getLayoutX() + movementVariable);
-          }
-          squareBorder();
-        }
-      };
+  //         if (directionUp.get()) {
+  //           player.setLayoutY(player.getLayoutY() - movementVariable);
+  //         }
+  //         if (directionLeft.get()) {
+  //           player.setLayoutX(player.getLayoutX() - movementVariable);
+  //         }
+  //         if (directionDown.get()) {
+  //           player.setLayoutY(player.getLayoutY() + movementVariable);
+  //         }
+  //         if (directionRight.get()) {
+  //           player.setLayoutX(player.getLayoutX() + movementVariable);
+  //         }
+  //         squareBorder();
+  //       }
+  //     };
 
   // Modify your setupAlertBlinking method as follows
   public void setupAlertBlinking() {
@@ -185,7 +175,10 @@ abstract class RoomController implements javafx.fxml.Initializable {
     scene.setOnKeyPressed(
         e -> {
           boolean wasMoving =
-              directionUp.get() || directionLeft.get() || directionDown.get() || directionRight.get();
+              directionUp.get()
+                  || directionLeft.get()
+                  || directionDown.get()
+                  || directionRight.get();
           // when w key is pressed, player moves up
           if (e.getCode() == KeyCode.W) {
             if (walkAnimationPlaying == false) {
@@ -222,7 +215,10 @@ abstract class RoomController implements javafx.fxml.Initializable {
           }
 
           boolean isMoving =
-              directionUp.get() || directionLeft.get() || directionDown.get() || directionRight.get();
+              directionUp.get()
+                  || directionLeft.get()
+                  || directionDown.get()
+                  || directionRight.get();
 
           // If we started moving and weren't before, start the sound.
           if (isMoving && !wasMoving) {
@@ -233,7 +229,10 @@ abstract class RoomController implements javafx.fxml.Initializable {
     scene.setOnKeyReleased(
         e -> {
           boolean wasMoving =
-              directionUp.get() || directionLeft.get() || directionDown.get() || directionRight.get();
+              directionUp.get()
+                  || directionLeft.get()
+                  || directionDown.get()
+                  || directionRight.get();
           // when w key is released, the player stops at its current position
           if (e.getCode() == KeyCode.W) {
             if (player.getImage() == leftCharacterAnimation
@@ -296,7 +295,10 @@ abstract class RoomController implements javafx.fxml.Initializable {
           }
 
           boolean isMovinng =
-              directionUp.get() || directionLeft.get() || directionDown.get() || directionRight.get();
+              directionUp.get()
+                  || directionLeft.get()
+                  || directionDown.get()
+                  || directionRight.get();
 
           // If we stopped moving and were before, stop the sound.
           if (!isMovinng && wasMoving) {
