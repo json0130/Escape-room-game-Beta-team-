@@ -2,7 +2,6 @@ package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
@@ -151,35 +150,35 @@ abstract class RoomController implements javafx.fxml.Initializable {
         }
       };
 
-  public void checkCollision2(ImageView player, List<Rectangle> walls) {
-    for (Rectangle wall : walls) {
-      if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
-        player.setLayoutX(previousX); // Restore the player's previous X position
-        player.setLayoutY(previousY); // Restore the player's previous Y position
-        // Exit the loop as soon as a collision is detected
-      }
-    }
-    // Detect if the timer is 30 seconds left and start the alert blinking
-    if (App.timerSeconds == 30) {
-      if (!hasHappend) {
-        System.out.println("30 seconds left");
-        hasHappend = true;
-        setupAlertBlinking();
-      }
-    } else if (App.timerSeconds == 0) {
-      // Stop the alert blinking when the timer reaches 0
-      stopAlertBlinking();
-    }
+  // public void checkCollision2(ImageView player, List<Rectangle> walls) {
+  //   for (Rectangle wall : walls) {
+  //     if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
+  //       player.setLayoutX(previousX); // Restore the player's previous X position
+  //       player.setLayoutY(previousY); // Restore the player's previous Y position
+  //       // Exit the loop as soon as a collision is detected
+  //     }
+  //   }
+  //   // Detect if the timer is 30 seconds left and start the alert blinking
+  //   if (App.timerSeconds == 30) {
+  //     if (!hasHappend) {
+  //       System.out.println("30 seconds left");
+  //       hasHappend = true;
+  //       setupAlertBlinking();
+  //     }
+  //   } else if (App.timerSeconds == 0) {
+  //     // Stop the alert blinking when the timer reaches 0
+  //     stopAlertBlinking();
+  //   }
 
-    // Initialize sound images based on the initial isSoundEnabled state
-    if (GameState.isSoundEnabled) {
-      soundOn.setVisible(true);
-      soundOff.setVisible(false);
-    } else {
-      soundOn.setVisible(false);
-      soundOff.setVisible(true);
-    }
-  }
+  //   // Initialize sound images based on the initial isSoundEnabled state
+  //   if (GameState.isSoundEnabled) {
+  //     soundOn.setVisible(true);
+  //     soundOff.setVisible(false);
+  //   } else {
+  //     soundOn.setVisible(false);
+  //     soundOff.setVisible(true);
+  //   }
+  // }
 
   // Modify your setupAlertBlinking method as follows
   public void setupAlertBlinking() {

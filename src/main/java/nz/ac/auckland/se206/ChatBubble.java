@@ -12,6 +12,13 @@ public class ChatBubble {
   private Label bubbleText;
   private HBox bubbleBox;
 
+  /**
+   * Constructor for ChatBubble
+   *
+   * @param msg the message to be displayed
+   * @param isGreeting whether the message is a greeting
+   * @return a ChatBubble object
+   */
   public ChatBubble(ChatMessage msg, Boolean isGreeting) {
 
     bubbleText = new Label(msg.getContent());

@@ -303,7 +303,7 @@ public class TileGameRoomController extends RoomController {
     chatBubbleListTileRoom.addListener(listener3);
   }
 
-  public void checkExit(ImageView player, Rectangle exit) {
+  private void checkExit(ImageView player, Rectangle exit) {
     if (player.getBoundsInParent().intersects(exit.getBoundsInParent())) {
       exit.setOpacity(1);
       timer.stop();
@@ -328,6 +328,14 @@ public class TileGameRoomController extends RoomController {
     }
   }
 
+  /**
+   * Check if the player is colliding with any of the walls.
+   *
+   * @param player the player
+   * @param walls the walls
+   * @return true if the player is colliding with any of the walls, false otherwise
+   */
+  @FXML
   public void checkCollision2(ImageView player, List<Rectangle> walls) {
     for (Rectangle wall : walls) {
       if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
@@ -358,7 +366,16 @@ public class TileGameRoomController extends RoomController {
     }
   }
 
+  /**
+   * Check if the player is next to the monitor.
+   *
+   * @param player the player
+   * @param wa the monitor
+   * @return true if the player is next to the monitor, false otherwise
+   */
+  @FXML
   private void checkMonitor(ImageView player, Rectangle wa) {
+    // if player is next to the monitor, show the button
     if (player.getBoundsInParent().intersects(wa.getBoundsInParent())) {
       blinkingRectangle.setOpacity(1);
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
@@ -533,12 +550,19 @@ public class TileGameRoomController extends RoomController {
    * Handles the click event on the window.
    *
    * @param event the mouse event
+   * @throws IOException if the game cannot be reset
    */
   @FXML
   public void clickWindow(MouseEvent event) {
     System.out.println("window clicked");
   }
 
+  /**
+   * Handles the click event on the door.
+   *
+   * @param event the mouse event
+   * @throws IOException if the game cannot be reset
+   */
   @FXML
   public void onTileGameButtonClick() throws IOException {
     translate.stop();

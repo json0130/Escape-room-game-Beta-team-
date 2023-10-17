@@ -109,8 +109,8 @@ public class ChatController {
     detectDifficulty();
   }
 
-  @FXML
   /** Detect difficulty of game whenever it changes. */
+  @FXML
   public void detectDifficulty() {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(

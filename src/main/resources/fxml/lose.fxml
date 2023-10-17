@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.EndController">
@@ -23,5 +25,19 @@
             <Font size="96.0" />
          </font>
       </Label>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000097" height="58.0" layoutX="979.0" layoutY="567.0" stroke="BLACK" strokeType="INSIDE" width="192.0" />
+      <Button fx:id="resetButton" layoutX="979.0" layoutY="567.0" mnemonicParsing="false" onAction="#handleRestartButtonClick" prefHeight="58.0" prefWidth="192.0" style="-fx-background-color: transparent; -fx-border-color: white;" text="RESTART" textFill="WHITE">
+         <font>
+            <Font name="Arial Bold Italic" size="29.0" />
+         </font>
+      </Button>
+      <Rectangle fx:id="restartBackground" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="303.0" layoutX="321.0" layoutY="223.0" stroke="WHITE" strokeType="INSIDE" width="538.0" />
+      <Label fx:id="restartLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="391.0" layoutY="310.0" prefHeight="92.0" prefWidth="377.0" text="Would you like to RESTART the game?" textAlignment="CENTER">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Button fx:id="restartNo" layoutX="391.0" layoutY="452.0" mnemonicParsing="false" onAction="#handleRestartButtonCanceled" text="CANCEL" />
+      <Button fx:id="restartYes" layoutX="723.0" layoutY="452.0" mnemonicParsing="false" onAction="#handleResetEvent" text="RESTART" />
    </children>
 </Pane>

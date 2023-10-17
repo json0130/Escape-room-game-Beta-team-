@@ -323,7 +323,7 @@ public class PlayerController extends RoomController {
    * @throws IOException if an input or output exception occurred
    */
   @FXML
-  public void checkRoom1(ImageView player, Rectangle room1) {
+  private void checkRoom1(ImageView player, Rectangle room1) {
     if (player.getBoundsInParent().intersects(room1.getBoundsInParent())) {
       room1.setVisible(true);
       timer.stop();
@@ -351,9 +351,9 @@ public class PlayerController extends RoomController {
    * When player is having collisions with room2 then it will go to the room2.
    *
    * @param event when the player is having collisions with room2
-   * @throws IOException
+   * @throws IOException if an input or output exception occurred
    */
-  public void checkRoom2(ImageView player, Rectangle room2) {
+  private void checkRoom2(ImageView player, Rectangle room2) {
     if (player.getBoundsInParent().intersects(room2.getBoundsInParent())) {
       room2.setVisible(true);
       timer.stop();
@@ -385,7 +385,7 @@ public class PlayerController extends RoomController {
    * @throws IOException
    */
   @FXML
-  public void checkRoom3(ImageView player, Rectangle room3) {
+  private void checkRoom3(ImageView player, Rectangle room3) {
     // If the player intersects with the room, go to the room.
     if (player.getBoundsInParent().intersects(room3.getBoundsInParent())) {
       room3.setVisible(true);
@@ -450,6 +450,7 @@ public class PlayerController extends RoomController {
    * When the player is touching the border then it will keep the player to be in the position.
    *
    * @param event when the player is touching the border
+   * @throws IOException if an input or output exception occurred
    */
   @FXML
   public void squareBorder() {
@@ -477,13 +478,13 @@ public class PlayerController extends RoomController {
   }
 
   /**
-   * When the go back button is clicked, the player will go back to the intro page.
+   * When the go back button is clicked, the player will go back to the control room.
    *
    * @param event when the go back button is clicked
    * @throws IOException
    */
   @FXML
-  public void onRoom3(ActionEvent event) {
+  private void onRoom3(ActionEvent event) {
     App.setScene(AppUi.ROOM3);
     simulateKeyPressAfterDelay();
   }
@@ -519,7 +520,12 @@ public class PlayerController extends RoomController {
         500);
   }
 
-  // code for player movement using wasd keys
+  /**
+   * Set up the keyboard control for the player.
+   *
+   * @param event when the go back button is clicked
+   * @throws IOException if an input or output exception occurred
+   */
   @FXML
   public void movingSetup() {
     scene.setOnKeyPressed(

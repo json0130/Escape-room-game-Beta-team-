@@ -311,7 +311,7 @@ public class ExitController extends RoomController {
    * @param player the character image
    * @param exit1 the exit which is connected to the map
    */
-  public void checkExit(ImageView player, Rectangle exit1) {
+  private void checkExit(ImageView player, Rectangle exit1) {
     if (player.getBoundsInParent().intersects(exit1.getBoundsInParent())) {
       exit1.setOpacity(1);
       timer.stop();
@@ -341,7 +341,7 @@ public class ExitController extends RoomController {
    * @param player the character
    * @param walls the border that the player cannot move axross
    */
-  public void checkCollision2(ImageView player, List<Rectangle> walls) {
+  private void checkCollision2(ImageView player, List<Rectangle> walls) {
     for (Rectangle wall : walls) {
       if (player.getBoundsInParent().intersects(wall.getBoundsInParent())) {
         player.setLayoutX(previousX); // Restore the player's previous X position
@@ -370,9 +370,14 @@ public class ExitController extends RoomController {
     }
   }
 
-  /** Enable the player can move using wasd keys */
+  /**
+   * If the button is clicked, the sound is toggled.
+   *
+   * @param event mouse is clicked
+   * @throws IOException if the sound cannot be toggled
+   */
   @FXML
-  public void setUpMovement() {
+  private void setUpMovement() {
 
     // while the keys are pressed, the player moves
     scene.setOnKeyPressed(
@@ -554,7 +559,13 @@ public class ExitController extends RoomController {
     }
   }
 
-  /** Idcards can be dragged. */
+  /**
+   * Make the id Cards to be draggable
+   *
+   * @param originalX It is the original x coordinate of the id cards.
+   * @param originalY It is the original y coordinate of the id cards.
+   */
+  @FXML
   private void makeDraggable(ImageView imageView) {
     double originalX = imageView.getLayoutX();
     double originalY = imageView.getLayoutY();
@@ -1196,19 +1207,6 @@ public class ExitController extends RoomController {
 
     aiWindowController.setVisible(true);
     System.out.print("HI");
-  }
-
-  /** Move game master robot up and down. */
-  @FXML
-  private void animateRobot() {
-    TranslateTransition translate = new TranslateTransition();
-    translate.setNode(gameMaster);
-    translate.setDuration(Duration.millis(1000)); // robot moves every 1 second
-    translate.setCycleCount(TranslateTransition.INDEFINITE); // robot continuously moves
-    translate.setByX(0);
-    translate.setByY(20);
-    translate.setAutoReverse(true); // robot moves back to its original position
-    translate.play();
   }
 
   /**

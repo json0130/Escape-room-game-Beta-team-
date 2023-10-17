@@ -261,6 +261,12 @@ public class Room1Controller extends RoomController {
         }
       };
 
+  /**
+   * Move the indicator randomly.
+   *
+   * @param indicator the indicator image
+   * @return true if the spaceship collides with the rock, false otherwise
+   */
   @FXML
   public void initialize(URL url, ResourceBundle resource) {
     shapesize = player.getFitWidth();
@@ -761,6 +767,12 @@ public class Room1Controller extends RoomController {
     mediaPlayer.setAutoPlay(true);
   }
 
+  /**
+   * Reveal indicators after the player resolves the riddle.
+   *
+   * @param event mouse is clicked
+   */
+  @FXML
   private void revealIndicator() {
     /** Reveal indicators after the player resolves the riddle. */
     Timer indicatorTimer = new Timer(true);
@@ -819,7 +831,7 @@ public class Room1Controller extends RoomController {
   }
 
   /**
-   * Back to the room1.
+   * If the player clicks cancel button then the restart will be canceled.
    *
    * @param event mouse is clicked
    * @throws IOException if the objects don't exist
@@ -834,7 +846,7 @@ public class Room1Controller extends RoomController {
   }
 
   /**
-   * Game is restarted.
+   * If the player clicks yes button then the game will be restarted.
    *
    * @param event mouse is clicked
    * @throws IOException if the objects don't exist
@@ -858,13 +870,18 @@ public class Room1Controller extends RoomController {
     btnCollect1.setStyle("-fx-background-color:grey; -fx-text-fill: white");
   }
 
+  /**
+   * Change the colour of button after the cursor leaves.
+   *
+   * @param e mouse is clicked
+   */
   @FXML
   private void exitCollect1(MouseEvent e) {
     btnCollect1.setStyle("-fx-background-color:lightgrey;-fx-text-fill:black;");
   }
 
   /**
-   * Change the colour of button on hover
+   * Change the colour of button on hover.
    *
    * @param e mouse is clicked
    */
