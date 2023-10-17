@@ -23,9 +23,9 @@ public class GptPromptEngineering {
   public static String riddleAi(String answer) {
 
     return "Your name is 'WALL-E' and you are the game maser in a starship escape room game."
-        + " Provide a riddle which the answer is "
+        + " Introduce yourself to the player and provide a riddle which the answer is ."
         + answer
-        + " in 30 words. Do not include the answer in your prompt.";
+        + " in 50 words. Do not include the answer in your prompt.";
   }
 
   public static String checkRiddleAnswer(String message) {
@@ -33,35 +33,37 @@ public class GptPromptEngineering {
     String user = "The user said " + message;
     // Depending on the difficulty the player chose, hint availability differes
     String answer = "";
+
+    if (message.toLowerCase().contains(Room1Controller.riddleAnswer)) {
+      return message
+          + "If the user is guessing the answer and you think it's the valid answer, start your"
+          + " prompt with 'Correct'.";
+    }
     if ((GameState.difficulty == "MEDIUM" && GameState.numOfHints <= 0)
         || GameState.difficulty == "HARD") {
       answer =
           "Determine if the user is asking for help or asking for answer or quessing the answer or"
-              + " just want to talk to you. If ths user is asking for help, say you cannot give"
-              + " hints and do not give a hint. If the user asks for the answer, say you cannot"
-              + " reveal the answer and do not give a hint. Guessing includes sending a single"
-              + " answer and If"
+              + " just want to talk to you. Guessing includes sending a single answer. If ths user"
+              + " is asking for help whether directly or indirectly, say you cannot give hints and"
+              + " do not give a hint and do not inclue the answer in your prompt. If the user asks"
+              + " for the answer, say you cannot reveal the answer and do not give a hint and do"
+              + " not include the answer in your prompt. If the user is guessing the answer, you"
+              + " must start you prompt with 'Incorrect' whatever the guess is. Do not include the"
+              + " answer in your prompt and do not give a hint when the user is guessing the"
+              + " answer. Otherwise, naturally respond to "
               + message
-              + "contains"
-              + Room1Controller.riddleAnswer
-              + "and the user's guess is"
-              + " correct, start your prompt with 'Correct'. If the guess is wrong, just write"
-              + " 'Incorrect' in your prompt. Otherwise, naturally respond to "
-              + message
-              + ",but do not give a hint.";
+              + ", but do not give a hint.";
     } else {
       answer =
-          "Determine if the user is asking for help or asking for answer or quessing the answer. If"
-              + " the user is asking for help, start your prompt with 'Hint' and give a hint."
-              + " Otherwise, do not give a hint. If the user asks for the answer, say you cannot"
-              + " reveal the answer and do not give a hint. Guessing includes sending a single"
-              + " answer. If "
-              + message
-              + " contains "
-              + Room1Controller.riddleAnswer
-              + "and the user's guess is correct, start your prompt with"
-              + " 'Correct'. If the user's guess is wrong, start you prompt with 'Incorrect'. Do"
-              + " not include the answer in your prompt. Otherwise, naturally respond to "
+          "Determine if the user is asking for help or asking for answer or quessing the answer or"
+              + " just want to talk to you. Guessing includes sending a single answer. If the user"
+              + " is asking for help whether directly or indirectly, you must start your prompt"
+              + " with 'Hint' and give a hint, but do not include the answer in your prompt. If the"
+              + " user asks for the answer, say you cannot reveal the answer, but do not give a"
+              + " hint and do not include the answer in your prompt. If the user is guessing the"
+              + " answer, you must start you prompt with 'Incorrect' whatever the guess is. Do not"
+              + " include the answer in your prompt and do not give a hint when the user is"
+              + " guessing the answer. Otherwise, naturally respond to "
               + message
               + ", but do not give a hint.";
     }
@@ -186,7 +188,7 @@ public class GptPromptEngineering {
             + " can be related to not knowing what to do, or asking for"
             + " what to find or asking for what is the next step. The user"
             + " may ask for what to do, and that is considered as asking for"
-            + " hint. If you believe the user asking for hint, then start your prompt with 'hint: '"
+            + " hint. If you believe the user asking for hint, then start your prompt with 'Hint: '"
             + "and based on this"
             + hint
             + " give a single hint to user and do not give the same hint everytime"
@@ -290,7 +292,7 @@ public class GptPromptEngineering {
               + ". First determine if the user is asking for hint or not. This can be related to"
               + " not knowing what to do, or asking for what to find or asking for what is the next"
               + " step. The user may ask for what to do, and that is considered as asking for hint."
-              + " If you believe the user asking for hint, then start your prompt with 'hint: 'and"
+              + " If you believe the user asking for hint, then start your prompt with 'Hint: 'and"
               + " based on this"
               + hint
               + " provide a single hint to user and do not give the same hint everytime and do not"
