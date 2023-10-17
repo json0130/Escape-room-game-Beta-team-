@@ -39,13 +39,17 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
+/** Controller for the tutorial scene */
 public class TutorialController implements Initializable {
   private BooleanProperty isWKeyPressed = new SimpleBooleanProperty();
   private BooleanProperty isAKeyPressed = new SimpleBooleanProperty();
   private BooleanProperty isSKeyPressed = new SimpleBooleanProperty();
   private BooleanProperty isDKeyPressed = new SimpleBooleanProperty();
 
-  private BooleanBinding keyPressed = isWKeyPressed.or(isAKeyPressed).or(isSKeyPressed).or(isDKeyPressed);
+  private BooleanBinding keyPressed = isWKeyPressed
+    .or(isAKeyPressed)
+    .or(isSKeyPressed)
+    .or(isDKeyPressed);
 
   private int movementVariable = 5;
   private double shapesize;
@@ -332,9 +336,11 @@ public class TutorialController implements Initializable {
   }
 
   /**
-   * Play the rock animation
-   *
+   * Play the rock animation which is the animation of the rocks falling down from the top of the screen.
+   * 
    * @param event The event
+   * @return void
+   * @throws Exception
    */
   @FXML
   private void playRock() {
@@ -349,12 +355,13 @@ public class TutorialController implements Initializable {
     setMovement(r4, false, 3, -900, 0, 5);
   }
 
-
   /**
    * Check if the player collides with any of the rocks
    *
    * @param player The player
    * @param rocks The rocks
+   * @return void
+   * @throws Exception
    */
   @FXML
   public void checkCollision(ImageView player, List<ImageView> rocks) {
@@ -418,7 +425,6 @@ public class TutorialController implements Initializable {
         player.setLayoutY(previousY);
       }
     }
-
     // Initialize sound images based on the initial isSoundEnabled state
     if (GameState.isSoundEnabled) {
       soundOn.setVisible(true);
@@ -433,6 +439,14 @@ public class TutorialController implements Initializable {
    * Set the movement of the player
    *
    * @param player The player
+   * @param isWKeyPressed The boolean for the W key
+   * @param isAKeyPressed The boolean for the A key
+   * @param isSKeyPressed The boolean for the S key
+   * @param isDKeyPressed The boolean for the D key
+   * @param keyPressed The boolean for any key
+   * @param movementVariable The movement variable
+   * @param shapesize The size of the player
+   * @throws Exception if the player collides with the boundaries of the scene
    */
   @FXML
   public void playerMove() {

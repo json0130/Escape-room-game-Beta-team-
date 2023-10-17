@@ -31,6 +31,7 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 
+/** Controller for the ending scene */
 public class EndController implements Initializable {
   @FXML private Label win;
   @FXML private Label youWin;

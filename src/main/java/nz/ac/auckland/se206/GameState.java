@@ -21,29 +21,24 @@ public class GameState {
   public static boolean isPlayerInRoom3 = false;
   public static boolean beenToRoom3 = false;
 
-  /** Game state in room1 */
   public static boolean isRiddleGiven = false;
 
   public static boolean isRiddleResolved = false;
   public static boolean isIdCollected = false;
 
-  /** Game state in room2 */
   public static boolean foundComputer = false;
 
   public static boolean isPuzzleSolved = false;
   public static boolean foundPasscode = false;
 
-  /* Game state in room3 */
   public static boolean foundMonitor = false;
   public static boolean isPasscodeCorrect = false;
   public static boolean isIdChecked = false;
 
   public static boolean isGameFinished = false;
 
-  /* password will be generated in room2 */
   public static String password = "";
 
-  /* id cards are collected in room1 */
   public static boolean isCaptainCollected = false;
   public static boolean isChefCollected = false;
   public static boolean isDoctorCollected = false;
@@ -62,6 +57,11 @@ public class GameState {
 
   public static boolean hasHappend = false;
 
+  /**
+   * Reset the game state to the initial state.
+   *
+   * @throws IOException if the game cannot be reset
+   */
   public static void resetGames() throws IOException {
     isGameStarted = false;
     isPlayerInMap = true;
@@ -76,27 +76,22 @@ public class GameState {
     isPlayerInRoom3 = false;
     beenToRoom3 = false;
 
-    /** Game state in room1 */
     isRiddleGiven = false;
     isRiddleResolved = false;
     isIdCollected = false;
 
-    /** Game state in room2 */
     foundComputer = false;
     isPuzzleSolved = false;
     foundPasscode = false;
 
-    /* Game state in room3 */
     foundMonitor = false;
     isPasscodeCorrect = false;
     isIdChecked = false;
 
     isGameFinished = false;
 
-    /* password will be generated in room2 */
     password = "";
 
-    /* id cards are collected in room1 */
     isCaptainCollected = false;
     isChefCollected = false;
     isDoctorCollected = false;

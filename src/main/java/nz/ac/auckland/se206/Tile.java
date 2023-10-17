@@ -75,11 +75,11 @@ public class Tile {
     return topTile;
   }
 
-  public double getXCoordinates() {
+  public double getxCoordinates() {
     return imageViewHorizontalCoordinates;
   }
 
-  public double getYCoordinates() {
+  public double getyCoordinates() {
     return imageViewVerticalCoordinates;
   }
 }
