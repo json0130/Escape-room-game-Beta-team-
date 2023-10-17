@@ -30,7 +30,7 @@ import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
 
 /** Controller class for the chat view. */
-public class AiWindowController {
+public class WindowController {
   @FXML public TextArea chatTextArea;
   @FXML private TextField inputText;
   @FXML private Button sendButton;
