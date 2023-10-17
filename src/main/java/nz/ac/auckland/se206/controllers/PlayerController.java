@@ -700,7 +700,7 @@ public class PlayerController implements Initializable {
                   || isAKeyPressed.get()
                   || isSKeyPressed.get()
                   || isDKeyPressed.get();
-
+          // When the w key is pressed, player moves up
           if (e.getCode() == KeyCode.W) {
             if (walkAnimationPlaying == false) {
               player.setImage(lastPlayedWalk);
@@ -708,7 +708,7 @@ public class PlayerController implements Initializable {
             }
             isWKeyPressed.set(true);
           }
-
+          // when the a key is pressed, player moves left
           if (e.getCode() == KeyCode.A) {
             if (player.getImage() != leftCharacterAnimation) {
               player.setImage(leftCharacterAnimation);
@@ -717,7 +717,7 @@ public class PlayerController implements Initializable {
             }
             isAKeyPressed.set(true);
           }
-
+          // when the s key is pressed, the player moves down
           if (e.getCode() == KeyCode.S) {
             if (walkAnimationPlaying == false) {
               player.setImage(lastPlayedWalk);
@@ -725,7 +725,7 @@ public class PlayerController implements Initializable {
             }
             isSKeyPressed.set(true);
           }
-
+          // when the d key is pressed, the player moves right
           if (e.getCode() == KeyCode.D) {
             if (player.getImage() != rightCharacterAnimation) {
               player.setImage(rightCharacterAnimation);
@@ -754,7 +754,7 @@ public class PlayerController implements Initializable {
                   || isAKeyPressed.get()
                   || isSKeyPressed.get()
                   || isDKeyPressed.get();
-
+          // if the w key is released, the player stops at its current position
           if (e.getCode() == KeyCode.W) {
             if (player.getImage() == leftCharacterAnimation
                 && isSKeyPressed.get() == false
@@ -771,7 +771,7 @@ public class PlayerController implements Initializable {
             }
             isWKeyPressed.set(false);
           }
-
+          // if the a key is released, the player stops at its current position
           if (e.getCode() == KeyCode.A) {
             if (isDKeyPressed.get() == false
                 && isWKeyPressed.get() == false
@@ -784,7 +784,7 @@ public class PlayerController implements Initializable {
 
             isAKeyPressed.set(false);
           }
-
+          // if s key is pressed, the player stops at its current position
           if (e.getCode() == KeyCode.S) {
             if (player.getImage() == leftCharacterAnimation
                 && isWKeyPressed.get() == false
@@ -801,7 +801,7 @@ public class PlayerController implements Initializable {
             }
             isSKeyPressed.set(false);
           }
-
+          // if d key is released, the player stops at its current position
           if (e.getCode() == KeyCode.D) {
             if (isAKeyPressed.get() == false
                 && isWKeyPressed.get() == false
@@ -900,18 +900,19 @@ public class PlayerController implements Initializable {
             () -> {
               try {
                 Thread.sleep(50); // Delay of 0.1 seconds
+                // s key is released when scene changes
                 KeyEvent keyReleaseEventS =
                     new KeyEvent(
                         KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
-
+                // a key is released when scene changes
                 KeyEvent keyReleaseEventA =
                     new KeyEvent(
                         KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
-
+                // w key is released when scene changes
                 KeyEvent keyReleaseEventW =
                     new KeyEvent(
                         KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
-
+                // d key is released when scene changes
                 KeyEvent keyReleaseEventD =
                     new KeyEvent(
                         KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);

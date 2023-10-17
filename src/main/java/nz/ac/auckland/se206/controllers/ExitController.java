@@ -51,12 +51,12 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
 public class ExitController implements Initializable {
   public static ObservableList<ChatBubble> chatBubbleListExit = FXCollections.observableArrayList();
 
-  private BooleanProperty isWPressed = new SimpleBooleanProperty();
-  private BooleanProperty isAPressed = new SimpleBooleanProperty();
-  private BooleanProperty isSPressed = new SimpleBooleanProperty();
-  private BooleanProperty isDPressed = new SimpleBooleanProperty();
+  private BooleanProperty wKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty aKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty sKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty dKeyPressed = new SimpleBooleanProperty();
 
-  private BooleanBinding keyPressed = isWPressed.or(isAPressed).or(isSPressed).or(isDPressed);
+  private BooleanBinding keyPressed = wKeyPressed.or(aKeyPressed).or(sKeyPressed).or(dKeyPressed);
   private int movementVariable = 5;
   private double shapesize;
 
@@ -211,16 +211,16 @@ public class ExitController implements Initializable {
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
 
-          if (isWPressed.get()) {
+          if (wKeyPressed.get()) {
             player.setLayoutY(player.getLayoutY() - movementVariable);
           }
-          if (isAPressed.get()) {
+          if (aKeyPressed.get()) {
             player.setLayoutX(player.getLayoutX() - movementVariable);
           }
-          if (isSPressed.get()) {
+          if (sKeyPressed.get()) {
             player.setLayoutY(player.getLayoutY() + movementVariable);
           }
-          if (isDPressed.get()) {
+          if (dKeyPressed.get()) {
             player.setLayoutX(player.getLayoutX() + movementVariable);
           }
           squareBorder();
@@ -262,8 +262,8 @@ public class ExitController implements Initializable {
     previousY = player.getLayoutY();
 
     keyPressed.addListener(
-        ((observableValue, aBoolean, time) -> {
-          if (!aBoolean) {
+        ((observableValue, isKeyPressed, time) -> {
+          if (!isKeyPressed) {
             timer.start();
           } else {
             timer.stop();
@@ -388,7 +388,7 @@ public class ExitController implements Initializable {
     scene.setOnKeyPressed(
         e -> {
           boolean wasMoving =
-              isWPressed.get() || isAPressed.get() || isSPressed.get() || isDPressed.get();
+              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
 
           if (keyboardControlEnabled) {
             // player moves up
@@ -397,7 +397,7 @@ public class ExitController implements Initializable {
                 player.setImage(lastPlayedWalk);
                 walkAnimationPlaying = true;
               }
-              isWPressed.set(true);
+              wKeyPressed.set(true);
             }
 
             // player moves left
@@ -407,7 +407,7 @@ public class ExitController implements Initializable {
                 walkAnimationPlaying = true;
                 lastPlayedWalk = player.getImage();
               }
-              isAPressed.set(true);
+              aKeyPressed.set(true);
             }
 
             // player moves down
@@ -416,7 +416,7 @@ public class ExitController implements Initializable {
                 player.setImage(lastPlayedWalk);
                 walkAnimationPlaying = true;
               }
-              isSPressed.set(true);
+              sKeyPressed.set(true);
             }
 
             // player moves right
@@ -426,10 +426,10 @@ public class ExitController implements Initializable {
                 walkAnimationPlaying = true;
                 lastPlayedWalk = player.getImage();
               }
-              isDPressed.set(true);
+              dKeyPressed.set(true);
             }
             boolean isMoving =
-                isWPressed.get() || isAPressed.get() || isSPressed.get() || isDPressed.get();
+                wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
 
             // If we started moving and weren't before, start the sound.
             if (isMoving && !wasMoving) {
@@ -442,75 +442,75 @@ public class ExitController implements Initializable {
     scene.setOnKeyReleased(
         e -> {
           boolean wasMoving =
-              isWPressed.get() || isAPressed.get() || isSPressed.get() || isDPressed.get();
+              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
 
           if (keyboardControlEnabled) {
             // If the player was moving up, image changes
             if (e.getCode() == KeyCode.W) {
               if (player.getImage() == leftCharacterAnimation
-                  && isSPressed.get() == false
-                  && isAPressed.get() == false) {
+                  && sKeyPressed.get() == false
+                  && aKeyPressed.get() == false) {
                 player.setImage(leftCharacterIdle);
                 walkAnimationPlaying = false;
-              } else if (isSPressed.get() == true) {
+              } else if (sKeyPressed.get() == true) {
                 player.setImage(lastPlayedWalk);
-              } else if (isAPressed.get() == false
-                  && isDPressed.get() == false
-                  && isSPressed.get() == false) {
+              } else if (aKeyPressed.get() == false
+                  && dKeyPressed.get() == false
+                  && sKeyPressed.get() == false) {
                 player.setImage(rightCharacterIdle);
                 walkAnimationPlaying = false;
               }
-              isWPressed.set(false);
+              wKeyPressed.set(false);
             }
 
             // If the player was moving left, image changes
             if (e.getCode() == KeyCode.A) {
-              if (isDPressed.get() == false
-                  && isWPressed.get() == false
-                  && isSPressed.get() == false) {
+              if (dKeyPressed.get() == false
+                  && wKeyPressed.get() == false
+                  && sKeyPressed.get() == false) {
                 player.setImage(leftCharacterIdle);
                 walkAnimationPlaying = false;
-              } else if (isDPressed.get() == true) {
+              } else if (dKeyPressed.get() == true) {
                 player.setImage(rightCharacterAnimation);
               }
 
-              isAPressed.set(false);
+              aKeyPressed.set(false);
             }
 
             // If the player was moving down, image changes
             if (e.getCode() == KeyCode.S) {
               if (player.getImage() == leftCharacterAnimation
-                  && isWPressed.get() == false
-                  && isAPressed.get() == false) {
+                  && wKeyPressed.get() == false
+                  && aKeyPressed.get() == false) {
                 player.setImage(leftCharacterIdle);
                 walkAnimationPlaying = false;
-              } else if (isWPressed.get() == true) {
+              } else if (wKeyPressed.get() == true) {
                 player.setImage(lastPlayedWalk);
-              } else if (isAPressed.get() == false
-                  && isDPressed.get() == false
-                  && isWPressed.get() == false) {
+              } else if (aKeyPressed.get() == false
+                  && dKeyPressed.get() == false
+                  && wKeyPressed.get() == false) {
                 player.setImage(rightCharacterIdle);
                 walkAnimationPlaying = false;
               }
-              isSPressed.set(false);
+              sKeyPressed.set(false);
             }
 
             // If the player was moving right, image changes
             if (e.getCode() == KeyCode.D) {
-              if (isAPressed.get() == false
-                  && isWPressed.get() == false
-                  && isSPressed.get() == false) {
+              if (aKeyPressed.get() == false
+                  && wKeyPressed.get() == false
+                  && sKeyPressed.get() == false) {
                 player.setImage(rightCharacterIdle);
                 walkAnimationPlaying = false;
-              } else if (isAPressed.get() == true) {
+              } else if (aKeyPressed.get() == true) {
                 player.setImage(leftCharacterAnimation);
               }
 
-              isDPressed.set(false);
+              dKeyPressed.set(false);
             }
 
             boolean isMovinng =
-                isWPressed.get() || isAPressed.get() || isSPressed.get() || isDPressed.get();
+                wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
 
             // If we stopped moving and were before, stop the sound.
             if (!isMovinng && wasMoving) {
@@ -537,19 +537,19 @@ public class ExitController implements Initializable {
     double right = scene.getWidth() - shapesize;
     double top = 0;
     double bottom = scene.getHeight() - shapesize;
-
+    // player cannot move across the left border
     if (player.getLayoutX() < left) {
       player.setLayoutX(left);
     }
-
+    // player cannot mobe across the right border
     if (player.getLayoutX() > right) {
       player.setLayoutX(right);
     }
-
+    // player cannot move across the top border
     if (player.getLayoutY() < top) {
       player.setLayoutY(top);
     }
-
+    // player cannot move across the bottom border
     if (player.getLayoutY() > bottom) {
       player.setLayoutY(bottom);
     }
@@ -653,6 +653,7 @@ public class ExitController implements Initializable {
   @FXML
   private void checkComputer(ImageView player, Rectangle wall2) {
     if (player.getBoundsInParent().intersects(wall2.getBoundsInParent())) {
+      // Monitor becomes visible when the player touches on it
       monitor.setOpacity(1);
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.3));
       pauseTransition.setOnFinished(
@@ -663,6 +664,7 @@ public class ExitController implements Initializable {
               monitor.setFill(javafx.scene.paint.Color.WHITE);
               clickButton.setVisible(true);
             } else {
+              // If the player didn't get the correct passcode, still monitor can be shown
               nextToButton = false;
               clickButton.setVisible(false);
               monitor.setFill(javafx.scene.paint.Color.TRANSPARENT);
@@ -678,6 +680,7 @@ public class ExitController implements Initializable {
 
   /** Make all the nodes invisible at once. */
   private void makeInvisible() {
+    // scanner related nodes are not visible
     idScanner.setVisible(false);
     light.setVisible(false);
     idLabel.setVisible(false);
@@ -686,6 +689,7 @@ public class ExitController implements Initializable {
     idChef.setVisible(false);
     idDoctor.setVisible(false);
     idEngineer.setVisible(false);
+    // key pad related nodes are not visible
     screen.setVisible(false);
     one.setVisible(false);
     two.setVisible(false);
@@ -700,6 +704,7 @@ public class ExitController implements Initializable {
     enter.setVisible(false);
     reset.setVisible(false);
     pad.setVisible(false);
+    // other nodes are not visible
     exit.setVisible(false);
     clickButton.setVisible(false);
     exit2.setVisible(false);
@@ -1132,8 +1137,11 @@ public class ExitController implements Initializable {
   /** Update the labels of hint and difficulty as the game progresses. */
   private void updateLabels() {
     difficultyLabel.setText(GameState.difficulty);
+    // Depending on the level that is selected in the intro page, proper texts are shown in the
+    // header
     if (GameState.difficulty == "EASY") {
       hintLabel.setText("UNLIMITED");
+      // For the medium difficulty, changing the number of hint left
     } else if (GameState.difficulty == "MEDIUM") {
       hintLabel.setText(String.valueOf(GameState.numOfHints));
       hintLabel2.setText("HINTS");
@@ -1149,15 +1157,15 @@ public class ExitController implements Initializable {
   private void changeOpacity() {
     // Create a FadeTransition for background
     FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(2), background);
-    fadeTransition1.setFromValue(1.0); // Start with fully opaque
-    fadeTransition1.setToValue(0.0); // Fade to fully transparent
-    fadeTransition1.play(); // Start the animation for background
+    fadeTransition1.setFromValue(1.0);
+    fadeTransition1.setToValue(0.0);
+    fadeTransition1.play();
 
     // Create a FadeTransition for background2
     FadeTransition fadeTransition2 = new FadeTransition(Duration.seconds(2), background2);
-    fadeTransition2.setFromValue(0.0); // Start with fully transparent
-    fadeTransition2.setToValue(1.0); // Fade to fully opaque
-    fadeTransition2.play(); // Start the animation for background2
+    fadeTransition2.setFromValue(0.0);
+    fadeTransition2.setToValue(1.0);
+    fadeTransition2.play();
     idScanner.setVisible(true);
     light.setVisible(true);
     idLabel.setVisible(true);
@@ -1169,11 +1177,11 @@ public class ExitController implements Initializable {
       player.setVisible(false);
       // Create a FadeTransition for both background images
       FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(2), background2);
-      fadeTransition1.setToValue(0.0); // Set the target opacity value (1.0 for fully opaque)
+      fadeTransition1.setToValue(0.0);
       fadeTransition1.play(); // Start the animation for background1
 
       FadeTransition fadeTransition2 = new FadeTransition(Duration.seconds(2), background3);
-      fadeTransition2.setToValue(1.0); // Set the target opacity value (1.0 for fully opaque)
+      fadeTransition2.setToValue(1.0);
       fadeTransition2.play(); // Start the animation for background2
 
       PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.0));
@@ -1316,11 +1324,11 @@ public class ExitController implements Initializable {
   private void animateRobot() {
     TranslateTransition translate = new TranslateTransition();
     translate.setNode(gameMaster);
-    translate.setDuration(Duration.millis(1000));
-    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setDuration(Duration.millis(1000)); // robot moves every 1 second
+    translate.setCycleCount(TranslateTransition.INDEFINITE); // robot continuously moves
     translate.setByX(0);
     translate.setByY(20);
-    translate.setAutoReverse(true);
+    translate.setAutoReverse(true); // robot moves back to its original position
     translate.play();
   }
 
@@ -1398,7 +1406,6 @@ public class ExitController implements Initializable {
                         KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
 
                 scene.fireEvent(keyReleaseEventA);
-                // scene.fireEvent(keyPressEvent);
                 scene.fireEvent(keyReleaseEventD);
                 scene.fireEvent(keyReleaseEventW);
                 scene.fireEvent(keyReleaseEventS);

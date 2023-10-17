@@ -43,7 +43,9 @@ public class GptPromptEngineering {
    * @return the generated prompt engineering string
    */
   public static String checkRiddleAnswer(String message) {
+    // Inform gpt about what the user just said
     String user = "The user said " + message;
+    // Depending on the difficulty the player chose, hint availability differes
     String answer = "";
 
     if (message.toLowerCase().contains(Room1Controller.riddleAnswer)) {
@@ -52,7 +54,7 @@ public class GptPromptEngineering {
           + " prompt with 'Correct'.";
     }
     if ((GameState.difficulty == "MEDIUM" && GameState.numOfHints <= 0)
-        || GameState.difficulty == "settingHARD") {
+        || GameState.difficulty == "HARD") {
       answer =
           "Determine if the user is asking for help or asking for answer or quessing the answer or"
               + " just want to talk to you. Guessing includes sending a single answer. If ths user"
@@ -79,7 +81,7 @@ public class GptPromptEngineering {
               + message
               + ", but do not give a hint.";
     }
-
+    // Send the final message to the gpt
     return user + answer;
   }
 
@@ -90,7 +92,7 @@ public class GptPromptEngineering {
    * @return the generated prompt engineering string
    */
   public static String greeting() {
-
+    // Prompt gpt to introduce itself and the rooms where player needs to visit to escape
     return "Your name is 'EVA' and you are the game master of Starship Escape 1. You were designed"
         + " to help crew members which is the user in the emergency situation. Now the"
         + " starship has crashed into a meteor. Your task is to communicate with the player"
@@ -145,7 +147,9 @@ public class GptPromptEngineering {
    * @throws IOException
    */
   public static String settingEasy(String message) {
+    // check the player's progress and prepare proper hint
     String hint = "";
+    // hint when the player is in the map
     if (GameState.isPlayerInMap) {
       if (!GameState.beenToRoom1 && !GameState.beenToRoom2 && !GameState.beenToRoom3) {
         hint = "tell the user to visit the computer room or the closet room to complete tasks";
@@ -164,6 +168,7 @@ public class GptPromptEngineering {
       } else if (!GameState.isIdChecked) {
         hint = "tell the user to check the riddle answer again and collect the correct id";
       }
+      // hint when the player is in room1
     } else if (GameState.isPlayerInRoom1) {
       if (!GameState.isRiddleGiven) {
         hint = "tell the user to interact with the monitor in the middle of the closet room";
@@ -182,6 +187,7 @@ public class GptPromptEngineering {
       } else if (!GameState.isIdChecked) {
         hint = "tell the user to check the riddle answer again and collect the correct id";
       }
+      // hint when the player is in room2
     } else if (GameState.isPlayerInRoom2) {
       if (!GameState.foundComputer) {
         hint = "tell the user to interact with the computer";
@@ -202,6 +208,7 @@ public class GptPromptEngineering {
       } else if (!GameState.isIdChecked) {
         hint = "tell the user to check the riddle answer again and collect the correct id";
       }
+      // hint when the player is in room3
     } else if (GameState.isPlayerInRoom3) {
       if (!GameState.beenToRoom1) {
         hint = "tell the user to go to the closet room";
@@ -218,6 +225,7 @@ public class GptPromptEngineering {
       }
     }
 
+    // Read player's input and let gpt to prepare proper respond to that
     String intro =
         "The user said"
             + message
@@ -238,12 +246,15 @@ public class GptPromptEngineering {
 
   public static String settingMedium(String message) {
     String intro = "";
+    // If the player used up all hints, no hints are available
     if (GameState.numOfHints <= 0) {
       intro =
           " Since player used all of the hint, so if you believe the"
               + " player is asking for hint, say you cannot give more hint. ";
     } else {
+      // Check the player's progress and prepare proper hint
       String hint = "";
+      // hint when the player is in map
       if (GameState.isPlayerInMap) {
         if (!GameState.beenToRoom1 && !GameState.beenToRoom2 && !GameState.beenToRoom3) {
           hint = "tell the user to visit the computer room or the closet room first";
@@ -262,6 +273,7 @@ public class GptPromptEngineering {
         } else if (!GameState.isIdChecked) {
           hint = "tell the user to check the riddle answer again and collect the correct id";
         }
+        // hint when the player is in room
       } else if (GameState.isPlayerInRoom1) {
         if (!GameState.isRiddleGiven) {
           hint = "tell the user to interact with the monitor in the middle of the closet room";
@@ -280,6 +292,7 @@ public class GptPromptEngineering {
         } else if (!GameState.isIdChecked) {
           hint = "tell the user to check the riddle answer again and collect the correct id";
         }
+        // hint when the player is in room2
       } else if (GameState.isPlayerInRoom2) {
         if (!GameState.foundComputer) {
           hint = "tell the user to interact with the computer";
@@ -300,6 +313,7 @@ public class GptPromptEngineering {
         } else if (!GameState.isIdChecked) {
           hint = "tell the user to check the riddle answer again and collect the correct id";
         }
+        // hint when the player is in room3
       } else if (GameState.isPlayerInRoom3) {
         if (!GameState.beenToRoom1) {
           hint = "tell the user to go to the closet room";
@@ -315,7 +329,7 @@ public class GptPromptEngineering {
                   + " the correct id";
         }
       }
-
+      // Read player's input and let gpt to prepare proper respond to that
       intro =
           "The user said"
               + message
@@ -344,6 +358,7 @@ public class GptPromptEngineering {
    * @throws IOException
    */
   public static String settingHard(String message) {
+    // Return the message explains the current situation but cannot provide hint to the user
     return "The user said"
         + message
         + ". you should naturally respond to user and do not give any hint. If the user is asking"
