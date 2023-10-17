@@ -1,7 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
@@ -32,9 +31,9 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 
 /**
- * Controller for the intro scene
+ * Controller for the intro scene.
  *
- * <p>Handles the intro scene and the level and time selection
+ * <p>Handles the intro scene and the level and time selection.
  *
  * @throws Exception if the fxml file cannot be loaded.
  */
@@ -130,7 +129,7 @@ public class IntroController implements Initializable {
   }
 
   /**
-   * Check if the sound is enabled or disabled and sets visibility of 'soundOn' and 'soundOff' accordingly.
+   * Check the gamestate and update the sound image accordingly.
    */
   @FXML
   public void checkCollision2() {

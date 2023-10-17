@@ -559,7 +559,7 @@ public class TileGameRoomController extends RoomController {
     }
   }
 
-  /** detect change in game state difficulty which is selected in the intro scene */
+  /** detect change in game state difficulty which is selected in the intro scene. */
   public void detectDifficulty() {
     Timer labelTimer = new Timer(true);
     labelTimer.scheduleAtFixedRate(

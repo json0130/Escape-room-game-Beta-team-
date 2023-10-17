@@ -221,8 +221,8 @@ public class PlayerController extends RoomController {
   /**
    * Set the initial state of file as following.
    *
-   * @param url the address of the current app
-   * @param resource anything imported into the file
+   * @param url the address of the current app.
+   * @param resourceBundle anything imported into the file.
    */
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -743,9 +743,6 @@ public class PlayerController extends RoomController {
 
   /**
    * Update the labels in the player scene.
-   *
-   * @param event when the go back button is clicked
-   * @throws IOException if an input or output exception occurred
    */
   @FXML
   public void simulateKeyPressAfterDelay() {
