@@ -19,12 +19,12 @@
             <Image url="@../images/Firefly%2020231012224339.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="title" fitHeight="262.0" fitWidth="738.0" layoutX="127.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="title" fitHeight="298.0" fitWidth="736.0" layoutX="235.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/titleImage.png" />
          </image>
       </ImageView>
-      <Pane fx:id="background3" layoutX="-13.0" layoutY="-15.0" opacity="0.47" prefHeight="681.0" prefWidth="1215.0" style="-fx-background-color: black;">
+      <Pane fx:id="background3" layoutX="-13.0" layoutY="-15.0" opacity="0.47" prefHeight="681.0" prefWidth="1215.0" style="-fx-background-color: black;" visible="false">
          <children>
             <Button fx:id="toggleSoundButton" layoutX="831.0" layoutY="49.0" mnemonicParsing="false" text="SETTING" visible="false" />
          </children></Pane>
