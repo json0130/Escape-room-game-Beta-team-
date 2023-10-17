@@ -12,7 +12,6 @@ import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
@@ -45,6 +44,7 @@ import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
+/** Controller class for the room1 view. */
 public class Room1Controller extends RoomController {
   public static ObservableList<ChatBubble> chatBubbleListRoom1 =
       FXCollections.observableArrayList();
@@ -176,9 +176,6 @@ public class Room1Controller extends RoomController {
   private MediaPlayer walkingMediaPlayer;
 
   @FXML private Button toggleSoundButton;
-
-  // Add this variable to your class
-  private Timeline alertBlinkTimeline;
 
   private boolean nextToButton = false;
   private boolean hasHappend = false;

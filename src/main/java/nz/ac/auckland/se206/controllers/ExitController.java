@@ -45,6 +45,7 @@ import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
+/** Controller class for the exit room view. */
 public class ExitController extends RoomController {
   public static ObservableList<ChatBubble> chatBubbleListExit = FXCollections.observableArrayList();
 
@@ -134,9 +135,6 @@ public class ExitController extends RoomController {
   private boolean hasHappend = false;
   private boolean keyboardControlEnabled = true;
   private boolean idTouching = false;
-
-  // Add this variable to your class
-  private Timeline alertBlinkTimeline;
 
   private String password = "";
 
@@ -306,6 +304,102 @@ public class ExitController extends RoomController {
               });
         };
     chatBubbleListExit.addListener(listener3);
+  }
+
+  /** Prevent the player moves out of the window. */
+  public void squareBorder() {
+    double left = 0;
+    double right = scene.getWidth() - shapesize;
+    double top = 0;
+    double bottom = scene.getHeight() - shapesize;
+    // player cannot move across the left border
+    if (player.getLayoutX() < left) {
+      player.setLayoutX(left);
+    }
+    // player cannot mobe across the right border
+    if (player.getLayoutX() > right) {
+      player.setLayoutX(right);
+    }
+    // player cannot move across the top border
+    if (player.getLayoutY() < top) {
+      player.setLayoutY(top);
+    }
+    // player cannot move across the bottom border
+    if (player.getLayoutY() > bottom) {
+      player.setLayoutY(bottom);
+    }
+  }
+
+  /**
+   * When the button is clicked, the player moves to the room.
+   *
+   * @param event mouse is clicked
+   */
+  @FXML
+  public void enterRoom() {
+    String soundEffect = "src/main/resources/sounds/enterReal.mp3";
+    Media media = new Media(new File(soundEffect).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setAutoPlay(true);
+  }
+
+  /**
+   * Turn on and off the background music.
+   *
+   * @param event mouse is clicked.
+   */
+  @FXML
+  public void toggleSound(MouseEvent event) {
+    GameState.isSoundEnabled = !GameState.isSoundEnabled;
+
+    double volume = GameState.isSoundEnabled ? 0.03 : 0;
+    if (App.mediaPlayer != null) {
+      App.mediaPlayer.setVolume(volume);
+    }
+
+    if (App.alertSoundPlayer != null) {
+      // If an Alert Sound Player exists, adjust its volume as well.
+      App.alertSoundPlayer.setVolume(volume);
+    }
+
+    soundOn.setVisible(GameState.isSoundEnabled);
+    soundOff.setVisible(!GameState.isSoundEnabled);
+  }
+
+  /** Prevent the key pressed state is preserved after scene changes. */
+  @FXML
+  public void simulateKeyPressAfterDelay() {
+    Thread thread =
+        new Thread(
+            () -> {
+              try {
+                Thread.sleep(50); // Delay of 0.1 seconds
+                KeyEvent keyReleaseEventS =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
+                // s key is released when scene changes
+                KeyEvent keyReleaseEventA =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
+                // a key is released when scene changes
+                KeyEvent keyReleaseEventW =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
+                // w key is released when scene changes
+                KeyEvent keyReleaseEventD =
+                    new KeyEvent(
+                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
+                // d key is released when scene changes
+                scene.fireEvent(keyReleaseEventA);
+                scene.fireEvent(keyReleaseEventD);
+                scene.fireEvent(keyReleaseEventW);
+                scene.fireEvent(keyReleaseEventS);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+            });
+
+    thread.start();
   }
 
   /**
@@ -541,30 +635,6 @@ public class ExitController extends RoomController {
         });
   }
 
-  /** Prevent the player moves out of the window. */
-  public void squareBorder() {
-    double left = 0;
-    double right = scene.getWidth() - shapesize;
-    double top = 0;
-    double bottom = scene.getHeight() - shapesize;
-    // player cannot move across the left border
-    if (player.getLayoutX() < left) {
-      player.setLayoutX(left);
-    }
-    // player cannot mobe across the right border
-    if (player.getLayoutX() > right) {
-      player.setLayoutX(right);
-    }
-    // player cannot move across the top border
-    if (player.getLayoutY() < top) {
-      player.setLayoutY(top);
-    }
-    // player cannot move across the bottom border
-    if (player.getLayoutY() > bottom) {
-      player.setLayoutY(bottom);
-    }
-  }
-
   /** Check if the id card is touching the id pad or not. */
   private void checkId(ImageView player, Rectangle id) {
     if (player.getBoundsInParent().intersects(id.getBoundsInParent())) {
@@ -625,20 +695,20 @@ public class ExitController extends RoomController {
             // Adjust the player's position to be right in front of the room)
             if (!GameState.correctPassword) {
               nextToButton = true;
-              monitor.setFill(javafx.scene.paint.Color.WHITE);
+              monitor.setFill(Color.WHITE);
               clickButton.setVisible(true);
             } else {
               // If the player didn't get the correct passcode, still monitor can be shown
               nextToButton = false;
               clickButton.setVisible(false);
-              monitor.setFill(javafx.scene.paint.Color.TRANSPARENT);
+              monitor.setFill(Color.TRANSPARENT);
             }
           });
       pauseTransition.play();
     } else {
       nextToButton = false;
       clickButton.setVisible(false);
-      monitor.setFill(javafx.scene.paint.Color.TRANSPARENT);
+      monitor.setFill(Color.TRANSPARENT);
     }
   }
 
@@ -1216,48 +1286,12 @@ public class ExitController extends RoomController {
     mediaPlayer.setAutoPlay(true);
   }
 
-  /**
-   * When the button is clicked, the player moves to the room.
-   *
-   * @param event mouse is clicked
-   */
-  @FXML
-  public void enterRoom() {
-    String soundEffect = "src/main/resources/sounds/enterReal.mp3";
-    Media media = new Media(new File(soundEffect).toURI().toString());
-    MediaPlayer mediaPlayer = new MediaPlayer(media);
-    mediaPlayer.setAutoPlay(true);
-  }
-
-  /** Game master becomes visible. */
+  /** Game master becomes visible when it is clicked. */
   @FXML
   private void onGameMasterClick() {
 
     aiWindowController.setVisible(true);
     System.out.print("HI");
-  }
-
-  /**
-   * Turn on and off the background music.
-   *
-   * @param event mouse is clicked.
-   */
-  @FXML
-  public void toggleSound(MouseEvent event) {
-    GameState.isSoundEnabled = !GameState.isSoundEnabled;
-
-    double volume = GameState.isSoundEnabled ? 0.03 : 0;
-    if (App.mediaPlayer != null) {
-      App.mediaPlayer.setVolume(volume);
-    }
-
-    if (App.alertSoundPlayer != null) {
-      // If an Alert Sound Player exists, adjust its volume as well.
-      App.alertSoundPlayer.setVolume(volume);
-    }
-
-    soundOn.setVisible(GameState.isSoundEnabled);
-    soundOff.setVisible(!GameState.isSoundEnabled);
   }
 
   /**
@@ -1278,7 +1312,7 @@ public class ExitController extends RoomController {
   }
 
   /**
-   * Game master becomes visible.
+   * Game master becomes visible when it is clicked.
    *
    * @param event mouse is clicked
    */
@@ -1295,7 +1329,7 @@ public class ExitController extends RoomController {
    * @throws IOException if the objects don't exist
    */
   @FXML
-  private void clikedRestartLabel(ActionEvent event) throws IOException {
+  private void onClickRestartLabel(ActionEvent event) throws IOException {
     black2.setVisible(true);
     resetBox.setVisible(true);
     resetLabel.setVisible(true);
@@ -1304,13 +1338,13 @@ public class ExitController extends RoomController {
   }
 
   /**
-   * Cancel the restart when cancel button is clicked
+   * Cancel the restart when cancel button is clicked.
    *
    * @param event mouse is clicked
    * @throws IOException if the objects don't exist
    */
   @FXML
-  private void canceledRestart(ActionEvent event) throws IOException {
+  private void onCancelRestart(ActionEvent event) throws IOException {
     black2.setVisible(false);
     resetBox.setVisible(false);
     resetLabel.setVisible(false);
@@ -1319,46 +1353,11 @@ public class ExitController extends RoomController {
   }
 
   @FXML
-  private void clickedRestartButton(ActionEvent event) throws IOException {
+  private void onClickRestartButton(ActionEvent event) throws IOException {
     try {
       GameState.resetGames();
     } catch (Exception e) {
       // TODO: handle exception
     }
-  }
-
-  @FXML
-  public void simulateKeyPressAfterDelay() {
-    Thread thread =
-        new Thread(
-            () -> {
-              try {
-                Thread.sleep(50); // Delay of 0.1 seconds
-                KeyEvent keyReleaseEventS =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
-
-                KeyEvent keyReleaseEventA =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
-
-                KeyEvent keyReleaseEventW =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
-
-                KeyEvent keyReleaseEventD =
-                    new KeyEvent(
-                        KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
-
-                scene.fireEvent(keyReleaseEventA);
-                scene.fireEvent(keyReleaseEventD);
-                scene.fireEvent(keyReleaseEventW);
-                scene.fireEvent(keyReleaseEventS);
-              } catch (InterruptedException e) {
-                e.printStackTrace();
-              }
-            });
-
-    thread.start();
   }
 }

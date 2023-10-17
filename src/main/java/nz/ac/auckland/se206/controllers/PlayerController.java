@@ -42,6 +42,7 @@ import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
+/** Controller class for the map view. */
 public class PlayerController extends RoomController {
   public static boolean hintContained = false;
   public static boolean answerContained = false;
@@ -381,9 +382,10 @@ public class PlayerController extends RoomController {
   }
 
   /**
-   * When the go back button is clicked, the player will go back to the intro page.
+   * When the player collides with the room3 box, scene changes to room3.
    *
-   * @param event when the go back button is clicked
+   * @param player player image
+   * @param room3 change scene to room3 when player touches
    * @throws IOException
    */
   @FXML
@@ -414,10 +416,10 @@ public class PlayerController extends RoomController {
   }
 
   /**
-   * When the go back button is clicked, the player will go back to the intro page.
+   * Prevent the player move across the walls.
    *
-   * @param event when the go back button is clicked
-   * @throws IOException
+   * @param player player image
+   * @param walls prevent the player movement with the walls
    */
   public void checkCollision2(ImageView player, List<Rectangle> walls) {
     for (Rectangle wall : walls) {
@@ -448,12 +450,7 @@ public class PlayerController extends RoomController {
     }
   }
 
-  /**
-   * When the player is touching the border then it will keep the player to be in the position.
-   *
-   * @param event when the player is touching the border
-   * @throws IOException if an input or output exception occurred
-   */
+  /** Prevent the player moves outside of the window. */
   @FXML
   public void squareBorder() {
     // Border that the player cannot move outof the window.
@@ -482,8 +479,7 @@ public class PlayerController extends RoomController {
   /**
    * When the go back button is clicked, the player will go back to the control room.
    *
-   * @param event when the go back button is clicked
-   * @throws IOException
+   * @param event button is clicked
    */
   @FXML
   private void onRoom3(ActionEvent event) {
@@ -491,12 +487,7 @@ public class PlayerController extends RoomController {
     simulateKeyPressAfterDelay();
   }
 
-  /**
-   * When the go back button is clicked, the player will go back to the intro page.
-   *
-   * @param event when the go back button is clicked
-   * @throws IOException
-   */
+  /** Detect difficulty if the difficulty is selected. */
   @FXML
   public void detectDifficulty() {
     // detect if there is change in gamestate difficulty in the intro page using timer
@@ -522,12 +513,7 @@ public class PlayerController extends RoomController {
         500);
   }
 
-  /**
-   * Set up the keyboard control for the player.
-   *
-   * @param event when the go back button is clicked
-   * @throws IOException if an input or output exception occurred
-   */
+  /** Set up the keyboard control for the player. */
   @FXML
   public void movingSetup() {
     scene.setOnKeyPressed(
@@ -671,6 +657,7 @@ public class PlayerController extends RoomController {
         });
   }
 
+  /** Change background music when scene changes. */
   @FXML
   public void enterRoom() {
     String soundEffect = "src/main/resources/sounds/enterReal.mp3";
@@ -679,6 +666,11 @@ public class PlayerController extends RoomController {
     mediaPlayer.setAutoPlay(true);
   }
 
+  /**
+   * Turn on and off the background music.
+   *
+   * @param event mouse is clicked
+   */
   @FXML
   public void toggleSound(MouseEvent event) {
     GameState.isSoundEnabled = !GameState.isSoundEnabled;
@@ -704,7 +696,7 @@ public class PlayerController extends RoomController {
    * @throws IOException if the objects don't exist
    */
   @FXML
-  private void clikedRestartLabel(ActionEvent event) throws IOException {
+  private void onClickRestartLabel(ActionEvent event) throws IOException {
     black2.setVisible(true);
     resetBox.setVisible(true);
     resetLabel.setVisible(true);
@@ -712,8 +704,14 @@ public class PlayerController extends RoomController {
     resetCancel.setVisible(true);
   }
 
+  /**
+   * Restart is canceled and return to the game.
+   *
+   * @param event button is clicked
+   * @throws IOException if the objects don't exist
+   */
   @FXML
-  private void canceledRestart(ActionEvent event) throws IOException {
+  private void onCancelRestart(ActionEvent event) throws IOException {
     black2.setVisible(false);
     resetBox.setVisible(false);
     resetLabel.setVisible(false);
@@ -721,8 +719,14 @@ public class PlayerController extends RoomController {
     resetCancel.setVisible(false);
   }
 
+  /**
+   * Restart is processed when the button is clilcked.
+   *
+   * @param event button is clicked
+   * @throws IOException if objects don't exist
+   */
   @FXML
-  private void clickedRestartButton(ActionEvent event) throws IOException {
+  private void onClickRestartButton(ActionEvent event) throws IOException {
     try {
       GameState.resetGames();
     } catch (Exception e) {
@@ -730,6 +734,7 @@ public class PlayerController extends RoomController {
     }
   }
 
+  /** Prevent the key pressed state is reserved after scene changes. */
   @FXML
   public void simulateKeyPressAfterDelay() {
     Thread thread =

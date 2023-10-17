@@ -140,7 +140,7 @@
             <Image url="@../images/gameCharacterArtRight.png" />
          </image>
       </ImageView>
-      <Button fx:id="resetButton" layoutX="1015.0" layoutY="9.0" mnemonicParsing="false" onAction="#clikedRestartLabel" style="-fx-background-color: transparent;" text="RESTART" textFill="WHITE">
+      <Button fx:id="resetButton" layoutX="1015.0" layoutY="9.0" mnemonicParsing="false" onAction="#onClickRestartLabel" style="-fx-background-color: transparent;" text="RESTART" textFill="WHITE">
          <font>
             <Font name="Arial Bold Italic" size="20.0" />
          </font>
@@ -151,8 +151,8 @@
             <Font size="27.0" />
          </font>
       </Label>
-      <Button fx:id="resetYes" layoutX="715.0" layoutY="359.0" mnemonicParsing="false" onAction="#clickedRestartButton" text="YES" />
-      <Button fx:id="resetCancel" layoutX="431.0" layoutY="359.0" mnemonicParsing="false" onAction="#canceledRestart" text="CANCEL" />
+      <Button fx:id="resetYes" layoutX="715.0" layoutY="359.0" mnemonicParsing="false" onAction="#onClickRestartButton" text="YES" />
+      <Button fx:id="resetCancel" layoutX="431.0" layoutY="359.0" mnemonicParsing="false" onAction="#onCancelRestart" text="CANCEL" />
       <Label fx:id="playerLabel" layoutX="293.0" layoutY="199.0" text="PLAYER" textFill="WHITE">
          <font>
             <Font size="23.0" />
