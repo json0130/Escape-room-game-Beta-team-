@@ -63,19 +63,21 @@ public class GameState {
    * @throws IOException if the game cannot be reset
    */
   public static void resetGames() throws IOException {
+    // Player is initially in the map
     isGameStarted = false;
     isPlayerInMap = true;
     beenToMap = false;
-
+    // Player never been to room1 and not in the room1
     isPlayerInRoom1 = false;
     beenToRoom1 = false;
-
+    // Player never been to room2 and not in the room2
     isPlayerInRoom2 = false;
     beenToRoom2 = false;
-
+    // Player never beent room3 and not in the room3
     isPlayerInRoom3 = false;
     beenToRoom3 = false;
 
+    // All the games states are false initially
     isRiddleGiven = false;
     isRiddleResolved = false;
     isIdCollected = false;
@@ -89,7 +91,7 @@ public class GameState {
     isIdChecked = false;
 
     isGameFinished = false;
-
+    // Reset the password
     password = "";
 
     isCaptainCollected = false;
@@ -98,7 +100,7 @@ public class GameState {
     isEngineerCollected = false;
 
     correctPassword = false;
-
+    // number of hint available is 5 intially
     numOfHints = 5;
 
     clickedButton = "";

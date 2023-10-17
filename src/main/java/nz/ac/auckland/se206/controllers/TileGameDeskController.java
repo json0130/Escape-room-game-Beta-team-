@@ -350,11 +350,7 @@ public class TileGameDeskController extends RoomController {
 
   @FXML
   private void refactorImage(
-      ImageView imageView,
-      double xCoordinatesOfPoint,
-      double yCoordinatesOfPoint,
-      String letter,
-      InputStream path) {
+      ImageView imageView, double horizontal, double vertical, String letter, InputStream path) {
     // generate new image in the path
     Image imageFile = new Image(path);
     imageView.setImage(imageFile);
@@ -363,8 +359,8 @@ public class TileGameDeskController extends RoomController {
     imageView.setFitHeight(130);
     imageView.setId(letter);
     // place the images in the correct position
-    imageView.setLayoutY(yCoordinatesOfPoint);
-    imageView.setLayoutX(xCoordinatesOfPoint);
+    imageView.setLayoutY(vertical);
+    imageView.setLayoutX(horizontal);
   }
 
   @FXML
