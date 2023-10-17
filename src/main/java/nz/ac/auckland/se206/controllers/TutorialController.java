@@ -41,8 +41,7 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
 
 /**
  * Controller for the tutorial game.
- * 
- * <p>Handles the logic for the tutorial game.
+ *
  * @throws Exception if the fxml file cannot be loaded
  */
 public class TutorialController implements Initializable {
@@ -131,144 +130,12 @@ public class TutorialController implements Initializable {
         }
       };
 
-  @FXML
-  private void onClickSkip(ActionEvent event) {
-    soundButttonClick();
-    App.setScene(AppUi.ANIMATION);
-    collisionTimer.stop();
-    keyboardTimer.stop();
-
-    // Stop the meteor sound if it's playing
-    if (meteorSoundPlayer != null) {
-      meteorSoundPlayer.stop();
-    }
-
-    GameState.isTutorialFinished = true;
-  }
-
-  @FXML
-  private void onClickStartAnimation(ActionEvent event) {
-    setRotate(c1, true, 360, 10);
-    setRotate(c2, true, 180, 18);
-    setRotate(c3, true, 145, 24);
-
-    // Set the movement of the images and repeat it forever
-    setMovement(r1, false, 2, -900, 0, 2);
-    setMovement(r2, false, 3, -900, 0, 4);
-    setMovement(r3, false, 4, -900, -0, 3);
-    setMovement(r4, false, 2, -900, 0, 5);
-  }
-
-  private List<String> parseSentences(String paragraph) {
-    String[] sentenceArray = paragraph.split("[.!?]"); // Split the paragraph into sentences
-    // Add each sentence to the List
-    List<String> sentences = new ArrayList<>();
-    for (String sentence : sentenceArray) {
-      sentences.add(sentence.trim());
-    }
-    return sentences;
-  }
-
-  private void displayNextSentence() {
-    if (currentSentenceIndex < sentences.size()) {
-      String nextSentence = sentences.get(currentSentenceIndex);
-      sentenceLabel.setText(nextSentence);
-      currentSentenceIndex++;
-    } else {
-      // All sentences are displayed, so call playRock
-      animateGates();
-      isInstructionDone = true;
-      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.0));
-      pauseTransition.setOnFinished(
-          events -> {
-            // Adjust the player's position to be right in front of the room
-            playRock();
-            meteorSound();
-            box.setVisible(false);
-            gate1.setVisible(false);
-            gate2.setVisible(false);
-            sentenceLabel.setVisible(false);
-          });
-      pauseTransition.play();
-    }
-  }
-
-  @FXML
-  private void meteorSound() {
-    if (!GameState.isTutorialFinished) {
-      String soundEffect = "src/main/resources/sounds/meteor.mp3";
-      Media media = new Media(new File(soundEffect).toURI().toString());
-
-      // Assign this MediaPlayer instance to our new field so we can access it later.
-      this.meteorSoundPlayer = new MediaPlayer(media);
-
-      this.meteorSoundPlayer.setVolume(0.5);
-      this.meteorSoundPlayer.setAutoPlay(true);
-      this.meteorSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-    }
-  }
-
-  private void animateGates() {
-    animateGate1UpAndDown();
-    animateGate2UpAndDown();
-  }
-
-  private void animateGate1UpAndDown() {
-    TranslateTransition upTransition = new TranslateTransition(Duration.seconds(2), gate1);
-    upTransition.setByY(-250);
-    upTransition.play();
-  }
-
-  private void animateGate2UpAndDown() {
-    TranslateTransition downTransition = new TranslateTransition(Duration.seconds(2), gate2);
-    downTransition.setByY(250);
-    downTransition.play();
-  }
-
-  private void setRotate(Circle c, boolean reverse, int angle, int duration) {
-    // Set the rotation of the circle which acts as the finish line in the tutorial game.
-    RotateTransition rt = new RotateTransition(Duration.seconds(duration), c);
-    rt.setAutoReverse(reverse);
-    rt.setByAngle(angle);
-    rt.setDelay(Duration.seconds(0));
-    rt.setRate(3);
-    rt.setCycleCount(18);
-    rt.play();
-  }
-
-  private void setMovement(
-      ImageView r, boolean reverse, int duration, double endX, double endY, int delaySeconds) {
-    double startX = r.getTranslateX();
-    double startY = r.getTranslateY();
-
-    Path path = new Path();
-    path.getElements().add(new MoveTo(startX, startY));
-    path.getElements().add(new LineTo(endX, endY));
-
-    PathTransition pathTransition = new PathTransition();
-    pathTransition.setNode(r);
-    pathTransition.setPath(path);
-    pathTransition.setDuration(Duration.seconds(duration));
-    pathTransition.setCycleCount(reverse ? Animation.INDEFINITE : 1);
-    pathTransition.setAutoReverse(reverse);
-
-    SequentialTransition sequentialTransition = new SequentialTransition();
-    sequentialTransition
-        .getChildren()
-        .addAll(new PauseTransition(Duration.seconds(delaySeconds)), pathTransition);
-
-    sequentialTransition.setOnFinished(
-        event -> {
-          // Reset the position of the ImageView to its original location
-          r.setTranslateX(startX);
-          r.setTranslateY(startY);
-
-          // Start the animation again
-          sequentialTransition.playFromStart();
-        });
-    sequentialTransition.play();
-  }
-
+  /**
+   * Set up the initial state of scene.
+   *
+   * @param location the address of the app
+   * @param resources everything which is imported in the file
+   */
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     // Initialise the position of the images
@@ -291,7 +158,7 @@ public class TutorialController implements Initializable {
     sentences = parseSentences(paragraph);
 
     shapesize = player.getFitHeight();
-    playerKeyboardMovement();
+    setUpPlayerKeyboardMovement();
 
     rocks.add(r1);
     rocks.add(r2);
@@ -338,11 +205,160 @@ public class TutorialController implements Initializable {
   }
 
   /**
-  * Play the rock animation which is used for tutorial game.
-  * 
-  * @param event When the rock button is clicked
-  * @throws Exception if the player collides with any of the rocks
-  */
+   * Player can skip the tutorial with the button.
+   *
+   * @param event button is clicked
+   */
+  @FXML
+  private void onClickSkip(ActionEvent event) {
+    soundButttonClick();
+    App.setScene(AppUi.ANIMATION);
+    collisionTimer.stop();
+    keyboardTimer.stop();
+
+    // Stop the meteor sound if it's playing
+    if (meteorSoundPlayer != null) {
+      meteorSoundPlayer.stop();
+    }
+
+    GameState.isTutorialFinished = true;
+  }
+
+  /**
+   * Animation is played when the button is clicked.
+   *
+   * @param event mouse is clicked
+   */
+  @FXML
+  private void onClickStartAnimation(ActionEvent event) {
+    setRotate(c1, true, 360, 10);
+    setRotate(c2, true, 180, 18);
+    setRotate(c3, true, 145, 24);
+
+    // Set the movement of the images and repeat it forever
+    setMovement(r1, false, 2, -900, 0, 2);
+    setMovement(r2, false, 3, -900, 0, 4);
+    setMovement(r3, false, 4, -900, -0, 3);
+    setMovement(r4, false, 2, -900, 0, 5);
+  }
+
+  private List<String> parseSentences(String paragraph) {
+    String[] sentenceArray = paragraph.split("[.!?]"); // Split the paragraph into sentences
+    // Add each sentence to the List
+    List<String> sentences = new ArrayList<>();
+    for (String sentence : sentenceArray) {
+      sentences.add(sentence.trim());
+    }
+    return sentences;
+  }
+
+  /** Show intructions on the screen in order. */
+  private void displayNextSentence() {
+    if (currentSentenceIndex < sentences.size()) {
+      String nextSentence = sentences.get(currentSentenceIndex);
+      sentenceLabel.setText(nextSentence);
+      currentSentenceIndex++;
+    } else {
+      // All sentences are displayed, so call playRock
+      animateGates();
+      isInstructionDone = true;
+      PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2.0));
+      pauseTransition.setOnFinished(
+          events -> {
+            // Adjust the player's position to be right in front of the room
+            playRock();
+            meteorSound();
+            box.setVisible(false);
+            gate1.setVisible(false);
+            gate2.setVisible(false);
+            sentenceLabel.setVisible(false);
+          });
+      pauseTransition.play();
+    }
+  }
+
+  /** Turn on the crash sounds. */
+  @FXML
+  private void meteorSound() {
+    if (!GameState.isTutorialFinished) {
+      String soundEffect = "src/main/resources/sounds/meteor.mp3";
+      Media media = new Media(new File(soundEffect).toURI().toString());
+
+      // Assign this MediaPlayer instance to our new field so we can access it later.
+      this.meteorSoundPlayer = new MediaPlayer(media);
+
+      this.meteorSoundPlayer.setVolume(0.5);
+      this.meteorSoundPlayer.setAutoPlay(true);
+      this.meteorSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    }
+  }
+
+  /** Move the game up and down. */
+  private void animateGates() {
+    animateGate1UpAndDown();
+    animateGate2UpAndDown();
+  }
+
+  /** Move the animation in diagonal direction. */
+  private void animateGate1UpAndDown() {
+    TranslateTransition upTransition = new TranslateTransition(Duration.seconds(2), gate1);
+    upTransition.setByY(-250);
+    upTransition.play();
+  }
+
+  /** Move the animation up and down. */
+  private void animateGate2UpAndDown() {
+    TranslateTransition downTransition = new TranslateTransition(Duration.seconds(2), gate2);
+    downTransition.setByY(250);
+    downTransition.play();
+  }
+
+  private void setRotate(Circle c, boolean reverse, int angle, int duration) {
+    // Set the rotation of the circle which acts as the finish line in the tutorial game.
+    RotateTransition rt = new RotateTransition(Duration.seconds(duration), c);
+    rt.setAutoReverse(reverse);
+    rt.setByAngle(angle);
+    rt.setDelay(Duration.seconds(0));
+    rt.setRate(3);
+    rt.setCycleCount(18);
+    rt.play();
+  }
+
+  /** Set the player movement using wasd keys. */
+  private void setMovement(
+      ImageView r, boolean reverse, int duration, double endX, double endY, int delaySeconds) {
+    double startX = r.getTranslateX();
+    double startY = r.getTranslateY();
+
+    Path path = new Path();
+    path.getElements().add(new MoveTo(startX, startY));
+    path.getElements().add(new LineTo(endX, endY));
+
+    PathTransition pathTransition = new PathTransition();
+    pathTransition.setNode(r);
+    pathTransition.setPath(path);
+    pathTransition.setDuration(Duration.seconds(duration));
+    pathTransition.setCycleCount(reverse ? Animation.INDEFINITE : 1);
+    pathTransition.setAutoReverse(reverse);
+
+    SequentialTransition sequentialTransition = new SequentialTransition();
+    sequentialTransition
+        .getChildren()
+        .addAll(new PauseTransition(Duration.seconds(delaySeconds)), pathTransition);
+
+    sequentialTransition.setOnFinished(
+        event -> {
+          // Reset the position of the ImageView to its original location
+          r.setTranslateX(startX);
+          r.setTranslateY(startY);
+
+          // Start the animation again
+          sequentialTransition.playFromStart();
+        });
+    sequentialTransition.play();
+  }
+
+  /** Play the rock animation which is used for tutorial game. */
   @FXML
   private void playRock() {
     setRotate(c1, true, 360, 10);
@@ -357,10 +373,10 @@ public class TutorialController implements Initializable {
   }
 
   /**
-   * Check if the player collides with any of the rocks
+   * Check if the player collides with any of the rocks.
    *
    * @param player The player
-   * @throws Exception if the player collides with any of the rocks
+   * @param rocks things that the player needs to avoid
    */
   @FXML
   private void checkCollision(ImageView player, List<ImageView> rocks) {
@@ -391,11 +407,10 @@ public class TutorialController implements Initializable {
   }
 
   /**
-   * Check if the player collides with the finish line
+   * Check if the player collides with the finish line.
    *
    * @param player The player
    * @param c3 The finish line
-   * @throws Exception if the player collides with the finish line
    */
   private void checkFinish(ImageView player, Circle c3) {
     // Check if the player collides with the finish line .
@@ -412,10 +427,10 @@ public class TutorialController implements Initializable {
   }
 
   /**
-   * Check if the player collides with the box
+   * Check if the player collides with the box.
    *
-   * @param player
-   * @throws Exception if the player collides with the box
+   * @param player the player image
+   * @param box object blocks the player movement
    */
   private void checkCollision1(ImageView player, Rectangle box) {
     // Check if the player collides with the box
@@ -435,15 +450,9 @@ public class TutorialController implements Initializable {
     }
   }
 
-  /**
-   * Set the movement of the player
-   *
-   * @param player 
-   * @param keyPressed The key that is pressed
-   * @throws Exception if the player collides with the boundaries of the scene
-   */
+  /** Set the movement of the player using w,a,s,and d keys. */
   @FXML
-  private void playerKeyboardMovement() {
+  private void setUpPlayerKeyboardMovement() {
     // If key is pressed, set the boolean to true. If key is released, set the boolean to false.
     scene.setOnKeyPressed(
         e -> {
@@ -485,13 +494,8 @@ public class TutorialController implements Initializable {
         });
   }
 
-  /**
-  * Check if the player collides with the boundaries of the scene
-  *
-  * @param player The player
-  * @throws Exception if the player collides with the boundaries of the scene
-  */
-  @FXML 
+  /** Check if the player collides with the boundaries of the scene. */
+  @FXML
   private void squareBorder() {
     // Set the boundaries of the scene
     double left = 0;
@@ -516,6 +520,7 @@ public class TutorialController implements Initializable {
     }
   }
 
+  /** Sound effect is played when user click something. */
   @FXML
   private void soundButttonClick() {
     String soundEffect = "src/main/resources/sounds/button-click.mp3";
@@ -524,6 +529,11 @@ public class TutorialController implements Initializable {
     mediaPlayer.setAutoPlay(true);
   }
 
+  /**
+   * Turn on and off the background music.
+   *
+   * @param event button is clicked
+   */
   @FXML
   private void toggleSound(MouseEvent event) {
     if (GameState.isSoundEnabled) {
@@ -544,11 +554,21 @@ public class TutorialController implements Initializable {
     GameState.isSoundEnabled = !GameState.isSoundEnabled; // Toggle the sound state
   }
 
+  /**
+   * Hover effect is given when the mouse enters the button.
+   *
+   * @param e mouse enters
+   */
   @FXML
   private void enterSkip(MouseEvent e) {
     skipButton.setStyle("-fx-background-color: white; -fx-text-fill: black;");
   }
 
+  /**
+   * Hover effect disappeas when mouse exits.
+   *
+   * @param e mouse exits
+   */
   @FXML
   private void exitSkip(MouseEvent e) {
     skipButton.setStyle(

@@ -5,6 +5,11 @@ import javafx.scene.Parent;
 
 /** Manages the scenes in the application. */
 public class SceneManager {
+  /**
+   * Enum for the different scenes in the application.
+   * 
+   * <p>Each enum value is associated with a fxml file.
+   */
   public enum AppUi {
     CHAT,
     ROOM1,

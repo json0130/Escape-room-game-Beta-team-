@@ -54,7 +54,7 @@ public class LetterGenerator {
     while (vowelsList.size() < 3) {
       characterValue = rand.nextInt(4) + 1;
       switch (characterValue) {
-          // add a if theres is no a
+        // add a if theres is no a
         case 1:
           if (vowelsList.contains("A")) {
             break;
