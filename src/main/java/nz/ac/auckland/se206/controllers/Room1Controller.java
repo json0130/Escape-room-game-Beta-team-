@@ -53,12 +53,12 @@ public class Room1Controller implements Initializable {
       FXCollections.observableArrayList();
   public static String riddleAnswer;
 
-  private BooleanProperty isWPressed = new SimpleBooleanProperty();
-  private BooleanProperty isAPressed = new SimpleBooleanProperty();
-  private BooleanProperty isSPressed = new SimpleBooleanProperty();
-  private BooleanProperty isDPressed = new SimpleBooleanProperty();
+  private BooleanProperty wKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty aKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty sKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty dKeyPressed = new SimpleBooleanProperty();
 
-  private BooleanBinding keyPressed = isWPressed.or(isAPressed).or(isSPressed).or(isDPressed);
+  private BooleanBinding keyPressed = wKeyPressed.or(aKeyPressed).or(sKeyPressed).or(dKeyPressed);
   private int movementVariable = 5;
   private double shapesize;
 
@@ -206,16 +206,16 @@ public class Room1Controller implements Initializable {
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
 
-          if (isWPressed.get()) {
+          if (wKeyPressed.get()) {
             player.setLayoutY(player.getLayoutY() - movementVariable);
           }
-          if (isAPressed.get()) {
+          if (aKeyPressed.get()) {
             player.setLayoutX(player.getLayoutX() - movementVariable);
           }
-          if (isSPressed.get()) {
+          if (sKeyPressed.get()) {
             player.setLayoutY(player.getLayoutY() + movementVariable);
           }
-          if (isDPressed.get()) {
+          if (dKeyPressed.get()) {
             player.setLayoutX(player.getLayoutX() + movementVariable);
           }
           squareBorder();
@@ -311,8 +311,8 @@ public class Room1Controller implements Initializable {
     idEngineer.setVisible(false);
 
     keyPressed.addListener(
-        ((observableValue, aBoolean, time) -> {
-          if (!aBoolean) {
+        ((observableValue, isKeyPressed, time) -> {
+          if (!isKeyPressed) {
             timer.start();
           } else {
             timer.stop();
@@ -619,14 +619,14 @@ public class Room1Controller implements Initializable {
     scene.setOnKeyPressed(
         e -> {
           boolean wasMoving =
-              isWPressed.get() || isAPressed.get() || isSPressed.get() || isDPressed.get();
+              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
 
           if (e.getCode() == KeyCode.W) {
             if (walkAnimationPlaying == false) {
               player.setImage(lastPlayedWalk);
               walkAnimationPlaying = true;
             }
-            isWPressed.set(true);
+            wKeyPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.A) {
@@ -635,7 +635,7 @@ public class Room1Controller implements Initializable {
               walkAnimationPlaying = true;
               lastPlayedWalk = player.getImage();
             }
-            isAPressed.set(true);
+            aKeyPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.S) {
@@ -643,7 +643,7 @@ public class Room1Controller implements Initializable {
               player.setImage(lastPlayedWalk);
               walkAnimationPlaying = true;
             }
-            isSPressed.set(true);
+            sKeyPressed.set(true);
           }
 
           if (e.getCode() == KeyCode.D) {
@@ -652,11 +652,11 @@ public class Room1Controller implements Initializable {
               walkAnimationPlaying = true;
               lastPlayedWalk = player.getImage();
             }
-            isDPressed.set(true);
+            dKeyPressed.set(true);
           }
 
           boolean isMoving =
-              isWPressed.get() || isAPressed.get() || isSPressed.get() || isDPressed.get();
+              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
 
           // If we started moving and weren't before, start the sound.
           if (isMoving && !wasMoving) {
@@ -667,70 +667,70 @@ public class Room1Controller implements Initializable {
     scene.setOnKeyReleased(
         e -> {
           boolean wasMoving =
-              isWPressed.get() || isAPressed.get() || isSPressed.get() || isDPressed.get();
+              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
 
           if (e.getCode() == KeyCode.W) {
             if (player.getImage() == leftCharacterAnimation
-                && isSPressed.get() == false
-                && isAPressed.get() == false) {
+                && sKeyPressed.get() == false
+                && aKeyPressed.get() == false) {
               player.setImage(leftCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (isSPressed.get() == true) {
+            } else if (sKeyPressed.get() == true) {
               player.setImage(lastPlayedWalk);
-            } else if (isAPressed.get() == false
-                && isDPressed.get() == false
-                && isDPressed.get() == false) {
+            } else if (aKeyPressed.get() == false
+                && dKeyPressed.get() == false
+                && dKeyPressed.get() == false) {
               player.setImage(rightCharacterIdle);
               walkAnimationPlaying = false;
             }
-            isWPressed.set(false);
+            wKeyPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.A) {
-            if (isDPressed.get() == false
-                && isWPressed.get() == false
-                && isSPressed.get() == false) {
+            if (dKeyPressed.get() == false
+                && wKeyPressed.get() == false
+                && sKeyPressed.get() == false) {
               player.setImage(leftCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (isDPressed.get() == true) {
+            } else if (dKeyPressed.get() == true) {
               player.setImage(rightCharacterAnimation);
             }
 
-            isAPressed.set(false);
+            aKeyPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.S) {
             if (player.getImage() == leftCharacterAnimation
-                && isWPressed.get() == false
-                && isAPressed.get() == false) {
+                && wKeyPressed.get() == false
+                && aKeyPressed.get() == false) {
               player.setImage(leftCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (isWPressed.get() == true) {
+            } else if (wKeyPressed.get() == true) {
               player.setImage(lastPlayedWalk);
-            } else if (isAPressed.get() == false
-                && isDPressed.get() == false
-                && isWPressed.get() == false) {
+            } else if (aKeyPressed.get() == false
+                && dKeyPressed.get() == false
+                && wKeyPressed.get() == false) {
               player.setImage(rightCharacterIdle);
               walkAnimationPlaying = false;
             }
-            isSPressed.set(false);
+            sKeyPressed.set(false);
           }
 
           if (e.getCode() == KeyCode.D) {
-            if (isAPressed.get() == false
-                && isWPressed.get() == false
-                && isSPressed.get() == false) {
+            if (aKeyPressed.get() == false
+                && wKeyPressed.get() == false
+                && sKeyPressed.get() == false) {
               player.setImage(rightCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (isAPressed.get() == true) {
+            } else if (aKeyPressed.get() == true) {
               player.setImage(leftCharacterAnimation);
             }
 
-            isDPressed.set(false);
+            dKeyPressed.set(false);
           }
 
           boolean isMovinng =
-              isWPressed.get() || isAPressed.get() || isSPressed.get() || isDPressed.get();
+              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
 
           // If we stopped moving and were before, stop the sound.
           if (!isMovinng && wasMoving) {

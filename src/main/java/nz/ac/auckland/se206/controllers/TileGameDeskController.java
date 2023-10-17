@@ -377,8 +377,8 @@ public class TileGameDeskController {
   @FXML
   private void refactorImage(
       ImageView imageView,
-      double xCoordinates,
-      double yCoordinates,
+      double xCoordinatesOfPoint,
+      double yCoordinatesOfPoint,
       String letter,
       InputStream path) {
 
@@ -389,8 +389,8 @@ public class TileGameDeskController {
     imageView.setFitHeight(130);
     imageView.setId(letter);
 
-    imageView.setLayoutY(yCoordinates);
-    imageView.setLayoutX(xCoordinates);
+    imageView.setLayoutY(yCoordinatesOfPoint);
+    imageView.setLayoutX(xCoordinatesOfPoint);
   }
 
   @FXML
