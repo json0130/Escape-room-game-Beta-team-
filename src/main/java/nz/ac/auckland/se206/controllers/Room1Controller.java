@@ -620,7 +620,7 @@ public class Room1Controller implements Initializable {
         e -> {
           boolean wasMoving =
               wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
-
+          // When the w key is pressed, it moves up
           if (e.getCode() == KeyCode.W) {
             if (walkAnimationPlaying == false) {
               player.setImage(lastPlayedWalk);
@@ -628,7 +628,7 @@ public class Room1Controller implements Initializable {
             }
             wKeyPressed.set(true);
           }
-
+          // when the a key is pressed, it moves left
           if (e.getCode() == KeyCode.A) {
             if (player.getImage() != leftCharacterAnimation) {
               player.setImage(leftCharacterAnimation);
@@ -637,7 +637,7 @@ public class Room1Controller implements Initializable {
             }
             aKeyPressed.set(true);
           }
-
+          // when the s key is pressed, it moves down
           if (e.getCode() == KeyCode.S) {
             if (walkAnimationPlaying == false) {
               player.setImage(lastPlayedWalk);
@@ -645,7 +645,7 @@ public class Room1Controller implements Initializable {
             }
             sKeyPressed.set(true);
           }
-
+          // when the d key is pressed, it moves right
           if (e.getCode() == KeyCode.D) {
             if (player.getImage() != rightCharacterAnimation) {
               player.setImage(rightCharacterAnimation);
@@ -668,7 +668,7 @@ public class Room1Controller implements Initializable {
         e -> {
           boolean wasMoving =
               wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
-
+          // if the w key is released, it stops at its current position
           if (e.getCode() == KeyCode.W) {
             if (player.getImage() == leftCharacterAnimation
                 && sKeyPressed.get() == false
@@ -685,7 +685,7 @@ public class Room1Controller implements Initializable {
             }
             wKeyPressed.set(false);
           }
-
+          // if a key is released, the plaer stops at its current position
           if (e.getCode() == KeyCode.A) {
             if (dKeyPressed.get() == false
                 && wKeyPressed.get() == false
@@ -698,7 +698,7 @@ public class Room1Controller implements Initializable {
 
             aKeyPressed.set(false);
           }
-
+          // if s key is released, the player stops at its current position
           if (e.getCode() == KeyCode.S) {
             if (player.getImage() == leftCharacterAnimation
                 && wKeyPressed.get() == false
@@ -715,7 +715,7 @@ public class Room1Controller implements Initializable {
             }
             sKeyPressed.set(false);
           }
-
+          // if d key is released, the player stops at its current position
           if (e.getCode() == KeyCode.D) {
             if (aKeyPressed.get() == false
                 && wKeyPressed.get() == false
@@ -1075,7 +1075,6 @@ public class Room1Controller implements Initializable {
                         KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
 
                 scene.fireEvent(keyReleaseEventA);
-                // scene.fireEvent(keyPressEvent);
                 scene.fireEvent(keyReleaseEventD);
                 scene.fireEvent(keyReleaseEventW);
                 scene.fireEvent(keyReleaseEventS);

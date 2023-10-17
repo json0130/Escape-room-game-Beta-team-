@@ -417,8 +417,9 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   public void movingSetup() {
     scene.setOnKeyPressed(
         e -> {
-          boolean wasMoving = wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
-
+          boolean wasMoving =
+              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+          // when w key is pressed, player moves up
           if (e.getCode() == KeyCode.W) {
             if (walkAnimationPlaying == false) {
               player.setImage(lastPlayedWalk);
@@ -426,7 +427,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             }
             wKeyPressed.set(true);
           }
-
+          // when a key is pressed, player moves left
           if (e.getCode() == KeyCode.A) {
             if (player.getImage() != leftCharacterAnimation) {
               player.setImage(leftCharacterAnimation);
@@ -435,7 +436,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             }
             aKeyPressed.set(true);
           }
-
+          // when s key is pressed, player moves down
           if (e.getCode() == KeyCode.S) {
             if (walkAnimationPlaying == false) {
               player.setImage(lastPlayedWalk);
@@ -443,7 +444,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             }
             sKeyPressed.set(true);
           }
-
+          // when d key is pressed, player moves right
           if (e.getCode() == KeyCode.D) {
             if (player.getImage() != rightCharacterAnimation) {
               player.setImage(rightCharacterAnimation);
@@ -453,7 +454,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             dKeyPressed.set(true);
           }
 
-          boolean isMoving = wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+          boolean isMoving =
+              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
 
           // If we started moving and weren't before, start the sound.
           if (isMoving && !wasMoving) {
@@ -463,8 +465,9 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
     scene.setOnKeyReleased(
         e -> {
-          boolean wasMoving = wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
-
+          boolean wasMoving =
+              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+          // when w key is released, the player stops at its current position
           if (e.getCode() == KeyCode.W) {
             if (player.getImage() == leftCharacterAnimation
                 && sKeyPressed.get() == false
@@ -481,9 +484,11 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             }
             wKeyPressed.set(false);
           }
-
+          // when a key is released, the player stops at its current position
           if (e.getCode() == KeyCode.A) {
-            if (dKeyPressed.get() == false && wKeyPressed.get() == false && sKeyPressed.get() == false) {
+            if (dKeyPressed.get() == false
+                && wKeyPressed.get() == false
+                && sKeyPressed.get() == false) {
               player.setImage(leftCharacterIdle);
               walkAnimationPlaying = false;
             } else if (dKeyPressed.get() == true) {
@@ -492,7 +497,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
 
             aKeyPressed.set(false);
           }
-
+          // when s key is released, the player stops at its current position
           if (e.getCode() == KeyCode.S) {
             if (player.getImage() == leftCharacterAnimation
                 && wKeyPressed.get() == false
@@ -509,9 +514,11 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             }
             sKeyPressed.set(false);
           }
-
+          // when d key is released, the player stops at its current position
           if (e.getCode() == KeyCode.D) {
-            if (aKeyPressed.get() == false && wKeyPressed.get() == false && sKeyPressed.get() == false) {
+            if (aKeyPressed.get() == false
+                && wKeyPressed.get() == false
+                && sKeyPressed.get() == false) {
               player.setImage(rightCharacterIdle);
               walkAnimationPlaying = false;
             } else if (aKeyPressed.get() == true) {
@@ -521,7 +528,8 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
             dKeyPressed.set(false);
           }
 
-          boolean isMovinng = wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+          boolean isMovinng =
+              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
 
           // If we stopped moving and were before, stop the sound.
           if (!isMovinng && wasMoving) {
@@ -593,6 +601,7 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML
   public void onTileGameButtonClick() throws IOException {
     translate.stop();
+    // Change the scene to the desk scene and change the background music
     if (nextToButton) {
       GameState.foundComputer = true;
       exclamationMark.setVisible(false);
@@ -629,8 +638,10 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   // labels for hint and difficulty updates as the game progress
   private void updateLabels() {
     difficultyLabel.setText(GameState.difficulty);
+    // depending on the difficulty chosen in the intro, change the label in the header
     if (GameState.difficulty == "EASY") {
       hintLabel.setText("UNLIMITED");
+      // for the medium difficulty, number of hints is reflected in the header
     } else if (GameState.difficulty == "MEDIUM") {
       hintLabel.setText(String.valueOf(GameState.numOfHints));
       hintLabel2.setText("HINTS");
@@ -651,11 +662,11 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML
   private void animateExclamationMark() {
     translate.setNode(exclamationMark);
-    translate.setDuration(Duration.millis(1000));
-    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setDuration(Duration.millis(1000)); // exclamation mark moves every 1 second
+    translate.setCycleCount(TranslateTransition.INDEFINITE); // the animaion continuously goes
     translate.setByX(0);
     translate.setByY(20);
-    translate.setAutoReverse(true);
+    translate.setAutoReverse(true); // the exclamation mark returns to its original position
     translate.play();
   }
 
@@ -690,11 +701,11 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   private void animateRobot() {
     TranslateTransition translate = new TranslateTransition();
     translate.setNode(gameMaster);
-    translate.setDuration(Duration.millis(1000));
-    translate.setCycleCount(TranslateTransition.INDEFINITE);
+    translate.setDuration(Duration.millis(1000)); // the robot moves every 1 second
+    translate.setCycleCount(TranslateTransition.INDEFINITE); // the robot continuously moves
     translate.setByX(0);
     translate.setByY(20);
-    translate.setAutoReverse(true);
+    translate.setAutoReverse(true); // the robot moves back to its original position
 
     translate.play();
   }
@@ -703,10 +714,12 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
   @FXML
   private void enablePlayerMovement() {
     Timer greetingTimer = new Timer(true);
+    // frequently check if the greeting is shown or not
     greetingTimer.scheduleAtFixedRate(
         new TimerTask() {
           @Override
           public void run() {
+            // if greeting is shown, enable player movement
             if (!isGreetingShown) {
               movingSetup();
               greetingTimer.cancel();
@@ -728,19 +741,19 @@ public class TileGameRoomController implements javafx.fxml.Initializable {
                 KeyEvent keyReleaseEventS =
                     new KeyEvent(
                         KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
-
+                // S key is released when the scene changes
                 KeyEvent keyReleaseEventA =
                     new KeyEvent(
                         KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
-
+                // A key is released when the scene changes
                 KeyEvent keyReleaseEventW =
                     new KeyEvent(
                         KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
-
+                // W key is released when the scene changes
                 KeyEvent keyReleaseEventD =
                     new KeyEvent(
                         KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
-
+                // D key is released when the scene changes
                 scene.fireEvent(keyReleaseEventA);
                 scene.fireEvent(keyReleaseEventD);
                 scene.fireEvent(keyReleaseEventW);
