@@ -1,6 +1,5 @@
 package nz.ac.auckland.se206.gpt;
 
-import java.io.IOException;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.controllers.Room1Controller;
 
@@ -45,7 +44,7 @@ public class GptPromptEngineering {
     // Inform gpt about what the user just said
     String user = "The user said " + message;
     // Depending on the difficulty the player chose, hint availability differes
-    String answer = "";
+    String answer;
     if (message.toLowerCase().contains(Room1Controller.riddleAnswer)) {
       return message
           + "If the user is guessing the answer and you think it's the valid answer, start your"
@@ -141,8 +140,7 @@ public class GptPromptEngineering {
    * Generates a GPT prompt engineering string for a riddle with the given word.
    *
    * @param wordToGuess the word to be guessed in the riddle
-   * @return the generated prompt engineering string
-   * @throws IOException
+   * @return the generated prompt engineering
    */
   public static String settingEasy(String message) {
     // check the player's progress and prepare proper hint
@@ -242,8 +240,14 @@ public class GptPromptEngineering {
     return intro;
   }
 
+  /**
+   * Generates a GPT prompt engineering string for a riddle with the given word.
+   *
+   * @param message message typed from the user
+   * @return the generated prompt engineering
+   */
   public static String settingMedium(String message) {
-    String intro = "";
+    String intro;
     // If the player used up all hints, no hints are available
     if (GameState.numOfHints <= 0) {
       intro =
@@ -353,7 +357,6 @@ public class GptPromptEngineering {
    *
    * @param wordToGuess the word to be guessed in the riddle
    * @return the generated prompt engineering string
-   * @throws IOException
    */
   public static String settingHard(String message) {
     // Return the message explains the current situation but cannot provide hint to the user
