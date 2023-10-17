@@ -2,6 +2,7 @@ package nz.ac.auckland.se206;
 
 import javafx.scene.image.ImageView;
 
+/** The tile class creates tile objects for the tile puzzle in the computer room. */
 public class Tile {
 
   private ImageView currentImage;
@@ -15,6 +16,7 @@ public class Tile {
   private Tile bottomTile;
   private Tile topTile;
 
+  /** Tile constructor to initiate tiles. */
   public void tileInitialise(
       ImageView currentImage,
       boolean freeSlot,
@@ -29,6 +31,7 @@ public class Tile {
     this.imageViewVerticalCoordinates = imageViewVerticalCoordinates;
   }
 
+  /** Setter that sets the tiles positions. */
   public void setTilePos(Tile leftTile, Tile rightTile, Tile bottomTile, Tile topTile) {
     this.leftTile = leftTile;
     this.rightTile = rightTile;

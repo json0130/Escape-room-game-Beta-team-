@@ -7,17 +7,17 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import nz.ac.auckland.se206.gpt.ChatMessage;
 
+/** Chat bubble class for the messaging system for the main AI. */
 public class ChatBubble {
 
   private Label bubbleText;
   private HBox bubbleBox;
 
   /**
-   * Constructor for ChatBubble
+   * Constructor for ChatBubble.
    *
    * @param msg the message to be displayed
    * @param isGreeting whether the message is a greeting
-   * @return a ChatBubble object
    */
   public ChatBubble(ChatMessage msg, Boolean isGreeting) {
 
