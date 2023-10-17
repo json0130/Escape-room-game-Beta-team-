@@ -185,7 +185,10 @@ abstract class RoomController implements javafx.fxml.Initializable {
     scene.setOnKeyPressed(
         e -> {
           boolean wasMoving =
-              directionUp.get() || directionLeft.get() || directionDown.get() || directionRight.get();
+              directionUp.get()
+                  || directionLeft.get()
+                  || directionDown.get()
+                  || directionRight.get();
           // when w key is pressed, player moves up
           if (e.getCode() == KeyCode.W) {
             if (walkAnimationPlaying == false) {
@@ -222,7 +225,10 @@ abstract class RoomController implements javafx.fxml.Initializable {
           }
 
           boolean isMoving =
-              directionUp.get() || directionLeft.get() || directionDown.get() || directionRight.get();
+              directionUp.get()
+                  || directionLeft.get()
+                  || directionDown.get()
+                  || directionRight.get();
 
           // If we started moving and weren't before, start the sound.
           if (isMoving && !wasMoving) {
@@ -233,7 +239,10 @@ abstract class RoomController implements javafx.fxml.Initializable {
     scene.setOnKeyReleased(
         e -> {
           boolean wasMoving =
-              directionUp.get() || directionLeft.get() || directionDown.get() || directionRight.get();
+              directionUp.get()
+                  || directionLeft.get()
+                  || directionDown.get()
+                  || directionRight.get();
           // when w key is released, the player stops at its current position
           if (e.getCode() == KeyCode.W) {
             if (player.getImage() == leftCharacterAnimation
@@ -296,7 +305,10 @@ abstract class RoomController implements javafx.fxml.Initializable {
           }
 
           boolean isMovinng =
-              directionUp.get() || directionLeft.get() || directionDown.get() || directionRight.get();
+              directionUp.get()
+                  || directionLeft.get()
+                  || directionDown.get()
+                  || directionRight.get();
 
           // If we stopped moving and were before, stop the sound.
           if (!isMovinng && wasMoving) {
