@@ -42,13 +42,7 @@ import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
-/**
- * Controller for the player scene
- *
- * <p>Handles the movement of the player and the collision with the walls
- *
- * @throws Exception if the fxml file cannot be loaded
- */
+/** Controller for the player scene. */
 public class PlayerController extends RoomController {
   public static boolean hintContained = false;
   public static boolean answerContained = false;
@@ -224,6 +218,12 @@ public class PlayerController extends RoomController {
         }
       };
 
+  /**
+   * Set the initial state of file as following.
+   *
+   * @param url the address of the current app
+   * @param resource anything imported into the file
+   */
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     black.setVisible(true);
@@ -423,8 +423,8 @@ public class PlayerController extends RoomController {
   /**
    * Prevent the player move across the walls.
    *
-   * @param event when the go back button is clicked
-   * @throws IOException if an input or output exception occurred
+   * @param player the player image
+   * @param walls prevent players movement.
    */
   public void checkCollision2(ImageView player, List<Rectangle> walls) {
     for (Rectangle wall : walls) {
@@ -493,12 +493,7 @@ public class PlayerController extends RoomController {
     simulateKeyPressAfterDelay();
   }
 
-  /**
-   * When the go back button is clicked, the player will go back to the intro page.
-   *
-   * @param event when the go back button is clicked
-   * @throws IOException if an input or output exception occurred
-   */
+  /** Detect difficulty when the difficulty is selected in the intro page. */
   @FXML
   public void detectDifficulty() {
     // detect if there is change in gamestate difficulty in the intro page using timer
@@ -524,12 +519,7 @@ public class PlayerController extends RoomController {
         500);
   }
 
-  /**
-   * Set up the keyboard control for the player.
-   *
-   * @param event
-   * @throws IOException if an input or output exception occurred
-   */
+  /** Set up the keyboard control using wasd for the player. */
   @FXML
   public void movingSetup() {
     scene.setOnKeyPressed(
@@ -673,12 +663,7 @@ public class PlayerController extends RoomController {
         });
   }
 
-  /**
-   * When the go back button is clicked, the player will go back to the intro page.
-   *
-   * @param event when the go back button is clicked
-   * @throws IOException if an input or output exception occurred
-   */
+  /** When the go back button is clicked, the player will go back to the intro page. */
   @FXML
   public void enterRoom() {
     // When the player is walking into a room, play the enter room sound effect
