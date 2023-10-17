@@ -53,12 +53,12 @@ public class Room1Controller implements Initializable {
       FXCollections.observableArrayList();
   public static String riddleAnswer;
 
-  private BooleanProperty wKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty aKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty sKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty dKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty up = new SimpleBooleanProperty();
+  private BooleanProperty left = new SimpleBooleanProperty();
+  private BooleanProperty down = new SimpleBooleanProperty();
+  private BooleanProperty right = new SimpleBooleanProperty();
 
-  private BooleanBinding keyPressed = wKeyPressed.or(aKeyPressed).or(sKeyPressed).or(dKeyPressed);
+  private BooleanBinding keyPressed = up.or(left).or(down).or(right);
   private int movementVariable = 5;
   private double shapesize;
 
@@ -206,16 +206,16 @@ public class Room1Controller implements Initializable {
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
 
-          if (wKeyPressed.get()) {
+          if (up.get()) {
             player.setLayoutY(player.getLayoutY() - movementVariable);
           }
-          if (aKeyPressed.get()) {
+          if (left.get()) {
             player.setLayoutX(player.getLayoutX() - movementVariable);
           }
-          if (sKeyPressed.get()) {
+          if (down.get()) {
             player.setLayoutY(player.getLayoutY() + movementVariable);
           }
-          if (dKeyPressed.get()) {
+          if (right.get()) {
             player.setLayoutX(player.getLayoutX() + movementVariable);
           }
           squareBorder();
@@ -624,15 +624,14 @@ public class Room1Controller implements Initializable {
   private void setUpMovement() {
     scene.setOnKeyPressed(
         e -> {
-          boolean wasMoving =
-              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+          boolean wasMoving = up.get() || left.get() || down.get() || right.get();
           // When the w key is pressed, it moves up
           if (e.getCode() == KeyCode.W) {
             if (walkAnimationPlaying == false) {
               player.setImage(lastPlayedWalk);
               walkAnimationPlaying = true;
             }
-            wKeyPressed.set(true);
+            up.set(true);
           }
           // when the a key is pressed, it moves left
           if (e.getCode() == KeyCode.A) {
@@ -641,7 +640,7 @@ public class Room1Controller implements Initializable {
               walkAnimationPlaying = true;
               lastPlayedWalk = player.getImage();
             }
-            aKeyPressed.set(true);
+            left.set(true);
           }
           // when the s key is pressed, it moves down
           if (e.getCode() == KeyCode.S) {
@@ -649,7 +648,7 @@ public class Room1Controller implements Initializable {
               player.setImage(lastPlayedWalk);
               walkAnimationPlaying = true;
             }
-            sKeyPressed.set(true);
+            down.set(true);
           }
           // when the d key is pressed, it moves right
           if (e.getCode() == KeyCode.D) {
@@ -658,11 +657,10 @@ public class Room1Controller implements Initializable {
               walkAnimationPlaying = true;
               lastPlayedWalk = player.getImage();
             }
-            dKeyPressed.set(true);
+            right.set(true);
           }
 
-          boolean isMoving =
-              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+          boolean isMoving = up.get() || left.get() || down.get() || right.get();
 
           // If we started moving and weren't before, start the sound.
           if (isMoving && !wasMoving) {
@@ -672,71 +670,61 @@ public class Room1Controller implements Initializable {
 
     scene.setOnKeyReleased(
         e -> {
-          boolean wasMoving =
-              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+          boolean wasMoving = up.get() || left.get() || down.get() || right.get();
           // if the w key is released, it stops at its current position
           if (e.getCode() == KeyCode.W) {
             if (player.getImage() == leftCharacterAnimation
-                && sKeyPressed.get() == false
-                && aKeyPressed.get() == false) {
+                && down.get() == false
+                && left.get() == false) {
               player.setImage(leftCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (sKeyPressed.get() == true) {
+            } else if (down.get() == true) {
               player.setImage(lastPlayedWalk);
-            } else if (aKeyPressed.get() == false
-                && dKeyPressed.get() == false
-                && dKeyPressed.get() == false) {
+            } else if (left.get() == false && right.get() == false && right.get() == false) {
               player.setImage(rightCharacterIdle);
               walkAnimationPlaying = false;
             }
-            wKeyPressed.set(false);
+            up.set(false);
           }
           // if a key is released, the plaer stops at its current position
           if (e.getCode() == KeyCode.A) {
-            if (dKeyPressed.get() == false
-                && wKeyPressed.get() == false
-                && sKeyPressed.get() == false) {
+            if (right.get() == false && up.get() == false && down.get() == false) {
               player.setImage(leftCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (dKeyPressed.get() == true) {
+            } else if (right.get() == true) {
               player.setImage(rightCharacterAnimation);
             }
 
-            aKeyPressed.set(false);
+            left.set(false);
           }
           // if s key is released, the player stops at its current position
           if (e.getCode() == KeyCode.S) {
             if (player.getImage() == leftCharacterAnimation
-                && wKeyPressed.get() == false
-                && aKeyPressed.get() == false) {
+                && up.get() == false
+                && left.get() == false) {
               player.setImage(leftCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (wKeyPressed.get() == true) {
+            } else if (up.get() == true) {
               player.setImage(lastPlayedWalk);
-            } else if (aKeyPressed.get() == false
-                && dKeyPressed.get() == false
-                && wKeyPressed.get() == false) {
+            } else if (left.get() == false && right.get() == false && up.get() == false) {
               player.setImage(rightCharacterIdle);
               walkAnimationPlaying = false;
             }
-            sKeyPressed.set(false);
+            down.set(false);
           }
           // if d key is released, the player stops at its current position
           if (e.getCode() == KeyCode.D) {
-            if (aKeyPressed.get() == false
-                && wKeyPressed.get() == false
-                && sKeyPressed.get() == false) {
+            if (left.get() == false && up.get() == false && down.get() == false) {
               player.setImage(rightCharacterIdle);
               walkAnimationPlaying = false;
-            } else if (aKeyPressed.get() == true) {
+            } else if (left.get() == true) {
               player.setImage(leftCharacterAnimation);
             }
 
-            dKeyPressed.set(false);
+            right.set(false);
           }
 
-          boolean isMovinng =
-              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+          boolean isMovinng = up.get() || left.get() || down.get() || right.get();
 
           // If we stopped moving and were before, stop the sound.
           if (!isMovinng && wasMoving) {
@@ -1015,7 +1003,7 @@ public class Room1Controller implements Initializable {
 
   /**
    * Change the colour of button on hover.
-   * 
+   *
    * @param e mouse is clicked
    */
   @FXML
@@ -1083,19 +1071,19 @@ public class Room1Controller implements Initializable {
                 KeyEvent keyReleaseEventS =
                     new KeyEvent(
                         KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
-
+                // Release s key when scene changes
                 KeyEvent keyReleaseEventA =
                     new KeyEvent(
                         KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
-
+                // Release a key when scene changes
                 KeyEvent keyReleaseEventW =
                     new KeyEvent(
                         KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
-
+                // Release w key when scene changes
                 KeyEvent keyReleaseEventD =
                     new KeyEvent(
                         KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
-
+                // Release d key when scene changes
                 scene.fireEvent(keyReleaseEventA);
                 scene.fireEvent(keyReleaseEventD);
                 scene.fireEvent(keyReleaseEventW);

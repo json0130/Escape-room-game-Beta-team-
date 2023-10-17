@@ -41,15 +41,12 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
 
 /** Controller for the tutorial scene */
 public class TutorialController implements Initializable {
-  private BooleanProperty isWKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty isAKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty isSKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty isDKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty up = new SimpleBooleanProperty();
+  private BooleanProperty left = new SimpleBooleanProperty();
+  private BooleanProperty down = new SimpleBooleanProperty();
+  private BooleanProperty right = new SimpleBooleanProperty();
 
-  private BooleanBinding keyPressed = isWKeyPressed
-    .or(isAKeyPressed)
-    .or(isSKeyPressed)
-    .or(isDKeyPressed);
+  private BooleanBinding keyPressed = up.or(left).or(down).or(right);
 
   private int movementVariable = 5;
   private double shapesize;
@@ -113,16 +110,16 @@ public class TutorialController implements Initializable {
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
 
-          if (isWKeyPressed.get()) {
+          if (up.get()) {
             player.setLayoutY(player.getLayoutY() - movementVariable);
           }
-          if (isAKeyPressed.get()) {
+          if (left.get()) {
             player.setLayoutX(player.getLayoutX() - movementVariable);
           }
-          if (isSKeyPressed.get()) {
+          if (down.get()) {
             player.setLayoutY(player.getLayoutY() + movementVariable);
           }
-          if (isDKeyPressed.get()) {
+          if (right.get()) {
             player.setLayoutX(player.getLayoutX() + movementVariable);
           }
           squareBorder();
@@ -336,8 +333,9 @@ public class TutorialController implements Initializable {
   }
 
   /**
-   * Play the rock animation which is the animation of the rocks falling down from the top of the screen.
-   * 
+   * Play the rock animation which is the animation of the rocks falling down from the top of the
+   * screen.
+   *
    * @param event The event
    * @return void
    * @throws Exception
@@ -454,19 +452,19 @@ public class TutorialController implements Initializable {
     scene.setOnKeyPressed(
         e -> {
           if (e.getCode() == KeyCode.W) {
-            isWKeyPressed.set(true);
+            up.set(true);
           }
 
           if (e.getCode() == KeyCode.A) {
-            isAKeyPressed.set(true);
+            left.set(true);
           }
 
           if (e.getCode() == KeyCode.S) {
-            isSKeyPressed.set(true);
+            down.set(true);
           }
 
           if (e.getCode() == KeyCode.D) {
-            isDKeyPressed.set(true);
+            right.set(true);
           }
         });
 
@@ -474,19 +472,19 @@ public class TutorialController implements Initializable {
     scene.setOnKeyReleased(
         e -> {
           if (e.getCode() == KeyCode.W) {
-            isWKeyPressed.set(false);
+            up.set(false);
           }
 
           if (e.getCode() == KeyCode.A) {
-            isAKeyPressed.set(false);
+            left.set(false);
           }
 
           if (e.getCode() == KeyCode.S) {
-            isSKeyPressed.set(false);
+            down.set(false);
           }
 
           if (e.getCode() == KeyCode.D) {
-            isDKeyPressed.set(false);
+            right.set(false);
           }
         });
   }

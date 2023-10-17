@@ -18,7 +18,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.ChatBubble;
 import nz.ac.auckland.se206.GameState;
@@ -127,6 +126,7 @@ public class WindowController {
    * @param msg the chat message to append
    */
   private void appendChatMessage(ChatMessage msg, Boolean isGreeting) {
+    // Store chat messages in every rooms with chat window
     ChatBubble newMessage1 = new ChatBubble(msg, isGreeting);
     ChatBubble newMessage2 = new ChatBubble(msg, isGreeting);
     ChatBubble newMessage3 = new ChatBubble(msg, isGreeting);
@@ -134,6 +134,7 @@ public class WindowController {
     ChatBubble newMessage5 = new ChatBubble(msg, isGreeting);
     ChatBubble newMessage6 = new ChatBubble(msg, isGreeting);
 
+    // Append the same message in every chat window to synch chat history
     App.chatBubbleList.add(newMessage1);
     PlayerController.chatBubbleListPlayer.add(newMessage2);
     Room1Controller.chatBubbleListRoom1.add(newMessage3);
@@ -156,6 +157,7 @@ public class WindowController {
    * @throws ApiProxyException if there is an error communicating with the API proxy
    */
   private ChatMessage runGpt(ChatMessage msg, Boolean isGreeting) throws ApiProxyException {
+    // Task to run gpt in multithread to prevent gui freezing
     Task<ChatMessage> runningGptTask =
         new Task<ChatMessage>() {
           @Override
@@ -165,10 +167,12 @@ public class WindowController {
               ChatCompletionResult chatCompletionResult = App.chatCompletionRequest.execute();
               Choice result = chatCompletionResult.getChoices().iterator().next();
               App.chatCompletionRequest.addMessage(result.getChatMessage());
+              // Append the message into v box
               Platform.runLater(
                   () -> {
                     appendChatMessage(result.getChatMessage(), isGreeting);
                   });
+              // Check if the user is asking for hint or not
               Platform.runLater(
                   () -> {
                     if (result.getChatMessage().getRole().equals("assistant")
@@ -183,30 +187,11 @@ public class WindowController {
             }
           }
         };
+    // run the task in multithread
     Thread gptThread = new Thread(runningGptTask);
     gptThread.setDaemon(true);
     gptThread.start();
     return msg;
-  }
-
-  /**
-   * Runs the GPT model with a given chat message.
-   *
-   * @param msg the chat message to process
-   * @return the response chat message
-   * @throws ApiProxyException if there is an error communicating with the API proxy
-   */
-  private String runGptWithoutPrinting(ChatMessage msg) {
-    App.chatCompletionRequest.addMessage(msg);
-    try {
-      ChatCompletionResult chatCompletionResult = App.chatCompletionRequest.execute();
-      Choice result = chatCompletionResult.getChoices().iterator().next();
-      App.chatCompletionRequest.addMessage(result.getChatMessage());
-      return result.getChatMessage().getContent();
-    } catch (ApiProxyException e) {
-      e.printStackTrace();
-      return null;
-    }
   }
 
   /**

@@ -51,12 +51,13 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
 public class ExitController implements Initializable {
   public static ObservableList<ChatBubble> chatBubbleListExit = FXCollections.observableArrayList();
 
-  private BooleanProperty wKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty aKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty sKeyPressed = new SimpleBooleanProperty();
-  private BooleanProperty dKeyPressed = new SimpleBooleanProperty();
+  private BooleanProperty directionUp = new SimpleBooleanProperty();
+  private BooleanProperty directionLeft = new SimpleBooleanProperty();
+  private BooleanProperty directionDown = new SimpleBooleanProperty();
+  private BooleanProperty directionRight = new SimpleBooleanProperty();
 
-  private BooleanBinding keyPressed = wKeyPressed.or(aKeyPressed).or(sKeyPressed).or(dKeyPressed);
+  private BooleanBinding keyPressed =
+      directionUp.or(directionLeft).or(directionDown).or(directionRight);
   private int movementVariable = 5;
   private double shapesize;
 
@@ -211,16 +212,16 @@ public class ExitController implements Initializable {
           previousX = player.getLayoutX(); // Update previousX
           previousY = player.getLayoutY(); // Update previousY
 
-          if (wKeyPressed.get()) {
+          if (directionUp.get()) {
             player.setLayoutY(player.getLayoutY() - movementVariable);
           }
-          if (aKeyPressed.get()) {
+          if (directionLeft.get()) {
             player.setLayoutX(player.getLayoutX() - movementVariable);
           }
-          if (sKeyPressed.get()) {
+          if (directionDown.get()) {
             player.setLayoutY(player.getLayoutY() + movementVariable);
           }
-          if (dKeyPressed.get()) {
+          if (directionRight.get()) {
             player.setLayoutX(player.getLayoutX() + movementVariable);
           }
           squareBorder();
@@ -377,7 +378,7 @@ public class ExitController implements Initializable {
 
   /**
    * If the button is clicked, the sound is toggled.
-   * 
+   *
    * @param event mouse is clicked
    * @throws IOException if the sound cannot be toggled
    */
@@ -388,7 +389,10 @@ public class ExitController implements Initializable {
     scene.setOnKeyPressed(
         e -> {
           boolean wasMoving =
-              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+              directionUp.get()
+                  || directionLeft.get()
+                  || directionDown.get()
+                  || directionRight.get();
 
           if (keyboardControlEnabled) {
             // player moves up
@@ -397,7 +401,7 @@ public class ExitController implements Initializable {
                 player.setImage(lastPlayedWalk);
                 walkAnimationPlaying = true;
               }
-              wKeyPressed.set(true);
+              directionUp.set(true);
             }
 
             // player moves left
@@ -407,7 +411,7 @@ public class ExitController implements Initializable {
                 walkAnimationPlaying = true;
                 lastPlayedWalk = player.getImage();
               }
-              aKeyPressed.set(true);
+              directionLeft.set(true);
             }
 
             // player moves down
@@ -416,7 +420,7 @@ public class ExitController implements Initializable {
                 player.setImage(lastPlayedWalk);
                 walkAnimationPlaying = true;
               }
-              sKeyPressed.set(true);
+              directionDown.set(true);
             }
 
             // player moves right
@@ -426,10 +430,13 @@ public class ExitController implements Initializable {
                 walkAnimationPlaying = true;
                 lastPlayedWalk = player.getImage();
               }
-              dKeyPressed.set(true);
+              directionRight.set(true);
             }
             boolean isMoving =
-                wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+                directionUp.get()
+                    || directionLeft.get()
+                    || directionDown.get()
+                    || directionRight.get();
 
             // If we started moving and weren't before, start the sound.
             if (isMoving && !wasMoving) {
@@ -442,75 +449,81 @@ public class ExitController implements Initializable {
     scene.setOnKeyReleased(
         e -> {
           boolean wasMoving =
-              wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+              directionUp.get()
+                  || directionLeft.get()
+                  || directionDown.get()
+                  || directionRight.get();
 
           if (keyboardControlEnabled) {
             // If the player was moving up, image changes
             if (e.getCode() == KeyCode.W) {
               if (player.getImage() == leftCharacterAnimation
-                  && sKeyPressed.get() == false
-                  && aKeyPressed.get() == false) {
+                  && directionDown.get() == false
+                  && directionLeft.get() == false) {
                 player.setImage(leftCharacterIdle);
                 walkAnimationPlaying = false;
-              } else if (sKeyPressed.get() == true) {
+              } else if (directionDown.get() == true) {
                 player.setImage(lastPlayedWalk);
-              } else if (aKeyPressed.get() == false
-                  && dKeyPressed.get() == false
-                  && sKeyPressed.get() == false) {
+              } else if (directionLeft.get() == false
+                  && directionRight.get() == false
+                  && directionDown.get() == false) {
                 player.setImage(rightCharacterIdle);
                 walkAnimationPlaying = false;
               }
-              wKeyPressed.set(false);
+              directionUp.set(false);
             }
 
             // If the player was moving left, image changes
             if (e.getCode() == KeyCode.A) {
-              if (dKeyPressed.get() == false
-                  && wKeyPressed.get() == false
-                  && sKeyPressed.get() == false) {
+              if (directionRight.get() == false
+                  && directionUp.get() == false
+                  && directionDown.get() == false) {
                 player.setImage(leftCharacterIdle);
                 walkAnimationPlaying = false;
-              } else if (dKeyPressed.get() == true) {
+              } else if (directionRight.get() == true) {
                 player.setImage(rightCharacterAnimation);
               }
 
-              aKeyPressed.set(false);
+              directionLeft.set(false);
             }
 
             // If the player was moving down, image changes
             if (e.getCode() == KeyCode.S) {
               if (player.getImage() == leftCharacterAnimation
-                  && wKeyPressed.get() == false
-                  && aKeyPressed.get() == false) {
+                  && directionUp.get() == false
+                  && directionLeft.get() == false) {
                 player.setImage(leftCharacterIdle);
                 walkAnimationPlaying = false;
-              } else if (wKeyPressed.get() == true) {
+              } else if (directionUp.get() == true) {
                 player.setImage(lastPlayedWalk);
-              } else if (aKeyPressed.get() == false
-                  && dKeyPressed.get() == false
-                  && wKeyPressed.get() == false) {
+              } else if (directionLeft.get() == false
+                  && directionRight.get() == false
+                  && directionUp.get() == false) {
                 player.setImage(rightCharacterIdle);
                 walkAnimationPlaying = false;
               }
-              sKeyPressed.set(false);
+              directionDown.set(false);
             }
 
             // If the player was moving right, image changes
             if (e.getCode() == KeyCode.D) {
-              if (aKeyPressed.get() == false
-                  && wKeyPressed.get() == false
-                  && sKeyPressed.get() == false) {
+              if (directionLeft.get() == false
+                  && directionUp.get() == false
+                  && directionDown.get() == false) {
                 player.setImage(rightCharacterIdle);
                 walkAnimationPlaying = false;
-              } else if (aKeyPressed.get() == true) {
+              } else if (directionLeft.get() == true) {
                 player.setImage(leftCharacterAnimation);
               }
 
-              dKeyPressed.set(false);
+              directionRight.set(false);
             }
 
             boolean isMovinng =
-                wKeyPressed.get() || aKeyPressed.get() || sKeyPressed.get() || dKeyPressed.get();
+                directionUp.get()
+                    || directionLeft.get()
+                    || directionDown.get()
+                    || directionRight.get();
 
             // If we stopped moving and were before, stop the sound.
             if (!isMovinng && wasMoving) {
@@ -1392,19 +1405,19 @@ public class ExitController implements Initializable {
                 KeyEvent keyReleaseEventS =
                     new KeyEvent(
                         KeyEvent.KEY_RELEASED, "S", "S", KeyCode.S, false, false, false, false);
-
+                // Release s key when scene changes
                 KeyEvent keyReleaseEventA =
                     new KeyEvent(
                         KeyEvent.KEY_RELEASED, "A", "A", KeyCode.A, false, false, false, false);
-
+                // Release a key when scene changes
                 KeyEvent keyReleaseEventW =
                     new KeyEvent(
                         KeyEvent.KEY_RELEASED, "W", "W", KeyCode.W, false, false, false, false);
-
+                // Release w key when scene changes
                 KeyEvent keyReleaseEventD =
                     new KeyEvent(
                         KeyEvent.KEY_RELEASED, "D", "D", KeyCode.D, false, false, false, false);
-
+                // Release d key when scene changes
                 scene.fireEvent(keyReleaseEventA);
                 scene.fireEvent(keyReleaseEventD);
                 scene.fireEvent(keyReleaseEventW);
