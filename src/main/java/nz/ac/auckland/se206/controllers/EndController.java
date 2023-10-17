@@ -31,7 +31,13 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 
-/** Controller for the ending scene */
+/**
+ * Controller for the ending scene
+ *
+ * <p>Handles the animation of the spaceship and the rock
+ *
+ * @throws Exception if the fxml file cannot be loaded
+ */
 public class EndController implements Initializable {
   @FXML private Label win;
   @FXML private Label youWin;
@@ -238,7 +244,7 @@ public class EndController implements Initializable {
    * @throws IOException if the objects don't exist
    */
   @FXML
-  private void clikedRestartLabel(ActionEvent event) throws IOException {
+  private void onClickRestart(ActionEvent event) throws IOException {
     resetButton.setVisible(false);
     restartLabel.setVisible(true);
     restartNo.setVisible(true);
@@ -247,7 +253,7 @@ public class EndController implements Initializable {
   }
 
   @FXML
-  private void canceledRestart(ActionEvent event) throws IOException {
+  private void onClickCancel(ActionEvent event) throws IOException {
     resetButton.setVisible(true);
     restartLabel.setVisible(false);
     restartNo.setVisible(false);
@@ -256,7 +262,7 @@ public class EndController implements Initializable {
   }
 
   @FXML
-  private void clickedRestartButton(ActionEvent event) throws IOException {
+  private void onClickReset(ActionEvent event) throws IOException {
     try {
       GameState.resetGames();
     } catch (Exception e) {

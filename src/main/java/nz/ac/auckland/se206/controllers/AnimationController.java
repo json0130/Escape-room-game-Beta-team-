@@ -24,7 +24,12 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
-/** Controller for the animation scene */
+/**
+ * Controller for the animation scene 
+ * 
+ * <p>Handles the animation of the spaceship and the rock
+ * @throws Exception if the fxml file cannot be loaded
+ */
 public class AnimationController implements Initializable {
   @FXML private ImageView spaceship;
   @FXML private ImageView r1;
@@ -137,8 +142,7 @@ public class AnimationController implements Initializable {
    * Check if the sound is enabled or not and update the sound image accordingly
    *
    * @param soundOn the soundOn image
-   * @param soundOff the soundOff image
-   * @return true if the spaceship collides with the rock, false otherwise
+   * @throws Exception if there is an error loading the fxml file 
    */
   private void checkCollision2() {
     // Initialize sound images based on the initial isSoundEnabled state

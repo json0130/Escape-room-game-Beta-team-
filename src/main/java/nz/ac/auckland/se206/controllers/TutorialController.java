@@ -39,7 +39,12 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 
-/** Controller for the tutorial scene */
+/**
+ * Controller for the tutorial game.
+ * 
+ * <p>Handles the logic for the tutorial game.
+ * @throws Exception if the fxml file cannot be loaded
+ */
 public class TutorialController implements Initializable {
   private BooleanProperty up = new SimpleBooleanProperty();
   private BooleanProperty left = new SimpleBooleanProperty();
@@ -127,7 +132,7 @@ public class TutorialController implements Initializable {
       };
 
   @FXML
-  private void clickedSkipButton(ActionEvent event) {
+  private void onClickSkip(ActionEvent event) {
     soundButttonClick();
     App.setScene(AppUi.ANIMATION);
     collisionTimer.stop();
@@ -142,7 +147,7 @@ public class TutorialController implements Initializable {
   }
 
   @FXML
-  private void startPlayingAnimations(ActionEvent event) {
+  private void onClickStartAnimation(ActionEvent event) {
     setRotate(c1, true, 360, 10);
     setRotate(c2, true, 180, 18);
     setRotate(c3, true, 145, 24);
@@ -335,9 +340,8 @@ public class TutorialController implements Initializable {
   /**
   * Play the rock animation which is used for tutorial game.
   * 
-  * @param event The event
-  * @return void
-  * @throws Exception
+  * @param event When the rock button is clicked
+  * @throws Exception if the player collides with any of the rocks
   */
   @FXML
   private void playRock() {
@@ -356,9 +360,7 @@ public class TutorialController implements Initializable {
    * Check if the player collides with any of the rocks
    *
    * @param player The player
-   * @param rocks The rocks
-   * @return void
-   * @throws Exception
+   * @throws Exception if the player collides with any of the rocks
    */
   @FXML
   public void checkCollision(ImageView player, List<ImageView> rocks) {
@@ -393,6 +395,7 @@ public class TutorialController implements Initializable {
    *
    * @param player The player
    * @param c3 The finish line
+   * @throws Exception if the player collides with the finish line
    */
   public void checkFinish(ImageView player, Circle c3) {
     // Check if the player collides with the finish line .
@@ -411,8 +414,8 @@ public class TutorialController implements Initializable {
   /**
    * Check if the player collides with the box
    *
-   * @param player The player
-   * @param box The box
+   * @param player
+   * @throws Exception if the player collides with the box
    */
   public void checkCollision1(ImageView player, Rectangle box) {
     // Check if the player collides with the box
@@ -435,14 +438,8 @@ public class TutorialController implements Initializable {
   /**
    * Set the movement of the player
    *
-   * @param player The player
-   * @param isWKeyPressed The boolean for the W key
-   * @param isAKeyPressed The boolean for the A key
-   * @param isSKeyPressed The boolean for the S key
-   * @param isDKeyPressed The boolean for the D key
-   * @param keyPressed The boolean for any key
-   * @param movementVariable The movement variable
-   * @param shapesize The size of the player
+   * @param player 
+   * @param keyPressed The key that is pressed
    * @throws Exception if the player collides with the boundaries of the scene
    */
   @FXML
@@ -489,10 +486,12 @@ public class TutorialController implements Initializable {
   }
 
   /**
-   * Check if the player collides with the boundaries of the scene
-   *
-   * @param player The player
-   */
+  * Check if the player collides with the boundaries of the scene
+  *
+  * @param player The player
+  * @throws Exception if the player collides with the boundaries of the scene
+  */
+  @FXML 
   public void squareBorder() {
     // Set the boundaries of the scene
     double left = 0;

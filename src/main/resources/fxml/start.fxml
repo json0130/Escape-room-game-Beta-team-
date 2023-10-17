@@ -156,7 +156,7 @@
             <Font name="Arial Bold" size="20.0" />
          </font>
       </Label>
-      <Button fx:id="tutorial" layoutX="495.0" layoutY="527.0" mnemonicParsing="false" onAction="#clickAnimations" prefHeight="66.0" prefWidth="189.0" text="LET'S GO" visible="false">
+      <Button fx:id="tutorial" layoutX="495.0" layoutY="527.0" mnemonicParsing="false" onAction="#onClickAnimation" prefHeight="66.0" prefWidth="189.0" text="LET'S GO" visible="false">
          <font>
             <Font name="Arial Bold Italic" size="18.0" />
          </font></Button>
