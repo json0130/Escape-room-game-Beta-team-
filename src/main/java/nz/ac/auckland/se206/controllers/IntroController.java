@@ -30,7 +30,13 @@ import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 
-/** Controller for the intro scene */
+/**
+ * Controller for the intro scene
+ *
+ * <p>Handles the intro scene and the level and time selection
+ *
+ * @throws Exception if the fxml file cannot be loaded
+ */
 public class IntroController implements Initializable {
   @FXML private Button minB2;
   @FXML private Button minB4;
@@ -126,8 +132,7 @@ public class IntroController implements Initializable {
    * Check if the sound is enabled or disabled
    *
    * @param soundOn the soundOn image
-   * @param soundOff the soundOff image
-   * @return true if the sound is enabled
+   * @throws Exception if the sound is not enabled
    */
   @FXML
   public void checkCollision2() {
@@ -285,7 +290,7 @@ public class IntroController implements Initializable {
   }
 
   @FXML
-  private void clickAnimations(ActionEvent events) {
+  private void onClickAnimation(ActionEvent events) {
     GameState.isGameStarted = true;
     soundButttonClick();
     if (!animationStarted) {

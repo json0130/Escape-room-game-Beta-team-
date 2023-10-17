@@ -26,18 +26,18 @@
          </font>
       </Label>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000097" height="58.0" layoutX="979.0" layoutY="567.0" stroke="BLACK" strokeType="INSIDE" width="192.0" />
-      <Button fx:id="resetButton" layoutX="979.0" layoutY="567.0" mnemonicParsing="false" onAction="#clikedRestartLabel" prefHeight="58.0" prefWidth="192.0" style="-fx-background-color: transparent; -fx-border-color: white;" text="RESTART" textFill="WHITE">
+      <Button fx:id="resetButton" layoutX="979.0" layoutY="567.0" mnemonicParsing="false" onAction="#onClickReset" prefHeight="58.0" prefWidth="192.0" style="-fx-background-color: transparent; -fx-border-color: white;" text="RESTART" textFill="WHITE">
          <font>
             <Font name="Arial Bold Italic" size="29.0" />
          </font>
       </Button>
-      <Rectangle fx:id="restartBackground" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="303.0" layoutX="321.0" layoutY="223.0" stroke="WHITE" strokeType="INSIDE" width="538.0" />
-      <Label fx:id="restartLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="391.0" layoutY="310.0" prefHeight="92.0" prefWidth="377.0" text="Would you like to RESTART the game?" textAlignment="CENTER">
+      <Rectangle fx:id="restartBackground" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="303.0" layoutX="321.0" layoutY="223.0" stroke="WHITE" strokeType="INSIDE" visible="false" width="538.0" />
+      <Label fx:id="restartLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="391.0" layoutY="310.0" prefHeight="92.0" prefWidth="377.0" text="Would you like to RESTART the game?" textAlignment="CENTER" visible="false">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="restartNo" layoutX="391.0" layoutY="452.0" mnemonicParsing="false" onAction="#canceledRestart" text="CANCEL" />
-      <Button fx:id="restartYes" layoutX="723.0" layoutY="452.0" mnemonicParsing="false" onAction="#clickedRestartButton" text="RESTART" />
+      <Button fx:id="restartNo" layoutX="391.0" layoutY="452.0" mnemonicParsing="false" onAction="#onClickCancel" text="CANCEL" visible="false" />
+      <Button fx:id="restartYes" layoutX="723.0" layoutY="452.0" mnemonicParsing="false" onAction="#onClickReset" text="RESTART" visible="false" />
    </children>
 </Pane>
