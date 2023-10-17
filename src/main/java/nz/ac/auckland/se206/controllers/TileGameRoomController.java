@@ -62,6 +62,7 @@ public class TileGameRoomController extends RoomController {
 
   private double previousX;
   private double previousY;
+  private double shapesize;
 
   @FXML private Label difficultyLabel;
   @FXML private Label hintLabel;

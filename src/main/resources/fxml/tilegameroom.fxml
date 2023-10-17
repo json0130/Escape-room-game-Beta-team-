@@ -53,7 +53,6 @@
             <Rectangle fx:id="wall17" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="35.0" layoutX="770.0" layoutY="436.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="31.0" />
             <Rectangle fx:id="wall19" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="35.0" layoutX="819.0" layoutY="513.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="31.0" />
             <Rectangle fx:id="wall15" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="25.0" layoutX="700.0" layoutY="369.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="31.0" />
-            <Button fx:id="button" mnemonicParsing="false" onAction="#clickBack" opacity="0.0" text="Button" />
             <Rectangle fx:id="blinkingRectangle" arcHeight="5.0" arcWidth="5.0" fill="#003cff00" height="78.0" layoutX="417.0" layoutY="158.0" onMouseClicked="#onTileGameButtonClick" stroke="#3df1ff" strokeType="INSIDE" strokeWidth="3.0" width="131.0" />
             <Label fx:id="clickButton" layoutX="444.0" layoutY="182.0" onMouseClicked="#onTileGameButtonClick" prefHeight="25.0" prefWidth="93.0" text="Click Me">
                <font>
