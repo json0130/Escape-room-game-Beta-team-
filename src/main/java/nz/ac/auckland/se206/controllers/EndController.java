@@ -32,11 +32,11 @@ import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 
 /**
- * Controller for the ending scene
+ * Controller for the ending scene.
  *
- * <p>Handles the animation of the spaceship and the rock
+ * <p>Handles the animation of the spaceship and the rock.
  *
- * @throws Exception if the fxml file cannot be loaded
+ * @throws Exception if the fxml file cannot be loaded.
  */
 public class EndController implements Initializable {
   @FXML private Label win;
