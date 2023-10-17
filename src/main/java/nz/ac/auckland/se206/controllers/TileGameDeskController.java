@@ -628,7 +628,7 @@ public class TileGameDeskController extends RoomController {
   }
 
   @FXML
-  private void clickInfoButton() {
+  private void onClickInfo() {
     tutorialScreen.setVisible(true);
     loadCaptchaButton.setVisible(true);
   }
